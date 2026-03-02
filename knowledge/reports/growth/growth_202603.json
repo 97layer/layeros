@@ -1,0 +1,21 @@
+{
+  "period": "2026-03",
+  "revenue": {
+    "atelier": 0,
+    "consulting": 0,
+    "products": 0,
+    "total": 0
+  },
+  "content": {
+    "essays_published": 11,
+    "signals_captured": 0,
+    "clusters_ripe": 0,
+    "instagram_posts": 0
+  },
+  "service": {
+    "total_visits": 0,
+    "new_clients": 0,
+    "returning_clients": 0
+  },
+  "recorded_at": "2026-03-01T09:50:44.770133"
+}
