@@ -44,7 +44,7 @@ class PipelineOrchestrator:
     # CD→Publisher: _process_cd_completed()
 
     MAX_CE_RETRIES = 2  # CD 거절 후 CE 재작업 최대 횟수
-    RALPH_PASS_SCORE = 70  # Ralph 품질 게이트
+    RALPH_PASS_SCORE = 90  # Ralph 품질 게이트
 
     def __init__(self, base_path: Optional[Path] = None):
         self.base_path = base_path or Path("/app")

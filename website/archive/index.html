@@ -48,14 +48,7 @@
 
     <div class="archive-hero container--wide">
       <span class="section-label">ARCHIVE</span>
-    </div>
-
-    <!-- 필터 -->
-    <div class="archive-filter container--wide" role="tablist">
-      <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">ALL</button>
-      <button class="filter-btn" data-filter="essay" role="tab" aria-selected="false">ESSAY</button>
-      <button class="filter-btn" data-filter="magazine" role="tab" aria-selected="false">MAGAZINE</button>
-      <button class="filter-btn" data-filter="lookbook" role="tab" aria-selected="false">LOOKBOOK</button>
+      <span style="font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.18em;color:var(--text-faint);display:block;margin-top:0.4rem;">기록들. 걷어낸 자리에 남은 것들.</span>
     </div>
 
     <!-- 리스트 -->
@@ -111,22 +104,6 @@
             '<span class="archive-list-item__title">' + p.title + '</span>' +
             '<span class="archive-list-item__arrow">→</span>';
           list.appendChild(item);
-        });
-
-        /* 필터 */
-        document.querySelectorAll('.filter-btn').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var f = this.dataset.filter;
-            document.querySelectorAll('.filter-btn').forEach(function (b) {
-              b.classList.remove('active');
-              b.setAttribute('aria-selected', 'false');
-            });
-            this.classList.add('active');
-            this.setAttribute('aria-selected', 'true');
-            document.querySelectorAll('.archive-list-item').forEach(function (c) {
-              c.hidden = (f !== 'all' && c.dataset.category !== f);
-            });
-          });
         });
 
         /* Intersection reveal */

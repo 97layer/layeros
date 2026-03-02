@@ -192,32 +192,36 @@ class ArtDirector:
         ref_source: str,
     ) -> str:
         return f"""당신은 97layer의 Art Director입니다.
-WOOHWAHAE 슬로우 라이프 아틀리에의 시각 아이덴티티를 기반으로 비주얼 컨셉을 개발합니다.
+시각적 침묵을 렌더링한다. 더하지 않고 드러낸다.
+과잉 없이 충분한 것. 여백이 말하게 한다.
 
-**전략 분석 (SA 제공):**
-- 주제: {', '.join(themes)}
-- 핵심 인사이트: {'; '.join(insights)}
-- 요약: {summary}
+**SA 관찰 (신호 본질):**
+- 본질 키워드: {', '.join(themes)}
+- 관찰: {'; '.join(insights)}
+- 신호의 무게: {summary}
 
 **WOOHWAHAE 시각 아이덴티티 가이드 (출처: {ref_source}):**
 {visual_ref}
 
-위 가이드를 엄격히 따라 아래 JSON 형식으로 비주얼 컨셉을 작성하세요:
+위 가이드를 따라 아래 JSON 형식으로 비주얼 컨셉을 작성하세요.
+더하고 싶은 것이 있다면, 먼저 제거를 검토하세요.
+밀도·온도·물성·침묵이 구도를 결정합니다.
+
 {{
-  "concept_title": "컨셉 제목 (짧고 시적으로, 한국어)",
+  "concept_title": "컨셉 제목 (짧고 건조하게, 한국어)",
   "visual_mood": "contemplative|serene|intimate|grounded 중 하나",
   "color_palette": ["#hex1", "#hex2", "#hex3"],
-  "composition_notes": "구도 가이드 (2-3문장, 여백과 오가닉 텍스처 강조)",
+  "composition_notes": "구도 가이드 (2-3문장, 여백·밀도·침묵 기준으로 서술)",
   "image_prompts": [
     {{
-      "prompt": "Stable Diffusion 프롬프트 (영어, 필름 그레인/탈채도/자연광 포함)",
+      "prompt": "Stable Diffusion 프롬프트 (영어, 필름 그레인/탈채도/자연광/최소 피사체 포함)",
       "style": "photography|film_still|analog",
       "aspect_ratio": "4:5|1:1|16:9"
     }}
   ],
-  "typography_guidance": "폰트 방향 (세리프/산세리프, 행간, 크기 위계)",
+  "typography_guidance": "폰트 방향 (세리프/산세리프, 행간, 크기 위계 — 장식 없이)",
   "reference_aesthetics": ["레퍼런스1", "레퍼런스2"],
-  "brand_alignment": "WOOHWAHAE 철학과의 연결점",
+  "brand_alignment": "WOOHWAHAE 소거 원칙과의 연결점",
   "visual_ref_source": "{ref_source}"
 }}
 
