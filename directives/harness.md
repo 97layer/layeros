@@ -303,23 +303,17 @@ knowledge/clients/ + knowledge/corpus/ + website/archive/
 
 ## 주요 갭 (현재 구현 vs 설계)
 
-### GAP-1: Ralph QA 기준선 불일치
-- **설계**: `sage_architect.md §6.5` — 기준선 90점
-- **구현**: `pipeline_orchestrator.py` — `RALPH_PASS_SCORE = 70`
-- **영향**: 브랜드 세계관 기준 미달 에세이가 AD 단계로 진행 가능
-- **조치**: `RALPH_PASS_SCORE` 90으로 상향. 단, CE 재작업 루프 안정성 검증 후 적용
+### ~~GAP-1: Ralph QA 기준선 불일치~~ ✅ 해결 (2026-03-02)
+- `pipeline_orchestrator.py` `RALPH_PASS_SCORE = 90` 확정
+
+### ~~GAP-3: 신호 수집 필터에 브랜드 공명 기준 부재~~ ✅ 해결 (2026-03-02)
+- `scout_agent.py` `has_resonance()` 추가 — `sage_architect.md §9` 금지어 기반 1차 소거
 
 ### GAP-2: L3 Service → L1 Perception 역류 단절
 - **설계**: Ritual(현장 경험 데이터)이 브랜드 패턴으로 순환되어 SA의 신호 판독 기준을 갱신해야 함
 - **구현**: Ritual 데이터(`knowledge/clients/`)가 Growth 집계로만 연결. SA 피드백 루프 없음
 - **영향**: 현장에서 발견되는 패턴(방문 리듬, 고객 주파수)이 콘텐츠 방향에 반영되지 않음
-- **조치**: Growth 월간 리포트 → SA 신호 inject 파이프 설계 필요
-
-### GAP-3: 신호 수집 필터에 브랜드 공명 기준 부재
-- **설계**: Scout는 "수집하지 않고 관찰"해야 함. 공명 가능성이 수집 필터
-- **구현**: Scout는 RSS 전량 수집 후 SA에 위임. 필터링 기준 없음
-- **영향**: SA가 처리해야 할 노이즈 신호 과다. "느림"의 원칙에 반함
-- **조치**: Scout에 브랜드 허용 키워드 기반 1차 필터 추가 (`sage_architect.md §5` 허용 키워드 활용)
+- **조치**: Growth 월간 리포트 → SA 신호 inject 파이프 설계 필요 (⏳ 다음 세션)
 
 ---
 
