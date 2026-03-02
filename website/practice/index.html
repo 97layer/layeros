@@ -20,7 +20,7 @@
     rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
     rel="stylesheet" />
-  <link href="../assets/css/style.css?v=e8659890" rel="stylesheet" />
+  <link href="../assets/css/style.css?v=004b0232" rel="stylesheet" />
   <script>
     (function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
   </script>
@@ -48,7 +48,7 @@
 <!-- /COMPONENT:nav --><!-- COMPONENT:wave-bg -->
 <!-- Background Removed by User Request: Filter Only -->
 <!-- /COMPONENT:wave-bg -->
-  <main class="page-main" style="position:relative;z-index:1;padding-top:120px">
+  <main class="page-main">
     <div class="container--wide">
       <!-- Practice 내부 탭 -->
       <nav class="practice-tabs" aria-label="Practice sections" id="practice-tabs">
@@ -60,7 +60,7 @@
 
       <!-- ─── ATELIER ─── -->
       <section id="atelier" class="practice-section">
-        <header class="service-hero" style="padding-bottom:var(--space-md)">
+        <header class="service-hero">
           <span class="section-label">ATELIER</span>
           <p class="service-lead">하루 세 명. 기장과 컨디션을 읽어 흐름을 제안합니다.</p>
         </header>
@@ -100,19 +100,19 @@
           </div>
         </div>
 
-        <div style="margin-top:var(--space-lg)">
-          <p style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;color:var(--text-sub);margin-bottom:0.8rem;text-transform:uppercase">사용 제품</p>
-          <p style="font-size:0.85rem;font-weight:300;color:var(--text-sub);line-height:1.9">Milbon, Olaplex, Schwarzkopf, Aestura</p>
+        <div class="practice-section-footer">
+          <p class="atelier-product-label">사용 제품</p>
+          <p class="atelier-product-list">Milbon, Olaplex, Schwarzkopf, Aestura</p>
         </div>
 
-        <div style="margin-top:var(--space-lg)">
+        <div class="practice-section-footer">
           <a href="https://booking.naver.com/booking/13/bizes/1037484" target="_blank" rel="noopener" class="form-submit">예약하기 →</a>
         </div>
       </section>
 
       <!-- ─── DIRECTING ─── -->
       <section id="directing" class="practice-section" style="display:none">
-        <header class="service-hero" style="padding-bottom:var(--space-md)">
+        <header class="service-hero">
           <span class="section-label">DIRECTING</span>
           <p class="service-lead">브랜드의 언어와 공간을 정렬합니다.</p>
         </header>
@@ -149,25 +149,25 @@
           </div>
         </div>
 
-        <div style="margin-top:var(--space-lg)">
+        <div class="practice-section-footer">
           <a href="mailto:hello@woohwahae.kr?subject=[Directing] 문의" class="form-submit">문의하기 →</a>
         </div>
       </section>
 
       <!-- ─── PROJECT ─── -->
       <section id="project" class="practice-section" style="display:none">
-        <header class="service-hero" style="padding-bottom:var(--space-md)">
+        <header class="service-hero">
           <span class="section-label">PROJECT</span>
           <p class="service-lead">얼굴형과 두상이 아닌, 태도와 분위기를 읽어 디자인합니다.</p>
         </header>
 
-        <p style="font-size:0.85rem;font-weight:300;color:var(--text-sub);line-height:1.9;max-width:560px;margin-bottom:var(--space-xl)">언어, 태도, 분위기를 읽어 헤어를 디자인합니다. 미용실 정착을 못했거나, 자신에게 맞는 스타일을 찾지 못했다면 신청서를 남겨주세요. 적합한 분을 선정해 개별 연락드립니다.</p>
+        <p class="service-body">언어, 태도, 분위기를 읽어 헤어를 디자인합니다. 미용실 정착을 못했거나, 자신에게 맞는 스타일을 찾지 못했다면 신청서를 남겨주세요. 적합한 분을 선정해 개별 연락드립니다.</p>
 
         <form class="project-form" id="project-form">
           <div class="form-field">
-            <label class="form-label" for="proj-instagram">Instagram <span style="color:var(--text-sub)">(필수)</span></label>
+            <label class="form-label" for="proj-instagram">Instagram <span class="form-required">(필수)</span></label>
             <input class="form-input" id="proj-instagram" type="text" name="instagram" placeholder="@username" required>
-            <span style="font-family:var(--font-mono);font-size:0.62rem;color:var(--text-sub);margin-top:0.3rem;display:block">비공개 계정은 확인이 어렵습니다</span>
+            <span class="form-hint">비공개 계정은 확인이 어렵습니다</span>
           </div>
           <div class="form-field">
             <label class="form-label" for="proj-contact">연락처</label>
@@ -175,7 +175,7 @@
           </div>
           <div class="form-field">
             <label class="form-label">현재 머리 길이</label>
-            <div class="form-radio-group" style="flex-wrap:wrap;gap:0.6rem 1.2rem">
+            <div class="form-radio-group form-radio-group--wrap">
               <label class="form-radio-label"><input type="radio" name="hair_length" value="쇼트"> <span class="form-radio-box"></span> 쇼트</label>
               <label class="form-radio-label"><input type="radio" name="hair_length" value="단발"> <span class="form-radio-box"></span> 단발</label>
               <label class="form-radio-label"><input type="radio" name="hair_length" value="미디엄"> <span class="form-radio-box"></span> 미디엄 (쇄골)</label>
@@ -183,12 +183,12 @@
             </div>
           </div>
           <div class="form-field">
-            <label class="form-label" for="proj-message">헤어 고민 또는 신청 동기 <span style="color:var(--text-sub)">(선택)</span></label>
+            <label class="form-label" for="proj-message">헤어 고민 또는 신청 동기 <span class="form-required">(선택)</span></label>
             <textarea class="form-textarea" id="proj-message" name="message" placeholder="하고 싶은 헤어, 고민, 또는 신청하게 된 이유를 자유롭게 남겨주세요." rows="5"></textarea>
           </div>
           <div class="form-field">
             <label class="form-label">촬영 동의</label>
-            <p style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-sub);margin-bottom:0.8rem;line-height:1.7">촬영된 콘텐츠는 추후 유튜브·인스타그램 게시물에 활용될 수 있습니다.</p>
+            <p class="form-consent-note">촬영된 콘텐츠는 추후 유튜브·인스타그램 게시물에 활용될 수 있습니다.</p>
             <div class="form-radio-group">
               <label class="form-radio-label"><input type="radio" name="photo_consent" value="동의"> <span class="form-radio-box"></span> 동의</label>
               <label class="form-radio-label"><input type="radio" name="photo_consent" value="비동의"> <span class="form-radio-box"></span> 비동의</label>
@@ -200,7 +200,7 @@
 
       <!-- ─── PRODUCT ─── -->
       <section id="product" class="practice-section" style="display:none">
-        <header class="service-hero" style="padding-bottom:var(--space-md)">
+        <header class="service-hero">
           <span class="section-label">PRODUCT</span>
           <p class="service-lead">기록과 도구.</p>
         </header>
@@ -212,7 +212,7 @@
               <p class="shop-item__desc">브랜드의 방향을 정리하는 질문집. 5개 섹션, 20개 질문.</p>
             </div>
             <div class="shop-item__meta">
-              <a href="/product/workbook.html" class="shop-item__price" style="text-decoration:none;color:inherit">열어보기 →</a>
+              <a href="/product/workbook.html" class="shop-item__price shop-item__price--link">열어보기 →</a>
             </div>
           </div>
 

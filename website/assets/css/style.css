@@ -9246,3 +9246,62 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   color: var(--text-faint);
   text-transform: uppercase;
 }
+
+
+/* ════════════════════════════════════════════════
+   PRACTICE PAGE — Migrated from inline styles
+   ════════════════════════════════════════════════ */
+
+.page-practice .page-main {
+  position: relative;
+  z-index: 1;
+  padding-top: 120px;
+}
+.practice-section .service-hero {
+  padding-bottom: var(--space-md);
+}
+.practice-section-footer {
+  margin-top: var(--space-lg);
+}
+.service-body {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-sub);
+  line-height: 1.9;
+  max-width: 560px;
+  margin-bottom: var(--space-xl);
+}
+.atelier-product-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--text-sub);
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+.atelier-product-list {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-sub);
+  line-height: 1.9;
+}
+.form-hint {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-sub);
+  margin-top: 0.3rem;
+  display: block;
+}
+.form-required { color: var(--text-sub); }
+.form-radio-group--wrap { flex-wrap: wrap; gap: 0.6rem 1.2rem; }
+.form-consent-note {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-sub);
+  margin-bottom: 0.8rem;
+  line-height: 1.7;
+}
+.shop-item__price--link {
+  text-decoration: none;
+  color: inherit;
+}
