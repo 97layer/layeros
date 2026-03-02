@@ -112,6 +112,43 @@
   line-height: 1.8;
 }
 .editor-principle__text strong { color: var(--text); font-weight: 400; }
+
+/* Editorial Photo */
+.editor-photo {
+  margin: var(--space-xl) 0;
+  width: 100%;
+}
+.editor-photo img {
+  width: 100%;
+  display: block;
+  filter: grayscale(1) contrast(1.08);
+}
+.editor-photo figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin-top: 0.6rem;
+}
+/* Placeholder — 이미지 없을 때 */
+.editor-photo--empty .editor-photo__slot {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-dark);
+  border: 1px dashed var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.editor-photo--empty .editor-photo__slot::after {
+  content: attr(data-label);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
 </style>
 </head>
 <body class="page-about">
@@ -177,6 +214,12 @@
       </div>
     </div>
 
+    <!-- 이미지 슬롯 A: 신대방 8평 / 합정·청담 시절 -->
+    <figure class="editor-photo editor-photo--empty" data-reveal>
+      <div class="editor-photo__slot" data-label="2019 — 신대방 / 합정 / 청담"></div>
+      <figcaption>서울. 2019</figcaption>
+    </figure>
+
     <div class="editor-chapter" data-reveal>
       <span class="editor-chapter__label">2021</span>
       <div class="editor-body">
@@ -191,6 +234,12 @@
         <p>뜬구름 잡는 몽상가인가 가끔 생각하지만, 나는 오늘도 나를 믿어보기로 한다.</p>
       </div>
     </div>
+
+    <!-- 이미지 슬롯 B: 아틀리에 공간 -->
+    <figure class="editor-photo editor-photo--empty" data-reveal>
+      <div class="editor-photo__slot" data-label="2024 — 우화해 아틀리에"></div>
+      <figcaption>울산. 2024</figcaption>
+    </figure>
 
     <div class="editor-chapter" data-reveal>
       <span class="editor-chapter__label">수상 / 협업</span>
