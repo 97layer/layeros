@@ -35,11 +35,12 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from core.system.agent_watcher import AgentWatcher
 from core.system.queue_manager import Task
+from core.system.proactive_scan import ProactiveScan
 
 # Using REST API directly - no SDK needed
 
 
-class StrategyAnalyst:
+class StrategyAnalyst(ProactiveScan):
     """
     Strategy Analyst Agent - Signal Analysis & Strategic Insights
 
@@ -96,6 +97,14 @@ class StrategyAnalyst:
         source = signal_data.get('source', 'unknown')
 
         logger.info("SA: 신호 %s 분석 시작. [API: %s]", signal_id, self._api_url)
+
+        # ── 능동 사고 스캔 ──────────────────────────────────────
+        self.scan("analyze_signal", {
+            "signal_id": signal_id,
+            "content": content,
+            "source": source,
+        })
+        # ────────────────────────────────────────────────────────
 
         # Construct prompt for strategic analysis
         prompt = self._build_analysis_prompt(content, source)
@@ -175,6 +184,18 @@ class StrategyAnalyst:
                 'error': str(e),
                 'status': 'failed'
             }
+
+    # ── ProactiveScan 오버라이드 ──────────────────────────────────
+
+    def _simpler_path(self, action: str, ctx: dict) -> list[str]:
+        """SA: 빈 신호 또는 너무 짧은 신호 감지."""
+        warnings = []
+        content = ctx.get("content", "")
+        if len(content.strip()) < 10:
+            warnings.append("SIMPLER PATH: 신호 내용이 너무 짧음 — 분석 생략 고려")
+        return warnings
+
+    # ─────────────────────────────────────────────────────────────
 
     def _load_directive(self) -> str:
         """SA 에이전트 컨텍스트 로드 — directive_loader 기반 섹션 단위 추출"""

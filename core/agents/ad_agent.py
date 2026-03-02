@@ -32,6 +32,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from core.system.agent_watcher import AgentWatcher
 from core.system.queue_manager import Task
+from core.system.proactive_scan import ProactiveScan
 
 # Gemini API (optional, for actual execution) — google.genai 신규 SDK
 GEMINI_AVAILABLE = False
@@ -62,7 +63,7 @@ def _load_design_tokens() -> str:
     )
 
 
-class ArtDirector:
+class ArtDirector(ProactiveScan):
     """
     Art Director Agent - Visual Concepts & Art Direction
 
@@ -103,6 +104,17 @@ class ArtDirector:
                 print(f"⚠️  {self.agent_id}: NotebookLM 미연결 — fallback 시각 레퍼런스 사용")
         except Exception as e:
             logger.warning("NotebookLM 초기화 실패: %s", e)
+
+    # ── ProactiveScan 오버라이드 ──────────────────────────────────
+
+    def _blind_spots(self, action: str, ctx: dict) -> list[str]:
+        """AD: 디자인 토큰 미로드 시 경고."""
+        warnings = super()._blind_spots(action, ctx)
+        if self._visual_ref_cache is None and not self.mock_mode:
+            warnings.append("BLIND SPOT: 시각 레퍼런스 미로드 — practice.md Part I 기준 미확인")
+        return warnings
+
+    # ─────────────────────────────────────────────────────────────
 
     def _get_visual_reference(self) -> str:
         """

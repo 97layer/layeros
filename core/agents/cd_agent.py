@@ -25,6 +25,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from core.system.agent_watcher import AgentWatcher
 from core.system.queue_manager import Task
+from core.system.proactive_scan import ProactiveScan
 
 try:
     import anthropic
@@ -33,7 +34,7 @@ except ImportError:
     CLAUDE_AVAILABLE = False
 
 
-class CreativeDirector:
+class CreativeDirector(ProactiveScan):
     """
     Creative Director Agent - Final Decisions & Brand Stewardship
     
@@ -62,6 +63,19 @@ class CreativeDirector:
 
         print(f"CD: 준비됨. 브랜드 기준 로드 완료.")
 
+    # ── ProactiveScan 오버라이드 ──────────────────────────────────
+
+    def _blind_spots(self, action: str, ctx: dict) -> list[str]:
+        """CD: 최종 게이트 전 브랜드 보이스 위반 사전 감지."""
+        warnings = super()._blind_spots(action, ctx)
+        text = ctx.get("text", "")
+        if text:
+            warnings += self.check_brand_voice(text)
+            warnings += self.check_ralph_loop(text)
+        return warnings
+
+    # ─────────────────────────────────────────────────────────────
+
     def _load_criteria(self) -> str:
         """CD 품질 게이트 컨텍스트 로드 — sage_architect.md §10 + §9"""
         try:
@@ -83,6 +97,14 @@ class CreativeDirector:
         """
         signal_id = content_draft.get('signal_id', 'unknown')
         print(f"CD: {signal_id} 검토 중.")
+
+        # ── 능동 사고 스캔 ──────────────────────────────────────
+        essay_text = content_draft.get('archive_essay', content_draft.get('body', ''))
+        self.scan("review_content", {
+            "signal_id": signal_id,
+            "text": essay_text,
+        })
+        # ────────────────────────────────────────────────────────
 
         # 새 포맷 지원: instagram_caption + archive_essay 우선, 없으면 구버전 필드
         instagram_caption = content_draft.get('instagram_caption', content_draft.get('social_caption', ''))

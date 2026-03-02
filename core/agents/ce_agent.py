@@ -33,6 +33,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from core.system.agent_watcher import AgentWatcher
 from core.system.queue_manager import Task
 from core.system.agent_logger import get_logger
+from core.system.proactive_scan import ProactiveScan
 
 try:
     import google.genai as genai
@@ -60,7 +61,7 @@ def _load_brand_directives() -> str:
     )
 
 
-class ChiefEditor:
+class ChiefEditor(ProactiveScan):
     """
     Chief Editor Agent - Content Synthesis & Editorial Direction
 
@@ -103,6 +104,27 @@ class ChiefEditor:
             logger.warning("NotebookLM 초기화 실패: %s", e)
 
         logger.info("CE: 준비됨")
+
+    # ── ProactiveScan 오버라이드 ──────────────────────────────────
+
+    def _blind_spots(self, action: str, ctx: dict) -> list[str]:
+        """CE: 신호 텍스트 내 Ralph Loop 위험 사전 감지."""
+        warnings = super()._blind_spots(action, ctx)
+        text = ctx.get("text", "")
+        if text:
+            warnings += self.check_ralph_loop(text)
+            warnings += self.check_brand_voice(text)
+        return warnings
+
+    def _simpler_path(self, action: str, ctx: dict) -> list[str]:
+        """CE: 재작업 3회 이상이면 경고."""
+        warnings = []
+        retry = ctx.get("retry", 0)
+        if retry >= 3:
+            warnings.append(f"SIMPLER PATH: 재작업 {retry}회차 — 신호 자체를 재검토할 것")
+        return warnings
+
+    # ─────────────────────────────────────────────────────────────
 
     def _get_brand_voice(self) -> str:
         """
@@ -152,6 +174,15 @@ class ChiefEditor:
         signal_id = analysis.get('signal_id', 'unknown')
         retry_msg = " (재작업 %d회차)" % retry_count if retry_count > 0 else ""
         logger.info("CE: %s 초안 작업.%s", signal_id, retry_msg)
+
+        # ── 능동 사고 스캔 ──────────────────────────────────────
+        signal_text = analysis.get('content', '') + ' ' + analysis.get('themes', '')
+        self.scan("write_content", {
+            "signal_id": signal_id,
+            "text": signal_text,
+            "retry": retry_count,
+        })
+        # ────────────────────────────────────────────────────────
 
         # 브랜드 보이스 참조 (NotebookLM 또는 fallback)
         brand_voice = self._get_brand_voice()

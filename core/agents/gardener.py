@@ -38,6 +38,7 @@ from core.system.bot_templates import (
     WEEKLY_REPORT, WEEKLY_REPORT_PROPOSALS_HEADER,
     WEEKLY_REPORT_PROPOSAL_ROW, WEEKLY_REPORT_PROPOSALS_FOOTER,
 )
+from core.system.proactive_scan import ProactiveScan
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +60,7 @@ PROPOSE = {
 # Gardener는 분석 + 제안만 담당
 
 
-class Gardener:
+class Gardener(ProactiveScan):
     """
     24시간 주기 자가진화 에이전트.
     데이터 분석 → AUTO 갱신 → PROPOSE 텔레그램 전송 → 승인 대기
@@ -914,6 +915,18 @@ JSON만 출력."""
         기계적 수정 실행. 텔레그램 봇이 승인 시 호출.
         Returns (success: bool, message: str)
         """
+        from core.system.proactive_scan import FROZEN_FILES, _check_work_lock
+
+        # ── 능동 사고 스캔 ──────────────────────────────────────
+        action_type = action.get('type', '')
+        target_file = action.get('params', {}).get('target_file', '')
+        if target_file and Path(target_file).name in FROZEN_FILES:
+            logger.warning("[Gardener] SCAN ▸ SIDE EFFECT: FROZEN 파일 접근 시도 — %s", target_file)
+            return False, f"실행 중단: FROZEN 파일 수정 불가 — {target_file}"
+        for w in _check_work_lock():
+            logger.warning("[Gardener] SCAN ▸ %s", w)
+        # ────────────────────────────────────────────────────────
+
         action_type = action.get('type', '')
         params = action.get('params', {})
 

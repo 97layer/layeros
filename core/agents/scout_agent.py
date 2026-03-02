@@ -34,6 +34,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from core.scripts.signal_inject import create_signal, enqueue_for_sa, save_signal
 from core.scripts import signal_inject as _si
+from core.system.proactive_scan import ProactiveScan
 
 logging.basicConfig(
     level=logging.INFO,
@@ -205,7 +206,7 @@ def inject_item(item: dict, source: dict) -> Optional[str]:
     return signal["signal_id"]
 
 
-class ScoutAgent:
+class ScoutAgent(ProactiveScan):
     """Brand Scout 데몬 — RSS 소스 순회 및 신호 자동 수집"""
 
     def __init__(self):
@@ -213,6 +214,17 @@ class ScoutAgent:
         self.sources = self.config.get("sources", [])
         self.max_per_source = self.config.get("max_signals_per_source", 5)
         self.poll_interval_hours = self.config.get("poll_interval_hours", 6)
+
+    # ── ProactiveScan 오버라이드 ──────────────────────────────────
+
+    def _simpler_path(self, action: str, ctx: dict) -> list[str]:
+        """Scout: 소스가 없으면 실행 불필요."""
+        warnings = []
+        if ctx.get("source_count", 1) == 0:
+            warnings.append("SIMPLER PATH: scout_sources.json에 소스 없음 — 수집 생략")
+        return warnings
+
+    # ─────────────────────────────────────────────────────────────
 
     def run_once(self) -> dict:
         """
@@ -224,6 +236,10 @@ class ScoutAgent:
         if not _FEEDPARSER_AVAILABLE:
             logger.error("feedparser 미설치. 실행 불가. (pip install feedparser)")
             return {"injected": 0, "skipped": 0, "errors": 1}
+
+        # ── 능동 사고 스캔 ──────────────────────────────────────
+        self.scan("run_once", {"source_count": len(self.sources)})
+        # ────────────────────────────────────────────────────────
 
         stats = {"injected": 0, "skipped": 0, "errors": 0}
         started_at = datetime.now().isoformat()
