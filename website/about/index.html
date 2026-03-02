@@ -17,183 +17,10 @@
 <link href="https://cdn.jsdelivr.net" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="../assets/css/style.css?v=dc469562" rel="stylesheet"/>
+<link href="../assets/css/style.css?v=e8659890" rel="stylesheet"/>
 <script>
 (function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
 </script>
-<style>
-.about-hero {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
-  padding-bottom: var(--space-lg);
-}
-.about-hero__left { flex: 1; }
-.about-hero__right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  flex-shrink: 0;
-  padding-top: 0.5rem;
-}
-.about-hero__right svg { opacity: 0.28; transition: opacity 1.2s ease; }
-.about-hero__right:hover svg { opacity: 0.55; }
-.about-zero-label {
-  font-family: var(--font-mono);
-  font-size: 0.52rem;
-  letter-spacing: 0.22em;
-  color: var(--text-faint);
-  text-transform: uppercase;
-}
-.page-about .journey-title {
-  font-size: clamp(2.4rem, 5.5vw, 4.8rem);
-  line-height: 1.05;
-}
-.page-about .etymology-char { font-size: 3.6rem; line-height: 1; }
-.about-slow-accent { font-family: var(--font-mono); font-size: 0.9em; letter-spacing: 0.06em; }
-.about-section__sub {
-  font-family: var(--font-mono);
-  font-size: 0.48rem;
-  letter-spacing: 0.22em;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  display: block;
-  margin-top: 0.4rem;
-}
-.about-toc {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: var(--space-lg);
-  padding: var(--space-sm) 0;
-}
-.about-toc a {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  color: var(--text-faint);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.about-toc a:hover { color: var(--text-sub); }
-.about-preamble {
-  font-size: 0.88rem;
-  font-weight: 300;
-  color: var(--text-sub);
-  line-height: 1.7;
-  margin-bottom: var(--space-lg);
-}
-.about-declaration {
-  margin-top: var(--space-lg);
-  padding-top: var(--space-md);
-  border-top: 1px solid var(--line);
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--text);
-  line-height: 1.7;
-}
-.about-chapter {
-  margin-top: var(--space-xl);
-  padding-top: var(--space-lg);
-  border-top: 1px solid var(--line);
-}
-.about-chapter__label {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.18em;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: var(--space-md);
-}
-.about-chapter__title {
-  font-size: 0.92rem;
-  font-weight: 300;
-  color: var(--text-sub);
-  margin-bottom: var(--space-md);
-  line-height: 1.6;
-}
-.about-editor-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: var(--space-xl);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: var(--text-sub);
-  text-decoration: none;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 2px;
-  transition: color 0.3s ease, border-color 0.3s ease;
-}
-.about-editor-link:hover { color: var(--text); border-color: var(--text); }
-/* Appendix */
-.about-appendix__header { margin-bottom: var(--space-md); }
-.about-appendix__block {
-  border-top: 1px solid var(--line);
-  padding-top: 0;
-}
-.about-appendix__block + .about-appendix__block { margin-top: 0; }
-.about-appendix__toggle {
-  cursor: pointer;
-  list-style: none;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: var(--ls-label);
-  color: var(--text-sub);
-  text-transform: uppercase;
-  padding: 1.2rem 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  user-select: none;
-}
-.about-appendix__toggle::-webkit-details-marker { display: none; }
-.about-appendix__toggle::after {
-  content: '+';
-  font-size: 0.9rem;
-  color: var(--text-faint);
-  font-weight: 300;
-}
-.about-appendix__block[open] .about-appendix__toggle { color: var(--text); }
-.about-appendix__block[open] .about-appendix__toggle::after { content: '−'; }
-.about-appendix__body { padding-bottom: var(--space-lg); }
-.about-appendix__term {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: var(--space-sm);
-}
-/* Brand Palette swatches */
-.appendix-palette {
-  display: flex;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-  margin-top: var(--space-sm);
-}
-.appendix-swatch { display: flex; flex-direction: column; gap: 0.4rem; }
-.appendix-swatch__color {
-  width: 3.2rem;
-  height: 3.2rem;
-}
-.appendix-swatch__label {
-  font-family: var(--font-mono);
-  font-size: 0.48rem;
-  letter-spacing: 0.08em;
-  color: var(--text-faint);
-}
-@media (max-width: 640px) {
-  .about-hero { flex-direction: column-reverse; gap: var(--space-md); }
-  .about-hero__right { flex-direction: row; align-items: center; }
-  .page-about .etymology-char { font-size: 2.8rem; }
-}
-</style>
 </head>
 <body class="page-about">
 
@@ -226,7 +53,7 @@
 
     <div class="about-hero">
       <div class="about-hero__left">
-        <header class="journey-header" style="padding-top:0.5rem">
+        <header class="journey-header">
           <h1 class="journey-title">WOOHWAHAE</h1>
         </header>
       </div>
@@ -249,7 +76,7 @@
     </div>
 
     <p class="about-preamble" data-reveal>덧씌워진 것들을 걷어내면 본래의 것이 드러납니다. 소거라는 렌즈로 세상을 읽습니다. 이 기록은 그 방식과 태도, 이름과 실천에 대한 것입니다.</p>
-    <p class="about-zero-label" data-reveal style="margin-bottom: var(--space-md)">기록 동결 · 2026-03-02</p>
+    <p class="about-zero-label" data-reveal>기록 동결 · 2026-03-02</p>
 
     <nav class="about-toc" data-reveal>
       <a href="#ch-1">001. 서(序) — 시선</a>
@@ -332,7 +159,7 @@
       </div>
     </div>
 
-    <div class="about-body-text" style="margin-top: var(--space-xl)" data-reveal>
+    <div class="about-body-text about-body-text--spaced" data-reveal>
       <p>이름을 짓는 일은 세계를 선언하는 일입니다. 이름 안에 원리를 새겼습니다. 불릴 때마다 방향이 떠오르도록.</p>
       <p>이름은 매일 불립니다. 우화해라는 이름이 떠오를 때마다 묻게 됩니다. 소거가 일어나고 있는가. 덧씌워진 것들을 걷어내고 있는가. 이름이 질문이 될 때, 살아있는 이름이 됩니다.</p>
       <p>이름은 명사가 아닙니다. 동사입니다. 무언가이려는 것이 아니라, 매일 하는 것.</p>
