@@ -90,3 +90,6 @@ website/assets/js/utils/
 website/assets/editor/
 website/assets/참고*/
 woohwahae_cms.db
+
+# 개인 참고 자료 (로컬 전용)
+knowledge/rawrwa/
