@@ -91,6 +91,32 @@ for name, info in d['inactive'].items():
     ssh ${VM_HOST} "sudo certbot certificates"
     ;;
 
+  admin-setpw)
+    # $2 = 평문 비밀번호
+    if [ -z "$2" ]; then echo "Usage: deploy.sh admin-setpw <password>"; exit 1; fi
+    echo "비밀번호 해시 생성 후 VM .env 주입..."
+    ssh ${VM_HOST} "
+      HASH=\$(python3 -c \"from werkzeug.security import generate_password_hash; print(generate_password_hash('$2', method='pbkdf2:sha256'))\")
+      ENV_FILE=${VM_PATH}/.env
+      # 기존 항목 제거 후 추가
+      sed -i '/^ADMIN_PASSWORD_HASH=/d' \$ENV_FILE
+      echo \"ADMIN_PASSWORD_HASH=\$HASH\" >> \$ENV_FILE
+      echo 'ADMIN_PASSWORD_HASH 설정 완료'
+    "
+    echo "cortex-admin 재시작..."
+    ssh ${VM_HOST} "sudo systemctl restart cortex-admin"
+    sleep 3
+    ssh ${VM_HOST} "systemctl is-active cortex-admin && sudo ss -tlnp | grep 5001"
+    ;;
+
+  admin-log)
+    echo "=== cortex-admin 로그 (최근 30줄) ==="
+    ssh ${VM_HOST} "sudo journalctl -u cortex-admin -n 30 --no-pager 2>&1"
+    echo ""
+    echo "=== 포트 5001 리스닝 확인 ==="
+    ssh ${VM_HOST} "sudo ss -tlnp | grep 5001 || echo '5001 NOT LISTENING'"
+    ;;
+
   ssl-check)
     echo "=== nginx api.woohwahae.kr 설정 확인 ==="
     ssh ${VM_HOST} "sudo ls /etc/nginx/sites-enabled/ && sudo cat /etc/nginx/sites-enabled/api.woohwahae.kr 2>/dev/null || sudo grep -rl 'api.woohwahae' /etc/nginx/ 2>/dev/null | head -5 | xargs sudo cat"
