@@ -1,6 +1,6 @@
 """
 Essay Quality Validator — Ralph Loop 기반 언어품질 검증
-Standards: knowledge/standards/language_quality.md
+Standards: directives/sage_architect.md §6.5
 """
 
 import re

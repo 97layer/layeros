@@ -1,6 +1,7 @@
 # HARNESS — WOOHWAHAE 풀스택 아키텍처 SSOT
 
-> **상위**: the_origin.md → sage_architect.md → system.md
+> **위치**: `knowledge/system/harness.md` (아키텍처 문서. 에이전트 지시문 아님)
+> **상위**: directives/the_origin.md → sage_architect.md → system.md
 > **역할**: 브랜드가 하나의 유기체로 작동하는 레이어 구조 및 데이터 흐름 정의
 > **권한**: PROPOSE (구조 변경 시 순호 승인 필요)
 > **최종 갱신**: 2026-03-02

@@ -124,10 +124,15 @@ CONTEXT_SLOTS = {
 ### 8.2 시각 제약
 - SSOT: practice.md Part I (Colors, Typography, Spacing, Breath)
 
-### 8.3 STAP 게이트
-- SSOT: sage_architect.md §10 + practice.md Part II §4
-- 70점+ → 통과, 50-69 → 정제(revise), 49↓ → 거절(reject)
-- 미달 시 재작성 최대 2회. 이후 CD 수동 검토
+### 8.3 품질 게이트 (2-Stage)
+
+**Stage 1 — STAP (콘텐츠 품질)**: `practice.md §II-4`
+- 5-pillar. 70점+ → Stage 2. 미달 → CE 재작업 최대 2회.
+
+**Stage 2 — Ralph Loop (언어 품질)**: `sage_architect.md §6.5`
+- 4-loop. 90점+ → AD 진행. 미달 → CE 재작업 최대 2회.
+
+두 게이트 모두 통과해야 AD로 이동.
 
 ---
 

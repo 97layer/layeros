@@ -204,3 +204,16 @@
 {"ts": "2026-03-02T13:17:44", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 203, "uncommitted": 9}}
 {"ts": "2026-03-02T13:23:29", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 204, "uncommitted": 8}}
 {"ts": "2026-03-02T13:25:19", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 205, "uncommitted": 8}}
+{"ts": "2026-03-02T13:29:30", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 206, "uncommitted": 0}}
+{"ts": "2026-03-02T13:29:40", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 207, "uncommitted": 1}}
+{"ts": "2026-03-02T13:29:48", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 208, "uncommitted": 1}}
+{"ts": "2026-03-02T13:32:05", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 209, "uncommitted": 1}}
+{"ts": "2026-03-02T13:33:34", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 210, "uncommitted": 1}}
+{"ts": "2026-03-02T13:35:08", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 211, "uncommitted": 2}}
+{"ts": "2026-03-02T13:35:12", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 212, "uncommitted": 2}}
+{"ts": "2026-03-02T13:35:31", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 213, "uncommitted": 3}}
+{"ts": "2026-03-02T13:37:01", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 214, "uncommitted": 6}}
+{"ts": "2026-03-02T13:47:35", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 215, "uncommitted": 1}}
+{"ts": "2026-03-02T13:48:03", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 216, "uncommitted": 1}}
+{"ts": "2026-03-02T13:50:24", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 217, "uncommitted": 1}}
+{"ts": "2026-03-02T13:51:20", "type": "session_summary", "actor": "session-stop", "id": "auto-session", "title": "세션 종료", "meta": {"session_decisions_today": 218, "uncommitted": 3}}
