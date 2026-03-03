@@ -9012,6 +9012,20 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   transition: color 0.3s ease;
 }
 .about-toc a:hover { color: var(--text-sub); }
+.about-toc-arc {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--line);
+}
+.about-toc-arc a {
+  font-size: 0.72rem;
+  color: var(--text-sub);
+  letter-spacing: 0.14em;
+}
+.about-toc-arc a:hover { color: var(--text); }
 .about-preamble {
   font-size: 0.88rem;
   font-weight: 300;
