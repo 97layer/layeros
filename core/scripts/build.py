@@ -3,8 +3,9 @@
 build.py — LAYER OS 통합 빌드 파이프라인
 
 사용법:
-    python build.py              # 전체: archive → components → cache bust
+    python build.py              # 전체: archive → components → stats → cache bust
     python build.py --components # 컴포넌트만
+    python build.py --stats      # about 이스터에그 수치만
     python build.py --bust       # 캐시 버스팅만
     python build.py --dry-run    # 프리뷰
 """

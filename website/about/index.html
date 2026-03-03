@@ -17,7 +17,7 @@
 <link href="https://cdn.jsdelivr.net" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="/assets/css/style.css?v=3823fae0" rel="stylesheet"/>
+<link href="/assets/css/style.css?v=9ca896e0" rel="stylesheet"/>
 <script>
 (function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
 </script>
@@ -54,14 +54,14 @@
     <span class="section-label">ABOUT</span>
     <p class="about-preamble" data-reveal>덧씌워진 것들을 걷어내면 본래의 것이 드러납니다. 소거라는 렌즈로 세상을 읽습니다. 이 기록은 그 방식과 태도, 이름과 실천에 대한 것입니다.</p>
     <p class="about-zero-label about-zero-label--toggle" data-reveal id="about-zero-trigger"><span id="about-clock"></span>조금씩 수정됩니다. <span class="about-zero-cta">눌러보세요</span></p>
-    <p class="about-zero-label about-zero-easter" id="about-zero-easter" aria-hidden="true">글을 195번 고쳤습니다. 54,360줄이 사라졌습니다. 비워야 보인다고 믿습니다. — 97layer</p>
+    <p class="about-zero-label about-zero-easter" id="about-zero-easter" aria-hidden="true">글을 195번 고쳤습니다. 54,360줄이 사라졌습니다. 비워야 보인다고 믿습니다. · 97layer</p>
     <nav class="about-toc" data-reveal>
-      <a href="#ch-1">001. 시선 — 서(序)</a>
-      <a href="#ch-2">002. 원리 — 소거(消去)</a>
-      <a href="#ch-3">003. 태도 — 느림</a>
-      <a href="#ch-4">004. 이름 — 우화해(羽化解)</a>
-      <a href="#ch-5">005. 실천 — 표현 방식</a>
-      <a href="#ch-6">006. 순환 — 발(跋)</a>
+      <a href="#ch-1">001. 시선 · 서(序)</a>
+      <a href="#ch-2">002. 원리 · 소거(消去)</a>
+      <a href="#ch-3">003. 태도 · 느림</a>
+      <a href="#ch-4">004. 이름 · 우화해(羽化解)</a>
+      <a href="#ch-5">005. 실천 · 표현 방식</a>
+      <a href="#ch-6">006. 순환 · 발(跋)</a>
     </nav>
   </div>
 
@@ -205,10 +205,10 @@
     <span class="about-section__label about-appendix__header">부록</span>
 
     <div class="about-appendix__block">
-      <button class="about-appendix__toggle" data-drawer="drawer-a">A. 철학적 배경 <span>+</span></button>
+      <button class="about-appendix__toggle" data-drawer="drawer-a" aria-expanded="false" aria-controls="drawer-a">A. 철학적 배경 <span>+</span></button>
     </div>
     <div class="about-appendix__block">
-      <button class="about-appendix__toggle" data-drawer="drawer-b">B. 브랜드 팔레트 <span>+</span></button>
+      <button class="about-appendix__toggle" data-drawer="drawer-b" aria-expanded="false" aria-controls="drawer-b">B. 브랜드 팔레트 <span>+</span></button>
     </div>
     <div class="about-appendix__block">
       <a class="about-appendix__toggle" href="/about/editor/">C. 편집자의 궤적 <span>→</span></a>
@@ -219,7 +219,7 @@
   <div class="appendix-overlay" id="appendix-overlay"></div>
 
   <div class="appendix-drawer" id="drawer-a">
-    <button class="appendix-drawer__close" aria-label="닫기">×</button>
+    <button class="appendix-drawer__close" aria-label="닫기">✕</button>
     <div class="appendix-drawer__inner about-body-text">
       <p class="appendix-drawer__title">A. 철학적 배경</p>
       <div class="about-chapter">
@@ -246,7 +246,7 @@
   </div>
 
   <div class="appendix-drawer" id="drawer-b">
-    <button class="appendix-drawer__close" aria-label="닫기">×</button>
+    <button class="appendix-drawer__close" aria-label="닫기">✕</button>
     <div class="appendix-drawer__inner about-body-text">
       <p class="appendix-drawer__title">B. 브랜드 팔레트</p>
       <div class="about-chapter">
@@ -339,25 +339,41 @@
 <script>
 (function () {
   var overlay = document.getElementById('appendix-overlay');
+
   function closeAll() {
     document.querySelectorAll('.appendix-drawer').forEach(function (d) { d.classList.remove('is-open'); });
+    document.querySelectorAll('[data-drawer]').forEach(function (btn) { btn.setAttribute('aria-expanded', 'false'); });
     if (overlay) overlay.classList.remove('is-open');
     document.body.style.overflow = '';
   }
+
   document.querySelectorAll('[data-drawer]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var drawer = document.getElementById(btn.dataset.drawer);
       if (!drawer) return;
+      var isOpen = drawer.classList.contains('is-open');
       closeAll();
-      drawer.classList.add('is-open');
-      if (overlay) overlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+      if (!isOpen) {
+        drawer.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        if (overlay) overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        /* 드로어 열리면 스크롤 탑 */
+        drawer.scrollTop = 0;
+      }
     });
   });
+
   document.querySelectorAll('.appendix-drawer__close').forEach(function (el) {
     el.addEventListener('click', closeAll);
   });
+
   if (overlay) overlay.addEventListener('click', closeAll);
+
+  /* Escape 키 */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAll();
+  });
 })();
 </script>
 <script>
@@ -375,15 +391,40 @@
   setInterval(tick, 1000);
 
   document.addEventListener('DOMContentLoaded', function () {
+    /* ── 이스터에그 ── */
     var trigger = document.getElementById('about-zero-trigger');
     var easter  = document.getElementById('about-zero-easter');
-    if (!trigger || !easter) return;
-    trigger.style.cursor = 'pointer';
-    trigger.addEventListener('click', function () {
-      var open = easter.classList.toggle('is-open');
-      easter.setAttribute('aria-hidden', String(!open));
-      trigger.classList.toggle('is-active', open);
-    });
+    if (trigger && easter) {
+      trigger.style.cursor = 'pointer';
+      trigger.addEventListener('click', function () {
+        var open = easter.classList.toggle('is-open');
+        easter.setAttribute('aria-hidden', String(!open));
+        trigger.classList.toggle('is-active', open);
+      });
+    }
+
+    /* ── TOC 스크롤 스파이 ── */
+    var tocLinks = document.querySelectorAll('.about-toc a[href^="#"]');
+    if (tocLinks.length && 'IntersectionObserver' in window) {
+      var sectionMap = {};
+      tocLinks.forEach(function (a) {
+        var id = a.getAttribute('href').slice(1);
+        sectionMap[id] = a;
+      });
+      var setActive = function (id) {
+        tocLinks.forEach(function (a) { a.classList.remove('is-active'); });
+        if (sectionMap[id]) sectionMap[id].classList.add('is-active');
+      };
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      }, { rootMargin: '-15% 0px -75% 0px', threshold: 0 });
+      Object.keys(sectionMap).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) obs.observe(el);
+      });
+    }
   });
 })();
 </script>

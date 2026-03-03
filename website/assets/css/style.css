@@ -9017,7 +9017,7 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   transition: max-height 0.3s ease, opacity 0.25s ease, margin-bottom 0.3s ease;
 }
 .about-zero-easter.is-open {
-  max-height: 3em;
+  max-height: 6em;
   opacity: 1;
   margin-bottom: var(--space-md);
 }
@@ -9067,6 +9067,7 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   display: block;
 }
 .about-toc a:hover { color: var(--text-sub); }
+.about-toc a.is-active { color: var(--text-sub); }
 .about-preamble {
   font-size: 0.88rem;
   font-weight: 300;
@@ -9084,11 +9085,11 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   line-height: 1.7;
 }
 .about-chapter {
-  margin-top: var(--space-xl);
+  margin-top: var(--space-lg);
   padding-top: 0;
 }
 .about-section > .about-chapter:first-of-type {
-  margin-top: var(--space-lg);
+  margin-top: var(--space-md);
 }
 .about-chapter__label {
   font-family: var(--font-mono);
@@ -9162,7 +9163,7 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   letter-spacing: 0.08em;
   color: var(--text-faint);
 }
-.about-body-text--spaced { margin-top: var(--space-xl); }
+.about-body-text--spaced { margin-top: var(--space-lg); }
 .appendix-font--body { font-family: var(--font-body); font-weight: 300; margin-bottom: 0.8rem; }
 .appendix-font--mono { font-family: var(--font-mono); font-size: 0.85em; color: var(--text-sub); }
 
@@ -9185,7 +9186,7 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   background: var(--bg);
   z-index: 201;
   overflow-y: auto;
-  padding: var(--space-xl) var(--space-lg) var(--space-xl);
+  padding: var(--space-md) var(--space-lg) var(--space-xl);
   border-left: 1px solid var(--line);
   transition: right 0.4s cubic-bezier(0.19,1,0.22,1);
 }
@@ -9194,14 +9195,16 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: var(--space-lg);
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  margin-bottom: var(--space-md);
   margin-left: auto;
   background: none;
   border: 1px solid var(--line);
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-sub);
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
