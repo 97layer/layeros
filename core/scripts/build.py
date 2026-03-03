@@ -3,9 +3,9 @@
 build.py — LAYER OS 통합 빌드 파이프라인
 
 사용법:
-    python build.py              # 전체: archive → components → stats → cache bust
+    python build.py              # 전체: archive → components → easter → cache bust
     python build.py --components # 컴포넌트만
-    python build.py --stats      # about 이스터에그 수치만
+    python build.py --easter     # about 이스터에그 타임스탬프+수치만
     python build.py --bust       # 캐시 버스팅만
     python build.py --dry-run    # 프리뷰
 """
@@ -31,8 +31,15 @@ ABOUT_HTML = WEBSITE_DIR / "about" / "index.html"
 # 캐시 버스팅 대상: CSS 참조가 있는 HTML 파일
 CACHE_BUST_PATTERN = re.compile(r'(style\.css)\?v=[a-zA-Z0-9]+')
 
-# about 이스터에그 수치 패턴
-_STATS_RE = re.compile(r'글을 [\d,]+번 고쳤습니다\. [\d,]+줄이 사라졌습니다\.')
+# about 이스터에그 블록 마커
+EASTER_RE = re.compile(r'<!-- EASTER:START -->.*?<!-- EASTER:END -->', re.DOTALL)
+
+EASTER_MSGS = [
+    "글을 {commits:,}번 고쳤습니다. {deletions:,}줄이 사라졌습니다.",
+    "디렉터가 밤낮없이 수정하고 있습니다.",
+    "지운 것이 남은 것보다 많습니다.",
+    "비워야 보인다고 믿습니다. — 97layer",
+]
 
 
 def run_script(name: str, args: list = None, dry_run: bool = False) -> bool:
@@ -90,27 +97,53 @@ def compute_site_stats() -> tuple:
     return commits, deletions
 
 
-def inject_site_stats(dry_run: bool = False) -> bool:
-    """about/index.html 이스터에그 수치를 git 실제 데이터로 갱신."""
+def _get_git_timestamps(n: int) -> list:
+    """git log에서 균등 분포 타임스탬프 n개 추출 (최신→구버전 순)."""
+    try:
+        r = subprocess.run(
+            ["git", "log", "--format=%ad", "--date=format:%Y.%m.%d %H:%M"],
+            capture_output=True, text=True, cwd=str(PROJECT_ROOT), timeout=30,
+        )
+        ts = [t.strip() for t in r.stdout.splitlines() if t.strip()]
+        if not ts:
+            return ["——"] * n
+        total = len(ts)
+        indices = [int(i * (total - 1) / max(n - 1, 1)) for i in range(n)]
+        return [ts[i] for i in indices]
+    except Exception as e:
+        logger.warning("타임스탬프 추출 실패: %s", e)
+        return ["——"] * n
+
+
+def inject_easter_log(dry_run: bool = False) -> bool:
+    """about 이스터에그 — git 타임스탬프 + stats 빌드 시 주입."""
     if not ABOUT_HTML.exists():
         logger.warning("about/index.html 없음")
         return False
 
     commits, deletions = compute_site_stats()
-    new_text = "글을 {:,}번 고쳤습니다. {:,}줄이 사라졌습니다.".format(commits, deletions)
+    timestamps = _get_git_timestamps(len(EASTER_MSGS))
+
+    lines = []
+    for ts, msg in zip(timestamps, EASTER_MSGS):
+        text = msg.format(commits=commits, deletions=deletions)
+        lines.append('    <span class="elog"><time>{}</time>{}</span>'.format(ts, text))
+
+    inner = "\n".join(lines)
+    block = "<!-- EASTER:START -->\n{}\n    <!-- EASTER:END -->".format(inner)
 
     content = ABOUT_HTML.read_text(encoding="utf-8")
-    updated = _STATS_RE.sub(new_text, content)
+    updated = EASTER_RE.sub(block, content)
 
     if updated == content:
-        logger.info("stats 변경 없음 (commits=%d, deletions=%d)", commits, deletions)
+        logger.info("easter log 변경 없음")
         return True
 
     if dry_run:
-        logger.info("[DRY-RUN] stats: %s", new_text)
+        logger.info("[DRY-RUN] easter log:\n%s", inner)
     else:
         ABOUT_HTML.write_text(updated, encoding="utf-8")
-        logger.info("stats 갱신: %s", new_text)
+        logger.info("easter log 갱신: commits=%d, deletions=%d", commits, deletions)
     return True
 
 
@@ -147,13 +180,13 @@ def main():
     parser = argparse.ArgumentParser(description="LAYER OS 통합 빌드")
     parser.add_argument("--archive", action="store_true", help="아카이브만 빌드")
     parser.add_argument("--components", action="store_true", help="컴포넌트만 주입")
-    parser.add_argument("--stats", action="store_true", help="about 이스터에그 수치만 갱신")
+    parser.add_argument("--easter", action="store_true", help="about 이스터에그 타임스탬프+수치 갱신")
     parser.add_argument("--bust", action="store_true", help="캐시 버스팅만")
     parser.add_argument("--dry-run", action="store_true", help="변경 프리뷰")
     args = parser.parse_args()
 
     # 특정 단계만 실행
-    run_all = not (args.archive or args.components or args.stats or args.bust)
+    run_all = not (args.archive or args.components or args.easter or args.bust)
 
     logger.info("═══ LAYER OS Build Pipeline ═══")
 
@@ -165,10 +198,10 @@ def main():
     if run_all or args.components:
         run_script("build_components.py", dry_run=args.dry_run)
 
-    # 3. Site Stats (about 이스터에그 수치 갱신)
-    if run_all or args.stats:
-        logger.info("─── site stats ───")
-        inject_site_stats(dry_run=args.dry_run)
+    # 3. Easter Log (about 이스터에그 타임스탬프+수치 갱신)
+    if run_all or args.easter:
+        logger.info("─── easter log ───")
+        inject_easter_log(dry_run=args.dry_run)
 
     # 4. Cache Busting
     if run_all or args.bust:
