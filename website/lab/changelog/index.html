@@ -8,17 +8,16 @@
   <meta content="website" property="og:type" />
   <title>Changelog — WOOHWAHAE</title>
   <!-- COMPONENT:head -->
-  <meta name="theme-color" content="#E3E2E0">
-  <link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-  <link rel="stylesheet" href="/assets/css/style.css?v=feaa73ff">
-  <script>(function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();</script>
-  <!-- /COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=433c510e">
+<script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
+<!-- /COMPONENT:head -->
   <style>
     /* ── The Glitch Entity : 미니멀리즘과 파편화의 결합 ── */
     :root {
@@ -115,29 +114,92 @@
 
     @keyframes glitch-anim {
       0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(1.05);
-      }
-
-      25% {
-        opacity: 0.2;
-        transform: translate(-2px, 1px) skewX(5deg);
-      }
-
-      50% {
         opacity: 0.8;
-        transform: translate(1px, -2px) scale(0.95);
+        transform: translate(0, 0);
       }
 
-      75% {
+      20% {
         opacity: 0.4;
-        transform: translate(-1px, -1px) skewX(-5deg);
+        transform: translate(-1px, 0);
+      }
+
+      40% {
+        opacity: 0.8;
+        transform: translate(1px, 0);
+      }
+
+      60% {
+        opacity: 0.4;
+        transform: translate(-1px, 0);
+      }
+
+      80% {
+        opacity: 0.8;
+        transform: translate(0, 0);
       }
 
       100% {
-        opacity: 1;
+        opacity: 0.8;
         transform: translate(0, 0);
       }
+    }
+
+    /* ── Terminal Redesign : Liquid Architecture ── */
+    .terminal-container {
+      --term-bg: rgba(13, 13, 13, 0.4);
+      --term-border: rgba(255, 255, 255, 0.08);
+      --term-accent: var(--text);
+      --term-dim: rgba(255, 255, 255, 0.3);
+
+      background: var(--term-bg);
+      -webkit-backdrop-filter: blur(40px) saturate(1.5);
+      backdrop-filter: blur(40px) saturate(1.5);
+      border: 1px solid var(--term-border);
+      border-radius: 1px;
+      margin-top: 4rem;
+      margin-bottom: 8rem;
+      position: relative;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+    }
+
+    .terminal-header {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--term-border);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 300;
+      color: var(--term-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .terminal-title {
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .terminal-meta {
+      opacity: 0.5;
+    }
+
+    .terminal-viewport {
+      height: 60vh;
+      max-height: 700px;
+      overflow-y: auto;
+      padding: 2.5rem 2rem;
+      position: relative;
+      scroll-behavior: smooth;
+    }
+
+    .terminal-viewport::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    .terminal-viewport::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     /* ── Logs Area : 무한 스크롤 스트림 ── */
@@ -150,8 +212,8 @@
       height: 60vh;
       max-height: 800px;
       overflow: hidden;
-      -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
-      mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 1) 85%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 1) 85%, transparent);
       border-left: 1px dotted var(--line);
       margin-left: calc(1rem + var(--cl-ghost-size)/2);
       padding-top: 50px;
@@ -160,115 +222,72 @@
     .cl-log {
       display: flex;
       flex-direction: column;
-      position: absolute;
-      width: 100%;
-      top: 100%;
-      padding-left: var(--cl-grid-edge);
-      will-change: transform;
+      gap: 0.5rem;
+      padding-bottom: 2rem;
     }
 
     .cl-entry {
-      position: relative;
-      margin-bottom: 3.5rem;
-      padding-left: 1.5rem;
-      font-family: var(--font-mono);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 0.85rem;
+      color: var(--text);
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
-      transition: filter 0.3s;
+      margin-bottom: 2rem;
+      padding-left: 1rem;
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     .cl-entry:hover {
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+      border-left-color: var(--text);
+      transform: translateX(4px);
     }
 
-    /* 랜덤 오프셋을 통한 파편화: JS에서 인라인 스타일로 주입 */
-
-    .cl-entry::before {
-      content: '';
-      position: absolute;
-      left: -2px;
-      /* Dotted line over */
-      top: 0.5rem;
-      width: 4px;
-      height: 4px;
-      background: var(--text-faint);
-      border-radius: 50%;
-    }
-
-    /* 로컬/미커밋 데이터의 특수성 (Anomaly) */
     .cl-entry--local {
-      margin-bottom: 2rem;
-    }
-
-    .cl-entry--local::before {
-      background: var(--text);
-      box-shadow: 0 0 6px var(--text-sub);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        opacity: 0.4;
-      }
-
-      50% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0.4;
-      }
+      opacity: 0.6;
     }
 
     .cl-meta {
       display: flex;
-      align-items: baseline;
-      gap: 0.8rem;
-      font-size: 0.6rem;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
       color: var(--text-faint);
-      opacity: 0.6;
+      opacity: 0.5;
     }
 
     .cl-sha {
       letter-spacing: 0.05em;
     }
 
-    .cl-entry:hover .cl-sha {
-      color: var(--text);
-      cursor: crosshair;
-    }
-
     .cl-msg {
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      font-weight: 300;
       color: var(--text);
+      font-family: var(--font-sans);
+      font-weight: 300;
       line-height: 1.5;
-      max-width: 500px;
       letter-spacing: -0.01em;
     }
 
     .cl-entry--local .cl-msg {
-      color: var(--text-sub);
-      font-style: italic;
+      color: var(--term-yellow);
     }
 
     .cl-path {
-      font-size: 0.55rem;
-      color: var(--text-faint);
-      opacity: 0.4;
-      margin-top: 0.2rem;
+      font-size: 0.6rem;
+      color: #666;
       word-break: break-all;
     }
 
     .cl-loading {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-faint);
-      padding: 4rem 0;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
+      font-size: 0.75rem;
+      color: #0c0;
+      padding: 2rem 0;
       animation: pulse 1.5s infinite;
     }
 
@@ -281,13 +300,13 @@
 
     .cl-section-label {
       font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--text-faint);
-      opacity: 0.55;
+      opacity: 0.4;
       display: block;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
     }
 
     .cl-chart {
@@ -315,40 +334,89 @@
       opacity: 0.6;
     }
 
-    /* ── 통계 데이터 (Anomaly Report) ── */
+    /* ── 통계 데이터 (Dashboard) ── */
     .cl-stats-module {
       margin-top: 2rem;
-      margin-bottom: 4rem;
-      border-top: 1px dotted var(--line);
+      margin-bottom: 6rem;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
       font-family: var(--font-mono);
-      padding-left: var(--cl-grid-edge);
-      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
 
     .cl-stat-box {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.8rem;
+      padding: 3.5rem 0;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .cl-stat-box::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--text);
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0.5;
+    }
+
+    .cl-stat-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .cl-stat-box:hover::after {
+      width: 100%;
     }
 
     .cl-stat-box em {
       font-style: normal;
-      font-size: 0.55rem;
+      font-size: 0.5rem;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.4em;
       color: var(--text-faint);
-      opacity: 0.7;
+      opacity: 0.4;
+      transition: opacity 0.4s;
+    }
+
+    .cl-stat-box:hover em {
+      opacity: 0.8;
     }
 
     .cl-stat-val {
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: var(--text);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      opacity: 0.9;
+      display: inline-block;
+    }
+
+    .cl-stat-val.is-counting {
+      filter: blur(2px);
+      opacity: 0.5;
+      transform: scale(0.95);
     }
 
     @media (max-width: 768px) {
+      .cl-stats-module {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cl-stat-box:nth-child(even) {
+        border-right: none;
+      }
+
+      .cl-stat-box:nth-child(1),
+      .cl-stat-box:nth-child(2) {
+        border-bottom: 1px solid var(--line);
+      }
+
       :root {
         --cl-grid-edge: 0rem;
       }
@@ -379,76 +447,86 @@
 
 <body class="page-lab">
   <!-- COMPONENT:nav -->
-  <nav class="site-nav" id="site-nav">
-    <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
-      <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
-    </a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
-      <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
-      <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
-      <li><a href="/lab/"><span class="numeric-tag">04.</span>Lab</a></li>
-    </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
-      <span></span><span></span>
-    </button>
-  </nav>
-  <div class="nav-overlay" id="nav-overlay">
-    <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
-    <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
-    <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
-    <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
-  </div>
-  <!-- /COMPONENT:nav -->
+<nav class="site-nav" id="site-nav">
+  <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+    <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
+    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
+    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/lab/"><span class="numeric-tag">04.</span>Lab</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</nav>
+<div class="nav-overlay" id="nav-overlay">
+  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
+  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
+  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
+</div>
+<!-- /COMPONENT:nav -->
 
   <div class="cl-wrap">
-    <div class="cl-chart-container" id="cl-chart-container" style="display:none;">
-      <span class="cl-section-label">Temporal Activity</span>
-      <div class="cl-chart" id="cl-chart"></div>
+    <header class="cl-header">
+      <span class="cl-label">TRACES OF CONTINUITY</span>
+      <h1 class="cl-title">Changelog</h1>
+      <p class="cl-desc">사유의 궤적과 시스템의 본질적 변화를 기록합니다.</p>
+    </header>
+
+    <div class="cl-stats-module" id="cl-stats">
+      <!-- Stats Rendered Here -->
     </div>
 
-    <div class="cl-stream-wrapper">
+    <!-- 터미널 컨테이너 (오토 스크롤 적용 영역) -->
+    <div class="terminal-container">
       <div id="entity-anchor"></div>
-      <div class="cl-log-viewport" id="cl-viewport">
+      <div class="terminal-header">
+        <span class="terminal-title">Continuity.log</span>
+        <span class="terminal-meta">Status.Essential</span>
+      </div>
+      <div class="terminal-viewport" id="cl-viewport">
         <div class="cl-log" id="cl-log">
-          <div class="cl-loading">Extracting traces...</div>
+          <div class="cl-loading">로그 데이터를 불러오는 중...</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- COMPONENT:footer -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-wordmark">WOOHWAHAE</div>
-      <div class="footer-mid">
-        <nav class="footer-nav">
-          <a href="/archive/">Archive</a>
-          <a href="/practice/">Practice</a>
-          <a href="/about/">About</a>
-          <a href="/lab/">Lab</a>
-        </nav>
-        <div class="footer-contact-row">
-          <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
-          <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
-          <a href="tel:05071393-2075">0507-1393-2075</a>
-        </div>
-      </div>
-      <div class="footer-base">
-        <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
-        <div class="footer-legal">
-          <a href="/privacy.html">Privacy</a>
-          <a href="/terms.html">Terms</a>
-          <span>&copy; 2024 WOOHWAHAE</span>
-        </div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-wordmark">WOOHWAHAE</div>
+    <div class="footer-mid">
+      <nav class="footer-nav">
+        <a href="/archive/">Archive</a>
+        <a href="/practice/">Practice</a>
+        <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+      </nav>
+      <div class="footer-contact-row">
+        <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
+        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+        <a href="tel:05071393-2075">0507-1393-2075</a>
       </div>
     </div>
-  </footer>
-  <!-- /COMPONENT:footer -->
+    <div class="footer-base">
+      <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
+      <div class="footer-legal">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <span>&copy; 2025 WOOHWAHAE</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /COMPONENT:footer -->
 
   <script>
     (function () {
-      var BASE = 'https://api.github.com/repos/97layer/layeros/';
+      var BASE//api.github.com/repos/97layer/layeros/';
 
       function fmtDate(iso) {
         var d = new Date(iso);
@@ -466,12 +544,43 @@
         var hours = data.invested_hours || 0;
 
         var statsHtml =
-          '<div class="cl-stat-box"><em>Temporal Depth</em><span class="cl-stat-val">T-plus ' + days + ' D</span></div>' +
-          '<div class="cl-stat-box"><em>System Flux</em><span class="cl-stat-val">' + total + ' Operations</span></div>' +
-          '<div class="cl-stat-box"><em>Invested Time</em><span class="cl-stat-val">~' + hours + ' Hrs</span></div>' +
-          '<div class="cl-stat-box"><em>Current Anomalies</em><span class="cl-stat-val">' + uncommitted + ' Detected</span></div>';
+          '<div class="cl-stat-box"><em>RUNTIME</em><span class="cl-stat-val">' + days + ' DAYS</span></div>' +
+          '<div class="cl-stat-box"><em>INCREMENTS</em><span class="cl-stat-val">' + total + ' UPDATES</span></div>' +
+          '<div class="cl-stat-box"><em>ENERGY</em><span class="cl-stat-val">~' + hours + ' HRS</span></div>' +
+          '<div class="cl-stat-box"><em>STANDBY</em><span class="cl-stat-val">' + uncommitted + ' ITEMS</span></div>';
 
         document.getElementById('cl-stats').innerHTML = statsHtml;
+
+        // Count Up Animation
+        document.querySelectorAll('.cl-stat-val').forEach(el => {
+          const targetText = el.innerText;
+          const num = parseInt(targetText.replace(/[^0-9]/g, ''));
+          if (isNaN(num)) return;
+
+          let start = 0;
+          const duration = 1500;
+          const startTime = performance.now();
+          const suffix = targetText.replace(/[0-9]/g, '').trim();
+
+          function updateCount(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOutExpo = 1 - Math.pow(2, -10 * progress);
+
+            const currentCount = Math.floor(easeOutExpo * num);
+            el.innerText = (targetText.includes('~') ? '~' : '') + currentCount + ' ' + suffix;
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCount);
+            } else {
+              el.innerText = targetText;
+              el.classList.remove('is-counting');
+            }
+          }
+
+          el.classList.add('is-counting');
+          requestAnimationFrame(updateCount);
+        });
 
         var entries = data.entries || [];
         var logHtml = entries.map(function (e, i) {
@@ -479,43 +588,53 @@
           var dateStr = fmtDate(e.date);
           var sha = e.sha || '-----';
 
-          // 의도된 노이즈: 해시값에 따라 랜덤한 마진 오프셋 (-10px ~ 40px)
-          var hashVal = parseInt(sha.slice(0, 4), 16) || i * 123;
-          var offset = (hashVal % 50) - 10;
+          // 직관적 한글 변환 및 최소한의 프라이버시 정보 노출
+          var rawMsg = e.msg || '';
+          var lowerMsg = rawMsg.toLowerCase();
+          var typeStr = "[업데이트]";
+          var displayMsg = "시스템 유지보수 진행"; // 기본 메시지
 
-          // 메시지 추상화 (프라이버시 보호 및 브랜드 감도)
-          var abstractMsg = "[DATA_MUTATION] Routine archival update";
-          var lowerMsg = (e.msg || '').toLowerCase();
           if (isLocal) {
-            abstractMsg = "Unregistered local anomaly detected";
-          } else if (lowerMsg.includes('style') || lowerMsg.includes('css') || lowerMsg.includes('디자인')) {
-            abstractMsg = "[AESTHETIC_REFINEMENT] Visual frequencies adjusted";
-          } else if (lowerMsg.includes('fix') || lowerMsg.includes('충돌') || lowerMsg.includes('오류') || lowerMsg.includes('해결')) {
-            abstractMsg = "[LOGIC_CORRECTION] Resolving structural paradox";
-          } else if (lowerMsg.includes('feat') || lowerMsg.includes('추가')) {
-            abstractMsg = "[SYSTEM_EXPANSION] New dimensional layer integrated";
-          } else if (lowerMsg.includes('refactor') || lowerMsg.includes('정리') || lowerMsg.includes('통합') || lowerMsg.includes('제거')) {
-            abstractMsg = "[ENTROPY_REDUCTION] Simplifying core principles";
+            typeStr = "? STANDBY";
+            displayMsg = "수정된 파편이 정렬을 기다리는 중";
+          } else if (lowerMsg.startsWith('feat:')) {
+            typeStr = "+ FEAT";
+            displayMsg = "신규 레이어의 확장 및 존재성 부여";
+          } else if (lowerMsg.startsWith('fix:')) {
+            typeStr = "~ FIX";
+            displayMsg = "불필요한 균열과 노이즈의 제거";
+          } else if (lowerMsg.startsWith('style:')) {
+            typeStr = "* STYLE";
+            displayMsg = "시각적 침묵과 여백의 농도 조정";
+          } else if (lowerMsg.startsWith('refactor:')) {
+            typeStr = "> REFACTOR";
+            displayMsg = "시스템의 순수한 구조적 재배열";
+          } else if (lowerMsg.startsWith('docs:')) {
+            typeStr = "- DOCS";
+            displayMsg = "사유의 흔적을 텍스트로 치환";
+          } else if (lowerMsg.startsWith('chore:')) {
+            typeStr = ". CHORE";
+            displayMsg = "기초 토대의 정적인 유지보수";
           }
 
           var pathHtml = '';
           if (isLocal) {
-            pathHtml = '<span class="cl-path">Hidden Reference</span>';
+            pathHtml = '<span class="cl-path">Status: Private Entry</span>';
           }
 
-          return '<div class="cl-entry' + (isLocal ? ' cl-entry--local' : '') + '" style="transform: translateX(' + offset + 'px);">' +
+          return '<div class="cl-entry' + (isLocal ? ' cl-entry--local' : '') + '">' +
             '<div class="cl-meta">' +
-            '<time>' + dateStr + '</time>' +
-            '<span class="cl-sha" data-sha="' + sha + '">(' + sha + ')</span>' +
+            '<time>[' + dateStr + ']</time>' +
+            '<span class="cl-sha">commit: ' + sha + '</span>' +
             '</div>' +
-            '<div class="cl-msg">' + abstractMsg + '</div>' +
+            '<div class="cl-msg">' + typeStr + ' ' + displayMsg + '</div>' +
             pathHtml +
             '</div>';
         }).join('');
 
         document.getElementById('cl-log').innerHTML = logHtml;
 
-        /* 옵저버(캐릭터) 인터랙션 로직 적용 */
+        /* 자동 스크롤 터미널 로직 적용 */
         setupObserver();
       }
 
@@ -526,22 +645,38 @@
 
         if (!anchor || !viewport || !logBox) return;
 
-        var currentY = viewport.clientHeight;
-        var speed = 0.6; // px per frame (흐르는 속도 조절)
+        var currentY = 0; // 시작점: 0
+        var speed = 0.5; // px per frame (흐르는 속도 조절)
+        var maxScroll = Math.max(0, logBox.scrollHeight - viewport.clientHeight);
+
+        // 데이터가 모자란 경우 무한 스크롤 무의미
+        if (maxScroll <= 0) return;
+
         var isPaused = false;
+        var manualScrollTimeout;
 
         viewport.addEventListener('mouseenter', function () { isPaused = true; });
         viewport.addEventListener('mouseleave', function () { isPaused = false; });
         viewport.addEventListener('touchstart', function () { isPaused = true; }, { passive: true });
         viewport.addEventListener('touchend', function () { isPaused = false; }, { passive: true });
 
+        // 사용자가 직접 휠 스크롤 시 자동 스크롤 일시 정지 (1초 후 재개)
+        viewport.addEventListener('wheel', function () {
+          isPaused = true;
+          currentY = viewport.scrollTop;
+          clearTimeout(manualScrollTimeout);
+          manualScrollTimeout = setTimeout(function () {
+            isPaused = false;
+          }, 1000);
+        }, { passive: true });
+
         function autoScroll() {
-          if (!isPaused && logBox.children.length > 0) {
-            currentY -= speed;
-            if (currentY < -logBox.offsetHeight) {
-              currentY = viewport.clientHeight;
+          if (!isPaused) {
+            currentY += speed;
+            if (currentY >= logBox.scrollHeight - viewport.clientHeight) {
+              currentY = 0;
             }
-            logBox.style.transform = 'translateY(' + currentY + 'px)';
+            viewport.scrollTop = currentY;
 
             if (Math.random() < 0.003) {
               triggerGlitch(anchor);
@@ -565,6 +700,28 @@
         el.classList.add('entity-glitch');
       }
 
+      function renderChart() {
+        var retry = function (url, n) {
+          return fetch(url).then(function (r) {
+            if (r.status === 202 && n > 0) return new Promise(function (res) { setTimeout(res, 2500) }).then(function () { return retry(url, n - 1); });
+            return r.json();
+          });
+        };
+        retry(BASE + 'stats/commit_activity', 4).then(function (cdata) {
+          if (!Array.isArray(cdata)) return;
+          var max = Math.max.apply(null, cdata.map(function (w) { return w.total; })) || 1;
+          var chartEl = document.getElementById('cl-chart');
+          var containerEl = document.getElementById('cl-chart-container');
+          if (chartEl && containerEl) {
+            containerEl.style.display = 'block';
+            chartEl.innerHTML = cdata.map(function (w, i) {
+              var h = Math.max(2, Math.round((w.total / max) * 100));
+              return '<div class="cl-chart__bar' + (i >= cdata.length - 12 ? ' is-recent' : '') + '" style="height:' + h + '%" title="' + w.total + ' Ops"></div>';
+            }).join('');
+          }
+        }).catch(function () { });
+      }
+
       /* data.json 로드 */
       fetch('./data.json?t=' + Date.now())
         .then(function (r) {
@@ -573,6 +730,7 @@
         })
         .then(function (data) {
           renderFromData(data);
+          renderChart();
         })
         .catch(function () {
           document.getElementById('cl-log').innerHTML = '<div class="cl-loading">[ERR_0x99] Synchronization Failed.</div>';

@@ -28,13 +28,15 @@
   /* ── Scene & Camera ── */
   var scene = new THREE.Scene();
   /* 깊이감: 멀수록 배경으로 녹아드는 지수 안개 */
-  scene.fog = new THREE.FogExp2(0xE3E2E0, 0.042);
+  scene.fog = new THREE.FogExp2(0xE3E2E0, 0.030);
 
   var fieldGroup = new THREE.Group();
   scene.add(fieldGroup);
 
-  var camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 1.2, 22);
+  var initZ = (isMobile && isPortrait) ? 32 : 22;
+  var initFov = (isMobile && isPortrait) ? 46 : 38;
+  var camera = new THREE.PerspectiveCamera(initFov, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 1.2, initZ);
   camera.lookAt(0, 0, 0);
 
   /* ── 마우스 추적 (관성 적용) ── */
@@ -60,9 +62,9 @@
 
   /* ── 쌍극자 필드라인 파라미터 (V37: 가시성 보정 — 맑지만 선명하게) ── */
   var isPortrait = window.innerHeight > window.innerWidth;
-  var LINE_COUNT = isMobile ? 32 : 80;
-  var SEEDS = isMobile ? 6 : 14;
-  var POINTS_PER = isMobile ? 60 : 180;
+  var LINE_COUNT = isMobile ? 32 : 100;
+  var SEEDS = isMobile ? 6 : 16;
+  var POINTS_PER = isMobile ? 60 : 260;
   var MAX_R = 22.0;
   var SCALE = (isMobile && isPortrait) ? 3.0 : 3.8;
 
@@ -104,7 +106,7 @@
       var frac = (si2 + 1) / SEEDS;
 
       /* 극(pole) 근처 진하게, 바깥으로 갈수록 소멸 */
-      var baseOp = isMobile ? (0.15 - frac * 0.10) : (0.30 - frac * 0.22);
+      var baseOp = isMobile ? (0.18 - frac * 0.10) : (0.40 - frac * 0.24);
       var col = fieldColor;
 
       var mat = new THREE.LineBasicMaterial({
@@ -162,49 +164,65 @@
   }
 
   var lastW = window.innerWidth;
+  var resizeTimer = null;
   function onResize() {
     var W = window.innerWidth;
     var H = window.innerHeight;
-    if (isMobile && W === lastW && Math.abs(H - renderer.domElement.height / renderer.getPixelRatio()) < 100) return;
+    if (W === lastW && Math.abs(H - renderer.domElement.height / renderer.getPixelRatio()) < 80) return;
     lastW = W;
     renderer.setSize(W, H, false);
     camera.aspect = W / H;
     camera.updateProjectionMatrix();
     isPortrait = H > W;
   }
+  function onResizeDebounced() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(onResize, 120);
+  }
   onResize();
-  window.addEventListener('resize', onResize, { passive: true });
+  window.addEventListener('resize', onResizeDebounced, { passive: true });
 
   /* ── 정교한 애니메이션 루프 ── */
   var clock = new THREE.Clock();
 
   /* 카메라 완전 고정 */
-  camera.position.set(0, 1.2, 22);
-  camera.fov = 38;
+  camera.position.set(0, 1.2, initZ);
+  camera.fov = initFov;
   camera.updateProjectionMatrix();
 
   var targetCamX = 1.2, targetCamY = 0;
-  var BASE_Z = 22, BASE_FOV = 38;
+  var BASE_Z = initZ, BASE_FOV = initFov;
+  var ZOOM_RANGE = isMobile ? 4 : 5; /* 스크롤 최대 줌인 거리 */
+
+  /* 스크롤 추적 — clientHeight 기준으로 주소창 변화에 안전 */
+  var scrollLerp = 0;
+
+  function getRawScroll() {
+    var docH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    return docH > 10 ? Math.min(1, Math.max(0, window.pageYOffset / docH)) : 0;
+  }
 
   function animate() {
     requestAnimationFrame(animate);
     var t = clock.getElapsedTime();
 
-    /* Y축 저속 회전 — 더 느리게, 더 관조적으로 */
+    /* Y축 저속 회전 */
     fieldGroup.rotation.y = t * 0.016;
 
     /* 미세 호흡: 전체 필드가 4.5초 주기로 아주 조금 팽창/수축 */
     var breathe = 1.0 + Math.sin(t * 0.22) * 0.004;
     fieldGroup.scale.set(breathe, breathe, breathe);
 
-    /* 라인별 opacity 호흡 — 각 라인이 미세하게 다른 타이밍으로 */
+    /* 라인별 opacity 호흡 */
     for (var fi = 0; fi < fieldLines.length; fi++) {
       var fl = fieldLines[fi];
       fl.mat.opacity = fl.baseOp * (0.82 + 0.18 * Math.sin(t * 0.10 + fl.phase));
     }
 
-    /* 스크롤 줌 비활성화 — 페이지 구조 단축으로 ratio 튐 방지 */
-    camera.position.z += (BASE_Z - camera.position.z) * 0.06;
+    /* 스크롤 줌 — 단일 루프 내 lerp (이중 RAF 제거) */
+    scrollLerp += (getRawScroll() - scrollLerp) * 0.05;
+    var targetZ = BASE_Z - scrollLerp * ZOOM_RANGE;
+    camera.position.z += (targetZ - camera.position.z) * 0.06;
     camera.fov += (BASE_FOV - camera.fov) * 0.06;
     camera.updateProjectionMatrix();
 
@@ -221,7 +239,6 @@
 
     if (!window.__fieldReady) {
       window.__fieldReady = true;
-      var elapsed = performance.now();
       var preloader = document.getElementById('preloader');
       if (preloader) {
         preloader.classList.add('is-revealing');
@@ -232,28 +249,4 @@
     }
   }
   animate();
-})();
-
-(function () {
-  var scrollRatio = 0;
-  var lerpRatio = 0;
-
-  function updateScroll() {
-    /* window.innerHeight 대신 clientHeight를 사용하여 주소창 변화에 의한 튕김 방지 */
-    var viewportH = document.documentElement.clientHeight;
-    var docH = document.documentElement.scrollHeight - viewportH;
-    scrollRatio = docH > 0 ? window.scrollY / docH : 0;
-  }
-  window.addEventListener('scroll', updateScroll, { passive: true });
-  window.addEventListener('resize', updateScroll, { passive: true });
-  updateScroll();
-
-  window._fieldState = {
-    get ratio() { return lerpRatio; }
-  };
-
-  (function lerpLoop() {
-    lerpRatio += (scrollRatio - lerpRatio) * 0.035; /* 관성 증가 */
-    requestAnimationFrame(lerpLoop);
-  })();
 })();

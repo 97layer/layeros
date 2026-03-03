@@ -8937,17 +8937,32 @@ body.is-loaded .home-hero__nav {
 }
 
 /* ─── Archive Controls (filter + search) ─── */
-.archive-controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--space-md);
-  flex-wrap: wrap;
+/* Grid: preamble(1fr) + search(auto) / filter(full-width) */
+.page-archive .page-intro {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: end;
+  column-gap: var(--space-md);
 }
+.page-archive .page-preamble {
+  grid-column: 1;
+  grid-row: 1;
+}
+.page-archive .archive-search {
+  grid-column: 2;
+  grid-row: 1;
+}
+.page-archive .archive-filter {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-top: var(--space-md);
+}
+
 .archive-filter {
   display: flex;
-  gap: var(--space-md);
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0;
 }
 .archive-filter__btn {
   font-family: var(--font-mono);
@@ -8958,9 +8973,12 @@ body.is-loaded .home-hero__nav {
   background: none;
   border: none;
   border-bottom: 0.5px solid rgba(26, 26, 26, 0.1);
-  padding: 0 0 0.15rem;
+  padding: 0.65rem 0;
+  display: block;
+  text-align: left;
+  width: 100%;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: color 0.2s ease;
 }
 .archive-filter__btn.is-active { color: var(--text); }
 .archive-filter__btn:hover { color: var(--text-sub); }
@@ -10683,14 +10701,13 @@ body.page-about { overflow-x: hidden; }
     padding: var(--space-md) 0;
   }
 
-  /* ── archive: 검색 모바일 full-width ── */
-  .archive-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-sm);
+  /* ── archive: 모바일 grid → block, 검색 full-width ── */
+  .page-archive .page-intro {
+    display: block;
   }
-  .archive-search {
+  .page-archive .archive-search {
     width: 100%;
+    margin-bottom: var(--space-sm);
   }
 }
 
