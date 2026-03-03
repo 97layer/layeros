@@ -4,97 +4,17 @@
     "title": "Lookbook No.01 — Subtraction",
     "date": "2026.03.03",
     "issue": "Visual 001",
-    "preview": "가득 쥔 손으로는 손 안을 볼 수 없습니다. 걷어내는 것이 곧 발견입니다.",
+    "preview": "가득 쥔 손으로는 손 안을 볼 수 없다. 걷어내는 것이 곧 발견이다.",
     "category": "Visual",
     "type": "Lookbook",
     "readMin": null
   },
   {
-    "slug": "essay-010-work-and-essence",
-    "title": "일과 본질",
-    "date": "2026.02.20",
-    "issue": "Issue 010",
-    "preview": "이 일을 하면서 돈이 우선이었던 적은 없었다. 나를 알아가는 것이 원동력이다.",
-    "category": "Working",
-    "type": "Essay",
-    "readMin": 3
-  },
-  {
-    "slug": "essay-009-inner-world",
-    "title": "내면 세계",
-    "date": "2026.02.20",
-    "issue": "Issue 009",
-    "preview": "이상을 추구하며 내면에 깊이 잠기는 사람. 물질이 아닌 아카이브로 풍부함을 채운다.",
-    "category": "Seeing",
-    "type": "Essay",
-    "readMin": 2
-  },
-  {
-    "slug": "essay-008-raw-materiality",
-    "title": "날것의 물성",
-    "date": "2026.02.18",
-    "issue": "Issue 008",
-    "preview": "매끄러운 표면 위에서는 시선이 미끄러진다. 거친 물성은 잠깐 멈춤을 선물한다.",
-    "category": "Seeing",
-    "type": "Essay",
-    "readMin": 2
-  },
-  {
-    "slug": "essay-007-noise-removal",
-    "title": "소음 제거",
-    "date": "2026.02.18",
-    "issue": "Issue 007",
-    "preview": "쓰지 않는 단어가 정체성을 드러낸다. 금지어 목록이 곧 철학이다.",
-    "category": "Making",
-    "type": "Journal",
-    "readMin": 2
-  },
-  {
-    "slug": "essay-006-8pyeong",
-    "title": "8평",
-    "date": "2026.02.18",
-    "issue": "Issue 006",
-    "preview": "좁은 공간이 가르치는 삶의 편집. 적게 가지면 각각에 더 많은 주의를 줄 수 있다.",
-    "category": "Living",
-    "type": "Essay",
-    "readMin": 2
-  },
-  {
-    "slug": "essay-005-72h-rule",
-    "title": "72시간 규칙",
-    "date": "2026.02.18",
-    "issue": "Issue 005",
-    "preview": "완벽한 지연보다 불완전한 완료. 저장되지 않은 것은 없는 것이다.",
-    "category": "Making",
-    "type": "Journal",
-    "readMin": 2
-  },
-  {
-    "slug": "essay-004-art-of-waiting",
-    "title": "기다림의 미학",
-    "date": "2026.02.18",
-    "issue": "Issue 004",
-    "preview": "빠르게 만든 것은 빠르게 무너진다. 기다림은 과정이다, 낭비가 아니다.",
-    "category": "Seeing",
-    "type": "Essay",
-    "readMin": 2
-  },
-  {
-    "slug": "essay-003-hair-and-daily",
-    "title": "머리카락과 일상",
-    "date": "2026.02.17",
-    "issue": "Issue 003",
-    "preview": "머리카락은 매일의 자기 대화다. 아침 거울 앞에서의 3분.",
-    "category": "Working",
-    "type": "Journal",
-    "readMin": 2
-  },
-  {
-    "slug": "essay-002-slow-life",
-    "title": "슬로우 라이프",
-    "date": "2026.02.17",
-    "issue": "Issue 002",
-    "preview": "느림이 아닌 주도권. 더 천천히 사는 것이 아니라 더 주체적으로 사는 것.",
+    "slug": "journal-001-subtraction",
+    "title": "소거하는 법",
+    "date": "2026.03",
+    "issue": "Journal 001",
+    "preview": "더하기 전에 묻는 것. 없으면 안 되는가.",
     "category": "Living",
     "type": "Journal",
     "readMin": 2

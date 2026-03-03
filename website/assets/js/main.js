@@ -164,4 +164,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+/* ─── Section Subnav 주입 (에세이/아티클 페이지) ─── */
+(function () {
+  var siteNav = document.getElementById('site-nav');
+  if (!siteNav) return;
+
+  var path = window.location.pathname;
+  if (path === '/' || path === '/index.html') return;
+
+  var active = '';
+  if (path.indexOf('/archive') === 0 || path.indexOf('/essay-') !== -1 || path.indexOf('/journal-') !== -1 || path.indexOf('/lookbook') !== -1) active = 'archive';
+  else if (path.indexOf('/practice') === 0) active = 'practice';
+  else if (path.indexOf('/about') === 0) active = 'about';
+  else if (path.indexOf('/lab') === 0) active = 'lab';
+
+  var sections = [
+    { key: 'archive', label: 'Archive', href: '/archive/' },
+    { key: 'practice', label: 'Practice', href: '/practice/' },
+    { key: 'about', label: 'About', href: '/about/' },
+    { key: 'lab', label: 'Lab', href: '/lab/' }
+  ];
+
+  var subnav = document.createElement('div');
+  subnav.className = 'site-subnav';
+  subnav.setAttribute('role', 'navigation');
+  subnav.setAttribute('aria-label', 'Section navigation');
+  subnav.innerHTML = sections.map(function (s) {
+    return '<a href="' + s.href + '" class="site-subnav__link' + (s.key === active ? ' is-active' : '') + '">' + s.label + '</a>';
+  }).join('');
+
+  document.body.appendChild(subnav);
+  document.body.classList.add('has-subnav');
+})();
+
 /* time-aware class: index.html inline script으로 이전 */

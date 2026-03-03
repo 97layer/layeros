@@ -26,10 +26,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WEBSITE_DIR = PROJECT_ROOT / "website"
 SCRIPTS_DIR = PROJECT_ROOT / "core" / "scripts"
 STYLE_CSS = WEBSITE_DIR / "assets" / "css" / "style.css"
+SITE_JS = WEBSITE_DIR / "assets" / "js" / "site.js"
+MAIN_JS = WEBSITE_DIR / "assets" / "js" / "main.js"
 ABOUT_HTML = WEBSITE_DIR / "about" / "index.html"
 
-# 캐시 버스팅 대상: CSS 참조가 있는 HTML 파일
+# 캐시 버스팅 대상: CSS/JS 참조가 있는 HTML 파일
 CACHE_BUST_PATTERN = re.compile(r'(style\.css)\?v=[a-zA-Z0-9]+')
+CACHE_BUST_JS_PATTERN = re.compile(r'(site\.js)\?v=[a-zA-Z0-9]+')
+CACHE_BUST_MAINJS_PATTERN = re.compile(r'(main\.js)\?v=[a-zA-Z0-9]+')
 
 # about 이스터에그 블록 마커
 EASTER_RE = re.compile(r'<!-- EASTER:START -->.*?<!-- EASTER:END -->', re.DOTALL)
@@ -65,6 +69,22 @@ def get_css_hash() -> str:
     if not STYLE_CSS.exists():
         return "0"
     content = STYLE_CSS.read_bytes()
+    return hashlib.md5(content).hexdigest()[:8]
+
+
+def get_js_hash() -> str:
+    """site.js의 짧은 해시 생성."""
+    if not SITE_JS.exists():
+        return "0"
+    content = SITE_JS.read_bytes()
+    return hashlib.md5(content).hexdigest()[:8]
+
+
+def get_mainjs_hash() -> str:
+    """main.js의 짧은 해시 생성."""
+    if not MAIN_JS.exists():
+        return "0"
+    content = MAIN_JS.read_bytes()
     return hashlib.md5(content).hexdigest()[:8]
 
 
@@ -148,9 +168,13 @@ def inject_easter_log(dry_run: bool = False) -> bool:
 
 
 def bust_cache(dry_run: bool = False) -> int:
-    """전 HTML 파일의 style.css?v=xxx를 현재 CSS 해시로 교체."""
+    """전 HTML 파일의 style.css?v=xxx + site.js?v=xxx를 현재 해시로 교체."""
     css_hash = get_css_hash()
-    new_ref = f"style.css?v={css_hash}"
+    js_hash = get_js_hash()
+    mainjs_hash = get_mainjs_hash()
+    new_css_ref = f"style.css?v={css_hash}"
+    new_js_ref = f"site.js?v={js_hash}"
+    new_mainjs_ref = f"main.js?v={mainjs_hash}"
     count = 0
 
     for html_file in sorted(WEBSITE_DIR.rglob("*.html")):
@@ -160,7 +184,9 @@ def bust_cache(dry_run: bool = False) -> int:
             continue
 
         content = html_file.read_text(encoding="utf-8")
-        updated = CACHE_BUST_PATTERN.sub(new_ref, content)
+        updated = CACHE_BUST_PATTERN.sub(new_css_ref, content)
+        updated = CACHE_BUST_JS_PATTERN.sub(new_js_ref, updated)
+        updated = CACHE_BUST_MAINJS_PATTERN.sub(new_mainjs_ref, updated)
 
         if updated != content:
             count += 1
@@ -170,7 +196,7 @@ def bust_cache(dry_run: bool = False) -> int:
                 html_file.write_text(updated, encoding="utf-8")
                 logger.info("캐시 버스트: %s", rel)
 
-    logger.info("캐시 버스트: %d 파일 (v=%s)", count, css_hash)
+    logger.info("캐시 버스트: %d 파일 (css=%s, js=%s, main=%s)", count, css_hash, js_hash, mainjs_hash)
     return count
 
 
