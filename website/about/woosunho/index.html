@@ -14,228 +14,158 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="/assets/css/style.css?v=58523445" rel="stylesheet"/>
+<link href="/assets/css/style.css?v=a231a07d" rel="stylesheet"/>
 <style>
 /* ─────────────────────────────────────────────
-   WOOSUNHO PAGE — 명함 × 링크드인 × 블로그
+   WOOSUNHO PAGE — sticky sidebar layout
 ───────────────────────────────────────────── */
 
-/* ── Hero (명함) ── */
-.ws-hero {
-  min-height: 72vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 3.5rem var(--space-md) 3.5rem;
-  position: relative;
+.ws-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 5rem var(--space-md) 8rem;
 }
-.ws-hero__photo {
-  width: 240px;
-  height: 240px;
+
+/* ── Split layout ── */
+.ws-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0 4rem;
+  align-items: start;
+}
+
+/* ── Sidebar ── */
+.ws-sidebar {
+  position: sticky;
+  top: 5.5rem;
+}
+.ws-photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  margin-bottom: 1.8rem;
   background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 2.2rem;
-  flex-shrink: 0;
 }
-.ws-hero__photo img {
+.ws-photo img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: top center;
   display: block;
 }
-.ws-hero__photo-placeholder {
-  font-family: var(--font-mono);
-  font-size: 2rem;
-  font-weight: 300;
-  color: var(--text-faint);
-  letter-spacing: -0.02em;
-}
-.ws-hero__name {
-  font-size: clamp(1.4rem, 3vw, 1.8rem);
+.ws-name {
+  font-size: 0.93rem;
   font-weight: 300;
   letter-spacing: -0.01em;
-  color: var(--text-main);
-  margin: 0 0 0.5rem;
-  line-height: 1;
+  color: var(--text);
+  margin: 0 0 0.3rem;
+  line-height: 1.2;
 }
-.ws-hero__role {
+.ws-role {
   font-family: var(--font-mono);
-  font-size: 0.63rem;
-  letter-spacing: 0.14em;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
   color: var(--text-faint);
-  margin: 0 0 1.8rem;
   text-transform: uppercase;
+  margin: 0 0 2rem;
+  line-height: 1.7;
 }
-.ws-hero__bio {
-  font-size: 0.93rem;
-  line-height: 1.85;
-  color: var(--text-sub);
-  max-width: 24rem;
-  margin: 0 auto 2.4rem;
-}
-.ws-hero__links {
+.ws-nav {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.8rem;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 2.4rem;
 }
-.ws-hero__link {
+.ws-nav a {
   font-family: var(--font-mono);
-  font-size: 0.63rem;
+  font-size: 0.6rem;
   letter-spacing: 0.07em;
   color: var(--text-sub);
   text-decoration: none;
   transition: color 0.2s;
 }
-.ws-hero__link:hover { color: var(--text-main); }
-.ws-hero__scroll {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+.ws-nav a:hover { color: var(--text); }
+.ws-back-link {
   font-family: var(--font-mono);
   font-size: 0.58rem;
-  letter-spacing: 0.12em;
-  color: var(--text-faint);
-  animation: ws-bounce 2s ease-in-out infinite;
-  user-select: none;
-}
-@keyframes ws-bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.45; }
-  50% { transform: translateX(-50%) translateY(6px); opacity: 1; }
-}
-
-/* ── Cards wrapper ── */
-.ws-back {
-  display: block;
-  max-width: 660px;
-  margin: 0 auto;
-  padding: 2rem var(--space-md) 0;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.07em;
   color: var(--text-faint);
   text-decoration: none;
   transition: color 0.2s;
+  display: block;
+  margin-top: 1.6rem;
 }
-.ws-back:hover { color: var(--text-main); }
-.ws-cards {
-  max-width: 660px;
-  margin: 0 auto;
-  padding: 0 var(--space-md) 5rem;
-  border-top: 1px solid var(--border);
+.ws-back-link:hover { color: var(--text-sub); }
+
+/* ── Main content ── */
+.ws-main {
+  padding-left: 3.5rem;
+  border-left: 1px solid var(--line);
 }
 
-/* ── Card ── */
-.ws-card { border-bottom: 1px solid var(--border); }
-.ws-card__head {
-  width: 100%;
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  padding: 1.25rem 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  color: inherit;
-  font-family: inherit;
+/* section divider */
+.ws-section {
+  padding-bottom: 3.5rem;
+  margin-bottom: 3.5rem;
+  border-bottom: 1px solid var(--line);
 }
-.ws-card__head--static { cursor: default; pointer-events: none; }
-.ws-card__num {
-  font-family: var(--font-mono);
-  font-size: 0.53rem;
-  letter-spacing: 0.14em;
-  color: var(--text-faint);
-  flex-shrink: 0;
+.ws-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
-.ws-card__title {
-  font-size: 0.93rem;
-  font-weight: 300;
-  color: var(--text-main);
-  letter-spacing: -0.01em;
-  flex-shrink: 0;
-}
-.ws-card__preview {
-  font-family: var(--font-mono);
-  font-size: 0.57rem;
-  letter-spacing: 0.04em;
-  color: var(--text-faint);
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding-left: 0.2rem;
-}
-.ws-card__toggle {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--text-faint);
-  flex-shrink: 0;
-  transition: transform 0.3s;
-  line-height: 1;
-}
-.ws-card.open .ws-card__toggle { transform: rotate(45deg); }
 
-/* accordion */
-.ws-card__body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.42s ease;
+.ws-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 2rem;
 }
-.ws-card.open .ws-card__body { grid-template-rows: 1fr; }
-.ws-card__body__inner { overflow: hidden; }
-.ws-card__body__pad { padding-bottom: 2.6rem; }
 
-/* ── Timeline (static, animates on open) ── */
+/* ── Timeline ── */
 .ws-timeline {
-  border-bottom: 1px solid var(--border);
-  padding: 0.9rem 0 1rem;
-  margin-bottom: 2.2rem;
+  margin-bottom: 2.4rem;
 }
 .ws-timeline__svg { width: 100%; display: block; overflow: visible; }
 .tl-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
-.tl-line.tl-animated { animation: tl-draw 1.2s ease forwards; }
+.tl-line.tl-animated { animation: tl-draw 1.4s ease forwards; }
 @keyframes tl-draw { to { stroke-dashoffset: 0; } }
 .tl-dot { opacity: 0; transition: opacity 0.3s; }
 .tl-dot.visible { opacity: 1; }
 .tl-dot circle { transition: fill 0.3s; }
-.tl-dot.active circle { fill: var(--text-main); }
+.tl-dot.active circle { fill: var(--text); }
 .tl-label {
   font-family: var(--font-mono, monospace);
-  font-size: 9px;
+  font-size: 8px;
   fill: var(--text-faint);
   letter-spacing: 0.06em;
   transition: fill 0.3s;
   user-select: none;
 }
-.tl-dot.active .tl-label { fill: var(--text-main); }
+.tl-dot.active .tl-label { fill: var(--text); }
 
 /* ── Essay ── */
 .ws-essay p {
-  font-size: 0.93rem;
-  line-height: 1.95;
-  color: var(--text-main);
-  margin: 0 0 1.3em;
+  font-size: 0.91rem;
+  line-height: 2;
+  color: var(--text);
+  margin: 0 0 1.4em;
 }
 .ws-essay p:last-child { margin-bottom: 0; }
 .ws-epigraph {
   font-style: italic;
   color: var(--text-sub);
-  border-left: 2px solid var(--border);
+  border-left: 1px solid var(--line);
   padding-left: 1.2rem;
   margin: 0 0 2.2rem !important;
 }
 .ws-pull {
-  font-size: 1.05rem;
-  line-height: 1.65;
-  color: var(--text-main);
-  border-left: 2px solid var(--text-main);
+  font-size: 0.97rem;
+  line-height: 1.8;
+  color: var(--text);
+  border-left: 1.5px solid var(--text);
   padding-left: 1.2rem;
   margin: 1.8rem 0 !important;
   font-weight: 300;
@@ -244,10 +174,10 @@
 .ws-essay-note {
   margin-top: 2.5rem !important;
   padding-top: 2rem;
-  border-top: 1px solid var(--border);
-  font-size: 0.82rem !important;
+  border-top: 1px solid var(--line);
+  font-size: 0.8rem !important;
   color: var(--text-sub) !important;
-  line-height: 2 !important;
+  line-height: 2.1 !important;
 }
 .year-anchor {
   display: block;
@@ -256,67 +186,100 @@
   pointer-events: none;
 }
 
-/* ── Archive link (블로그 확장) ── */
+/* ── Archive link ── */
 .ws-archive-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
   padding: 0.9rem 1rem;
-  margin-top: 2.2rem;
+  margin-top: 2.4rem;
   text-decoration: none;
   transition: border-color 0.2s;
   font-size: 0.82rem;
-  color: var(--text-main);
+  color: var(--text);
 }
 .ws-archive-link:hover { border-color: var(--text-sub); }
 .ws-archive-link__label {
   font-family: var(--font-mono);
-  font-size: 0.57rem;
+  font-size: 0.55rem;
   letter-spacing: 0.1em;
   color: var(--text-faint);
   text-transform: uppercase;
   margin-right: 1rem;
 }
 
-/* ── Credentials (링크드인) ── */
-.ws-label {
+/* ── Credentials ── */
+.ws-creds-group {
+  margin-bottom: 2rem;
+}
+.ws-creds-group:last-child { margin-bottom: 0; }
+.ws-label-sm {
   font-family: var(--font-mono);
-  font-size: 0.57rem;
+  font-size: 0.55rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-faint);
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.7rem;
 }
-.ws-creds__body {
-  font-size: 0.84rem;
-  line-height: 2.1;
+.ws-creds-body {
+  font-size: 0.82rem;
+  line-height: 2;
   color: var(--text-sub);
-  margin-bottom: 2rem;
 }
-.ws-creds__body:last-child { margin-bottom: 0; }
 
-/* ── Connection links ── */
-.ws-link-item {
+/* ── Contact links ── */
+.ws-contact-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.88rem;
-  color: var(--text-main);
+  font-size: 0.85rem;
+  color: var(--text);
   text-decoration: none;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
   transition: color 0.2s;
 }
-.ws-link-item:last-child { border-bottom: none; padding-bottom: 1.4rem; }
-.ws-link-item:hover { color: var(--text-sub); }
+.ws-contact-link:first-child { border-top: 1px solid var(--line); }
+.ws-contact-link:hover { color: var(--text-sub); }
 
 /* ── Mobile ── */
+@media (max-width: 720px) {
+  .ws-wrap { padding: 3rem var(--space-md) 6rem; }
+
+  .ws-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem 0;
+  }
+
+  .ws-sidebar { position: static; }
+
+  .ws-sidebar__inner {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0 1.4rem;
+    align-items: start;
+  }
+  .ws-photo {
+    aspect-ratio: 3 / 4;
+    margin-bottom: 0;
+  }
+  .ws-sidebar__info { padding-top: 0.2rem; }
+  .ws-back-link { margin-top: 1rem; }
+
+  .ws-main {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--line);
+    padding-top: 2rem;
+  }
+}
+
 @media (max-width: 480px) {
-  .ws-hero { min-height: 65vh; padding: 3rem var(--space-md) 3rem; }
-  .ws-hero__photo { width: 160px; height: 160px; margin-bottom: 1.6rem; }
-  .ws-hero__name { font-size: clamp(1.2rem, 5vw, 1.5rem); }
-  .ws-card__preview { display: none; }
+  .ws-sidebar__inner {
+    grid-template-columns: 90px 1fr;
+    gap: 0 1.1rem;
+  }
 }
 </style>
 </head>
@@ -346,197 +309,173 @@
 <!-- /COMPONENT:nav -->
 
 <main class="page-main">
+<div class="ws-wrap">
+  <div class="ws-layout">
 
-  <!-- ────────────────────────────────
-       HERO — 명함
-  ──────────────────────────────── -->
-  <section class="ws-hero" data-reveal>
-    <div class="ws-hero__photo">
-      <img src="/assets/media/profile/woosunho.jpg" alt="WOOSUNHO"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <span class="ws-hero__photo-placeholder" style="display:none;">W</span>
-    </div>
-    <h1 class="ws-hero__name">WOOSUNHO</h1>
-    <p class="ws-hero__role">Hair Artisan &amp; Editor — WOOHWAHAE, Ulsan</p>
-    <div class="ws-hero__links">
-      <a class="ws-hero__link" href="https://instagram.com/97layer" target="_blank" rel="noopener">@97layer ↗</a>
-      <a class="ws-hero__link" href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae ↗</a>
-      <a class="ws-hero__link" href="mailto:hello@woohwahae.kr">hello@woohwahae.kr →</a>
-    </div>
-    <span class="ws-hero__scroll" aria-hidden="true">↓</span>
-  </section>
-
-  <!-- ────────────────────────────────
-       CARDS — 블로그 × 링크드인 × 연락
-  ──────────────────────────────── -->
-  <a class="ws-back" href="/about/">← About</a>
-
-  <div class="ws-cards">
-
-    <!-- ── 01. 에세이 (블로그) ── -->
-    <div class="ws-card" id="card-essay">
-      <button class="ws-card__head" onclick="toggleCard('essay')" aria-expanded="false" aria-controls="body-essay">
-        <span class="ws-card__num">01</span>
-        <span class="ws-card__title">에세이</span>
-        <span class="ws-card__preview">기원에 대하여 — 소거, 타이틀, 울산</span>
-        <span class="ws-card__toggle" aria-hidden="true">+</span>
-      </button>
-      <div class="ws-card__body" id="body-essay">
-        <div class="ws-card__body__inner">
-          <div class="ws-card__body__pad">
-
-            <!-- Timeline -->
-            <div class="ws-timeline">
-              <svg class="ws-timeline__svg" height="36" viewBox="0 0 660 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <line class="tl-line" x1="20" y1="14" x2="640" y2="14" stroke="currentColor" stroke-width="0.8" opacity="0.25"/>
-                <g class="tl-dot" data-year="2012">
-                  <circle cx="20" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-                  <text class="tl-label" x="20" y="30" text-anchor="middle">2012</text>
-                </g>
-                <g class="tl-dot" data-year="2016">
-                  <circle cx="137" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-                  <text class="tl-label" x="137" y="30" text-anchor="middle">2016</text>
-                </g>
-                <g class="tl-dot" data-year="2019">
-                  <circle cx="254" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-                  <text class="tl-label" x="254" y="30" text-anchor="middle">2019</text>
-                </g>
-                <g class="tl-dot" data-year="2020">
-                  <circle cx="371" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-                  <text class="tl-label" x="371" y="30" text-anchor="middle">2020</text>
-                </g>
-                <g class="tl-dot" data-year="2021">
-                  <circle cx="488" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-                  <text class="tl-label" x="488" y="30" text-anchor="middle">2021</text>
-                </g>
-                <g class="tl-dot" data-year="2024">
-                  <circle cx="640" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
-                  <text class="tl-label" x="640" y="30" text-anchor="middle">2024</text>
-                </g>
-              </svg>
-            </div>
-
-            <!-- Essay body -->
-            <div class="ws-essay">
-              <p class="ws-epigraph">생각대로 살지 않으면 사는 대로 생각하게 된다.</p>
-
-              <p>어릴 때부터 혼자인 시간이 많았다. 무리 지어 소모적인 이야기를 주고받는 것보다, 정해진 답이 없는 것들을 끝없이 생각하는 편이 더 자연스러웠다. 인류의 기원이나 우주의 끝처럼, 살아있는 동안 어쩌면 알 수 없는 것들. 수학처럼 정해진 답이 아니라 나만의 해석으로 끝없이 상상할 수 있는 것들이 좋았다. 그 태도가 일과 일상에서 습관으로 배어들었다. 눈앞의 것이 과연 당연한 것인가 물으며 추론하는 것. 그 조각이 쌓여 본질적인 것을 탐구하는 가치관으로 귀결됐다.</p>
-
-              <p>이건 그 과정의 기록이다.</p>
-
-              <span class="year-anchor" data-year="2012"></span>
-
-              <p>2012년, 중학교 3학년이었다. 성적표가 너무 엉망이라 어머니가 미용이라도 배워보라 권유했다. 학교 공부처럼 흥미롭지 않던 학원 생활은, 가발과 친구들 머리를 만지며 손끝에서 스타일이 만들어지는 것을 보면서 달라졌다. 주변 친구들이 가지 않는 길이라는 것이 멋져 보였다. 깊은 신념 같은 건 없었다. 그것이 시작이었다.</p>
-
-              <span class="year-anchor" data-year="2016"></span>
-
-              <p>고등학교 때부터 주말엔 미용실 알바를 했다. 입시에 집중할 때 현장 데이터를 쌓고 있었다. 비교적 이른 나이인 2016년에 디자이너가 되었다. 그리고 2년쯤 지나 매번 같은 스타일을 기계처럼 반복하는 자신을 보았다. 직업적 사명감이란 말은 고리타분하게만 들렸다. 학원 강사 일도 해봤다. 채워지지 않는 것이 있었다. 그게 무엇인지는 그때 몰랐다.</p>
-
-              <span class="year-anchor" data-year="2019"></span>
-
-              <p>2019년, 미용 구직사이트에서 서울 카테고리를 무심코 클릭했다. 울산에는 보이지 않던 분위기의 살롱들이 리스트에 주욱 나열되어 있었다. 일해보고 싶은 곳들에 지원서를 마구 넣었다. 한 곳에서 면접 오라는 소식이 왔다. 빨간 탈색머리에 선글라스, 페이즐리 셔츠를 입고 상경했다. 그곳에서 원할 것 같은 이미지라고 생각했다. 지금 생각하면 과했다.</p>
-
-              <p>신대방 반지하 8평. 청년전세대출 한도로 얻은 방이었다. 습했다. 좁았다. 래퍼들이 가사에 반지하를 언급하듯 그 자체로 낭만이 있었다. 울산에서의 디자이너 타이틀을 내려놓고 합정과 청담에서 스태프로 다시 시작했다. 채워지지 않던 결핍을 채우기 위한 선택이었다.</p>
-
-              <p class="ws-pull">기존의 나를 한 번 녹여내야 했다. 어떻게 보면, 그게 첫 번째 내려놓음이었다.</p>
-
-              <p>스타일리스트로서 화보와 헤어쇼 같은 작업도 해보고 싶었다. 연락을 돌리며 이어진 인연들과 협업이 하나씩 붙기 시작했다. 손끝이 할 수 있는 일이 미용실 안에만 있지 않다는 것을 그때 처음 알았다.</p>
-
-              <span class="year-anchor" data-year="2020"></span>
-
-              <p>2020년, 코로나가 왔다. 반강제적 고독이 찾아왔다. 나는 어떤 사람인가. 혼자 있는 나에게 끊임없이 같은 물음을 던졌다. 다른 디자이너들이 매출 전략을 고민할 때, 어떤 음악이 공간과 어울릴지 고민했다. 헤어 컨설팅 릴스를 만드는 대신 핀터레스트에서 취향을 모았다. 숫자로 표현할 수 없는 것들에 시간을 쓰고 있었다. 수익성으로 보면 상품성이 떨어지는 디자이너였다. 그 사실을 알면서도 고집을 내려놓지 못했다.</p>
-
-              <p>책을 읽었다. 영상을 봤다. 인문학적인 것들에 자연스레 관심이 갔다. 가치관이 조금씩 자리를 잡았다. 성인이 된 이후 그 시기가 가장 정신적으로 성장했다. 내면의 성장은 고독과 고뇌에서 시작된다고 지금도 믿는다.</p>
-
-              <p>그 과정에서 하나의 결론에 닿았다. 나는 단순히 미용사라는 타이틀 안에만 갇혀 있고 싶지 않다. 내 기술이 소모적인 노동이 아니라, 나라는 개인의 사유가 쌓인 축적물이 되기를 바랐다. 기술보다 중요한 건, 그 기술을 어떤 관점과 태도로 운영하느냐라는 것. 그것을 그때 처음으로 명확하게 알았다.</p>
-
-              <span class="year-anchor" data-year="2021"></span>
-
-              <p>2021년, 울산으로 돌아왔다. 재정비한 기술과 사유를 들고. 상권 따위 집어치우고 한적한 동네를 골랐다. 사람이 몰리는 곳이 아니라, 올 이유가 있는 사람만 오는 자리를 원했다. 미용사가 되기로 마음먹었던 초심이 여전히 유효한가, 스스로에게 물었다. 내가 상권 없는 동네에 자리를 잡은 것 보니 확실한 것 같았다.</p>
-
-              <span class="year-anchor" data-year="2024"></span>
-
-              <p>2024년 6월, 우화해를 열었다. 실무 경력 12년. 세일즈 능력도 부족했고, 수익성으로만 보면 상품성이 높은 타입은 아니었다. 웃기게도 디자이너들이 흔히 하는 월매출 인증도 해본 적이 없다. 아니, 못 했다. 다른 디자이너들이 매출 전략을 고민할 때, 어떤 음악을 공간에 넣었을 때 조화로울지 고민하는 사람이었으니까.</p>
-
-              <p>그럼에도 이 고집을 쉽게 내려놓지 못했다. 돈이나 생계가 직업의 앞자리에 오면 본질이 흐려진다고 느꼈기 때문이다. 불필요한 시술 권유, 할인 경쟁. 그쪽으로는 가고 싶지 않았다. 주변에 말했다. 적자가 나더라도 투잡을 했지, 미용을 생계수단으로만 삼고 싶지 않다고.</p>
-
-              <p class="ws-pull">첫 공간의 모토는 수익 극대화가 아니다. 내가 생각하는 미용의 본질을 실험해볼 수 있는 연구실이다.</p>
-
-              <p>억지스럽지 않게 사람을 돋보이게 하는 것. 한 사람의 리듬을 읽고 그에 맞게 호흡하는 것. 이 두 가지가 지켜지는지 계속 검증한다. 느리지만, 책임감을 가지고 일에 임한다면 부는 자연히 따라올 거라는 믿음이 아직 있다. 그 믿음이 비교 속에서 좌절하지 않도록 붙잡아준 나침반이었다.</p>
-
-              <p>작게 시작한 브랜드가 규모가 커졌을 때 흔히 초심을 잃었다는 표현을 종종 본다. 30대의 내가 20대를 돌아보며 초심을 잡을 수 있도록, 공개된 공간에 흔적을 남긴다.</p>
-
-              <p>뜬구름 잡는 몽상가인가 가끔 생각하지만, 나는 오늘도 나를 믿어보기로 한다.</p>
-
-              <p class="ws-essay-note">
-                우화해(羽化海)라는 이름에 대해서 물으면, 번데기가 고치 안에서 자기 몸을 완전히 녹여 나비가 되는 과정을 말한다. 울산의 직급을 버리고 서울 반지하에서 다시 시작한 그 과정이 이미 그랬다. 기존의 것을 한 번 녹여내야 다음 형태가 된다.<br><br>
-                羽 — 타인의 시선에서 독립해, 자신의 파동으로 날아오르려는 주권.<br>
-                化 — 관성에 제동을 걸고, 스스로를 계속 조율해 나가는 변화.<br>
-                海 — 이런 변화의 기록들이 모여 하나의 심연 같은 아카이브를 이루는 바다.
-              </p>
-
-              <!-- Archive 연결 (블로그 레이어) -->
-              <a class="ws-archive-link" href="/archive/">
-                <span><span class="ws-archive-link__label">Archive</span>더 많은 글 보기</span>
-                <span>→</span>
-              </a>
-            </div>
-
-          </div>
+    <!-- ── Sidebar ── -->
+    <aside class="ws-sidebar">
+      <div class="ws-sidebar__inner">
+        <div class="ws-photo">
+          <img src="/assets/media/profile/woosunho.jpg" alt="WOOSUNHO"
+            onerror="this.style.display='none';">
+        </div>
+        <div class="ws-sidebar__info">
+          <p class="ws-name">WOOSUNHO</p>
+          <p class="ws-role">Hair Artisan<br>&amp; Editor<br>WOOHWAHAE, Ulsan</p>
+          <nav class="ws-nav">
+            <a href="https://instagram.com/woosunhokr" target="_blank" rel="noopener">@woosunhokr ↗</a>
+            <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae ↗</a>
+            <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr →</a>
+          </nav>
+          <a class="ws-back-link" href="/about/">← About</a>
         </div>
       </div>
-    </div>
+    </aside>
 
-    <!-- ── 02. 이력 (링크드인) ── -->
-    <div class="ws-card" id="card-creds">
-      <button class="ws-card__head" onclick="toggleCard('creds')" aria-expanded="false" aria-controls="body-creds">
-        <span class="ws-card__num">02</span>
-        <span class="ws-card__title">이력</span>
-        <span class="ws-card__preview">수상 · 협업 · 교육 — 2012–</span>
-        <span class="ws-card__toggle" aria-hidden="true">+</span>
-      </button>
-      <div class="ws-card__body" id="body-creds">
-        <div class="ws-card__body__inner">
-          <div class="ws-card__body__pad">
-            <p class="ws-label">수상 / 협업</p>
-            <p class="ws-creds__body">
-              밀본 DA-AD in Tokyo 우수상 &middot; 밀본 DA-Link in Seoul 노미네이트 &middot;
-              France MALVIE Magazine vol.42 &middot; Nike × Over the Pitch &middot;
-              서울 패션위크 UL:KIN &middot; fashion brand IDWS &middot;
-              Tag Magazine &middot; Elle Magazine &middot;
-              밀본 퍼포먼스 아티스트 &middot; Loreal Style&amp;Colour Trophy
-            </p>
-            <p class="ws-label">교육 / 수료</p>
-            <p class="ws-creds__body">
-              Peek a Boo Basic Cut &middot; Pivot Point Cut &middot;
-              차홍 디자인 클래스 &middot; 차홍 트렌드 클래스 &middot;
-              모발생리학 교육 &middot; HAPS 한국모발과학 학술원 모발분석시술 디플로마 &middot;
-              Wella Colour Craft 디플로마
-            </p>
-          </div>
+    <!-- ── Main ── -->
+    <div class="ws-main">
+
+      <!-- 에세이 -->
+      <section class="ws-section">
+        <p class="ws-section-label">에세이</p>
+
+        <!-- Timeline -->
+        <div class="ws-timeline">
+          <svg class="ws-timeline__svg" height="32" viewBox="0 0 560 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <line class="tl-line" x1="10" y1="12" x2="550" y2="12" stroke="currentColor" stroke-width="0.7" opacity="0.2"/>
+            <g class="tl-dot" data-year="2012">
+              <circle cx="10" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+              <text class="tl-label" x="10" y="27" text-anchor="middle">2012</text>
+            </g>
+            <g class="tl-dot" data-year="2016">
+              <circle cx="118" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+              <text class="tl-label" x="118" y="27" text-anchor="middle">2016</text>
+            </g>
+            <g class="tl-dot" data-year="2019">
+              <circle cx="226" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+              <text class="tl-label" x="226" y="27" text-anchor="middle">2019</text>
+            </g>
+            <g class="tl-dot" data-year="2020">
+              <circle cx="334" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+              <text class="tl-label" x="334" y="27" text-anchor="middle">2020</text>
+            </g>
+            <g class="tl-dot" data-year="2021">
+              <circle cx="442" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+              <text class="tl-label" x="442" y="27" text-anchor="middle">2021</text>
+            </g>
+            <g class="tl-dot" data-year="2024">
+              <circle cx="550" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+              <text class="tl-label" x="550" y="27" text-anchor="middle">2024</text>
+            </g>
+          </svg>
         </div>
-      </div>
-    </div>
 
-    <!-- ── 03. 연락 (명함 하단) ── -->
-    <div class="ws-card">
-      <div class="ws-card__head ws-card__head--static">
-        <span class="ws-card__num">03</span>
-        <span class="ws-card__title">연락</span>
-      </div>
-      <a class="ws-link-item" href="mailto:hello@woohwahae.kr">
-        <span>hello@woohwahae.kr</span><span>→</span>
-      </a>
-      <a class="ws-link-item" href="https://instagram.com/97layer" target="_blank" rel="noopener">
-        <span>@97layer</span><span>↗</span>
-      </a>
-      <a class="ws-link-item" href="https://instagram.com/woohwahae" target="_blank" rel="noopener">
-        <span>@woohwahae</span><span>↗</span>
-      </a>
-    </div>
+        <div class="ws-essay">
+          <p class="ws-epigraph">생각대로 살지 않으면 사는 대로 생각하게 된다.</p>
 
-  </div>
+          <p>어릴 때부터 혼자인 시간이 많았다. 무리 지어 소모적인 이야기를 주고받는 것보다, 정해진 답이 없는 것들을 끝없이 생각하는 편이 더 자연스러웠다. 인류의 기원이나 우주의 끝처럼, 살아있는 동안 어쩌면 알 수 없는 것들. 수학처럼 정해진 답이 아니라 나만의 해석으로 끝없이 상상할 수 있는 것들이 좋았다. 그 태도가 일과 일상에서 습관으로 배어들었다. 눈앞의 것이 과연 당연한 것인가 물으며 추론하는 것. 그 조각이 쌓여 본질적인 것을 탐구하는 가치관으로 귀결됐다.</p>
 
+          <p>이건 그 과정의 기록이다.</p>
+
+          <span class="year-anchor" data-year="2012"></span>
+
+          <p>2012년, 중학교 3학년이었다. 성적표가 너무 엉망이라 어머니가 미용이라도 배워보라 권유했다. 학교 공부처럼 흥미롭지 않던 학원 생활은, 가발과 친구들 머리를 만지며 손끝에서 스타일이 만들어지는 것을 보면서 달라졌다. 주변 친구들이 가지 않는 길이라는 것이 멋져 보였다. 깊은 신념 같은 건 없었다. 그것이 시작이었다.</p>
+
+          <span class="year-anchor" data-year="2016"></span>
+
+          <p>고등학교 때부터 주말엔 미용실 알바를 했다. 입시에 집중할 때 현장 데이터를 쌓고 있었다. 비교적 이른 나이인 2016년에 디자이너가 되었다. 그리고 2년쯤 지나 매번 같은 스타일을 기계처럼 반복하는 자신을 보았다. 직업적 사명감이란 말은 고리타분하게만 들렸다. 학원 강사 일도 해봤다. 채워지지 않는 것이 있었다. 그게 무엇인지는 그때 몰랐다.</p>
+
+          <span class="year-anchor" data-year="2019"></span>
+
+          <p>2019년, 미용 구직사이트에서 서울 카테고리를 무심코 클릭했다. 울산에는 보이지 않던 분위기의 살롱들이 리스트에 주욱 나열되어 있었다. 일해보고 싶은 곳들에 지원서를 마구 넣었다. 한 곳에서 면접 오라는 소식이 왔다. 빨간 탈색머리에 선글라스, 페이즐리 셔츠를 입고 상경했다. 그곳에서 원할 것 같은 이미지라고 생각했다. 지금 생각하면 과했다.</p>
+
+          <p>신대방 반지하 8평. 청년전세대출 한도로 얻은 방이었다. 습했다. 좁았다. 래퍼들이 가사에 반지하를 언급하듯 그 자체로 낭만이 있었다. 울산에서의 디자이너 타이틀을 내려놓고 합정과 청담에서 스태프로 다시 시작했다. 채워지지 않던 결핍을 채우기 위한 선택이었다.</p>
+
+          <p class="ws-pull">기존의 나를 한 번 녹여내야 했다. 어떻게 보면, 그게 첫 번째 내려놓음이었다.</p>
+
+          <p>스타일리스트로서 화보와 헤어쇼 같은 작업도 해보고 싶었다. 연락을 돌리며 이어진 인연들과 협업이 하나씩 붙기 시작했다. 손끝이 할 수 있는 일이 미용실 안에만 있지 않다는 것을 그때 처음 알았다.</p>
+
+          <span class="year-anchor" data-year="2020"></span>
+
+          <p>2020년, 코로나가 왔다. 반강제적 고독이 찾아왔다. 나는 어떤 사람인가. 혼자 있는 나에게 끊임없이 같은 물음을 던졌다. 다른 디자이너들이 매출 전략을 고민할 때, 어떤 음악이 공간과 어울릴지 고민했다. 헤어 컨설팅 릴스를 만드는 대신 핀터레스트에서 취향을 모았다. 숫자로 표현할 수 없는 것들에 시간을 쓰고 있었다. 수익성으로 보면 상품성이 떨어지는 디자이너였다. 그 사실을 알면서도 고집을 내려놓지 못했다.</p>
+
+          <p>책을 읽었다. 영상을 봤다. 인문학적인 것들에 자연스레 관심이 갔다. 가치관이 조금씩 자리를 잡았다. 성인이 된 이후 그 시기가 가장 정신적으로 성장했다. 내면의 성장은 고독과 고뇌에서 시작된다고 지금도 믿는다.</p>
+
+          <p>그 과정에서 하나의 결론에 닿았다. 나는 단순히 미용사라는 타이틀 안에만 갇혀 있고 싶지 않다. 내 기술이 소모적인 노동이 아니라, 나라는 개인의 사유가 쌓인 축적물이 되기를 바랐다. 기술보다 중요한 건, 그 기술을 어떤 관점과 태도로 운영하느냐라는 것. 그것을 그때 처음으로 명확하게 알았다.</p>
+
+          <span class="year-anchor" data-year="2021"></span>
+
+          <p>2021년, 울산으로 돌아왔다. 재정비한 기술과 사유를 들고. 상권 따위 집어치우고 한적한 동네를 골랐다. 사람이 몰리는 곳이 아니라, 올 이유가 있는 사람만 오는 자리를 원했다. 미용사가 되기로 마음먹었던 초심이 여전히 유효한가, 스스로에게 물었다. 내가 상권 없는 동네에 자리를 잡은 것 보니 확실한 것 같았다.</p>
+
+          <span class="year-anchor" data-year="2024"></span>
+
+          <p>2024년 6월, 우화해를 열었다. 실무 경력 12년. 세일즈 능력도 부족했고, 수익성으로만 보면 상품성이 높은 타입은 아니었다. 웃기게도 디자이너들이 흔히 하는 월매출 인증도 해본 적이 없다. 아니, 못 했다. 다른 디자이너들이 매출 전략을 고민할 때, 어떤 음악을 공간에 넣었을 때 조화로울지 고민하는 사람이었으니까.</p>
+
+          <p>그럼에도 이 고집을 쉽게 내려놓지 못했다. 돈이나 생계가 직업의 앞자리에 오면 본질이 흐려진다고 느꼈기 때문이다. 불필요한 시술 권유, 할인 경쟁. 그쪽으로는 가고 싶지 않았다. 주변에 말했다. 적자가 나더라도 투잡을 했지, 미용을 생계수단으로만 삼고 싶지 않다고.</p>
+
+          <p class="ws-pull">첫 공간의 모토는 수익 극대화가 아니다. 내가 생각하는 미용의 본질을 실험해볼 수 있는 연구실이다.</p>
+
+          <p>억지스럽지 않게 사람을 돋보이게 하는 것. 한 사람의 리듬을 읽고 그에 맞게 호흡하는 것. 이 두 가지가 지켜지는지 계속 검증한다. 느리지만, 책임감을 가지고 일에 임한다면 부는 자연히 따라올 거라는 믿음이 아직 있다. 그 믿음이 비교 속에서 좌절하지 않도록 붙잡아준 나침반이었다.</p>
+
+          <p>작게 시작한 브랜드가 규모가 커졌을 때 흔히 초심을 잃었다는 표현을 종종 본다. 30대의 내가 20대를 돌아보며 초심을 잡을 수 있도록, 공개된 공간에 흔적을 남긴다.</p>
+
+          <p>뜬구름 잡는 몽상가인가 가끔 생각하지만, 나는 오늘도 나를 믿어보기로 한다.</p>
+
+          <p class="ws-essay-note">
+            우화해(羽化解)라는 이름에 대해서 물으면, 번데기가 고치 안에서 자기 몸을 완전히 녹여 나비가 되는 과정을 말한다. 울산의 직급을 버리고 서울 반지하에서 다시 시작한 그 과정이 이미 그랬다. 기존의 것을 한 번 녹여내야 다음 형태가 된다.<br><br>
+            羽 — 타인의 시선에서 독립해, 자신의 파동으로 날아오르려는 주권.<br>
+            化 — 관성에 제동을 걸고, 스스로를 계속 조율해 나가는 변화.<br>
+            解 — 이런 변화의 기록들이 모여 하나의 심연 같은 아카이브를 이루는 바다.
+          </p>
+
+          <a class="ws-archive-link" href="/archive/">
+            <span><span class="ws-archive-link__label">Archive</span>더 많은 글 보기</span>
+            <span>→</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 이력 -->
+      <section class="ws-section">
+        <p class="ws-section-label">이력</p>
+        <div class="ws-creds-group">
+          <p class="ws-label-sm">수상 / 협업</p>
+          <p class="ws-creds-body">
+            밀본 DA-AD in Tokyo 우수상 &middot; 밀본 DA-Link in Seoul 노미네이트 &middot;
+            France MALVIE Magazine vol.42 &middot; Nike × Over the Pitch &middot;
+            서울 패션위크 UL:KIN &middot; fashion brand IDWS &middot;
+            Tag Magazine &middot; Elle Magazine &middot;
+            밀본 퍼포먼스 아티스트 &middot; Loreal Style&amp;Colour Trophy
+          </p>
+        </div>
+        <div class="ws-creds-group">
+          <p class="ws-label-sm">교육 / 수료</p>
+          <p class="ws-creds-body">
+            Peek a Boo Basic Cut &middot; Pivot Point Cut &middot;
+            차홍 디자인 클래스 &middot; 차홍 트렌드 클래스 &middot;
+            모발생리학 교육 &middot; HAPS 한국모발과학 학술원 모발분석시술 디플로마 &middot;
+            Wella Colour Craft 디플로마
+          </p>
+        </div>
+      </section>
+
+      <!-- 연락 -->
+      <section class="ws-section">
+        <p class="ws-section-label">연락</p>
+        <a class="ws-contact-link" href="mailto:hello@woohwahae.kr">
+          <span>hello@woohwahae.kr</span><span>→</span>
+        </a>
+        <a class="ws-contact-link" href="https://instagram.com/woosunhokr" target="_blank" rel="noopener">
+          <span>@woosunhokr</span><span>↗</span>
+        </a>
+        <a class="ws-contact-link" href="https://instagram.com/woohwahae" target="_blank" rel="noopener">
+          <span>@woohwahae</span><span>↗</span>
+        </a>
+      </section>
+
+    </div><!-- /.ws-main -->
+  </div><!-- /.ws-layout -->
+</div><!-- /.ws-wrap -->
 </main>
 
 <!-- COMPONENT:footer -->
@@ -571,16 +510,6 @@
 <script defer src="/assets/js/site.js"></script>
 <script>
 (function () {
-  function toggleCard(id) {
-    var card = document.getElementById('card-' + id);
-    var isOpen = card.classList.contains('open');
-    card.classList.toggle('open', !isOpen);
-    var btn = card.querySelector('.ws-card__head');
-    if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
-    if (id === 'essay' && !isOpen) initTimeline();
-  }
-  window.toggleCard = toggleCard;
-
   var tlInited = false;
   function initTimeline() {
     if (tlInited) return;
@@ -589,7 +518,7 @@
     var line = document.querySelector('.tl-line');
     if (line) line.classList.add('tl-animated');
     dots.forEach(function (dot, i) {
-      setTimeout(function () { dot.classList.add('visible'); }, 300 + i * 110);
+      setTimeout(function () { dot.classList.add('visible'); }, 200 + i * 90);
     });
     var anchors = document.querySelectorAll('.year-anchor[data-year]');
     var currentYear = null;
@@ -603,6 +532,13 @@
       entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.dataset.year); });
     }, { rootMargin: '-40% 0px -55% 0px' });
     anchors.forEach(function (a) { obs.observe(a); });
+  }
+
+  // init timeline when page is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTimeline);
+  } else {
+    initTimeline();
   }
 })();
 </script>
