@@ -9237,6 +9237,38 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   border-bottom: 1px solid var(--line);
 }
 
+/* ── 모바일 TOC 플로트 바 ── */
+#about-toc-float {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 0.55rem var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  display: none;
+}
+#about-toc-float.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 768px) {
+  #about-toc-float { display: block; }
+}
+@media (min-width: 769px) {
+  #about-toc-float { top: 80px; }
+}
+
 @media (max-width: 640px) {
   .about-hero { flex-direction: column; gap: var(--space-sm); }
   .about-hero__right { flex-direction: row; align-items: center; gap: 0.8rem; }

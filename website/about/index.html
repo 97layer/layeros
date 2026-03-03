@@ -17,7 +17,7 @@
 <link href="https://cdn.jsdelivr.net" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="/assets/css/style.css?v=736b21c3" rel="stylesheet"/>
+<link href="/assets/css/style.css?v=6060fb6f" rel="stylesheet"/>
 <script>
 (function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
 </script>
@@ -46,6 +46,11 @@
   <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
 </div>
 <!-- /COMPONENT:nav -->
+
+<!-- 모바일 섹션 인디케이터 -->
+<div id="about-toc-float" aria-hidden="true" aria-live="polite">
+  <span id="about-toc-float__text"></span>
+</div>
 
 <main class="page-main">
 
@@ -392,18 +397,32 @@
       });
     }
 
-    /* ── TOC 스크롤 스파이 ── */
+    /* ── TOC 스크롤 스파이 + 모바일 플로트 바 ── */
     var tocLinks = document.querySelectorAll('.about-toc a[href^="#"]');
+    var floatBar = document.getElementById('about-toc-float');
+    var floatText = document.getElementById('about-toc-float__text');
+    var sectionLabels = {
+      'ch-1': '001 · 시선',
+      'ch-2': '002 · 원리',
+      'ch-3': '003 · 태도',
+      'ch-4': '004 · 이름',
+      'ch-5': '005 · 실천',
+      'ch-6': '006 · 순환'
+    };
+
     if (tocLinks.length && 'IntersectionObserver' in window) {
       var sectionMap = {};
       tocLinks.forEach(function (a) {
         var id = a.getAttribute('href').slice(1);
         sectionMap[id] = a;
       });
+
       var setActive = function (id) {
         tocLinks.forEach(function (a) { a.classList.remove('is-active'); });
         if (sectionMap[id]) sectionMap[id].classList.add('is-active');
+        if (floatText && sectionLabels[id]) floatText.textContent = sectionLabels[id];
       };
+
       var obs = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) setActive(e.target.id);
@@ -413,6 +432,19 @@
         var el = document.getElementById(id);
         if (el) obs.observe(el);
       });
+    }
+
+    /* ── 인트로 지나면 플로트 바 표시 ── */
+    if (floatBar && 'IntersectionObserver' in window) {
+      var introObs = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) {
+          floatBar.classList.remove('is-visible');
+        } else {
+          floatBar.classList.add('is-visible');
+        }
+      }, { threshold: 0.1 });
+      var introEl = document.querySelector('.about-intro');
+      if (introEl) introObs.observe(introEl);
     }
   });
 })();
