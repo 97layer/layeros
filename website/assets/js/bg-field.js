@@ -164,12 +164,17 @@
   }
 
   var lastW = window.innerWidth;
+  var lastH = window.innerHeight;
   var resizeTimer = null;
   function onResize() {
     var W = window.innerWidth;
     var H = window.innerHeight;
-    if (W === lastW && Math.abs(H - renderer.domElement.height / renderer.getPixelRatio()) < 80) return;
+    /* 모바일 주소창 hide/show는 width 변화 없이 height만 바뀜 — 무시 */
+    if (W === lastW && isMobile) return;
+    /* 데스크탑: height 변화 ±5% 이내면 무시 */
+    if (W === lastW && Math.abs(H - lastH) / lastH < 0.05) return;
     lastW = W;
+    lastH = H;
     renderer.setSize(W, H, false);
     camera.aspect = W / H;
     camera.updateProjectionMatrix();
@@ -177,7 +182,7 @@
   }
   function onResizeDebounced() {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(onResize, 120);
+    resizeTimer = setTimeout(onResize, 300);
   }
   onResize();
   window.addEventListener('resize', onResizeDebounced, { passive: true });
