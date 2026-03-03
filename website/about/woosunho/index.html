@@ -245,18 +245,19 @@
 
 /* ── Works ── */
 /* project strip */
-.wk-proj { margin-bottom: 1.6rem; }
+.wk-proj { margin-bottom: 2.6rem; }
 .wk-proj__hd {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 0.45rem;
+  gap: 0.8rem;
+  margin-bottom: 0.65rem;
 }
 .wk-proj__name {
   font-family: var(--font-mono);
-  font-size: 0.48rem;
-  letter-spacing: 0.14em;
-  color: var(--text-faint);
+  font-size: 0.56rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--text-sub);
   text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
@@ -264,12 +265,12 @@
 .wk-proj__rule { flex: 1; height: 1px; background: var(--line); }
 .wk-proj__imgs {
   display: flex;
-  gap: 0.4rem;
-  height: 160px;
+  gap: 0.5rem;
+  height: 180px;
 }
-.wk-proj--wide .wk-proj__imgs { height: 200px; }
-/* misc masonry */
-.wk-grid { columns: 3; column-gap: 0.4rem; }
+.wk-proj--wide .wk-proj__imgs { height: 220px; }
+/* masonry */
+.wk-grid { columns: 3; column-gap: 0.5rem; }
 /* shared item */
 .wk-item {
   position: relative;
@@ -278,41 +279,82 @@
   flex: 1;
   min-width: 0;
   break-inside: avoid;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s var(--ease-wave, cubic-bezier(0.37,0,0.63,1)),
+              transform 0.7s var(--ease-wave, cubic-bezier(0.37,0,0.63,1));
+}
+.wk-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 .wk-proj__imgs .wk-item { margin-bottom: 0; height: 100%; }
-.wk-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.25s; }
+.wk-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+}
 .wk-grid .wk-item img { height: auto; }
-.wk-item:hover img { opacity: 0.84; }
+.wk-item:hover img { transform: scale(1.025); opacity: 0.88; }
+
 /* lightbox */
 .wk-lb {
-  display: none;
   position: fixed;
   inset: 0;
-  background: rgba(26,26,26,0.94);
   z-index: 9999;
-  cursor: zoom-out;
+  display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(20,20,20,0.96);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s;
 }
-.wk-lb.open { display: flex; }
-.wk-lb img {
-  max-width: min(92vw, 960px);
-  max-height: 90vh;
+.wk-lb.open { opacity: 1; visibility: visible; }
+.wk-lb__img {
+  max-width: min(88vw, 1000px);
+  max-height: 88vh;
   object-fit: contain;
+  display: block;
+  transition: opacity 0.25s;
 }
 .wk-lb__close {
   position: absolute;
-  top: 1.4rem; right: 1.6rem;
+  top: 1.6rem; right: 1.8rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.45);
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.35);
   letter-spacing: 0.1em;
   cursor: pointer;
   user-select: none;
-  transition: color 0.2s;
+  transition: color 0.25s;
 }
 .wk-lb__close:hover { color: rgba(255,255,255,0.8); }
+.wk-lb__nav {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  font-size: 1.3rem;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  user-select: none;
+  padding: 1.2rem 1.6rem;
+  transition: color 0.25s;
+  line-height: 1;
+}
+.wk-lb__nav:hover { color: rgba(255,255,255,0.8); }
+.wk-lb__prev { left: 0; }
+.wk-lb__next { right: 0; }
+.wk-lb__counter {
+  position: absolute;
+  bottom: 1.6rem; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.25);
+  white-space: nowrap;
+}
 
 /* ── Mobile ── */
 @media (max-width: 720px) {
@@ -347,16 +389,18 @@
 }
 
 @media (max-width: 720px) {
-  .wk-proj__imgs { height: 120px; }
-  .wk-proj--wide .wk-proj__imgs { height: 150px; }
-  .wk-grid { columns: 2; }
+  .wk-proj__imgs { height: 130px; }
+  .wk-proj--wide .wk-proj__imgs { height: 160px; }
+  .wk-grid { columns: 2; column-gap: 0.4rem; }
+  .wk-lb__nav { padding: 0.8rem 0.6rem; font-size: 1.1rem; }
 }
 @media (max-width: 480px) {
   .ws-sidebar__inner {
     grid-template-columns: 90px 1fr;
     gap: 0 1.1rem;
   }
-  .wk-grid { columns: 2; }
+  .wk-grid { columns: 2; column-gap: 0.35rem; }
+  .wk-item { margin-bottom: 0.35rem; }
 }
 </style>
 </head>
@@ -756,21 +800,102 @@
 
 <script defer src="/assets/js/site.js"></script>
 <script>
-// Lightbox
+// Scroll reveal — staggered fade-in
+(function () {
+  var items = document.querySelectorAll('.wk-item');
+  if (!items.length) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      io.unobserve(el);
+      var delay = (el._revealIdx || 0) * 60;
+      setTimeout(function () { el.classList.add('revealed'); }, delay);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  var batch = 0;
+  items.forEach(function (item, i) {
+    item._revealIdx = i % 6;
+    io.observe(item);
+  });
+})();
+
+// Lightbox — full gallery with prev/next
 (function () {
   var lb = document.createElement('div');
   lb.className = 'wk-lb';
-  lb.innerHTML = '<span class="wk-lb__close">ESC</span><img src="" alt="">';
+  lb.innerHTML = [
+    '<span class="wk-lb__close">ESC</span>',
+    '<span class="wk-lb__nav wk-lb__prev">\u2190</span>',
+    '<img class="wk-lb__img" src="" alt="">',
+    '<span class="wk-lb__nav wk-lb__next">\u2192</span>',
+    '<span class="wk-lb__counter"></span>'
+  ].join('');
   document.body.appendChild(lb);
-  var lbImg = lb.querySelector('img');
-  function open(src) { lbImg.src = src; lb.classList.add('open'); }
-  function close() { lb.classList.remove('open'); lbImg.src = ''; }
-  document.querySelectorAll('.wk-item').forEach(function (el) {
-    el.addEventListener('click', function () { open(el.dataset.src); });
+
+  var lbImg   = lb.querySelector('.wk-lb__img');
+  var counter = lb.querySelector('.wk-lb__counter');
+  var prevBtn = lb.querySelector('.wk-lb__prev');
+  var nextBtn = lb.querySelector('.wk-lb__next');
+  var all     = [];
+  var idx     = 0;
+
+  function build() {
+    all = Array.from(document.querySelectorAll('.wk-item[data-src]'));
+  }
+
+  function show(i) {
+    if (!all.length) build();
+    idx = (i + all.length) % all.length;
+    lbImg.style.opacity = '0';
+    setTimeout(function () {
+      lbImg.src = all[idx].dataset.src;
+      lbImg.style.opacity = '1';
+    }, 120);
+    counter.textContent = (idx + 1) + ' / ' + all.length;
+    prevBtn.style.display = all.length > 1 ? '' : 'none';
+    nextBtn.style.display = all.length > 1 ? '' : 'none';
+  }
+
+  function open(i) {
+    if (!all.length) build();
+    document.body.style.overflow = 'hidden';
+    lb.classList.add('open');
+    show(i);
+  }
+
+  function close() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function () { lbImg.src = ''; }, 350);
+  }
+
+  document.addEventListener('click', function (e) {
+    var item = e.target.closest('.wk-item[data-src]');
+    if (!item) return;
+    if (!all.length) build();
+    open(all.indexOf(item));
   });
-  lb.addEventListener('click', function (e) { if (e.target !== lbImg) close(); });
-  lb.querySelector('.wk-lb__close').addEventListener('click', close);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  prevBtn.addEventListener('click', function (e) { e.stopPropagation(); show(idx - 1); });
+  nextBtn.addEventListener('click', function (e) { e.stopPropagation(); show(idx + 1); });
+  lb.querySelector('.wk-lb__close').addEventListener('click', function (e) { e.stopPropagation(); close(); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape')     close();
+    if (e.key === 'ArrowLeft')  show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+
+  // touch swipe
+  var touchX = 0;
+  lb.addEventListener('touchstart', function (e) { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+  }, { passive: true });
 })();
 </script>
 <script>
