@@ -487,10 +487,10 @@ class PipelineOrchestrator:
 
         logger.info("[Orchestrator] CE 완료, Ralph 점수: %s/100 (signal=%s)", ralph_score, signal_id)
 
-        # Ralph < 50 → CE 재작업 (최대 2회)
+        # Ralph < RALPH_PASS_SCORE → CE 재작업 (최대 2회)
         retry_count = self._get_ce_retry_count(signal_id)
-        if ralph_score < 50 and retry_count < self.MAX_CE_RETRIES:
-            logger.info("[Orchestrator] Ralph %s<50 → CE 재작업 (%d/%d)", ralph_score, retry_count + 1, self.MAX_CE_RETRIES)
+        if ralph_score < self.RALPH_PASS_SCORE and retry_count < self.MAX_CE_RETRIES:
+            logger.info("[Orchestrator] Ralph %s<%s → CE 재작업 (%d/%d)", ralph_score, self.RALPH_PASS_SCORE, retry_count + 1, self.MAX_CE_RETRIES)
             retry_payload = {
                 **task.get("payload", {}),
                 "retry_count": retry_count + 1,
