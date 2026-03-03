@@ -22,7 +22,7 @@
     alpha: true,
     antialias: true
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 3 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
 
   /* ── Scene & Camera ── */
@@ -63,9 +63,9 @@
 
   /* ── 쌍극자 필드라인 파라미터 (V37: 가시성 보정 — 맑지만 선명하게) ── */
   var isPortrait = window.innerHeight > window.innerWidth;
-  var LINE_COUNT = isMobile ? 56 : 100;
-  var SEEDS = isMobile ? 10 : 16;
-  var POINTS_PER = isMobile ? 140 : 260;
+  var LINE_COUNT = isMobile ? 32 : 100;
+  var SEEDS = isMobile ? 6 : 16;
+  var POINTS_PER = isMobile ? 60 : 260;
   var MAX_R = 22.0;
   var SCALE = (isMobile && isPortrait) ? 3.0 : 3.8;
 
@@ -107,7 +107,7 @@
       var frac = (si2 + 1) / SEEDS;
 
       /* 극(pole) 근처 진하게, 바깥으로 갈수록 소멸 */
-      var baseOp = isMobile ? (0.42 - frac * 0.24) : (0.40 - frac * 0.24);
+      var baseOp = isMobile ? (0.18 - frac * 0.10) : (0.40 - frac * 0.24);
       var col = fieldColor;
 
       var mat = new THREE.LineBasicMaterial({
