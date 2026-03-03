@@ -69,13 +69,17 @@ class IntentClassifier:
         if len(text) <= 20:
             return _result('conversation', 0.9, 'short message')
 
-        # 5. 모호한 중간 길이 → Gemini 판단
-        if self.use_ai and 30 <= len(text) <= 200:
+        # 5. 매우 긴 텍스트 (>500자) → 에세이/메모 → insight로 직처리
+        if len(text) > 500:
+            return _result('insight', 0.85, 'long text — essay/memo')
+
+        # 6. 모호한 중간 길이 → Gemini 판단
+        if self.use_ai and 30 <= len(text) <= 500:
             result = self._classify_with_ai(text)
             if result:
                 return result
 
-        # 6. 기본값: conversation
+        # 7. 기본값: conversation
         return _result('conversation', 0.7, 'default')
 
     def _classify_with_ai(self, text: str) -> Optional[Dict]:

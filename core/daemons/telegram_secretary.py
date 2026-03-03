@@ -796,9 +796,10 @@ class TelegramSecretaryV6:
                 placeholder = await update.message.reply_text("💭 사유 중...")
                 try:
                     response = self.engine.chat(str(update.effective_user.id), text)
-                    await placeholder.edit_text(
-                        _escape_html(response), parse_mode=constants.ParseMode.HTML
-                    )
+                    escaped = _escape_html(response)
+                    if len(escaped) > 4000:
+                        escaped = escaped[:3980] + "\n\n<i>[응답이 길어 잘렸습니다]</i>"
+                    await placeholder.edit_text(escaped, parse_mode=constants.ParseMode.HTML)
                 except Exception as chat_e:
                     logger.error("Chat engine error: %s", chat_e)
                     await placeholder.edit_text("죄송합니다. 응답 생성 중 오류가 발생했습니다.")
