@@ -11,8 +11,12 @@ gen_lookbook.py — WOOHWAHAE 룩북 Imagen 4.0 이미지 생성
 import argparse
 import os
 import sys
+import io
+import random
 from pathlib import Path
 
+import numpy as np
+from PIL import Image, ImageFilter
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
@@ -23,70 +27,72 @@ from google.genai import types
 OUTPUT_DIR = Path(__file__).resolve().parents[2] / "website/archive/lookbook/assets/images"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# 브랜드 기반 공통 접두 프롬프트
-BASE_STYLE = (
-    "editorial fashion photography, slow life aesthetics, "
-    "muted desaturated palette, soft natural light from a single window, "
-    "Japanese-Korean minimalism, quiet atmosphere, analog grain, "
-    "medium format film look, no text, no logo"
-)
+GRAIN_INTENSITY = 28      # 0=없음, 18=subtle, 28=film, 40=heavy
+GRAIN_HIGHLIGHT_PROTECT = 0.55  # 밝은 영역은 grain 줄이기 (0~1)
+
+
+def apply_film_grain(img_bytes: bytes) -> bytes:
+    """ISO 400 필름 그레인 시뮬레이션."""
+    img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
+    arr = np.array(img, dtype=np.float32)
+
+    # 루미넌스 기반 grain mask — 어두운 곳에 grain 많이
+    luma = 0.299 * arr[:, :, 0] + 0.587 * arr[:, :, 1] + 0.114 * arr[:, :, 2]
+    shadow_mask = 1.0 - np.clip(luma / 255.0, 0, 1) * GRAIN_HIGHLIGHT_PROTECT
+    shadow_mask = shadow_mask[:, :, np.newaxis]
+
+    # 각 채널 독립 노이즈 (필름 느낌)
+    rng = np.random.default_rng()
+    noise = rng.normal(0, GRAIN_INTENSITY, arr.shape).astype(np.float32)
+    noise *= shadow_mask
+
+    # 미세한 blur로 grain 입자감
+    noise_img = Image.fromarray(np.clip(noise + 128, 0, 255).astype(np.uint8))
+    noise_img = noise_img.filter(ImageFilter.GaussianBlur(radius=0.4))
+    noise = np.array(noise_img, dtype=np.float32) - 128
+
+    result = np.clip(arr + noise, 0, 255).astype(np.uint8)
+    out = Image.fromarray(result)
+
+    buf = io.BytesIO()
+    out.save(buf, format="JPEG", quality=92, subsampling=2)
+    return buf.getvalue()
+
+# 소거(消去) — 하나만 남기고 전부 어둠으로
+BASE_STYLE = "pure black background, single light source, analog film grain, no text, no logo"
 
 PROMPTS = [
     {
         "filename": "lookbook-01-stillness.jpg",
-        "prompt": (
-            f"A pair of hands resting on a white ceramic bowl, morning light, "
-            f"linen tablecloth, minimal composition, close-up. {BASE_STYLE}"
-        ),
+        "prompt": "A single white peony floating in absolute darkness. " + BASE_STYLE,
     },
     {
         "filename": "lookbook-02-texture.jpg",
-        "prompt": (
-            f"Extreme close-up of freshly cut hair strands on a pale stone floor, "
-            f"geometric shadow pattern, soft focus background. {BASE_STYLE}"
-        ),
+        "prompt": "A woman's face in profile, eyes closed, one white flower resting on her hair. Black void. " + BASE_STYLE,
     },
     {
         "filename": "lookbook-03-space.jpg",
-        "prompt": (
-            f"Empty atelier interior, bare white walls, single wooden stool, "
-            f"afternoon window light casting long shadow, high ceiling, wide angle. {BASE_STYLE}"
-        ),
+        "prompt": "A pair of hands releasing a single moth into darkness. " + BASE_STYLE,
     },
     {
         "filename": "lookbook-04-ritual.jpg",
-        "prompt": (
-            f"Hairdresser's hands delicately combing through dark hair, "
-            f"bokeh background, intimate close-up, calm focus, warm shadow. {BASE_STYLE}"
-        ),
+        "prompt": "One stem of wild grass bending, a crescent moon far above. Nothing else. " + BASE_STYLE,
     },
     {
         "filename": "lookbook-05-material.jpg",
-        "prompt": (
-            f"Flat lay of haircutting scissors, a small glass jar, dried botanicals "
-            f"on rough linen, top-down shot, negative space dominant. {BASE_STYLE}"
-        ),
+        "prompt": "A single fallen petal on black stone. Close. " + BASE_STYLE,
     },
     {
         "filename": "lookbook-06-portrait.jpg",
-        "prompt": (
-            f"Side profile of a person with a precise short haircut, eyes closed, "
-            f"against a soft neutral wall, late afternoon light, film portrait. {BASE_STYLE}"
-        ),
+        "prompt": "A person's bare shoulder, one small flower placed on the collarbone. Dark. " + BASE_STYLE,
     },
     {
         "filename": "lookbook-07-moment.jpg",
-        "prompt": (
-            f"A single cup of tea on a window ledge, rain blur outside, "
-            f"condensation on glass, hands cradling the cup, crop mid-frame. {BASE_STYLE}"
-        ),
+        "prompt": "One candle flame and a moth circling it. Total darkness around. " + BASE_STYLE,
     },
     {
         "filename": "lookbook-08-light.jpg",
-        "prompt": (
-            f"Abstract: a sheer white curtain diffusing late morning light, "
-            f"soft creases, almost no detail, peaceful emptiness. {BASE_STYLE}"
-        ),
+        "prompt": "A silk ribbon mid-fall in darkness, light catching only its edge. " + BASE_STYLE,
     },
 ]
 
@@ -110,13 +116,14 @@ def generate_image(client: genai.Client, prompt_data: dict, dry_run: bool = Fals
             prompt=prompt_data["prompt"],
             config=types.GenerateImagesConfig(
                 number_of_images=1,
-                aspect_ratio="3:4",  # 세로 룩북 포맷
+                aspect_ratio="3:4",
                 safety_filter_level="BLOCK_LOW_AND_ABOVE",
             ),
         )
         img = response.generated_images[0].image
-        out_path.write_bytes(img.image_bytes)
-        print("  saved: %s (%d KB)" % (out_path.name, len(img.image_bytes) // 1024))
+        grained = apply_film_grain(img.image_bytes)
+        out_path.write_bytes(grained)
+        print("  saved: %s (%d KB, grain applied)" % (out_path.name, len(grained) // 1024))
         return True
     except Exception as e:
         print("  ERROR: %s" % e)
