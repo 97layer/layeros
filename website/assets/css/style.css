@@ -8956,7 +8956,7 @@ body::after {
   align-items: flex-start;
   justify-content: space-between;
   gap: 2rem;
-  padding-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
 }
 .about-hero__left { flex: 1; }
 .about-hero__right {
@@ -9124,8 +9124,8 @@ p.about-zero-label { margin-bottom: var(--space-md); }
 .appendix-font--mono { font-family: var(--font-mono); font-size: 0.85em; color: var(--text-sub); }
 
 @media (max-width: 640px) {
-  .about-hero { flex-direction: column-reverse; gap: var(--space-md); }
-  .about-hero__right { flex-direction: row; align-items: center; }
+  .about-hero { flex-direction: column; gap: var(--space-sm); }
+  .about-hero__right { flex-direction: row; align-items: center; gap: 0.8rem; }
   .page-about .etymology-char { font-size: 2.8rem; }
 }
 
