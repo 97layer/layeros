@@ -83,56 +83,6 @@ def bust_cache(dry_run: bool = False) -> int:
     return count
 
 
-_COMMIT_PREFIX = re.compile(r'^(feat|fix|refactor|docs|chore|style|test|perf):\s*')
-_ABOUT_HTML = WEBSITE_DIR / "about" / "index.html"
-_CL_START = "/* CHANGELOG:START */"
-_CL_END   = "/* CHANGELOG:END */"
-
-
-def inject_changelog(dry_run: bool = False) -> bool:
-    """git log (website/ 경로) → about/index.html changelog 데이터 주입."""
-    if not _ABOUT_HTML.exists():
-        logger.warning("about/index.html 없음, changelog 스킵")
-        return False
-
-    result = subprocess.run(
-        ["git", "log", "--pretty=format:%as|%s", "--", "website/", "-30"],
-        cwd=str(PROJECT_ROOT), capture_output=True, text=True,
-    )
-    entries = []
-    for line in result.stdout.strip().splitlines():
-        if "|" not in line:
-            continue
-        date, msg = line.split("|", 1)
-        msg = _COMMIT_PREFIX.sub("", msg).strip()
-        # 날짜 포맷 YYYY-MM-DD → YYYY.MM.DD
-        date = date.replace("-", ".")
-        entries.append({"date": date, "msg": msg})
-
-    if not entries:
-        return False
-
-    data_js = "var CHANGELOG_DATA = %s;" % json.dumps(entries, ensure_ascii=False)
-    block = "%s\n  %s\n  %s" % (_CL_START, data_js, _CL_END)
-
-    html = _ABOUT_HTML.read_text(encoding="utf-8")
-    if _CL_START in html and _CL_END in html:
-        updated = re.sub(
-            r"/\* CHANGELOG:START \*/.*?/\* CHANGELOG:END \*/",
-            block, html, flags=re.DOTALL,
-        )
-    else:
-        logger.warning("changelog 마커 없음 — about/index.html에 마커 삽입 필요")
-        return False
-
-    if updated == html:
-        return True
-    if not dry_run:
-        _ABOUT_HTML.write_text(updated, encoding="utf-8")
-        logger.info("changelog 주입: %d건", len(entries))
-    else:
-        logger.info("[DRY-RUN] changelog %d건", len(entries))
-    return True
 
 
 def main():
@@ -140,12 +90,11 @@ def main():
     parser.add_argument("--archive", action="store_true", help="아카이브만 빌드")
     parser.add_argument("--components", action="store_true", help="컴포넌트만 주입")
     parser.add_argument("--bust", action="store_true", help="캐시 버스팅만")
-    parser.add_argument("--changelog", action="store_true", help="changelog만 주입")
     parser.add_argument("--dry-run", action="store_true", help="변경 프리뷰")
     args = parser.parse_args()
 
     # 특정 단계만 실행
-    run_all = not (args.archive or args.components or args.bust or args.changelog)
+    run_all = not (args.archive or args.components or args.bust)
 
     logger.info("═══ LAYER OS Build Pipeline ═══")
 
@@ -157,12 +106,7 @@ def main():
     if run_all or args.components:
         run_script("build_components.py", dry_run=args.dry_run)
 
-    # 3. Changelog 주입
-    if run_all or args.changelog:
-        logger.info("─── changelog ───")
-        inject_changelog(dry_run=args.dry_run)
-
-    # 4. Cache Busting
+    # 3. Cache Busting
     if run_all or args.bust:
         logger.info("─── cache bust ───")
         bust_cache(dry_run=args.dry_run)
