@@ -8996,6 +8996,19 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   line-height: 1.9;
 }
 #about-log-lines li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.about-log-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.16em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+}
+.about-zero-cta { opacity: 0.45; }
 
 .page-about .journey-title {
   font-size: clamp(2.4rem, 5.5vw, 4.8rem);
