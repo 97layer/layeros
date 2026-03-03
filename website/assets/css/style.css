@@ -8000,7 +8000,7 @@ body.is-loaded .home-preloader__logo {
   }
 }
 
-/* ─── Footer (High-end Minimal Grid) ─── */
+/* ─── Footer ─── */
 .site-footer {
   position: relative;
   z-index: 10;
@@ -8016,90 +8016,104 @@ body.is-loaded .home-preloader__logo {
   padding: 0 var(--space-md);
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1.2rem;
 }
 
-.footer-row {
+.footer-wordmark {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--text);
+}
+
+.footer-mid {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.4rem 1rem;
-}
-
-.footer-row--bottom {
   justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.footer-link,
-.footer-nav a,
-.footer-meta a,
-.footer-meta span {
+.footer-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.footer-contact-row a {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--text-sub);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color 0.2s;
 }
+
+.footer-contact-row a:hover { color: var(--text); }
 
 .footer-nav {
   display: flex;
   align-items: center;
-  gap: 0.4rem 0.8rem;
+  gap: 1.2rem;
+}
+
+.footer-nav a {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--text-sub);
+  text-decoration: none;
+  border-bottom: none;
+  transition: color 0.2s;
+}
+
+.footer-nav a:hover { color: var(--text); }
+
+.footer-base {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
-.footer-meta {
+.footer-biz {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+.footer-legal {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.footer-link:hover,
-.footer-nav a:hover,
-.footer-meta a:hover {
-  color: var(--text);
-}
-
-.footer-sep {
+.footer-legal a,
+.footer-legal span {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--border);
-  user-select: none;
-}
-
-@media (max-width: 640px) {
-  .footer-row--bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
-  }
-}
-
-.footer-biz {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 0 0.4rem;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
   color: var(--text-faint);
-  letter-spacing: 0.05em;
-  line-height: 1.6;
-  overflow: hidden;
-  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
+.footer-legal a:hover { color: var(--text-sub); }
+
 @media (max-width: 640px) {
-  .footer-biz {
-    flex-wrap: wrap;
-    white-space: normal;
-    overflow: visible;
+  .footer-mid {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.1rem;
   }
-  .footer-biz .footer-sep { display: none; }
+
+  .footer-base {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 
 /* ─── woosunho 포트폴리오 ─── */
