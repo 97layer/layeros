@@ -6505,40 +6505,63 @@ body.is-loaded .home-preloader__logo {
   100% { opacity: 0;   }
 }
 
-/* ─── Home Hero Elog — 작업 비하인드 로그 ─── */
-.home-hero__elog {
+/* ─── Home Hero Elog — 작업 비하인드 로그 (about 이스터 이식) ─── */
+.home-hero__elog-wrap {
   position: absolute;
   top: 5rem;
   left: 0;
   right: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45em;
   padding: 0 var(--space-xl);
-  pointer-events: none;
   opacity: 0;
   transform: translateY(-6px);
   transition: opacity 1.2s var(--ease) 0.8s, transform 1.2s var(--ease) 0.8s;
 }
 
-body.is-loaded .home-hero__elog {
+body.is-loaded .home-hero__elog-wrap {
   opacity: 1;
   transform: translateY(0);
 }
 
-.home-hero__elog .elog {
+.home-hero__elog-trigger {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin: 0 0 0.4em;
+}
+
+.home-elog-cta {
+  opacity: 0.45;
+}
+
+.home-hero__elog-panel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+.home-hero__elog-panel.is-open {
+  max-height: 14em;
+  opacity: 1;
+}
+
+.home-hero__elog-wrap .elog {
   font-size: 0.6rem;
   color: var(--text-faint);
 }
 
-.home-hero__elog .elog time {
+.home-hero__elog-wrap .elog time {
   font-size: 0.6rem;
-  color: var(--text-faint);
   opacity: 0.6;
 }
 
 @media (max-width: 640px) {
-  .home-hero__elog {
+  .home-hero__elog-wrap {
     padding: 0 1.5rem;
     top: 4.5rem;
   }
