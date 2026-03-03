@@ -62,10 +62,6 @@
           {
             "type": "command",
             "command": ".claude/hooks/code-quality-check.sh"
-          },
-          {
-            "type": "command",
-            "command": ".claude/hooks/gemini-critic.sh"
           }
         ]
       },
@@ -75,10 +71,6 @@
           {
             "type": "command",
             "command": ".claude/hooks/code-quality-check.sh"
-          },
-          {
-            "type": "command",
-            "command": ".claude/hooks/gemini-critic.sh"
           }
         ]
       },
@@ -88,6 +80,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/output-secret-filter.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/gemini-critic.sh"
           }
         ]
       }
