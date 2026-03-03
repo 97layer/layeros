@@ -921,35 +921,45 @@ class TelegramSecretaryV6:
 
     @admin_only
     async def note_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """/note [제목] — 텍스트를 knowledge/docs/[제목].md로 저장 (분석 없음)"""
-        args = context.args or []
-        # 첫 번째 단어 = 제목 (없으면 타임스탬프)
-        if args:
-            title = args[0].strip()
-            body = ' '.join(args[1:]).strip()
-        else:
-            title = ''
-            body = ''
+        """/note [내용] — 텍스트를 knowledge/docs/note_YYYYMMDD_HHMMSS.md로 저장 (분석 없음)
+        선택: /note @제목 내용  →  지정 제목으로 저장 / 기존 파일이면 append
+        """
+        import re as _re
+        from datetime import datetime as _dt
 
-        # 본문이 없으면 사용법 안내
+        # 전체 텍스트에서 커맨드 부분 제거
+        raw = update.message.text or ''
+        # '/note' 이후 텍스트
+        body = _re.sub(r'^/note\S*\s*', '', raw, count=1).strip()
+
+        # @제목 옵션 파싱
+        title_match = _re.match(r'^@(\S+)\s+(.*)', body, _re.DOTALL)
+        if title_match:
+            title = title_match.group(1)
+            body = title_match.group(2).strip()
+        else:
+            title = _dt.now().strftime('note_%Y%m%d_%H%M%S')
+
         if not body:
             await update.message.reply_text(
-                "사용법: <code>/note 제목 본문 내용</code>\n\n"
-                "예: <code>/note career_draft 2012년 미용학원 등록...</code>\n\n"
-                "저장 위치: knowledge/docs/[제목].md\n"
-                "분석 없음 — 나중에 직접 지시해서 활용.",
+                "<b>사용법</b>\n"
+                "<code>/note 내용 그대로 붙여넣기</code>\n"
+                "→ note_YYYYMMDD_HHMMSS.md 자동 생성\n\n"
+                "<code>/note @제목 내용</code>\n"
+                "→ 제목.md 저장 (기존 파일이면 내용 추가)\n\n"
+                "분석 없음 — 나중에 지시해서 활용.",
                 parse_mode=constants.ParseMode.HTML
             )
             return
 
         try:
-            from datetime import datetime as _dt
             docs_dir = PROJECT_ROOT / 'knowledge' / 'docs'
             docs_dir.mkdir(parents=True, exist_ok=True)
 
-            # 파일명: 소문자, 공백→언더스코어
-            safe_title = title.lower().replace(' ', '_') or _dt.now().strftime('note_%Y%m%d_%H%M%S')
-            # .md 중복 방지
+            # 파일명 정리: 특수문자 제거, 소문자
+            safe_title = _re.sub(r'[^\w가-힣-]', '_', title).lower().strip('_')
+            if not safe_title:
+                safe_title = _dt.now().strftime('note_%Y%m%d_%H%M%S')
             if not safe_title.endswith('.md'):
                 safe_title += '.md'
 
