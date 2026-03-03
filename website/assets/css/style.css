@@ -8960,30 +8960,11 @@ body::after {
   margin-bottom: var(--space-xl);
 }
 
-.about-hero {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
-  padding-bottom: var(--space-md);
-}
-.about-hero__left { flex: 1; }
-.about-hero__right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  flex-shrink: 0;
-  padding-top: 0.5rem;
-}
-.about-hero__right svg { opacity: 0.28; transition: opacity 1.2s ease; }
-.about-hero__right:hover svg { opacity: 0.55; }
-.about-hero .journey-header { padding-top: 0.5rem; }
 
 .about-zero-label {
   font-family: var(--font-mono);
-  font-size: 0.52rem;
-  letter-spacing: 0.22em;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
   color: var(--text-faint);
   text-transform: uppercase;
 }
@@ -9025,8 +9006,8 @@ p.about-zero-label { margin-bottom: var(--space-md); }
 
 .about-section__sub {
   font-family: var(--font-mono);
-  font-size: 0.48rem;
-  letter-spacing: 0.22em;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
   color: var(--text-faint);
   text-transform: uppercase;
   display: block;
@@ -9041,11 +9022,13 @@ p.about-zero-label { margin-bottom: var(--space-md); }
 }
 .about-toc a {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   letter-spacing: 0.1em;
   color: var(--text-faint);
   text-decoration: none;
   transition: color 0.3s ease;
+  padding: 0.6rem 0;
+  display: block;
 }
 .about-toc a:hover { color: var(--text-sub); }
 .about-preamble {
@@ -9085,28 +9068,13 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   margin-bottom: var(--space-md);
   line-height: 1.6;
 }
-.about-editor-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: var(--space-xl);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: var(--text-sub);
-  text-decoration: none;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 2px;
-  transition: color 0.3s ease, border-color 0.3s ease;
-}
-.about-editor-link:hover { color: var(--text); border-color: var(--text); }
-
 /* Appendix */
 .about-appendix__header { margin-bottom: var(--space-md); }
 .about-appendix__block {
   border-top: 1px solid var(--line);
   padding-top: 0;
 }
+.about-appendix__block:last-child { border-bottom: 1px solid var(--line); }
 .about-appendix__block + .about-appendix__block { margin-top: 0; }
 .about-appendix__toggle {
   background: none;
@@ -9913,24 +9881,6 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   .archive-list-item {
     padding: var(--space-md) 0;
   }
-}
-
-/* ── about: TOC touch target + 폰트 ── */
-.about-toc a {
-  font-size: 0.7rem;        /* 0.58rem → 0.7rem */
-  padding: 0.6rem 0;        /* touch target ≈ 44px */
-  display: block;
-}
-
-.about-zero-label {
-  font-size: 0.65rem;       /* 0.52rem → 0.65rem */
-  letter-spacing: 0.16em;
-}
-
-/* ── about: section sub-label 가독성 ── */
-.about-section__sub {
-  font-size: 0.6rem;        /* 0.48rem → 0.6rem */
-  letter-spacing: 0.16em;
 }
 
 /* ── footer: touch target 확보 ── */
