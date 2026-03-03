@@ -46,6 +46,7 @@ brain/
 !website/assets/media/brand/*.png
 *.jpg
 !website/archive/lookbook/assets/images/*.jpg
+!website/assets/media/profile/*.jpg
 *.jpeg
 config.json
 *COMPLETE.md
