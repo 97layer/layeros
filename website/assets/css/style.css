@@ -9085,11 +9085,10 @@ p.about-zero-label { margin-bottom: var(--space-md); }
   cursor: pointer;
   list-style: none;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: var(--ls-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
   color: var(--text-sub);
-  text-transform: uppercase;
-  padding: 1.2rem 0;
+  padding: 1.6rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9107,10 +9106,9 @@ p.about-zero-label { margin-bottom: var(--space-md); }
 .about-appendix__body { padding-bottom: var(--space-lg); }
 .about-appendix__term {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  color: var(--text-faint);
-  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--text-sub);
   display: block;
   margin-bottom: var(--space-sm);
 }
