@@ -58,41 +58,60 @@ def apply_film_grain(img_bytes: bytes) -> bytes:
     out.save(buf, format="JPEG", quality=92, subsampling=2)
     return buf.getvalue()
 
-# 소거(消去) — 하나만 남기고 전부 어둠으로
-BASE_STYLE = "pure black background, single light source, analog film grain, no text, no logo"
+SHARED = "analog 35mm film grain, no text, no logo, 3:4 portrait"
 
 PROMPTS = [
     {
         "filename": "lookbook-01-stillness.jpg",
-        "prompt": "A single white peony floating in absolute darkness. " + BASE_STYLE,
+        "prompt": "A single white peony floating in absolute darkness. Pure black background, single directional light. " + SHARED,
     },
     {
-        "filename": "lookbook-02-texture.jpg",
-        "prompt": "A woman's face in profile, eyes closed, one white flower resting on her hair. Black void. " + BASE_STYLE,
+        # 백자 그릇 — 단순, 동아시아 감각
+        "filename": "lookbook-02-fragment.jpg",
+        "prompt": "Overhead shot of a single white porcelain bowl on dark wet stone, one small smooth pebble inside, a thin film of still water at the bottom reflecting faint light. Minimal, contemporary. " + SHARED,
     },
     {
-        "filename": "lookbook-03-space.jpg",
-        "prompt": "A pair of hands releasing a single moth into darkness. " + BASE_STYLE,
+        # 황혼 복도 — 넓은 공간감
+        "filename": "lookbook-03-interval.jpg",
+        "prompt": "An empty corridor at blue dusk, worn concrete walls, all doors shut, one sheet of white paper lying face-down on the floor midway. No people. Cold ambient light. " + SHARED,
     },
     {
-        "filename": "lookbook-04-ritual.jpg",
-        "prompt": "One stem of wild grass bending, a crescent moon far above. Nothing else. " + BASE_STYLE,
+        # 콘크리트 옥상 — 현대적, 도시
+        "filename": "lookbook-04-weight.jpg",
+        "prompt": "Empty concrete rooftop at predawn, a single folded dark jacket left on the low ledge, city fog filling the space below, cool blue ambient light from above, modernist. " + SHARED,
     },
     {
-        "filename": "lookbook-05-material.jpg",
-        "prompt": "A single fallen petal on black stone. Close. " + BASE_STYLE,
+        # 어두운 물 위 — 리본 유영
+        "filename": "lookbook-05-drift.jpg",
+        "prompt": "A long white silk cloth floating just above dark still water at night, one end already touching the surface and dissolving. Moonlight from the side. " + SHARED,
     },
     {
-        "filename": "lookbook-06-portrait.jpg",
-        "prompt": "A person's bare shoulder, one small flower placed on the collarbone. Dark. " + BASE_STYLE,
+        # 계단 끝 / 안개 수면
+        "filename": "lookbook-06-threshold.jpg",
+        "prompt": "Stone steps descending into dark fog-covered water, only the top three steps visible, the rest swallowed. Low diffuse light from above. " + SHARED,
     },
     {
-        "filename": "lookbook-07-moment.jpg",
-        "prompt": "One candle flame and a moth circling it. Total darkness around. " + BASE_STYLE,
+        # 현대 미용가위 — 클린, 정밀
+        "filename": "lookbook-07-remains.jpg",
+        "prompt": "A pair of sleek modern Japanese barber scissors lying flat on white marble, blades just slightly open, one long sharp shadow raking across the surface from side light. Clean, precise. " + SHARED,
     },
     {
-        "filename": "lookbook-08-light.jpg",
-        "prompt": "A silk ribbon mid-fall in darkness, light catching only its edge. " + BASE_STYLE,
+        # 어두운 방 창문 — 부재의 후크
+        "filename": "lookbook-08-absence.jpg",
+        "prompt": "Dark interior room, gray fog outside a single tall window, an empty coat hook on the wall beside it, no coat, strong window light casting one long shadow. " + SHARED,
+    },
+    # ─── Light series — 라이트 그레이 배경, 헤어 에디토리얼 ───
+    {
+        "filename": "lookbook-09-cut.jpg",
+        "prompt": "A bundle of dark cut hair lying on pale concrete floor, strands spreading slightly outward. Overhead natural window light, soft shadow, minimal. analog 35mm film grain, editorial fashion, no text, no logo, 3:4 portrait",
+    },
+    {
+        "filename": "lookbook-10-hold.jpg",
+        "prompt": "A single hand loosely holding closed barber scissors against a pale gray wall. Strong side shadow. Desaturated. analog 35mm film grain, editorial fashion, no text, no logo, 3:4 portrait",
+    },
+    {
+        "filename": "lookbook-11-after.jpg",
+        "prompt": "Back of a person's bare nape, hair freshly cut very short, collar of a white garment just visible at the bottom. Off-white concrete wall background. Natural side light. analog 35mm film grain, editorial fashion, no text, no logo, 3:4 portrait",
     },
 ]
 
