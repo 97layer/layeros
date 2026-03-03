@@ -6,10 +6,11 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Lab 011: Ambient BGM — WOOHWAHAE</title>
 <meta content="Lab 011: Web Audio API를 활용한 제너레이티브 앰비언트 사운드스케이프 실험." name="description"/>
-<link href="../assets/img/symbol.png" rel="icon" type="image/svg+xml"/>
+<link href="/assets/media/brand/symbol.png" rel="icon" type="image/svg+xml"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
+<link href="/assets/css/style.css?v=902d1134" rel="stylesheet"/>
 <style>
         :root {
             --bg: #E8E6E1;
@@ -131,9 +132,31 @@
         }
     </style>
 </head>
-<body><nav class="site-nav" id="site-nav">
+<body>
+<!-- COMPONENT:nav -->
+<nav class="site-nav" id="site-nav">
+  <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+    <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
+    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
+    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/lab/"><span class="numeric-tag">04.</span>Lab</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</nav>
+<div class="nav-overlay" id="nav-overlay">
+  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
+  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
+  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
+</div>
+<!-- /COMPONENT:nav --><nav class="site-nav" id="site-nav">
 <a aria-label="WOOHWAHAE" class="nav-brand" href="../">
-<img alt="WOOHWAHAE" class="nav-symbol" src="../assets/img/symbol.png"/>
+<img alt="WOOHWAHAE" class="nav-symbol" src="/assets/media/brand/symbol.png"/>
 </a>
 <ul class="nav-links" id="nav-links">
 <li><a href="../archive/">Archive</a></li>
@@ -356,5 +379,31 @@
 <p class="footer-copy">© 2026 WOOHWAHAE</p>
 </div>
 </div>
-</footer></body>
+</footer><!-- COMPONENT:footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-row footer-row--contact">
+      <a href="mailto:hello@woohwahae.kr" class="footer-link">hello@woohwahae.kr</a>
+      <span class="footer-sep">·</span>
+      <a href="https://instagram.com/woohwahae" class="footer-link" target="_blank" rel="noopener">@woohwahae</a>
+    </div>
+    <div class="footer-row footer-row--bottom">
+      <nav class="footer-nav">
+        <a href="/archive/">Archive</a>
+        <span class="footer-sep">·</span>
+        <a href="/practice/">Practice</a>
+        <span class="footer-sep">·</span>
+        <a href="/about/">About</a>
+      </nav>
+      <div class="footer-meta">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <span>&copy; 2026 WOOHWAHAE</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /COMPONENT:footer -->
+<script defer src="/assets/js/site.js"></script>
+</body>
 </html>

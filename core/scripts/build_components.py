@@ -27,7 +27,7 @@ WEBSITE_DIR = PROJECT_ROOT / "website"
 COMPONENTS_DIR = WEBSITE_DIR / "_components"
 
 # 제외 디렉토리/파일
-EXCLUDE_DIRS = {"_components", "_templates", "lab"}
+EXCLUDE_DIRS = {"_components", "_templates"}
 EXCLUDE_FILES = {"404.html"}
 
 # 페이지별 footer 매핑: 어느 섹션이 어떤 footer를 쓰는지
