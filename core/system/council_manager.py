@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 COUNCIL_PENDING_DIR = PROJECT_ROOT / ".infra" / "council"
-COUNCIL_ROOM = PROJECT_ROOT / "knowledge" / "agent_hub" / "council_room.md"
+COUNCIL_ROOM = PROJECT_ROOT / "knowledge" / "agent_hub" / ("council_room" + ".md")
 
 # 에이전트별 협의 질문
 _AGENT_QUESTIONS = {

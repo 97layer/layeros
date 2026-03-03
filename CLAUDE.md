@@ -2,8 +2,16 @@
 # Updated: 2026-03-01
 
 ## 세션 시작
-startup hook이 state.md 자동 로드. work_lock 잠금 시 STOP.
+startup hook이 자동 로드하는 것:
+1. `knowledge/agent_hub/state.md` — 세션 상태
+2. `directives/the_origin.md` — 세계관 SSOT
+3. `directives/sage_architect.md` — 브랜드 인격 SSOT (언어/어조/금지어 전체)
+4. `directives/practice.md` — 서비스·브랜드 실행 기준
+
+work_lock 잠금 시 STOP.
 파일 생성 전: `filesystem_cache.json` 확인. 배치 규칙: `directives/system.md §10`.
+
+**디자인/콘텐츠 작업 시**: sage_architect.md §4(어조) + §9(금지어) 반드시 적용.
 
 ## 금지
 1. ❌ 중복 생성 — filesystem_cache.json 먼저

@@ -5,7 +5,7 @@ Weekly Rollup Generator — LAYER OS
 매주 월요일 실행 (또는 수동).
 지난 7일의 signals + corpus + essays + growth를 .md 롤업으로 생성.
 
-출력: knowledge/reports/weekly_YYYYWNN.md
+출력: knowledge/reports/weekly_pattern_md
 """
 
 import json

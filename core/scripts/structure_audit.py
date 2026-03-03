@@ -30,9 +30,15 @@ EXPECTED_DIRECTIVES = {
     "directives/sage_architect.md",
     "directives/system.md",
     "directives/practice.md",
+    "directives/harness.md",
     "directives/agents/sa.md",
     "directives/agents/ce.md",
     "directives/agents/ad.md",
+    "directives/agents/vd.md",
+    "directives/practice/writing_guide.md",
+    "directives/harness.md",
+    "directives/agents/vd.md",
+    "directives/practice/writing_guide.md",
 }
 
 
@@ -89,7 +95,7 @@ def check_dead_references() -> List[str]:
                         "cd.md",
                         # 금지 파일명 예시 (verify.md 등에서 참조)
                         "WAKEUP_REPORT.md", "DEEP_WORK_PROGRESS.md",
-                        "NEXT_STEPS.md",
+                        "NEXT_STEPS.md", "council_room.md",
                     }
                     if ref in GENERIC_PATTERNS or Path(ref).name in GENERIC_PATTERNS:
                         continue

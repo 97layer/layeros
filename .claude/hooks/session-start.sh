@@ -1,10 +1,9 @@
 #!/bin/bash
 # session-start.sh — SessionStart hook
-# QUANTA 전체 출력 + work_lock 체크
-# (QUANTA가 ~65줄로 경량화되어 선택 로드 불필요)
+# state.md 전체 출력 + work_lock 체크
 
 PROJECT_ROOT="/Users/97layer/97layerOS"
-QUANTA="$PROJECT_ROOT/knowledge/agent_hub/state.md"
+STATE="$PROJECT_ROOT/knowledge/agent_hub/state.md"
 WORK_LOCK="$PROJECT_ROOT/knowledge/system/work_lock.json"
 
 # 세션 시작 시각 기록 (auto_quanta_update.py가 커밋 경계로 사용)
@@ -12,12 +11,12 @@ date -u +"%Y-%m-%dT%H:%M:%SZ" > "$PROJECT_ROOT/knowledge/system/session_start.tx
 
 echo "━━━ LAYER OS Session Start ━━━"
 
-# ─── QUANTA 전체 출력 ─────────────────────────────────────
+# ─── STATE 전체 출력 ──────────────────────────────────────
 
-if [ -f "$QUANTA" ]; then
-  cat "$QUANTA"
+if [ -f "$STATE" ]; then
+  cat "$STATE"
 else
-  echo "WARNING: QUANTA 파일 없음 — $QUANTA"
+  echo "WARNING: state.md 파일 없음 — $STATE"
 fi
 
 echo ""
@@ -42,6 +41,20 @@ else
 fi
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# ─── 브랜드 SSOT 자동 로드 ─────────────────────────────────
+
+SAGE="$PROJECT_ROOT/directives/sage_architect.md"
+ORIGIN="$PROJECT_ROOT/directives/the_origin.md"
+PRACTICE="$PROJECT_ROOT/directives/practice.md"
+
+for FILE in "$ORIGIN" "$SAGE" "$PRACTICE"; do
+  if [ -f "$FILE" ]; then
+    echo ""
+    echo "━━━ DIRECTIVES: $(basename $FILE) ━━━"
+    cat "$FILE"
+  fi
+done
 
 # ─── 구조 감사 (선제 스캔) ──────────────────────────────────
 

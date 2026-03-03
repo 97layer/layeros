@@ -1,8 +1,8 @@
-# 🧠 INTELLIGENCE QUANTA - 지능 앵커
+# 🧠 SESSION STATE - 지능 앵커
 
 > **목적**: 어떤 모델/세션이 오더라도 사고 흐름이 끊기지 않도록 보장하는 물리적 앵커
 > **갱신 정책**: 덮어쓰기 (최신 상태만 유지). session-stop 훅이 자동 갱신.
-> **마지막 갱신**: 2026-03-02
+> **마지막 갱신**: 2026-03-03
 
 ---
 
@@ -76,7 +76,7 @@
 
 ### [DESIGN] 페이지별 다음 작업 (에이전트 없어도 착수 가능)
 - ⏳ **archive/index.html** — 가짜 필터탭(MAGAZINE/LOOKBOOK) 제거, 타이포그래피 리스트
-- ⏳ **about/index.html** — 7섹션 → 3섹션 압축 (Declaration/Practice/Connection), 브랜드 팔레트 섹션 제거
+- ✅ **about/index.html** — 레이아웃 기준 소스 확정. 수정 금지.
 - ⏳ **practice/ 전체** — direction/project/contact 감사 및 재설계
 - ⏳ **모바일 전체** — 640px 이하 레이아웃 검증
 

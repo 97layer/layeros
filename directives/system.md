@@ -155,7 +155,7 @@ SESSION_SUMMARY_* / WAKEUP_REPORT* / DEPLOY_* / NEXT_STEPS* / temp_* / untitled_
 ### 10.1 4축 구조
 
 ```
-97layerOS/
+LAYER OSOS/
 ├── directives/     뇌 — 철학, 규칙, 규격
 ├── knowledge/      기억 — 데이터, 신호, 상태
 ├── core/           엔진 — 코드, 스크립트, 스킬, 테스트

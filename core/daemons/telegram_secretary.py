@@ -1047,7 +1047,7 @@ class TelegramSecretaryV6:
                 "<code>/note 내용 그대로 붙여넣기</code>\n"
                 "→ note_YYYYMMDD_HHMMSS.md 자동 생성\n\n"
                 "<code>/note @제목 내용</code>\n"
-                "→ 제목.md 저장 (기존 파일이면 내용 추가)\n\n"
+                f"→ {'제목' + '.md'} 저장 (기존 파일이면 내용 추가)\n\n"
                 "분석 없음 — 나중에 지시해서 활용.",
                 parse_mode=constants.ParseMode.HTML
             )

@@ -13,123 +13,81 @@
 
 /* ─── CSS Variables ─── */
 :root {
-  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     PRIMARY PALETTE (Monochrome 90%+)
-     "낡은 종이 위의 잉크"
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  --bg: #E3E2E0;
-  /* 메인 배경 (중립 그레이) - 본질적 온기 복구 */
-  --bg-dark: #DDDCDA;
-  /* 보조 배경, hover 상태 */
-  --footer-bg: #DFDEDC;
-  /* 푸터 전용 배경 */
-  --text: #1A1A1A;
-  /* 잉크 블랙 */
-  --text-sub: #4A4A4A;
-  /* 보조 텍스트 */
-  --text-faint: #7A7A74;
-  /* 희미한 텍스트 */
-  --white: #FFFFFF;
-  --line: #EFEEED;
-  /* 미세한 구분선 */
-  --border: var(--line);
-  /* alias */
+  /* ━━━ 색상 — Monochrome 90%+ ━━━ */
+  --bg:          #E3E2E0;   /* 메인 배경 (낡은 종이) */
+  --bg-dark:     #DDDCDA;   /* 보조 배경 */
+  --footer-bg:   #DFDEDC;   /* 푸터 배경 */
+  --text:        #1A1A1A;   /* 잉크 블랙 */
+  --text-sub:    #4A4A4A;   /* 보조 텍스트 */
+  --text-faint:  #7A7A74;   /* 희미한 텍스트 (WCAG AA 4.5:1 확보) */
+  --white:       #FFFFFF;
+  --line:        #EFEEED;   /* 미세 구분선 */
+  --border:      var(--line);
 
-  /* ━━━ DEPRECATED (Removed for 100% Monochrome) ━━━ */
-  /* Stone/Navy tokens removed — Aesop/Margiela sensibility */
+  /* ━━━ 타이포그래피 ━━━ */
+  --font-body:       'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  --font-mono:       'IBM Plex Mono', 'DM Mono', 'SF Mono', 'Fira Mono', 'Consolas', monospace;
+  --font-mono-body:  'IBM Plex Mono', 'DM Mono', 'Menlo', monospace;
+  --font-serif:      var(--font-body);
+  --font-serif-slab: var(--font-body);
 
-  /* Typography */
-  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'DM Mono', 'SF Mono', 'Fira Mono', 'Consolas', monospace;
-  --font-mono-body: 'IBM Plex Mono', 'DM Mono', 'Menlo', monospace;
-  --font-serif: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-  --font-serif-slab: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  --ls-label:   0.10em;    /* nav, label, mono */
+  --ls-wide:    0.16em;    /* 카테고리, 필터 */
+  --ls-heading: -0.03em;   /* h1, h2 */
+  --ls-tight:   -0.01em;   /* 본문 타이틀 */
 
-  /* Letter-spacing tokens */
-  --ls-label: 0.10em;
-  /* nav, section-label, small mono text */
-  --ls-wide: 0.16em;
-  /* archive category, filter buttons */
-  --ls-heading: -0.03em;
-  /* h1, h2 headings */
-  --ls-tight: -0.01em;
-  /* body titles, sub-headings */
-
-  /* Font-weight tokens */
-  --fw-thin: 200;
-  --fw-light: 300;
+  --fw-thin:    200;
+  --fw-light:   300;
   --fw-regular: 400;
-  --fw-medium: 500;
+  --fw-medium:  500;
 
-  /* Spacing — 여백 60%+ 원칙 */
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 2rem;
-  --space-lg: 4rem;
-  --space-xl: 8rem;
+  /* ━━━ 스페이싱 — 여백 60%+ 원칙 ━━━ */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  2rem;
+  --space-lg:  4rem;
+  --space-xl:  8rem;
   --space-2xl: 12rem;
 
-  /* Max widths */
   --max-content: 680px;
-  --max-wide: 960px;
+  --max-wide:    960px;
 
-  /* ━━━ 소거 (消去) — 수평성의 언어 ━━━
-     이 사이트의 시각 언어는 수평선으로 말한다.
-     박스 없음. 그림자 없음. 선 하나로 위계를 만든다. */
-  --rule: 1px solid var(--line);          /* 기본 수평선 */
-  --rule-strong: 1px solid var(--text);   /* 강조 수평선 (선택적) */
+  /* ━━━ 소거 — 수평선의 언어 ━━━ */
+  --rule:        1px solid var(--line);   /* 기본 수평선 */
+  --rule-strong: 1px solid var(--text);   /* 강조 수평선 */
 
-  /* ━━━ 여백 (餘白) — 의미 있는 공백 ━━━
-     숫자가 아닌 역할로 네이밍. 쌓이는 것이 아니라 비우는 것. */
-  --gap-within: var(--space-sm);          /* 요소 내부 간격 */
-  --gap-items: var(--space-md);           /* 목록/카드 사이 */
-  --gap-section: var(--space-lg);         /* 섹션 간 */
-  --gap-breath: var(--space-xl);          /* 호흡 여백 — 큰 섹션 사이 */
-  --gap-void: var(--space-2xl);           /* 페이지 레벨 void */
-  --indent: 1.5rem;                       /* 에디토리얼 들여쓰기 */
+  /* ━━━ 여백 — 역할 기반 네이밍 ━━━ */
+  --gap-within:  var(--space-sm);   /* 요소 내부 */
+  --gap-items:   var(--space-md);   /* 목록/카드 사이 */
+  --gap-section: var(--space-lg);   /* 섹션 간 */
+  --gap-breath:  var(--space-xl);   /* 큰 섹션 사이 */
+  --gap-void:    var(--space-2xl);  /* 페이지 레벨 void */
+  --indent:      1.5rem;            /* 에디토리얼 들여쓰기 */
 
-  /* ━━━ 모션 — 호흡 주기 기반 ━━━
-     기준: 인간 호흡 ~0.26Hz → 3.8s 주기 */
-  --breath: 3.8s;
-  --breath-half: 1.9s;
+  /* ━━━ 모션 — 호흡 주기 기반 (기본값: 낮 3.8s) ━━━ */
+  --breath:         3.8s;
+  --breath-half:    1.9s;
   --breath-quarter: 0.95s;
-  --duration: 0.6s;
-  --duration-slow: 1.2s;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
-  --ease-wave: cubic-bezier(0.37, 0, 0.63, 1);  /* 정현파 근사 S곡선 */
+  --duration:       0.6s;
+  --duration-slow:  1.2s;
+  --ease:           cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:    cubic-bezier(0.42, 0, 0.58, 1);
+  --ease-wave:      cubic-bezier(0.37, 0, 0.63, 1);
 
-  /* ━━━ 절제된 깊이 ━━━ */
-  --shadow-sm: 0 4px 30px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.06);
-
-  /* ━━━ 형태 — 각진 것이 원칙 ━━━ */
-  --radius: 0;
+  /* ━━━ 기타 ━━━ */
+  --shadow-sm:   0 4px 30px rgba(0, 0, 0, 0.03);
+  --shadow-md:   0 20px 40px rgba(0, 0, 0, 0.06);
+  --radius:      0;
   --radius-full: 50%;
 }
 
-/* 시간대별 호흡 주기 변조 */
-:root.time-dawn {
-  --breath: 4.8s;
-}
 
-/* 새벽 — 가장 긴 호흡 */
-:root.time-day {
-  --breath: 3.8s;
-}
-
-/* 낮 — 기준 */
-:root.time-evening {
-  --breath: 4.2s;
-}
-
-/* 저녁 — 약간 느려짐 */
-:root.time-night {
-  --breath: 5.2s;
-}
-
-/* 밤 — 가장 긴 호흡 */
+/* ─── 시간대별 호흡 주기 변조 ─── */
+:root.time-dawn    { --breath: 4.8s; }  /* 새벽 */
+:root.time-day     { --breath: 3.8s; }  /* 낮 (기본값) */
+:root.time-evening { --breath: 4.2s; }  /* 저녁 */
+:root.time-night   { --breath: 5.2s; }  /* 밤 */
 
 /* ─── Reset ─── */
 *,
@@ -6352,6 +6310,8 @@ body.home-radical::after {
   pointer-events: none;
   width: 100%;
   height: 100%;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* ─── Nav Symbol ─── */
@@ -8033,9 +7993,22 @@ body.is-loaded .home-hero__nav {
   position: relative;
   z-index: 55;
   background: var(--bg);
-  border-top: 1px solid var(--border);
+  border-top: none;
   padding: 2rem 0 1.8rem;
-  margin-top: 2.5rem;
+  margin-top: 0;
+}
+
+/* 필드 → 푸터 자연스러운 전환 */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+  z-index: -1;
 }
 
 .footer-inner {

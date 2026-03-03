@@ -203,12 +203,9 @@
       fl.mat.opacity = fl.baseOp * (0.82 + 0.18 * Math.sin(t * 0.10 + fl.phase));
     }
 
-    /* 스크롤 기반 줌인 */
-    var ratio = (window._fieldState && window._fieldState.ratio) || 0;
-    var targetZ = BASE_Z - ratio * 14;
-    var targetFov = BASE_FOV + ratio * 18;
-    camera.position.z += (targetZ - camera.position.z) * 0.06;
-    camera.fov += (targetFov - camera.fov) * 0.06;
+    /* 스크롤 줌 비활성화 — 페이지 구조 단축으로 ratio 튐 방지 */
+    camera.position.z += (BASE_Z - camera.position.z) * 0.06;
+    camera.fov += (BASE_FOV - camera.fov) * 0.06;
     camera.updateProjectionMatrix();
 
     /* 마우스 틸트 — 감도 절제 */

@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=c1e5be68">
+<link rel="stylesheet" href="/assets/css/style.css?v=d23de7eb">
 <script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
 <!-- /COMPONENT:head -->
   <link href="assets/media/brand/icon-192.png" rel="apple-touch-icon" />
@@ -67,41 +67,32 @@
 </div>
 <!-- /COMPONENT:nav -->
   <canvas class="field-bg" id="field-bg"></canvas>
-  <div class="grain-overlay" aria-hidden="true"></div>
-
   <!-- 홈 히어로: 100dvh — 필드라인이 곧 비주얼 -->
   <section class="home-hero">
+    <nav class="home-hero__nav">
+      <a class="home-nav-item" href="/archive/">
+        <span class="home-nav-item__num">01.</span>
+        <span class="home-nav-item__name">Archive</span>
+        <span class="mono home-nav-item__arrow">→</span>
+      </a>
+      <a class="home-nav-item" href="/practice/">
+        <span class="home-nav-item__num">02.</span>
+        <span class="home-nav-item__name">Practice</span>
+        <span class="mono home-nav-item__arrow">→</span>
+      </a>
+      <a class="home-nav-item" href="/about/">
+        <span class="home-nav-item__num">03.</span>
+        <span class="home-nav-item__name">About</span>
+        <span class="mono home-nav-item__arrow">→</span>
+      </a>
+      <a class="home-nav-item" href="/lab/">
+        <span class="home-nav-item__num">04.</span>
+        <span class="home-nav-item__name">Lab</span>
+        <span class="mono home-nav-item__arrow">→</span>
+      </a>
+    </nav>
   </section>
 
-  <div class="home-scroll-space"></div>
-
-  <!-- 홈 하단: 풀 와이드 에디토리얼 네비 -->
-  <section class="home-below">
-    <div class="home-below__inner container--wide">
-      <nav class="home-nav-list" data-reveal>
-        <a class="home-nav-item" href="/archive/">
-          <span class="home-nav-item__num">01.</span>
-          <span class="home-nav-item__name">Archive</span>
-          <span class="mono home-nav-item__arrow">→</span>
-        </a>
-        <a class="home-nav-item" href="/practice/">
-          <span class="home-nav-item__num">02.</span>
-          <span class="home-nav-item__name">Practice</span>
-          <span class="mono home-nav-item__arrow">→</span>
-        </a>
-        <a class="home-nav-item" href="/about/">
-          <span class="home-nav-item__num">03.</span>
-          <span class="home-nav-item__name">About</span>
-          <span class="mono home-nav-item__arrow">→</span>
-        </a>
-        <a class="home-nav-item" href="/lab/">
-          <span class="home-nav-item__num">04.</span>
-          <span class="home-nav-item__name">Lab</span>
-          <span class="mono home-nav-item__arrow">→</span>
-        </a>
-      </nav>
-    </div>
-  </section>
 
   <script defer="" src="assets/js/bg-field.js"></script>
   <script defer="" src="assets/js/site.js?v=8891238c"></script>
