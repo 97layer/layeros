@@ -204,4 +204,39 @@
         });
     })();
 
+    /* ─── About 부록 아코디언 ─── */
+    (function () {
+        var toggles = document.querySelectorAll('.about-appendix__toggle[data-accordion]');
+        if (!toggles.length) return;
+        toggles.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var targetId = btn.getAttribute('data-accordion');
+                var body = document.getElementById(targetId);
+                if (!body) return;
+                var isOpen = body.classList.contains('is-open');
+                body.classList.toggle('is-open', !isOpen);
+                btn.setAttribute('aria-expanded', String(!isOpen));
+                var indicator = btn.querySelector('span');
+                if (indicator) indicator.textContent = isOpen ? '+' : '−';
+            });
+        });
+    })();
+
+    /* ─── 읽기 진행 바 (에세이 전용) ─── */
+    (function () {
+        if (!document.body.classList.contains('page-essay')) return;
+        var bar = document.getElementById('read-progress');
+        if (!bar) return;
+        var ticking = false;
+        function update() {
+            var docH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var progress = docH > 0 ? Math.min(1, window.pageYOffset / docH) : 0;
+            bar.style.transform = 'scaleX(' + progress + ')';
+            ticking = false;
+        }
+        window.addEventListener('scroll', function () {
+            if (!ticking) { requestAnimationFrame(update); ticking = true; }
+        }, { passive: true });
+    })();
+
 })();

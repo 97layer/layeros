@@ -6117,6 +6117,21 @@ body.home-radical::after {
   transition: background-color 1.2s ease, border-color 1.2s ease;
 }
 
+/* 읽기 진행 바 — 에세이 전용 */
+.read-progress {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--text);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+.page-essay .read-progress { display: block; }
+
 /* 홈 화면 전용 무거운 등장 및 투명화 (캔버스 노출 극대화) */
 .page-home .site-nav {
   background: transparent;
