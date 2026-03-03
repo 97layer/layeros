@@ -79,6 +79,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/deepwork-tracker.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/browser-reload.sh"
           }
         ]
       },
