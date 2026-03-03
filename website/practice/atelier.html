@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=3ffe050c">
+<link rel="stylesheet" href="/assets/css/style.css?v=57662fa8">
 <script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
 <!-- /COMPONENT:head -->
 
@@ -52,11 +52,9 @@
     <p class="atelier-hero__sub">WOOHWAHAE 첫 번째 오프라인 공간.</p>
   </div>
   <div class="atelier-hero__desc">
-    <p>레퍼런스 사진은 후보정과 전문가의 스타일링이 가미된 결과물입니다.
-       살롱에서 완성된 형태가 집에서 재현되지 않는 것은 구조의 문제입니다.</p>
-    <p>열기구 없이도 살아나는 커트 구조를 설계합니다.
-       손으로 털어 말려도 볼륨이 유지되는 펌을 디자인합니다.
-       스타일링이 아닌, 구조가 형태를 결정합니다.</p>
+    <p>소거라는 실천이 처음으로 공간이 됩니다.</p>
+    <p>덧씌워진 것들을 걷어낼 때, 머리카락도 본래의 질감을 드러냅니다.
+       레퍼런스 사진이 아닌, 구조가 형태를 결정합니다.</p>
     <p>Wash &amp; Go. 매일 아침 머리에 쓰는 시간을, 좋아하는 것에 쓸 수 있도록.</p>
   </div>
 </section>
@@ -99,14 +97,20 @@
   </div>
 </section>
 
-<!-- ④ 서비스 상세: 서사 좌 + Process 우 -->
+<!-- ④ 서비스 서사: Salon Work 좌 + Process 우 -->
 <section class="atelier-detail container--wide" data-reveal>
   <div class="atelier-detail__left">
-    <span class="section-label">Salon Work</span>
-    <p>이상과 현실 사이의 간격을 먼저 이해한 뒤, 재현 가능한 범위를 정리합니다.</p>
-    <p>간단한 손질(5분 이내의 핸드 드라이, 오일)을 더하면 완성도는 한 단계 올라갑니다.
-       일상의 편안함과 특별한 날의 완성도 사이를 오갈 수 있는 유연성.
-       이것이 재현성입니다.</p>
+    <span class="about-section__label">Salon Work</span>
+    <div class="about-body-text">
+      <p>이상과 현실 사이의 간격을 먼저 이해합니다.
+         재현 가능한 범위를 정리합니다.</p>
+      <p>열기구 없이도 살아나는 커트 구조를 설계합니다.
+         손으로 털어 말려도 볼륨이 유지되는 펌을 디자인합니다.
+         스타일링이 아닌, 구조가 형태를 결정합니다.</p>
+      <p>간단한 손질을 더하면 완성도는 한 단계 올라갑니다.
+         일상과 특별한 날 사이를 오갈 수 있는 유연성.
+         이것이 재현성입니다.</p>
+    </div>
   </div>
   <div class="atelier-detail__right">
     <div class="atelier-process-list">
@@ -153,9 +157,11 @@
   </div>
 </section>
 
-<!-- ⑤ 가격표 -->
-<div class="container--wide">
-<div class="atelier-price-list">
+<!-- ⑤ 가격 + Essential + CTA -->
+<section class="atelier-price-section container--wide" data-reveal>
+  <span class="about-section__label">Menu</span>
+
+  <div class="atelier-price-list">
 
     <div class="atelier-price-item--enhanced">
       <div class="atelier-price-item__body">
@@ -167,43 +173,43 @@
       </div>
     </div>
 
-    <div class="atelier-price-item--enhanced" style="display:flex;flex-direction:column;align-items:flex-start;gap:1.2rem">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%">
+    <div class="atelier-price-item--enhanced atelier-price-item--expanded">
+      <div class="atelier-price-item__header">
         <div class="atelier-price-item__body">
           <span class="atelier-price-item__name-label">디자인 00</span>
-          <span class="atelier-price-item__note" style="margin-top:0.3rem;display:block">간소화 디자인워크</span>
+          <span class="atelier-price-item__note">간소화 디자인워크</span>
         </div>
-        <div class="atelier-price-item__right" style="text-align:right">
+        <div class="atelier-price-item__right">
           <span class="atelier-price-item__amount">₩110,000</span>
           <span class="atelier-price-item__duration">~120min</span>
-          <span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-sub);margin-top:0.2rem;white-space:nowrap">60일 이내 재방문 커트 포함</span>
+          <span class="atelier-price-item__meta">60일 이내 재방문 커트 포함</span>
         </div>
       </div>
-      <div style="width:100%;padding-top:0.8rem;border-top:1px solid var(--line)">
-        <p style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;color:var(--text-sub);margin-bottom:0.8rem;line-height:1.7">기장과 컨디션에 따라, 2시간 내 디자인 또는 집중 케어를 제안합니다.</p>
-        <p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.5rem;text-transform:uppercase">Ex Guide</p>
-        <p style="font-size:0.78rem;font-weight:300;color:var(--text-sub);line-height:1.9">
+      <div class="atelier-price-item__detail">
+        <p class="atelier-price-item__notice">기장과 컨디션에 따라, 2시간 내 디자인 또는 집중 케어를 제안합니다.</p>
+        <span class="atelier-price-item__guide-label">Ex Guide</span>
+        <p class="atelier-price-item__guide-text">
           턱선 위 (Short / Bob) — 퍼머, 스트레이트 등 전체적 흐름 위주 디자이닝<br>
           그 외 (All Length) — 부분적 흐름, 단순 톤업/다운 염색, 모근부 곱슬/모류 교정, 모발·두피 집중 영양케어
         </p>
       </div>
     </div>
 
-    <div class="atelier-price-item--enhanced" style="display:flex;flex-direction:column;align-items:flex-start;gap:1.2rem">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%">
+    <div class="atelier-price-item--enhanced atelier-price-item--expanded">
+      <div class="atelier-price-item__header">
         <div class="atelier-price-item__body">
           <span class="atelier-price-item__name-label">디자인 01</span>
-          <span class="atelier-price-item__note" style="margin-top:0.3rem;display:block">복합 디자인워크</span>
+          <span class="atelier-price-item__note">복합 디자인워크</span>
         </div>
-        <div class="atelier-price-item__right" style="text-align:right">
+        <div class="atelier-price-item__right">
           <span class="atelier-price-item__amount">₩220,000</span>
           <span class="atelier-price-item__duration">~180min</span>
-          <span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-sub);margin-top:0.2rem;white-space:nowrap">3시간↑ 복합 시술 시 상담 후 확정</span>
+          <span class="atelier-price-item__meta">3시간↑ 복합 시술 시 상담 후 확정</span>
         </div>
       </div>
-      <div style="width:100%;padding-top:0.8rem;border-top:1px solid var(--line)">
-        <p style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;color:var(--text-faint);margin-bottom:0.5rem;text-transform:uppercase">Ex Guide</p>
-        <p style="font-size:0.78rem;font-weight:300;color:var(--text-sub);line-height:1.9">
+      <div class="atelier-price-item__detail">
+        <span class="atelier-price-item__guide-label">Ex Guide</span>
+        <p class="atelier-price-item__guide-text">
           턱선 위 (Short / Bob) — 퍼머+스트레이트 등 복합적 디자이닝<br>
           그 외 (All Length) — 전체적 디테일 디자이닝, 입체적 하이라이트/블리치 염색
         </p>
@@ -212,27 +218,28 @@
 
   </div>
 
-  <div style="margin-top:var(--space-lg);padding-top:var(--space-md);border-top:1px solid var(--line)">
-    <p style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--text-sub);text-transform:uppercase;margin-bottom:1rem">Essential</p>
-    <p style="font-size:0.82rem;font-weight:300;color:var(--text-sub);line-height:1.9;margin-bottom:1.4rem">
+  <div class="atelier-essential">
+    <span class="atelier-essential__label">Essential</span>
+    <p class="atelier-essential__body">
       모든 화학적 시술에 단백질, CMC 기반 전·후 케어가 기본 포함됩니다.<br>
       도구는 10년 이상의 연혁, 또는 직접 3년 이상 검증한 것만 사용합니다.
     </p>
-    <div style="display:grid;gap:0.5rem">
-      <p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-sub);line-height:1.8">
+    <div class="atelier-essential__tools">
+      <p class="atelier-essential__tool-text">
         시저스 — 히카리 (Japan. Est. 1967)<br>
         약제 — 시세이도 (Japan. Est. 1872) · 밀본 (Japan. Est. 1960) · ATS (Korea. Est. 1991)<br>
         케어&amp;바스 — ATS (Korea. Est. 1991) · Davines
       </p>
-      <p style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-faint);margin-top:0.4rem">* 25년 11월 기준</p>
+      <span class="atelier-essential__date">* 25년 11월 기준</span>
     </div>
   </div>
 
-  <div style="margin-top:var(--space-xl)">
+  <div class="atelier-cta">
     <a href="https://booking.naver.com/booking/13/bizes/1037484" target="_blank" rel="noopener" class="form-submit">예약 →</a>
   </div>
 
-</div>
+</section>
+
 </main>
 <script defer src="../assets/js/site.js?v=8891238c"></script>
 

@@ -9362,6 +9362,115 @@ body.is-loaded .home-hero__nav {
   .atelier-price-item__name-label { font-size: 1.25rem; }
 }
 
+/* ─── Atelier family-look: label overrides (no border inside grid cells) ─── */
+.atelier-detail__left .about-section__label,
+.atelier-price-section .about-section__label {
+  border-top: none;
+  padding-top: 0;
+  margin-bottom: var(--space-md);
+}
+
+/* ─── Atelier price item: expanded variant (디자인 00/01) ─── */
+.atelier-price-item--enhanced.atelier-price-item--expanded {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+.atelier-price-item--expanded .atelier-price-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+.atelier-price-item--expanded .atelier-price-item__right {
+  text-align: right;
+}
+.atelier-price-item__meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-sub);
+  margin-top: 0.2rem;
+  white-space: nowrap;
+}
+.atelier-price-item__detail {
+  width: 100%;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--line);
+}
+.atelier-price-item__guide-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  display: block;
+}
+.atelier-price-item__notice {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--text-sub);
+  margin-bottom: 0.8rem;
+  line-height: 1.7;
+}
+.atelier-price-item__guide-text {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--text-sub);
+  line-height: 1.9;
+}
+
+/* ─── Atelier Essential ─── */
+.atelier-essential {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--line);
+}
+.atelier-essential__label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1rem;
+}
+.atelier-essential__body {
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--text-sub);
+  line-height: 1.9;
+  margin-bottom: 1.4rem;
+}
+.atelier-essential__tools {
+  display: grid;
+  gap: 0.5rem;
+}
+.atelier-essential__tool-text {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-sub);
+  line-height: 1.8;
+}
+.atelier-essential__date {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-faint);
+  margin-top: 0.4rem;
+  display: block;
+}
+
+/* ─── Atelier Price Section & CTA ─── */
+.atelier-price-section {
+  padding-bottom: var(--space-xl);
+}
+.atelier-cta {
+  margin-top: var(--space-xl);
+}
+
 /* ─── Practice page-main padding ─── */
 .page-practice-sub .page-main,
 body.page-practice-sub main.page-main {
