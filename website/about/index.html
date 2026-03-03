@@ -67,16 +67,6 @@
       <a href="#ch-5">005. 실천 · 표현 방식</a>
       <a href="#ch-6">006. 순환 · 발(跋)</a>
     </nav>
-    <p class="about-zero-label about-zero-label--toggle" data-reveal id="about-zero-trigger"><span id="about-clock"></span>조금씩 수정됩니다. <span class="about-zero-cta">눌러보세요</span></p>
-    <div class="about-zero-label about-zero-easter" id="about-zero-easter" aria-hidden="true">
-    <!-- EASTER:START -->
-    <span class="elog"><time>2026.03.03</time>웹 디자인·개발이 처음이다. 미완성이고, 계속 업데이트된다.</span>
-    <span class="elog"><time>2026.03.03 20:16</time>글을 477번 고쳤습니다. 7,466,433줄이 사라졌습니다.</span>
-    <span class="elog"><time>2026.03.02 22:52</time>디렉터가 밤낮없이 수정하고 있습니다.</span>
-    <span class="elog"><time>2026.02.24 22:39</time>지운 것이 남은 것보다 많습니다.</span>
-    <span class="elog"><time>2026.02.14 00:08</time>비워야 보인다고 믿습니다. — 97layer</span>
-    <!-- EASTER:END -->
-    </div>
   </div>
 
   <!-- ━━━ I. 서(序) — 시선 ━━━ -->
@@ -321,37 +311,5 @@
 <!-- /COMPONENT:footer -->
 
 <script defer src="/assets/js/site.js?v=8891238c"></script>
-<script>
-  /* ─── About 이스터에그 + 시계 ─── */
-  (function () {
-    var trigger = document.getElementById('about-zero-trigger');
-    var easter = document.getElementById('about-zero-easter');
-    var clock = document.getElementById('about-clock');
-
-    /* 시계 */
-    function updateClock() {
-      if (!clock) return;
-      var now = new Date();
-      var y = now.getFullYear();
-      var mo = String(now.getMonth() + 1).padStart(2, '0');
-      var d = String(now.getDate()).padStart(2, '0');
-      var h = String(now.getHours()).padStart(2, '0');
-      var mi = String(now.getMinutes()).padStart(2, '0');
-      clock.textContent = y + '.' + mo + '.' + d + ' ' + h + ':' + mi + ' · ';
-    }
-    updateClock();
-    setInterval(updateClock, 30000);
-
-    /* 토글 */
-    if (trigger && easter) {
-      trigger.style.cursor = 'pointer';
-      trigger.addEventListener('click', function () {
-        var isOpen = easter.classList.contains('is-open');
-        easter.classList.toggle('is-open', !isOpen);
-        easter.setAttribute('aria-hidden', String(isOpen));
-      });
-    }
-  })();
-</script>
 </body>
 </html>

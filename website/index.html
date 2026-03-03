@@ -70,13 +70,9 @@
   <!-- 홈 히어로: 100dvh — 필드라인이 곧 비주얼 -->
   <section class="home-hero">
     <div class="home-hero__elog-wrap">
-      <p class="home-hero__elog-trigger" id="home-elog-trigger"><span id="home-clock"></span>조금씩 수정됩니다. <span class="home-elog-cta">눌러보세요</span></p>
+      <p class="home-hero__elog-trigger" id="home-elog-trigger"><span id="home-clock"></span>웹 개발 처음. <span class="home-elog-cta">↓ 기록</span></p>
       <div class="home-hero__elog-panel" id="home-elog-panel" aria-hidden="true">
-        <span class="elog"><time>2026.03.03</time>웹 디자인·개발이 처음이다. 미완성이고, 계속 업데이트된다.</span>
-        <span class="elog"><time>2026.03.03 20:16</time>글을 477번 고쳤습니다. 7,466,433줄이 사라졌습니다.</span>
-        <span class="elog"><time>2026.03.02 22:52</time>디렉터가 밤낮없이 수정하고 있습니다.</span>
-        <span class="elog"><time>2026.02.24 22:39</time>지운 것이 남은 것보다 많습니다.</span>
-        <span class="elog"><time>2026.02.14 00:08</time>비워야 보인다고 믿습니다. — 97layer</span>
+        <span class="elog elog--loading"><time>—</time>불러오는 중</span>
       </div>
     </div>
     <nav class="home-hero__nav">
@@ -111,6 +107,8 @@
     var trigger = document.getElementById('home-elog-trigger');
     var panel = document.getElementById('home-elog-panel');
     var clock = document.getElementById('home-clock');
+
+    /* 실시간 시계 — 1분마다 갱신 */
     function updateClock() {
       if (!clock) return;
       var now = new Date();
@@ -119,14 +117,54 @@
       var d = String(now.getDate()).padStart(2, '0');
       var h = String(now.getHours()).padStart(2, '0');
       var mi = String(now.getMinutes()).padStart(2, '0');
-      clock.textContent = y + '.' + mo + '.' + d + ' ' + h + ':' + mi + ' · ';
+      clock.textContent = y + '.' + mo + '.' + d + ' ' + h + ':' + mi + ' — ';
     }
     updateClock();
-    setInterval(updateClock, 30000);
+    setInterval(updateClock, 60000);
+
+    /* GitHub 커밋 로그 fetch */
+    function formatDate(iso) {
+      var d = new Date(iso);
+      var y = d.getFullYear();
+      var mo = String(d.getMonth() + 1).padStart(2, '0');
+      var dd = String(d.getDate()).padStart(2, '0');
+      var h = String(d.getHours()).padStart(2, '0');
+      var mi = String(d.getMinutes()).padStart(2, '0');
+      return y + '.' + mo + '.' + dd + ' ' + h + ':' + mi;
+    }
+
+    function stripPrefix(msg) {
+      /* feat:, fix:, chore: 등 제거 */
+      return msg.replace(/^(feat|fix|refactor|chore|style|docs|test):\s*/i, '').split('\n')[0].trim();
+    }
+
+    function loadCommits() {
+      fetch('https://api.github.com/repos/97layer/layeros/commits?per_page=10&path=website/')
+        .then(function(r) { return r.json(); })
+        .then(function(commits) {
+          if (!Array.isArray(commits) || !commits.length) return;
+          var html = commits.map(function(c) {
+            var date = formatDate(c.commit.author.date);
+            var msg = stripPrefix(c.commit.message);
+            return '<span class="elog"><time>' + date + '</time>' + msg + '</span>';
+          }).join('');
+          panel.innerHTML = html;
+        })
+        .catch(function() {
+          panel.innerHTML = '<span class="elog"><time>—</time>기록을 불러올 수 없다.</span>';
+        });
+    }
+
+    /* 토글 — 첫 열기 시 fetch */
+    var fetched = false;
     if (trigger && panel) {
       trigger.style.cursor = 'pointer';
       trigger.addEventListener('click', function () {
         var isOpen = panel.classList.contains('is-open');
+        if (!isOpen && !fetched) {
+          fetched = true;
+          loadCommits();
+        }
         panel.classList.toggle('is-open', !isOpen);
         panel.setAttribute('aria-hidden', String(isOpen));
       });
