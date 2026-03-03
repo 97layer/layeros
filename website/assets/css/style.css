@@ -1547,13 +1547,7 @@ section+section {
   margin-top: var(--space-md);
 }
 
-.page-intro {
-  font-size: 1rem;
-  color: var(--text-sub);
-  line-height: 1.85;
-  max-width: 480px;
-  margin-top: var(--space-md);
-}
+
 
 /* ─── About / Service Body ─── */
 /* ─── Magazine Row Layout ─── */
@@ -6511,19 +6505,43 @@ body.is-loaded .home-preloader__logo {
   100% { opacity: 0;   }
 }
 
-/* ─── Home Hero Notice ─── */
-.home-hero__notice {
+/* ─── Home Hero Elog — 작업 비하인드 로그 ─── */
+.home-hero__elog {
   position: absolute;
   top: 5rem;
   left: 0;
   right: 0;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--text-sub);
-  letter-spacing: 0.02em;
-  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
   padding: 0 var(--space-xl);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 1.2s var(--ease) 0.8s, transform 1.2s var(--ease) 0.8s;
+}
+
+body.is-loaded .home-hero__elog {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-hero__elog .elog {
+  font-size: 0.6rem;
+  color: var(--text-faint);
+}
+
+.home-hero__elog .elog time {
+  font-size: 0.6rem;
+  color: var(--text-faint);
+  opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+  .home-hero__elog {
+    padding: 0 1.5rem;
+    top: 4.5rem;
+  }
 }
 
 /* ─── Home Hero Nav Overlay — 프리로더 후 하단에서 슬라이드업 ─── */
@@ -6956,8 +6974,9 @@ body.is-loaded .home-hero__nav {
 .archive-filter {
   display: flex;
   gap: var(--space-md);
-  padding-bottom: var(--space-lg);
   flex-wrap: wrap;
+  margin-top: var(--space-md);
+  padding-bottom: var(--space-sm);
 }
 
 .filter-btn {
@@ -8626,14 +8645,7 @@ body.is-loaded .home-hero__nav {
   margin-top: 0.75rem;
 }
 
-.archive-filter {
-  display: flex;
-  gap: 0.4rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: var(--space-md);
-  margin-top: var(--space-md);
-}
+
 
 .filter-btn {
   font-family: var(--font-mono);
@@ -9093,9 +9105,9 @@ body::after {
 /* === 섹션 페이지 공통 (archive / practice / lab) === */
 .page-intro {
   padding-top: var(--space-md);
-  padding-bottom: var(--space-lg);
+  padding-bottom: 0;
   border-bottom: 1px solid var(--line);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 .page-preamble {
   font-family: var(--font-mono);
