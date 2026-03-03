@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=06a5fd9d">
-<script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
+<link rel="stylesheet" href="/assets/css/style.css?v=180f3349">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
 <!-- /COMPONENT:head -->
   <style>
     /* ─── Lookbook Layout ─── */
@@ -158,6 +158,34 @@
       letter-spacing: 0.01em;
     }
 
+    /* ─── Concept ─── */
+    .lb-concept {
+      max-width: 36rem;
+      margin: 0 auto 10vh;
+      padding: 0 var(--space-xl);
+      text-align: center;
+    }
+
+    .lb-concept__text {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 2;
+      color: var(--text-sub);
+      letter-spacing: 0.01em;
+    }
+
+    /* ─── Primary (single) image ─── */
+    .lb-item--primary {
+      max-width: 52%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .lb-item--primary .lb-img {
+      aspect-ratio: 3 / 4;
+    }
+
     /* ─── Back link ─── */
     .lb-back {
       display: block;
@@ -178,12 +206,18 @@
 
     /* ─── Mobile ─── */
     @media (max-width: 640px) {
+      .lb-concept {
+        padding: 0 var(--space-lg);
+        margin-bottom: 6vh;
+      }
+
       .lb-hero {
         padding: 20vh var(--space-lg) 14vh;
       }
 
       .lb-item--half,
-      .lb-item--narrow {
+      .lb-item--narrow,
+      .lb-item--primary {
         max-width: 100%;
         margin-left: 0 !important;
         margin-right: 0 !important;
@@ -257,68 +291,35 @@
       <p class="lb-hero__year" data-reveal>2026</p>
     </header>
 
+    <!-- Concept -->
+    <div class="lb-concept" data-reveal>
+      <p class="lb-concept__text">
+        하나를 남기기 위해 얼마나 많은 것들을 걷어내야 하는가.<br>
+        어둠이 많을수록 남은 것이 선명해진다.
+      </p>
+    </div>
+
     <!-- Image Sequence -->
     <div class="lb-sequence">
 
-      <!-- 01. Full width -->
-      <div class="lb-item lb-item--full" data-reveal>
+      <!-- 01. Main -->
+      <div class="lb-item lb-item--primary lb-item--center" data-reveal>
         <img class="lb-img" src="assets/images/lookbook-01-stillness.jpg" alt="Stillness" loading="lazy" />
-        <p class="lb-caption">Stillness</p>
-      </div>
-
-      <!-- 02 + 03. Pair -->
-      <div class="lb-pair" data-reveal>
-        <div class="lb-item">
-          <img class="lb-img" src="assets/images/lookbook-02-texture.jpg" alt="Texture" loading="lazy" />
-          <p class="lb-caption">Texture</p>
-        </div>
-        <div class="lb-item">
-          <img class="lb-img" src="assets/images/lookbook-03-space.jpg" alt="Space" loading="lazy" />
-          <p class="lb-caption">Space</p>
-        </div>
-      </div>
-
-      <!-- 04. Half right -->
-      <div class="lb-item lb-item--half lb-item--right" data-reveal>
-        <img class="lb-img" src="assets/images/lookbook-04-ritual.jpg" alt="Ritual" loading="lazy" />
-        <p class="lb-caption">Ritual</p>
-      </div>
-
-      <!-- 05. Narrow center -->
-      <div class="lb-item lb-item--narrow lb-item--center" data-reveal>
-        <img class="lb-img" src="assets/images/lookbook-05-material.jpg" alt="Material" loading="lazy" />
-        <p class="lb-caption">Material</p>
-      </div>
-
-      <!-- Divider -->
-      <div class="lb-rule"></div>
-
-      <!-- 06. Full width -->
-      <div class="lb-item lb-item--full" data-reveal>
-        <img class="lb-img" src="assets/images/lookbook-06-portrait.jpg" alt="Portrait" loading="lazy" />
-        <p class="lb-caption">Portrait</p>
-      </div>
-
-      <!-- 07. Half left -->
-      <div class="lb-item lb-item--half" data-reveal>
-        <img class="lb-img" src="assets/images/lookbook-07-moment.jpg" alt="Moment" loading="lazy" />
-        <p class="lb-caption">Moment</p>
-      </div>
-
-      <!-- 08. Full width -->
-      <div class="lb-item lb-item--full" data-reveal>
-        <img class="lb-img" src="assets/images/lookbook-08-light.jpg" alt="Light" loading="lazy" />
-        <p class="lb-caption">Light</p>
+        <p class="lb-caption">Stillness — 2026</p>
       </div>
 
     </div>
+
+    <!-- Divider -->
+    <div class="lb-rule"></div>
 
     <!-- Editor Note -->
     <div class="lb-note" data-reveal>
       <p class="lb-note__label">Editor's Note</p>
       <p class="lb-note__text">
-        가득 쥔 손으로는 손 안을 볼 수 없습니다.<br>
-        걷어내는 것이 곧 발견입니다.
+        꽃은 어둠 속에 있다. 빛이 하나다.<br>
+        걷어낸 것들이 바닥에 쌓여 어둠이 된 자리에서,<br>
+        남은 것이 드러난다.
       </p>
     </div>
 
@@ -356,7 +357,7 @@
 </footer>
 <!-- /COMPONENT:footer -->
 
-  <script src="/assets/js/site.js?v=711c1f0c" defer></script>
+  <script src="/assets/js/site.js?v=53abfa73" defer></script>
 
 </body>
 
