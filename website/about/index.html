@@ -17,7 +17,7 @@
 <link href="https://cdn.jsdelivr.net" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="/assets/css/style.css?v=f8bfc850" rel="stylesheet"/>
+<link href="/assets/css/style.css?v=7e992aea" rel="stylesheet"/>
 <script>
 (function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
 </script>
@@ -376,47 +376,10 @@
   tick();
   setInterval(tick, 1000);
 
-  /* ── live log panel ── */
-  var MSGS = [
-    '새 글감 수집됨',
-    '링크 분석 완료 · kinfolk.com',
-    '주제 군집 형성 중 · 슬로우라이프',
-    '주제 군집 형성 중 · 본질',
-    '에세이 초안 검토 중',
-    '아카이브 업데이트됨',
-    '큐레이션 기록 추가됨',
-    '링크 분석 완료 · dezeen.com',
-    '새 글감 수집됨 · 영상',
-    '발행 완료 · woohwahae.kr',
-    '주제 연결됨 · 느림과 여백',
-    '새 글감 수집됨 · 3건',
-    '에세이 발행 대기 중',
-    '아카이브 색인 갱신됨',
-    '큐레이션 흐름 점검 중',
-    '주제 군집 성숙됨 · 소거',
-    '링크 분석 완료 · monocle.com',
-    '에세이 초안 작성됨 · 느림에 대하여',
-    '새 글감 수집됨 · 텍스트',
-    '발행 준비 완료',
-  ];
-  var timer = null;
-  var active = false;
-
-  function ts() {
-    var n = new Date();
-    return pad(n.getHours()) + ':' + pad(n.getMinutes()) + ':' + pad(n.getSeconds());
-  }
-  function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-  function addLine() {
-    var ul = document.getElementById('about-log-lines');
-    if (!ul) return;
-    var m = rand(MSGS);
-    var li = document.createElement('li');
-    li.textContent = ts() + '  ' + m;
-    ul.appendChild(li);
-    if (ul.children.length > 14) ul.removeChild(ul.firstChild);
-  }
+  /* ── changelog panel ── */
+  /* CHANGELOG:START */
+  var CHANGELOG_DATA = [{"date": "2026.03.03", "msg": "appendix 토글 button 박스 리셋, ::after 이중 표시 제거"}, {"date": "2026.03.03", "msg": "편집자의 궤적 부록 C로 흡수, CONNECTION 독립 링크 제거"}, {"date": "2026.03.03", "msg": "about log 메시지 한국어화 — 내부 시스템명 제거"}, {"date": "2026.03.03", "msg": "about 실시간 로그 패널 — zero-label 클릭 토글"}, {"date": "2026.03.03", "msg": "appendix 사이드 드로어 + CONNECTION 링크 실제 서비스명 교체"}, {"date": "2026.03.03", "msg": "about clock 구분자 CSS ::after — 제거 시 레이아웃 안전"}, {"date": "2026.03.03", "msg": "about zero-label 실시간 시계 (날짜+시분초)"}, {"date": "2026.03.03", "msg": "부록 UX — 토글 크기 확대, uppercase 제거, 서브레이블 정리"}, {"date": "2026.03.03", "msg": "about zero-label — beta 제거, 매번 삭제"}, {"date": "2026.03.03", "msg": "lookbook 이미지 02-08 복원 (이전 커밋에서 의도치 않게 삭제됨)"}, {"date": "2026.03.03", "msg": "CONNECTION 링크 2열 그리드 — 수직 나열 해소"}, {"date": "2026.03.03", "msg": "about 레이아웃 완결 — ch-4 고립 제목 제거, CONNECTION 링크 모노 통일, 경로 절대화, 캐시 버스트"}, {"date": "2026.03.03", "msg": "005 섹션 고립된 about-chapter__title 제거"}, {"date": "2026.03.03", "msg": "about 페이지 헤더 분리 — ABOUT 레이블 + intro 블록 독립"}, {"date": "2026.03.03", "msg": "섹션 레이블 순서 통일 — 개념어 먼저, 한자어 서브"}, {"date": "2026.03.03", "msg": "about hero — WOOHWAHAE 타이틀 + SVG 제거"}, {"date": "2026.03.03", "msg": "기록 동결 → beta 배포 메시지로 교체"}, {"date": "2026.03.03", "msg": "서(序) P8 마무리 재구성 — 덧씌워진 제거, 소거 선언 구조로"}, {"date": "2026.03.03", "msg": "본문 em dash 전수 제거, writing_guide 금지어 추가"}, {"date": "2026.03.03", "msg": "Das Man 대시 제거"}, {"date": "2026.03.03", "msg": "Das Man 목록에서 누구도 탓하지 않을 것들 제거"}, {"date": "2026.03.03", "msg": "서(序) P1 대시 제거, Das Man 목록 재구성, hero 모바일 레이아웃 수정"}, {"date": "2026.03.03", "msg": "서(序) '무엇인지' → '어떤 존재인지' 존재론 명시"}, {"date": "2026.03.03", "msg": "서(序) 존재론적 전환 — '무엇인지', 흐려짐의 역설 (클리셰 제거)"}, {"date": "2026.03.03", "msg": "서(序) — 사유 잠식 단락 추가 (판단하는 힘, 자유 사유자 호출)"}, {"date": "2026.03.03", "msg": "서(序) 오프닝 — '인간에게' → '이 시대 —'"}, {"date": "2026.03.03", "msg": "001 서(序) — 목소리 단락 + 균열 입구 단락 추가 (밀도 확장)"}, {"date": "2026.03.03", "msg": "003 느림 — '우리에게' 범위 한정 (속도 반의어 정의)"}, {"date": "2026.03.03", "msg": "우화해 섹션 — '이름은' → '우리의 이름은' 범위 한정"}, {"date": "2026.03.03", "msg": "about TOC 순서 반전 — 개념어 우선 (시선 — 서(序))"}, {"date": "2026.03.03", "msg": "revert: about TOC 기존 체계 복원 (001. 서(序) — 시선 세로 리스트)"}, {"date": "2026.03.03", "msg": "about TOC — 아크 단독 네비 (시선/원리/..), 중복 리스트 제거"}, {"date": "2026.03.03", "msg": "about — 形/無形/本 한글 병기, 클리셰 어휘 제거 (나다운가→돌아오는가)"}, {"date": "2026.03.03", "msg": "우화해 sub-label 방식→이름"}, {"date": "2026.03.03", "msg": "about 섹션 레이블 재설계 — 동도서기 통합, 표현방식/方式 구조화"}, {"date": "2026.03.03", "msg": "룩북 스타일 확정 — 단일 요소/흑배경/ISO400 필름 그레인"}, {"date": "2026.03.03", "msg": "룩북 Imagen 이미지 8장 + validator 이미지 경로 예외"}, {"date": "2026.03.03", "msg": "룩북 No.01 — Imagen 4.0 생성, HTML 레이아웃, archive 목록 등록"}, {"date": "2026.03.03", "msg": "Lab 섹션 컴포넌트 흡수 — nav 04.Lab + 전체 통합"}, {"date": "2026.03.03", "msg": "잔여 인라인 스타일 제거 — archive/about/editor"}, {"date": "2026.03.03", "msg": "cache bust v=ad0ac742 — 전체 HTML 갱신"}, {"date": "2026.03.03", "msg": "product 인라인 스타일 CSS 이전 + home inline 제거"}, {"date": "2026.03.03", "msg": "cache bust v=004b0232"}, {"date": "2026.03.03", "msg": "practice 인라인 스타일 CSS 클래스화 + practice/about/editor 스타일 style.css 이전"}, {"date": "2026.03.03", "msg": "cache bust v=e8659890 — 전체 33파일"}, {"date": "2026.03.03", "msg": "CSS 일관성 — about/editor <style> 블록 style.css 이전, inline style 제거, container 중복 정의 제거"}, {"date": "2026.03.02", "msg": "editor 페이지 이미지 슬롯 2개 + editorial photo CSS — tooooools.app 이미지 드롭인 준비"}, {"date": "2026.03.02", "msg": "editor 페이지 — 레거시 어조 전면 소거, about 톤 정렬 (부록.md 원자료 기반)"}, {"date": "2026.03.02", "msg": "부록 C(편집자궤적) 제거 — /about/editor/ 롱폼으로 일원화"}, {"date": "2026.03.02", "msg": "부록 C — 편집자의 궤적 타임라인 (2012→2024) + 수상/협업 기록"}, {"date": "2026.03.02", "msg": "about 부록 — 3섹션 구조 (철학적배경/브랜드팔레트/편집자궤적)"}, {"date": "2026.03.02", "msg": "practice 6페이지 담백 모드 — 아우라/효율적/감성 수식 전면 소거, 미정의 CSS 토큰 수정"}, {"date": "2026.03.02", "msg": "에세이 000-010 전면 리뉴얼 — Ralph Loop 정렬, 시대한정 어휘 소거, 관찰 톤 통일"}, {"date": "2026.03.02", "msg": "about 철학 부록 추가 — 반본환원/본래면목/우화등선/소요유/동도서기 (접이식)"}, {"date": "2026.03.02", "msg": "에이전트 소거 렌즈 정렬 + Ralph 90 기준선 + 프론트 정비"}, {"date": "2026.03.02", "msg": "about — 주파수 반복 4→2·그것은 패턴 제거"}, {"date": "2026.03.02", "msg": "about 잔여 3건 — IV→V중복·羽처음부터4회·공명중복 제거"}, {"date": "2026.03.02", "msg": "about IV장 — imaginal cells 과학 명칭 제거, 현상 묘사로 전환"}, {"date": "2026.03.02", "msg": "about 흐름 정제 — 문제는탐색수정·동방단락재배치·IV중복삭제·그것이패턴2건제거"}, {"date": "2026.03.02", "msg": "about 최종 정제 6건 — 구호제거·중복단락삭제·메타지시삭제·본래면목추가"}, {"date": "2026.03.02", "msg": "우화해 어원 4층 설계 — imaginal cells·인간생애주기·羽化어원·우화등선 통합"}, {"date": "2026.03.02", "msg": "V섹션 됩니다 3연속 해소, 발(跋) 순환합니다 메타선언 제거"}, {"date": "2026.03.02", "msg": "발(跋) 반복 어구 2건 제거 — '그것으로 됩니다' → '충분합니다', '완성된 대답은' 어순 수정"}, {"date": "2026.03.02", "msg": "발(跋) 전면 재작성 — 수미상관 완성, 희망 문단, 사용자 직필 2단락 반영"}, {"date": "2026.03.02", "msg": "about Ralph 루프 — 중복 구문 5건 제거 (자리잡/그러나×2/지층/선택앞에서)"}, {"date": "2026.03.02", "msg": "about 5건 정제 — I장 압축, II장 설명단락 제거, III장 뜬구름 부록이동, V장 자기긍정 이미지닫기, 발 밀도 추가"}, {"date": "2026.03.02", "msg": "about 기록 동결 타임스탬프 추가 (2026-03-02)"}, {"date": "2026.03.02", "msg": "about 마무리 재작성 — 존재 의의 선언 + 단문 여운"}, {"date": "2026.03.02", "msg": "about 소거 적용 — 설명 걷어내고 원리만 남김 (고지적 독자 신뢰)"}, {"date": "2026.03.02", "msg": "about 책 구조 완성 — 목차+프리앰블+V장 1:1 대응+비전"}, {"date": "2026.03.02", "msg": "about 옴니버스 해소 — 챕터 간 브릿지 3건 + 중복 문구 제거"}, {"date": "2026.03.02", "msg": "about 팀 고도화 — 소거 감축(31→20) + 신념 레이어 3문단 + CONNECTION 랜딩"}, {"date": "2026.03.02", "msg": "about 산문 교정 — 4팀 감사 기반 출판 품질 마무리"}, {"date": "2026.03.02", "msg": "about 매니페스토 6챕터 구조 — 동도서기 흡수 + 서/발 체계"}, {"date": "2026.03.02", "msg": "about Ralph 루프 4패스 — 출판 품질 교정"}, {"date": "2026.03.02", "msg": "about 논리적 공격 표면 3건 수정 + 낯섦 중복 제거"}, {"date": "2026.03.02", "msg": "about — AI 수동 접미어 제거 (그것이/이것이 7건)"}, {"date": "2026.03.02", "msg": "3-way 정렬 — about 역설계 → sage_architect 고도화 + the_origin 동기화"}, {"date": "2026.03.02", "msg": "about — 렌즈 어조 전환 (정의 선언→우리의 관점), 8섹션 롱폼"}, {"date": "2026.03.02", "msg": "소거 구조 명시 — Via Negativa 제거, 자기긍정 목적지화, 사는방식 삭제"}, {"date": "2026.03.02", "msg": "the_origin 재구조화 + website 이전 세션 변경 반영"}, {"date": "2026.03.01", "msg": "전체 Crimson Text/italic 제거 — Pretendard+Mono 단일화"}, {"date": "2026.03.01", "msg": "워크북 타이포그래피 — Crimson Text/italic 제거, Pretendard+Mono만"}, {"date": "2026.03.01", "msg": "영점의 발견 워크북 (Zero Point Workbook No.1)"}, {"date": "2026.03.01", "msg": "practice/ 페이지 완성 — 폼 동작·콘텐츠 정렬"}, {"date": "2026.03.01", "msg": "about 전면 재구성 + 에디터 페이지 분리"}, {"date": "2026.03.01", "msg": "about 레이아웃 개선 — 타이틀/SVG 나란히, 여백 정제, 어원 char 대형화"}, {"date": "2026.03.01", "msg": "about 페이지 전면 재설계 + 레거시 CSS 정리"}, {"date": "2026.03.01", "msg": "모바일 archive 공백 + 디자인 표면 정제 (마르지엘라+동도서기)"}, {"date": "2026.03.01", "msg": "데스크톱 nav 링크 복구 + practice tabs bordered-tag 전환"}, {"date": "2026.03.01", "msg": "design: 전 페이지 MVP 콘텐츠 + 스케일 정제"}, {"date": "2026.03.01", "msg": "홈 필드라인 버그수정 + 스크롤줌인 + 마우스틸트 인터랙션"}, {"date": "2026.03.01", "msg": "design: 홈 히어로 RESONANCE 텍스트 제거 — 순수 필드라인"}, {"date": "2026.03.01", "msg": "design: 홈 히어로 유리레이어+SVG 제거 — 필드라인 직접 노출"}, {"date": "2026.02.28", "msg": "레거시 삭제 + 누적 변경 커밋"}, {"date": "2026.02.28", "msg": "design: 모바일 최적화 + Margiela 감도 적용"}, {"date": "2026.02.28", "msg": "quick: 18:32 웹 업데이트"}, {"date": "2026.02.28", "msg": "홈페이지 스크롤 및 콘텐츠 가시성 복구"}, {"date": "2026.02.28", "msg": "design: 디자인 일관성 딥워크 완료 (AD 권한)"}, {"date": "2026.02.28", "msg": "session-stop hook 추가 + Lock 자동 해제"}, {"date": "2026.02.28", "msg": "아틀리에 랜딩 완성 — intro 한 줄 + 예약 안내 + service-lead CSS"}, {"date": "2026.02.28", "msg": "아틀리에 서비스 설명 섹션 제거 — 가격표만 유지"}, {"date": "2026.02.28", "msg": "아틀리에 가격표 — 커트/디자인00/디자인01 구조로 변경"}, {"date": "2026.02.28", "msg": "아틀리에 가격 메뉴 + Archive 리스트 전환 + service CSS 완성 + practice.md II-8 채널별 어조 추가"}, {"date": "2026.02.28", "msg": "서비스 페이지 어조 SA 필터 적용 — 한다체→합니다체, 부정선언→관찰서술"}, {"date": "2026.02.28", "msg": "Practice 전면 개편 — nav-list 패턴 + 서비스 랜딩 실상품화"}, {"date": "2026.02.28", "msg": "홈 home-below Magazine B 스타일 3섹션 리스트로 재설계"}, {"date": "2026.02.28", "msg": "홈 레이아웃 재설계 + Issue 넘버링 전면 제거"}, {"date": "2026.02.28", "msg": "favicon 경로 통일 + CSS dead code 제거"}, {"date": "2026.02.28", "msg": "서비스 페이지 콘텐츠 확장 + 합니다체 적용 (SAGE Service 채널)"}, {"date": "2026.02.28", "msg": "about 페이지 THE ORIGIN 원문 반영 + practice 카드 여백 정규화"}, {"date": "2026.02.28", "msg": "the_origin v5.1 + 스키마 정규화 + backfill_signals 추가"}, {"date": "2026.02.28", "msg": "HEAD 표준화 — OG 메타 + 아이콘 + 캐시버스트 전 페이지 통일"}, {"date": "2026.02.28", "msg": "About 전면 리뉴얼 — THE ORIGIN v5.0 롱폼 구현"}, {"date": "2026.02.28", "msg": "Templates Phase 1 — About 통합 + Practice 개별 페이지 + Brand Book"}, {"date": "2026.02.27", "msg": "practice/ 통합 + 소문자 통일 + state.md 리네임"}, {"date": "2026.02.27", "msg": "SAGE-ARCHITECT 대개편 — 멀티에이전트 위계 재설계 (34→23 md)"}, {"date": "2026.02.27", "msg": "about/index 매니페스토 + 브랜드 가이드 통합 (WIP)"}, {"date": "2026.02.26", "msg": "proto 파일 archive → lab 이동 (명명규칙 준수)"}, {"date": "2026.02.26", "msg": "인프라 정비 — 캐시버스팅 반영 + 디자인토큰 강화 + 문서 동기화"}, {"date": "2026.02.26", "msg": "archive/index.html 명명규칙 예외 추가 + 컴포넌트 주입"}, {"date": "2026.02.26", "msg": "컴포넌트 통일 — nav/footer/wave-bg 단일 소스 + 홈 리디자인"}, {"date": "2026.02.26", "msg": "Design System 완결 — Dependency Graph + Visual Validator"}, {"date": "2026.02.26", "msg": "THE ORIGIN 생태계 완전 구축 — 58파일 레거시 전면 청산"}, {"date": "2026.02.26", "msg": "인프라 구조조정 — Cloudflare Pages 분리 + VM API 전용화"}, {"date": "2026.02.26", "msg": "푸터 네이버예약/주소 제거 + QUANTA 컴포넌트 통일 태스크 추가"}, {"date": "2026.02.26", "msg": "푸터에 Contact 섹션 분리 배치 (중간 랜딩 → 푸터)"}, {"date": "2026.02.26", "msg": "홈 하단 Contact 엔트리 추가 + QUANTA 핸드오프 갱신"}, {"date": "2026.02.26", "msg": "푸터 연락처 보강 + story→journey 파일명 통일"}, {"date": "2026.02.26", "msg": "SVG 히어로 패밀리룩 통일 + 심볼 해상도 최적화"}, {"date": "2026.02.26", "msg": "홈 히어로 리빌딩 — 로고 심볼 + 하단 세션 + 푸터 구체화"}, {"date": "2026.02.26", "msg": "배경색 톤다운 — warm beige → neutral gray 통일"}, {"date": "2026.02.26", "msg": "about.html 레거시도 Story → Journey 통일"}, {"date": "2026.02.26", "msg": "Story → Journey 용어 통일 (서사)"}, {"date": "2026.02.26", "msg": "비주얼 Phase 1 — 캔버스 복구 + 파동 SVG + About/Practice 레이아웃"}, {"date": "2026.02.26", "msg": "에세이 푸터 통일 (레거시 구조 → 신규 site-footer)"}, {"date": "2026.02.26", "msg": "전체 네비/푸터 링크 일괄 통일 (Archive|Practice|About)"}, {"date": "2026.02.26", "msg": "HTML 리빌딩 + 카피 원칙 규격화"}, {"date": "2026.02.25", "msg": "크로스체크 5건 처리 + backend→core/ 이동"}, {"date": "2026.02.25", "msg": "website IA 확정 + assets/media 통합 + woosunho 포트폴리오"}, {"date": "2026.02.25", "msg": "4축 구조 정렬 — directives/knowledge/core/website"}, {"date": "2026.02.25", "msg": "Phase 30 완료 — 풀스택 리빌딩 + VM 배포"}, {"date": "2026.02.25", "msg": "Copyright 2024 유지 (저작권 연도)"}, {"date": "2026.02.25", "msg": "Nav/Footer 컴포넌트 통일 (Phase 13-14)"}, {"date": "2026.02.25", "msg": "타이포그래피 + 색상 일관성 개선"}, {"date": "2026.02.25", "msg": "브랜드 메뉴얼 품질 업그레이드 — 색상 우선순위 체계 확립"}, {"date": "2026.02.24", "msg": "폰트 로딩 최적화 + SSE 캐시 + admin 대시보드 개선"}, {"date": "2026.02.24", "msg": "Three.js 헤어 렌더러 번들 + 포털 UI 정비"}, {"date": "2026.02.24", "msg": "모바일 hero 렌더 품질 개선"}, {"date": "2026.02.24", "msg": "모바일 portrait 홈 최적화 — 필드 스케일 + 히어로 텍스트"}, {"date": "2026.02.24", "msg": "홈 메인 페이지 UX 재설계 — Hero + Content 분리"}, {"date": "2026.02.24", "msg": "Three.js 3D 헤어 실루엣 시스템 — Blender glTF 에셋 + 브라우저 실시간 렌더링"}, {"date": "2026.02.24", "msg": "포털 3D 헤어 시각화 통합 — GLTFLoader + get_hair_style 함수 추가"}, {"date": "2026.02.24", "msg": "모바일 최적화 — viewport/100dvh/input-zoom/nav-backdrop/Three.js 해상도"}, {"date": "2026.02.24", "msg": "백엔드 템플릿 3종 Design System v7.0 규격화"}, {"date": "2026.02.24", "msg": "고객 포털 헤어 실루엣 시각화 시스템 통합"}, {"date": "2026.02.24", "msg": "arc-row 5번째 span 레이아웃 붕괴 — cat+type 단일 span으로 병합"}, {"date": "2026.02.24", "msg": "Archive 카테고리×타입 2-레이어 발행 시스템 구축"}, {"date": "2026.02.24", "msg": "UI/UX 일관성 리디자인 — bg-field.js 추출 + nav/CSS 표준화"}, {"date": "2026.02.24", "msg": "guard_rules v1.1 + reports archive + website"}, {"date": "2026.02.24", "msg": "Brand OS A-Z v2 — 동아시아 내러티브 + 이중 모드 카피 통합"}, {"date": "2026.02.24", "msg": "폐기 파일 3개 삭제 (ralph_agent, nightguard_daemon, website/products)"}, {"date": "2026.02.24", "msg": "nginx auth_basic 제거 + 프록시 연결 + 사이트 정상화"}, {"date": "2026.02.24", "msg": "파일시스템 일괄 정리 + FILESYSTEM_MANIFEST 갱신"}, {"date": "2026.02.24", "msg": "shop·objects 브랜드 보이스 정리 — Coming Soon 제거, 반복 카피 축약, objects nav Lab 추가"}, {"date": "2026.02.24", "msg": "전수 조사 기반 파일시스템 구조 정리"}, {"date": "2026.02.24", "msg": "copyright year 2026 → 2024 복원"}, {"date": "2026.02.24", "msg": "웹사이트 일관성 패치 — 모바일 nav slide-out, footer 통일, CSS 버전 bump"}, {"date": "2026.02.24", "msg": "Sprint 6 — woohwahae.kr 슈퍼앱 통합 구조 구축"}, {"date": "2026.02.24", "msg": "미추적 신규 파일 5개 추적 시작"}, {"date": "2026.02.24", "msg": "LAYER OS Rebuild Phase 2A~4 — Brand OS + 파편정리 + 에이전트리빌딩 + 통합스키마"}, {"date": "2026.02.21", "msg": "pre-renewal snapshot: website 52 files before full rebrand"}, {"date": "2026.02.18", "msg": "feat(multiuse): 원소스 멀티유즈 — 1번 생성 → 5개 채널 동시 출력"}, {"date": "2026.02.18", "msg": "harness: 세션 무결성 강제화 + Cortex 통합 + 필수 파일 생성"}, {"date": "2026.02.18", "msg": "publish: 2026-02-18 19:28"}, {"date": "2026.02.18", "msg": "publish: 2026-02-18 19:27"}, {"date": "2026.02.18", "msg": "Update 97layerOS: WOOHWAHAE website redesign and system sync"}, {"date": "2026.02.18", "msg": "Refactor: WOOHWAHAE website IA redesign (7->4 nav, integrate Photography)"}, {"date": "2026.02.18", "msg": "feat(website): Archive 섹션 활성화 + 전체 페이지 연결"}, {"date": "2026.02.18", "msg": "fix(website): 슬로우 라이프 매거진 컨셉으로 복구"}, {"date": "2026.02.17", "msg": "chore(website): 미사용 파일 삭제 + 구조 문서화"}, {"date": "2026.02.17", "msg": "refactor(website): nav 로고 단독화 + 카피 직접화"}, {"date": "2026.02.17", "msg": "refactor(website): 오리지널 로고 복원 + 카피 톤 조정 + CSS 추가"}, {"date": "2026.02.17", "msg": "refactor(website): 디자인 전면 개선 — 구조 축소 + CSS 정리"}, {"date": "2026.02.17", "msg": "temp: CNAME 임시 제거 — github.io 직접 확인용"}, {"date": "2026.02.17", "msg": "PWA 전환 + 어드민 패널 구축"}, {"date": "2026.02.17", "msg": "feat(website): v3 — Aesop 미감 + 영어 통일 + Hub 6칸 + 햄버거 메뉴"}, {"date": "2026.02.17", "msg": "feat(website): v2 브랜드 허브 재설계"}, {"date": "2026.02.17", "msg": "feat(website): 홈페이지 허브 구조 구축"}, {"date": "2026.02.17", "msg": "WOOHWAHAE 홈페이지 + 전체 파이프라인 구축"}, {"date": "2026.02.16", "msg": "Phase 1 완료 - 세션 연속성 + 멀티에이전트 병렬 + 자산 추적"}, {"date": "2026.02.15", "msg": "텔레그램 통신 복구 및 5-Agent Hub 통합 엔진 엔진 고도화"}];
+  /* CHANGELOG:END */
 
   document.addEventListener('DOMContentLoaded', function () {
     var trigger = document.getElementById('about-zero-trigger');
@@ -425,16 +388,19 @@
     trigger.style.cursor = 'pointer';
 
     trigger.addEventListener('click', function () {
-      active = !active;
-      panel.classList.toggle('is-open', active);
-      panel.setAttribute('aria-hidden', String(!active));
-      trigger.classList.toggle('is-active', active);
-      if (active) {
-        addLine();
-        timer = setInterval(addLine, 900);
-      } else {
-        clearInterval(timer);
-        timer = null;
+      var open = panel.classList.toggle('is-open');
+      panel.setAttribute('aria-hidden', String(!open));
+      trigger.classList.toggle('is-active', open);
+      if (open && !panel.dataset.rendered) {
+        var ul = document.getElementById('about-log-lines');
+        if (ul && CHANGELOG_DATA.length) {
+          CHANGELOG_DATA.forEach(function (entry) {
+            var li = document.createElement('li');
+            li.textContent = entry.date + '  ' + entry.msg;
+            ul.appendChild(li);
+          });
+        }
+        panel.dataset.rendered = '1';
       }
     });
   });
