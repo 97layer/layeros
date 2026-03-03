@@ -10766,6 +10766,10 @@ html[data-nav-dir="back"] ::view-transition-new(root) { animation-name: vt-slide
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
 
+/* About: VT가 엔터 모션 담당 — data-reveal translateY 억제 (이중 튕김 방지) */
+.page-about [data-reveal] { transform: none; }
+.page-about [data-reveal].is-visible { transform: none; }
+
 /* ════════════════════════════════════════════════
    PRACTICE — Section Card Grid
    ════════════════════════════════════════════════ */

@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=433c510e">
+<link rel="stylesheet" href="/assets/css/style.css?v=6d1f05c7">
 <script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
 <!-- /COMPONENT:head -->
 </head>
@@ -46,12 +46,15 @@
 <main class="page-main">
   <div class="page-intro container--wide">
     <p class="page-preamble">에세이, 저널, 룩북을 올립니다.</p>
+    <nav class="archive-filter" aria-label="Archive filter" id="archive-type-filter">
+  <div class="archive-filter__item">
+    <button class="archive-filter__btn is-active" data-filter="all">01. All</button>
     <input class="archive-search" id="archive-search" type="search" placeholder="검색" autocomplete="off" spellcheck="false">
-<nav class="archive-filter" aria-label="Archive filter" id="archive-type-filter">
-  <button class="archive-filter__btn is-active" data-filter="all">All</button>
-  <button class="archive-filter__btn" data-filter="essay">Essay</button>
-  <button class="archive-filter__btn" data-filter="journal">Journal</button>
-  <button class="archive-filter__btn" data-filter="lookbook">Lookbook</button>
+  </div>
+  <button class="archive-filter__btn" data-filter="essay">02. Essay</button>
+  <button class="archive-filter__btn" data-filter="journal">03. Journal</button>
+  <button class="archive-filter__btn" data-filter="lookbook">04. Lookbook</button>
+  <p class="archive-count" id="archive-count"></p>
 </nav>
   </div>
   <div class="archive-list container--wide" id="archive-list">
@@ -91,14 +94,21 @@
 
       var activeFilter = 'all';
       var searchQuery = '';
+      if (countEl) countEl.textContent = posts.length + ' / ' + posts.length;
+
+      var countEl = document.getElementById('archive-count');
 
       function applyFilters() {
         var items = list.querySelectorAll('.archive-list-item');
+        var visible = 0;
         items.forEach(function (item) {
           var typeMatch = activeFilter === 'all' || item.getAttribute('data-type') === activeFilter;
           var textMatch = !searchQuery || item.querySelector('.archive-list-item__title').textContent.toLowerCase().indexOf(searchQuery) !== -1;
-          item.style.display = (typeMatch && textMatch) ? '' : 'none';
+          var show = typeMatch && textMatch;
+          item.style.display = show ? '' : 'none';
+          if (show) visible++;
         });
+        if (countEl) countEl.textContent = visible + ' / ' + posts.length;
       }
 
       var filterBtns = document.querySelectorAll('#archive-type-filter .archive-filter__btn');

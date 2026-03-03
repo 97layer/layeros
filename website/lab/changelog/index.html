@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=433c510e">
+<link rel="stylesheet" href="/assets/css/style.css?v=6d1f05c7">
 <script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
 <!-- /COMPONENT:head -->
   <style>
@@ -31,15 +31,15 @@
     }
 
     .cl-wrap {
-      max-width: 800px;
+      max-width: 850px;
       margin: 0 auto;
-      padding: 10rem var(--space-md) 15rem;
+      padding: calc(var(--gap-void) / 2) var(--space-md) var(--gap-void);
       position: relative;
     }
 
     /* ── Header : 권위의 해체 ── */
     .cl-header {
-      margin-bottom: 8rem;
+      margin-bottom: var(--gap-section);
       position: relative;
       padding-left: var(--cl-grid-edge);
     }
@@ -51,7 +51,7 @@
       text-transform: uppercase;
       color: var(--text-faint);
       display: block;
-      margin-bottom: 2rem;
+      margin-bottom: 1.25rem;
     }
 
     .cl-label::before {
@@ -156,8 +156,8 @@
       backdrop-filter: blur(40px) saturate(1.5);
       border: 1px solid var(--term-border);
       border-radius: 1px;
-      margin-top: 4rem;
-      margin-bottom: 8rem;
+      margin-top: var(--gap-section);
+      margin-bottom: var(--gap-breath);
       position: relative;
       box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
     }
@@ -234,7 +234,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
-      margin-bottom: 2rem;
+      margin-bottom: var(--gap-items);
       padding-left: 1rem;
       border-left: 1px solid rgba(255, 255, 255, 0.05);
       transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -291,11 +291,10 @@
       animation: pulse 1.5s infinite;
     }
 
-    /* ── Activity Chart : 1-bit ── */
     .cl-chart-container {
-      margin-top: 4rem;
+      margin-top: var(--gap-section);
       padding-left: var(--cl-grid-edge);
-      margin-bottom: 6rem;
+      margin-bottom: var(--gap-breath);
     }
 
     .cl-section-label {
@@ -336,8 +335,8 @@
 
     /* ── 통계 데이터 (Dashboard) ── */
     .cl-stats-module {
-      margin-top: 2rem;
-      margin-bottom: 6rem;
+      margin-top: var(--gap-items);
+      margin-bottom: var(--gap-section);
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       font-family: var(--font-mono);
@@ -348,8 +347,8 @@
     .cl-stat-box {
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
-      padding: 3.5rem 0;
+      gap: var(--gap-within);
+      padding: var(--gap-items) 0;
       transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
     }
@@ -544,10 +543,10 @@
         var hours = data.invested_hours || 0;
 
         var statsHtml =
-          '<div class="cl-stat-box"><em>RUNTIME</em><span class="cl-stat-val">' + days + ' DAYS</span></div>' +
-          '<div class="cl-stat-box"><em>INCREMENTS</em><span class="cl-stat-val">' + total + ' UPDATES</span></div>' +
-          '<div class="cl-stat-box"><em>ENERGY</em><span class="cl-stat-val">~' + hours + ' HRS</span></div>' +
-          '<div class="cl-stat-box"><em>STANDBY</em><span class="cl-stat-val">' + uncommitted + ' ITEMS</span></div>';
+          '<div class="cl-stat-box"><em>개발 기간</em><span class="cl-stat-val">' + days + ' 일째</span></div>' +
+          '<div class="cl-stat-box"><em>누적 업데이트</em><span class="cl-stat-val">' + total + ' 건</span></div>' +
+          '<div class="cl-stat-box"><em>투입 시간</em><span class="cl-stat-val">~' + hours + ' 시간</span></div>' +
+          '<div class="cl-stat-box"><em>보류 조각</em><span class="cl-stat-val">' + uncommitted + ' 개</span></div>';
 
         document.getElementById('cl-stats').innerHTML = statsHtml;
 
@@ -560,7 +559,7 @@
           let start = 0;
           const duration = 1500;
           const startTime = performance.now();
-          const suffix = targetText.replace(/[0-9]/g, '').trim();
+          const suffix = targetText.replace(/[0-9\.~]/g, '').trim();
 
           function updateCount(currentTime) {
             const elapsed = currentTime - startTime;
