@@ -6546,7 +6546,7 @@ body.is-loaded .home-hero__elog-wrap {
 }
 
 .home-hero__elog-panel.is-open {
-  max-height: 14em;
+  max-height: 22em;
   opacity: 1;
 }
 
@@ -6557,6 +6557,48 @@ body.is-loaded .home-hero__elog-wrap {
 
 .home-hero__elog-wrap .elog time {
   font-size: 0.6rem;
+  opacity: 0.6;
+}
+
+.elog-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  margin-bottom: 0.5em;
+}
+
+.elog-stats__row {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-faint);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.elog-stats__row em {
+  font-style: normal;
+  opacity: 0.55;
+  width: 2.2em;
+  flex-shrink: 0;
+}
+
+.elog-bar {
+  letter-spacing: 0.05em;
+  color: var(--text-sub);
+  opacity: 0.5;
+}
+
+.elog-stats__row b {
+  font-weight: 400;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+.elog-divider {
+  height: 1px;
+  background: var(--line);
+  margin-bottom: 0.5em;
   opacity: 0.6;
 }
 
@@ -9041,6 +9083,233 @@ body.is-loaded .home-hero__nav {
 .form-submit:hover {
   background: var(--text);
   color: var(--bg);
+}
+
+/* ─── Atelier Hero (Provision-style 2-col) ─── */
+.atelier-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-md);
+  margin-bottom: 0;
+}
+.atelier-hero__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.atelier-hero__symbol {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  opacity: 0.85;
+}
+.atelier-hero__title {
+  font-family: var(--font-body);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-heading);
+  color: var(--text);
+  margin: 0;
+  line-height: 1.1;
+}
+.atelier-hero__sub {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: var(--fw-light);
+  letter-spacing: 0.08em;
+  color: var(--text-sub);
+  margin: 0;
+}
+.atelier-hero__desc {
+  padding-top: 0.4rem;
+}
+.atelier-hero__desc p {
+  font-size: 0.88rem;
+  font-weight: var(--fw-light);
+  line-height: 1.9;
+  color: var(--text-sub);
+  margin-bottom: 1.1rem;
+  max-width: 480px;
+}
+.atelier-hero__desc p:last-child { margin-bottom: 0; }
+
+/* ─── Atelier Gallery ─── */
+.atelier-gallery {
+  margin-bottom: 0;
+  overflow: hidden;
+}
+.atelier-gallery__track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.atelier-gallery__item {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+.atelier-gallery__item--placeholder {
+  background: var(--bg-dark);
+  border: 1px solid var(--line);
+}
+.atelier-gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.7);
+}
+
+/* ─── Atelier Info Grid ─── */
+.atelier-info {
+  margin-bottom: var(--space-lg);
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--line);
+}
+.atelier-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+.atelier-info-block__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: var(--space-sm);
+}
+.atelier-info-block__body {
+  font-size: 0.82rem;
+  font-weight: var(--fw-light);
+  line-height: 1.9;
+  color: var(--text-sub);
+  margin-bottom: 0.8rem;
+}
+.atelier-info-block__link {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--text);
+  padding-bottom: 1px;
+  transition: opacity var(--duration) var(--ease-out);
+}
+.atelier-info-block__link:hover { opacity: 0.5; }
+
+/* ─── Atelier Detail (서사 좌 + Process 우) ─── */
+.atelier-detail {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--line);
+}
+.atelier-detail__left .section-label {
+  display: block;
+  margin-bottom: var(--space-md);
+  color: var(--text-faint);
+}
+.atelier-detail__left p {
+  font-size: 0.82rem;
+  font-weight: var(--fw-light);
+  line-height: 1.9;
+  color: var(--text-sub);
+  margin-bottom: 1.1rem;
+  max-width: 320px;
+}
+.atelier-detail__left p:last-child { margin-bottom: 0; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .atelier-hero {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  .atelier-gallery__track {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .atelier-gallery__track .atelier-gallery__item:last-child {
+    display: none;
+  }
+  .atelier-info-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  .atelier-detail {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  .atelier-detail__left p { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  .atelier-gallery__track {
+    grid-template-columns: 1fr;
+  }
+  .atelier-gallery__track .atelier-gallery__item:last-child {
+    display: block;
+  }
+}
+
+/* ─── Atelier Narrative & Process ─── */
+.atelier-narrative {
+  margin-bottom: var(--space-xl);
+}
+.atelier-narrative .section-label {
+  display: block;
+  margin-bottom: var(--space-md);
+  color: var(--text-faint);
+}
+.atelier-process {
+  margin-bottom: var(--space-xl);
+}
+.atelier-process .section-label {
+  display: block;
+  margin-bottom: var(--space-lg);
+  color: var(--text-faint);
+}
+.atelier-process-list {
+  display: flex;
+  flex-direction: column;
+}
+.atelier-process-item {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: var(--space-sm);
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--line);
+}
+.atelier-process-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.atelier-process-item__num {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-label);
+  color: var(--text-faint);
+  padding-top: 0.15rem;
+}
+.atelier-process-item__body strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: var(--fw-medium);
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.atelier-process-item__body p {
+  font-size: 0.82rem;
+  font-weight: var(--fw-light);
+  line-height: 1.9;
+  color: var(--text-sub);
+  max-width: 520px;
 }
 
 /* ─── Atelier Price Table (enhanced) ─── */
