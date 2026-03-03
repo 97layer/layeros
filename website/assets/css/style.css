@@ -9093,6 +9093,7 @@ body.page-about { overflow-x: hidden; }
   font-weight: 400;
   color: var(--text-sub);
   line-height: 1.7;
+  max-width: var(--max-content);
   margin-bottom: var(--space-lg);
 }
 .about-declaration {
@@ -9287,9 +9288,9 @@ body.page-about { overflow-x: hidden; }
    ════════════════════════════════════════════════ */
 
 .editor-hero {
-  padding: var(--space-lg) 0 var(--space-xl);
+  padding: var(--space-sm) 0 var(--space-md);
   border-bottom: 1px solid var(--line);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 .editor-eyebrow {
   font-family: var(--font-mono);
@@ -9347,7 +9348,7 @@ body.page-about { overflow-x: hidden; }
   letter-spacing: 0.1em;
   color: var(--text-faint);
   text-decoration: none;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-md);
   transition: color 0.3s ease;
 }
 .editor-nav-back:hover { color: var(--text-sub); }
