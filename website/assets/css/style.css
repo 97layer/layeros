@@ -1,5 +1,5 @@
 /* =============================================
-   WOOHWAHAE — Design System v7.1
+   WOOHWAHAE — Design System v7.2
    "절제된 편집자 — 날것의 질감"
    IBM Plex Mono (label) + Pretendard Variable (body)
    폰트 규칙: Pretendard + IBM Plex Mono만. serif/italic/색상 금지.
@@ -8599,6 +8599,12 @@ body.is-loaded .home-preloader__logo {
   padding-bottom: 1.2rem;
 }
 
+.archive-hero__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
 .archive-hero .section-label {
   font-family: var(--font-mono);
   font-size: 0.6rem;
@@ -8607,13 +8613,22 @@ body.is-loaded .home-preloader__logo {
   text-transform: uppercase;
   color: var(--text-sub);
 }
+
+.archive-hero__count {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: var(--fw-light);
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+}
+
 .archive-hero__desc {
   font-family: var(--font-mono);
   font-size: 0.58rem;
   letter-spacing: 0.18em;
   color: var(--text-faint);
   display: block;
-  margin-top: 0.4rem;
+  margin-top: 0.5rem;
 }
 
 .archive-filter {
@@ -8622,6 +8637,7 @@ body.is-loaded .home-preloader__logo {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--line);
   margin-bottom: var(--space-md);
+  margin-top: var(--space-md);
 }
 
 .filter-btn {
@@ -8655,10 +8671,10 @@ body.is-loaded .home-preloader__logo {
 
 .archive-list-item {
   display: grid;
-  grid-template-columns: 5rem 5rem 1fr auto;
+  grid-template-columns: 3rem 5.5rem 1fr 7.5rem 1.2rem;
   align-items: baseline;
   gap: var(--space-sm);
-  padding: var(--space-sm) 0;
+  padding: 0.9rem 0;
   border-bottom: 1px solid var(--line);
   text-decoration: none;
   color: inherit;
@@ -8670,12 +8686,12 @@ body.is-loaded .home-preloader__logo {
   padding-left: 0.3rem;
 }
 
-.archive-list-item__date {
+.archive-list-item__issue {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   font-weight: var(--fw-light);
-  letter-spacing: 0.06em;
-  color: var(--text-sub);
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
 }
 
 .archive-list-item__type {
@@ -8696,22 +8712,37 @@ body.is-loaded .home-preloader__logo {
   letter-spacing: -0.01em;
 }
 
+.archive-list-item__date {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: var(--fw-light);
+  letter-spacing: 0.06em;
+  color: var(--text-sub);
+  text-align: right;
+}
+
 .archive-list-item__arrow {
   font-family: var(--font-mono);
   font-size: 0.6rem;
   color: var(--text-sub);
   opacity: 0.6;
+  text-align: right;
 }
 
 @media (max-width: 640px) {
   .archive-list-item {
-    grid-template-columns: 1fr auto;
-    gap: 0.2rem;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 0 0.5rem;
+    padding: 0.8rem 0;
   }
 
-  .archive-list-item__date,
-  .archive-list-item__type {
+  .archive-list-item__type,
+  .archive-list-item__date {
     display: none;
+  }
+
+  .archive-list-item__title {
+    font-size: 0.88rem;
   }
 }
 
