@@ -334,5 +334,20 @@
 <!-- /COMPONENT:footer -->
 
 <script defer src="/assets/js/site.js"></script>
+<script>
+(function () {
+  function tick() {
+    var el = document.getElementById('about-clock');
+    if (!el) return;
+    var n = new Date();
+    var pad = function (v) { return String(v).padStart(2, '0'); };
+    var date = n.getFullYear() + '.' + pad(n.getMonth() + 1) + '.' + pad(n.getDate());
+    var time = pad(n.getHours()) + ':' + pad(n.getMinutes()) + ':' + pad(n.getSeconds());
+    el.textContent = date + ' ' + time;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
 </body>
 </html>
