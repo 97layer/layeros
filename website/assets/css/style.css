@@ -6511,6 +6511,21 @@ body.is-loaded .home-preloader__logo {
   100% { opacity: 0;   }
 }
 
+/* ─── Home Hero Notice ─── */
+.home-hero__notice {
+  position: absolute;
+  top: 5rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-sub);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  padding: 0 var(--space-xl);
+}
+
 /* ─── Home Hero Nav Overlay — 프리로더 후 하단에서 슬라이드업 ─── */
 .home-hero__nav {
   position: absolute;
@@ -6536,6 +6551,15 @@ body.is-loaded .home-hero__nav {
   .home-hero__nav {
     padding: 0 1.5rem;
   }
+}
+
+/* ─── Home Field Buffer — 히어로/푸터 사이 쿠션 구간 ─── */
+.home-field-buffer {
+  position: relative;
+  z-index: 1;
+  height: 30vh;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0%, var(--bg) 100%);
 }
 
 /* ─── Home Scroll Space — field-bg 클로즈업 구간 ─── */
@@ -7998,18 +8022,6 @@ body.is-loaded .home-hero__nav {
   margin-top: 0;
 }
 
-/* 필드 → 푸터 자연스러운 전환 */
-.site-footer::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, transparent, var(--bg));
-  pointer-events: none;
-  z-index: -1;
-}
 
 .footer-inner {
   max-width: var(--max-wide);
