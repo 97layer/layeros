@@ -338,13 +338,14 @@ def _generate_changes(instruction: str, context_files: list[dict]) -> Optional[d
         draft["_critic"] = {"score": score, "verdict": "APPROVE"}
         return draft
 
-    # ── Round 3: Gemini 재생성 (Critic 피드백 반영) ────────────────────
+    # ── Round 3: Gemini 재생성 (Critic 피드백 반영, context 제외로 토큰 절감) ───
     feedback_block = "\n".join(f"- {s}" for s in suggestions) or "\n".join(f"- {i}" for i in issues)
+    draft_text = json.dumps(draft, ensure_ascii=False, indent=2)
     revised_prompt = (
         f"지시: {instruction}\n\n"
-        f"관련 파일:{context_text}\n\n"
-        f"이전 코드 검토 결과 (score={score}/100):\n{feedback_block}\n\n"
-        f"위 피드백을 반영해 개선된 JSON만 반환:"
+        f"이전 코드 (수정 대상):\n```json\n{draft_text}\n```\n\n"
+        f"검토 결과 (score={score}/100) — 반드시 반영:\n{feedback_block}\n\n"
+        f"위 피드백을 모두 반영한 개선된 JSON만 반환:"
     )
     revised = _call_gemini(revised_prompt)
     if revised and revised.get("files"):
@@ -354,8 +355,21 @@ def _generate_changes(instruction: str, context_files: list[dict]) -> Optional[d
         logger.info("Gemini 수정안 생성 완료 (critic score=%s)", score)
         return revised
 
-    # 재생성도 실패 → 초안 반환
-    logger.warning("Gemini 재생성 실패 → 초안 채택")
+    # Round 3 Gemini 실패 → Claude가 직접 Critic 피드백 반영
+    logger.info("Gemini Round 3 실패 → Claude Reviser 에스컬레이션")
+    claude_revised_prompt = (
+        f"지시: {instruction}\n\n"
+        f"현재 코드:\n```json\n{draft_text}\n```\n\n"
+        f"코드 리뷰 결과 (score={score}/100) — 아래 모든 항목을 반드시 반영:\n{feedback_block}\n\n"
+        f"피드백을 모두 반영한 개선된 JSON만 반환:"
+    )
+    claude_revised = _call_claude(claude_revised_prompt)
+    if claude_revised and claude_revised.get("files"):
+        claude_revised["_critic"] = {"score": score, "verdict": "CLAUDE_REVISED", "issues": issues}
+        logger.info("Claude 수정안 생성 완료 (critic score=%s)", score)
+        return claude_revised
+
+    logger.warning("모든 재생성 실패 → 초안 채택")
     return draft
 
 

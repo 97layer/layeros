@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-duel.py — Claude vs Gemini 코드 생성 대결
+duel.py — Claude vs Gemini 코드 생성 대결 (실시간 critic 검증용)
 
 사용법:
   python3 core/scripts/duel.py "텔레그램 note 커맨드 재시도 로직 추가"
@@ -96,7 +96,12 @@ def duel(instruction: str, max_rounds: int = 2, apply: bool = False) -> dict | N
 
     context_text = ""
     for f in context_files:
-        context_text += f"\n\n### {f['path']}\n```\n{f['content']}\n```"
+        # duel용: 파일당 60줄로 제한 (프롬프트 과부하 방지)
+        lines = f["content"].splitlines()
+        snippet = "\n".join(lines[:60])
+        if len(lines) > 60:
+            snippet += "\n... (truncated)"
+        context_text += f"\n\n### {f['path']}\n```\n{snippet}\n```"
 
     base_prompt = (
         f"지시: {instruction}\n\n"
@@ -129,7 +134,7 @@ def duel(instruction: str, max_rounds: int = 2, apply: bool = False) -> dict | N
         if not draft or not draft.get("files"):
             print(f"  {RED}Gemini 생성 실패{RESET}")
             if round_num == 1:
-                # Claude로 대체
+                # Round 1 실패 → Claude Proposer로 초안 생성
                 _banner("Claude Proposer (Fallback)", YELLOW)
                 print(f"{DIM}  생성 중...{RESET}", end="", flush=True)
                 draft = _call_claude(base_prompt)
@@ -138,6 +143,25 @@ def duel(instruction: str, max_rounds: int = 2, apply: bool = False) -> dict | N
                     print(f"  {RED}Claude도 실패. 종료.{RESET}")
                     return None
             else:
+                # Round 2+ 실패 → Claude Reviser로 즉시 피드백 반영
+                _banner("Claude Reviser (Gemini 실패 → 즉시 피드백 반영)", YELLOW)
+                print(f"{DIM}  피드백 반영 중...{RESET}", end="", flush=True)
+                draft_text = json.dumps(best, ensure_ascii=False, indent=2)
+                feedback = "\n".join(f"- {s}" for s in last_suggestions)
+                claude_prompt = (
+                    f"지시: {instruction}\n\n"
+                    f"현재 코드:\n```json\n{draft_text}\n```\n\n"
+                    f"검토 결과 (score={score}/100) — 아래를 모두 반영:\n{feedback}\n\n"
+                    f"피드백 반영 개선된 JSON만 반환:"
+                )
+                claude_rev = _call_claude(claude_prompt)
+                print(f"\r{' ' * 30}\r", end="")
+                if claude_rev and claude_rev.get("files"):
+                    _print_changes(claude_rev, "Claude Revised", GREEN)
+                    claude_rev["_critic"] = {"score": score, "verdict": "CLAUDE_REVISED"}
+                    best = claude_rev
+                else:
+                    print(f"  {YELLOW}Claude Reviser도 실패 → 초안 채택{RESET}")
                 break
 
         _print_changes(draft, f"Gemini Round {round_num}", CYAN)
@@ -165,8 +189,26 @@ def duel(instruction: str, max_rounds: int = 2, apply: bool = False) -> dict | N
             break
 
         if round_num == max_rounds:
-            print(f"\n{YELLOW}  최대 라운드 도달 → 마지막 안 채택{RESET}")
-            best["_critic"] = critique
+            # Gemini 재생성 실패 → Claude가 Critic 피드백 직접 반영
+            _banner(f"Round {round_num} — Claude Reviser (Gemini 실패 fallback)", YELLOW)
+            print(f"{DIM}  피드백 반영 중...{RESET}", end="", flush=True)
+            draft_text = json.dumps(best, ensure_ascii=False, indent=2)
+            feedback = "\n".join(f"- {s}" for s in last_suggestions)
+            claude_prompt = (
+                f"지시: {instruction}\n\n"
+                f"현재 코드:\n```json\n{draft_text}\n```\n\n"
+                f"검토 결과 (score={score}/100) — 아래를 모두 반영:\n{feedback}\n\n"
+                f"피드백 반영 개선된 JSON만 반환:"
+            )
+            claude_rev = _call_claude(claude_prompt)
+            print(f"\r{' ' * 30}\r", end="")
+            if claude_rev and claude_rev.get("files"):
+                _print_changes(claude_rev, "Claude Revised", GREEN)
+                claude_rev["_critic"] = {"score": score, "verdict": "CLAUDE_REVISED"}
+                best = claude_rev
+            else:
+                print(f"  {YELLOW}Claude Reviser도 실패 → 초안 채택{RESET}")
+                best["_critic"] = critique
 
     # 최종 결과
     _banner("최종 코드", GREEN)
@@ -224,10 +266,10 @@ def _pick_auto_task() -> str | None:
         except Exception:
             pass
 
-    # 3. TODO/FIXME in core/
+    # 3. TODO/FIXME 주석 (# TODO: 또는 # FIXME: 형태만)
     import subprocess
     result = subprocess.run(
-        ["grep", "-rn", "-E", "TODO|FIXME",
+        ["grep", "-rn", "-E", r"#\s*(TODO|FIXME):",
          "--include=*.py", "--exclude-dir=__pycache__",
          str(PROJECT_ROOT / "core")],
         capture_output=True, text=True, timeout=10
