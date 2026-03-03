@@ -84,8 +84,11 @@
 - ✅ **GITHUB_TOKEN .env 설정** — VM에 추가 완료, 파이프라인 end-to-end 개통
 - ✅ **세컨드 브레인 폐쇄 루프** — decision_log.jsonl + retrospective_analysis 구현
 - ✅ **텔레그램 대화 엔진 리뉴얼** — 컨텍스트 영속성 + 장기 기억 + Zero-Noise 프롬프트
-- ⏳ **P4 Brand Scout** — 외부 신호 자동 수집
-- ⏳ **VM 배포** — conversation_engine + intent_classifier 반영 필요
+- ✅ **P4 Brand Scout** — ScoutAgent Gardener step 13 통합 완료
+- ✅ **VM 배포** — 전체 서비스 최신 코드 반영 완료
+- ✅ **Duel → ProposeGate** — Gardener 자율 제안 텔레그램 루프 완성
+- ✅ **SA pipeline 수정** — signal_path 로드, URL fetch, YouTube 프롬프트 정상화
+- ⏳ **RSS 소스 URL 교체** — Monocle/It's Nice That/아무튼 계속 파싱 오류 3건
 
 **완료됨**:
 
@@ -157,27 +160,30 @@ ssh 97layer-vm "for s in 97layer-telegram 97layer-ecosystem 97layer-gardener woo
 
 ## 📍 현재 상태 (CURRENT STATE)
 
-### [2026-03-02] claude-sonnet-4-6
+### [2026-03-03] claude-sonnet-4-6
 
 **완료**:
-- ✅ 세컨드 브레인 폐쇄 루프 — decision_log.jsonl, retrospective_analysis, session-stop 기록
-- ✅ GITHUB_TOKEN VM .env 추가 → 파이프라인 end-to-end 개통
-- ✅ 텔레그램 대화 엔진 전면 리뉴얼:
-  - ConversationEngine: 컨텍스트 파일 영속성 (knowledge/system/conversation_contexts.json)
-  - ConversationEngine: 장기 기억 학습 복원 (5번째 대화마다)
-  - ConversationEngine: Zero-Noise 반말 동료 포지션 프롬프트
-  - IntentClassifier: 규칙 우선 (단순 메시지는 Gemini API 호출 0회)
+- ✅ Gemini Proposer 스키마 불일치 수정 — system_instruction 추가, GEMINI_API_KEY fallback, JSON brace 추출 (code_agent.py)
+- ✅ Duel → ProposeGate 연결 — Gardener 결과 propose_queue 등록, 텔레그램 5분 polling job
+- ✅ Brand Scout Gardener 통합 — ScoutAgent.run_once() step 13으로 추가 (신규 daemon 없음)
+- ✅ _pick_auto_task 자기참조 버그 수정 — duel.py grep 제외
+- ✅ SA agent signal_path 로드 — 큐 payload에서 파일 로드 후 analyze_signal 호출 (content 빈값 버그 수정)
+- ✅ SA content/body/source 필드 정규화 — 멀티 스키마 신호 처리
+- ✅ 텔레그램 URL 처리 — URL 감지 시 페이지 본문 fetch + url_content 신호 저장
+- ✅ YouTube 분석 프롬프트 — 코드 주석 제거, 브랜드 철학 슬로우라이프/소거/본질로 업데이트
+- ✅ VM 전체 배포 — ecosystem/telegram/gardener 최신 코드 반영
 
 **파이프라인 현황**:
-- corpus ripe 클러스터 2개 (슬로우라이프/본질) — GITHUB_TOKEN 개통으로 에세이→발행 자동화 가능
-- VM 재배포 필요 (conversation_engine + intent_classifier 신규 코드 미반영)
+- 신호 입력 → SA 분석 → Gardener 군집화 → CE 에세이 → 발행 전체 체인 정상화
+- Duel 자율 실행 → ProposeGate → 텔레그램 승인 루프 작동
+- Brand Scout (Kinfolk/Dezeen): RSS 수집 정상, 3개 소스 파싱 오류 (URL 교체 필요)
 
 **다음**:
-- ⏳ VM 배포 (telegram + ecosystem 재시작)
-- ⏳ archive/about 디자인 압축
-- ⏳ P4 Brand Scout
+- ⏳ RSS 파싱 오류 소스 URL 교체 (Monocle, It's Nice That, 아무튼 계속)
+- ⏳ archive/about 디자인 (다른 에이전트 작업 중)
+- ⏳ SA 분석 결과 → Gardener 군집화 연동 검증 (end-to-end 테스트)
 
-**업데이트 시간**: 2026-03-02T11:30:00
+**업데이트 시간**: 2026-03-03T12:30:00
 
 work_lock: unlocked
 

@@ -677,6 +677,63 @@ class TelegramSecretaryV6:
 
     # ── 텍스트 처리 ──────────────────────────────────────────────────────────
 
+    @staticmethod
+    def _fetch_url_content(url: str) -> dict:
+        """
+        URL 페이지 본문 추출.
+        Returns: {"title": str, "content": str, "ok": bool}
+        """
+        try:
+            import urllib.request
+            from html.parser import HTMLParser
+
+            class _Extractor(HTMLParser):
+                def __init__(self):
+                    super().__init__()
+                    self._title = []
+                    self._body = []
+                    self._in_title = False
+                    self._skip = False
+
+                def handle_starttag(self, tag, attrs):
+                    if tag == 'title':
+                        self._in_title = True
+                    if tag in ('script', 'style', 'nav', 'header', 'footer', 'aside'):
+                        self._skip = True
+
+                def handle_endtag(self, tag):
+                    if tag == 'title':
+                        self._in_title = False
+                    if tag in ('script', 'style', 'nav', 'header', 'footer', 'aside'):
+                        self._skip = False
+
+                def handle_data(self, data):
+                    if self._in_title:
+                        self._title.append(data.strip())
+                    elif not self._skip:
+                        stripped = data.strip()
+                        if stripped:
+                            self._body.append(stripped)
+
+            req = urllib.request.Request(
+                url,
+                headers={'User-Agent': 'Mozilla/5.0 (compatible; LAYER-OS/1.0)'},
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                charset = resp.headers.get_content_charset() or 'utf-8'
+                html = resp.read().decode(charset, errors='replace')
+
+            parser = _Extractor()
+            parser.feed(html)
+            title = ' '.join(parser._title).strip()
+            content = ' '.join(parser._body)
+            # 연속 공백 정리 + 5000자 제한
+            content = ' '.join(content.split())[:5000]
+            return {"title": title, "content": content, "ok": bool(content)}
+        except Exception as e:
+            logger.warning("URL fetch 실패 (%s): %s", url, e)
+            return {"title": "", "content": "", "ok": False}
+
     async def process_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         text = update.message.text
         try:
@@ -685,6 +742,42 @@ class TelegramSecretaryV6:
             intent = intent_data['intent']
 
             if intent == 'insight':
+                # URL이면 페이지 본문 fetch 후 풍부한 신호로 저장
+                url_match = re.search(r'https?://\S+', text)
+                if url_match:
+                    url = url_match.group(0)
+                    status_msg = await update.message.reply_text("🔍 페이지 수집 중...")
+                    fetched = self._fetch_url_content(url)
+                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                    signal_id = "url_%s" % timestamp
+                    content = fetched["content"] if fetched["ok"] else ("URL: %s" % url)
+                    signal_data = {
+                        "signal_id": signal_id,
+                        "type": "url_content",
+                        "status": "captured",
+                        "content": content,
+                        "captured_at": datetime.now().isoformat(),
+                        "from_user": update.effective_user.username or update.effective_user.first_name,
+                        "source_channel": "telegram",
+                        "metadata": {
+                            "source_url": url,
+                            "title": fetched["title"],
+                            "fetch_ok": fetched["ok"],
+                        },
+                    }
+                    _, queue_ok = self._save_signal(signal_data)
+                    fetch_note = f"제목: {_escape_html(fetched['title'][:80])}\n" if fetched["title"] else ""
+                    fetch_status = f"본문 {len(fetched['content'])}자 수집" if fetched["ok"] else "⚠️ 본문 수집 실패 (URL만 저장)"
+                    sa_status = "SA 분석 중." if queue_ok else "⚠️ SA 큐 전달 실패"
+                    await status_msg.edit_text(
+                        f"📥 <b>URL 수집 완료</b>\n\n"
+                        f"{fetch_note}"
+                        f"{fetch_status}\n"
+                        f"{sa_status}",
+                        parse_mode=constants.ParseMode.HTML,
+                    )
+                    return
+
                 queue_ok = self._save_insight(text, update.effective_user)
                 timestamp = datetime.now().strftime('%H:%M:%S')
                 preview = _escape_html(text[:150])

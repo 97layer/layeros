@@ -400,8 +400,29 @@ JSON만 출력. 설명 없이.
         logger.info("%s: Processing task %s (%s)", self.agent_id, task.task_id, task_type)
 
         if task_type == 'analyze_signal':
-            # Analyze signal
-            result = self.analyze_signal(payload)
+            # signal_path가 있으면 파일 로드 (큐 payload엔 경로만 있음)
+            signal_path = payload.get('signal_path')
+            if signal_path:
+                try:
+                    from pathlib import Path as _Path
+                    signal_data = json.loads(_Path(signal_path).read_text(encoding='utf-8'))
+                except Exception as _e:
+                    logger.warning("signal_path 로드 실패, payload 직접 사용: %s", _e)
+                    signal_data = payload
+            else:
+                signal_data = payload
+
+            # content 필드 정규화 (body/title 조합 fallback)
+            if not signal_data.get('content'):
+                title = signal_data.get('title', '')
+                body = signal_data.get('body', '')
+                signal_data['content'] = ("%s\n\n%s" % (title, body)).strip() if title else body
+
+            # source 필드 정규화
+            if not signal_data.get('source'):
+                signal_data['source'] = signal_data.get('source_channel', 'unknown')
+
+            result = self.analyze_signal(signal_data)
             return {
                 'status': 'completed',
                 'task_id': task.task_id,

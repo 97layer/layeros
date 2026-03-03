@@ -158,20 +158,21 @@ class YouTubeAnalyzer:
                 'actionable_items': []
             }
 
-        prompt = f"""다음은 YouTube 영상의 자막입니다. 97layer 브랜드 철학(본질, 절제, 자기긍정)에 맞춰 분석해주세요.
+        transcript_excerpt = transcript[:8000]
+        prompt = f"""다음은 YouTube 영상의 자막입니다. WOOHWAHAE 브랜드 렌즈(슬로우라이프, 소거, 본질)로 분석해주세요.
 
 **영상 URL**: {video_url}
 
 **자막**:
-{transcript[:8000]}  # Limit to 8000 chars
+{transcript_excerpt}
 
 **분석 요청**:
 1. **요약** (3-4문장으로 핵심만)
 2. **핵심 인사이트** (3-5개 bullet points)
 3. **주요 토픽** (키워드 5개)
-4. **실행 가능한 아이디어** (우리가 적용할 수 있는 것들)
+4. **브랜드 연결점** (슬로우라이프/소거 관점에서 적용 가능한 것)
 
-간결하고 명확하게 답변해주세요. 과장하지 말고 본질만 추출하세요.
+간결하고 건조하게. 과장 없이 본질만.
 """
 
         try:
