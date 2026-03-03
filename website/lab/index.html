@@ -17,8 +17,8 @@
     rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
     rel="stylesheet" />
-  <link as="style" href="../assets/css/style.css?v=58523445" rel="preload" />
-  <link href="../assets/css/style.css?v=58523445" rel="stylesheet" />
+  <link as="style" href="../assets/css/style.css?v=5fbf4a42" rel="preload" />
+  <link href="../assets/css/style.css?v=5fbf4a42" rel="stylesheet" />
   <script defer="" src="../assets/js/analytics.js"></script>
   <style>
     .lab-hero {
@@ -263,19 +263,21 @@
 
   <!-- wave-bg 추가 -->
 
+  <main class="page-main">
   <!-- wave-bg 추가 -->
-  <section class="lab-hero">
-    <p class="lab-hero-label">Experiments</p>
-    <h1 class="lab-hero-title">Lab</h1>
-    <p class="lab-hero-desc">웹 렌더링, 모션, 인터랙션 프로토타입. 완성 전 단계의 날것 실험들.</p>
-  </section>
+  <div class="about-intro container--wide">
+    <span class="section-label">LAB</span>
+    <p class="about-preamble" data-reveal>웹 렌더링, 모션, 인터랙션 프로토타입. 완성 전 단계의 날것 실험들.</p>
+  </div>
   <!-- Filter Toggle -->
-  <div class="lab-filters-container">
-    <button class="lab-filter-btn active" data-filter="all">All</button>
-    <button class="lab-filter-btn" data-filter="platform">Platform Build</button>
-    <button class="lab-filter-btn" data-filter="hair">Hair Architect</button>
-    <button class="lab-filter-btn" data-filter="kinetic">Kinematics</button>
-    <button class="lab-filter-btn" data-filter="pro">Pro System</button>
+  <div class="container--wide">
+    <nav class="practice-tabs" aria-label="Lab filters">
+      <button class="practice-tab active" data-filter="all">All</button>
+      <button class="practice-tab" data-filter="platform">Platform Build</button>
+      <button class="practice-tab" data-filter="hair">Hair Architect</button>
+      <button class="practice-tab" data-filter="kinetic">Kinematics</button>
+      <button class="practice-tab" data-filter="pro">Pro System</button>
+    </nav>
   </div>
   <div class="lab-grid" id="labGrid">
     <a class="lab-card fade-in" data-category="hair" href="demo-bob-silhouette.html">
@@ -530,7 +532,7 @@
 
     // Filtering Logic
     document.addEventListener('DOMContentLoaded', () => {
-      const filterBtns = document.querySelectorAll('.lab-filter-btn');
+      const filterBtns = document.querySelectorAll('.practice-tab[data-filter]');
       const cards = document.querySelectorAll('.lab-card');
 
       filterBtns.forEach(btn => {
@@ -561,6 +563,7 @@
       });
     });
   </script>
+  </main>
 
 <!-- COMPONENT:footer -->
 <footer class="site-footer">

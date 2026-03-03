@@ -15,7 +15,7 @@
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
   <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-  <link rel="stylesheet" href="../assets/css/style.css?v=58523445">
+  <link rel="stylesheet" href="../assets/css/style.css?v=5fbf4a42">
   <script>
     (function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
   </script>
@@ -49,18 +49,9 @@
   <main class="page-main">
 
     <div class="archive-hero container--wide">
-      <div class="archive-hero__header">
-        <span class="section-label">ARCHIVE</span>
-        <span class="archive-hero__count" id="archive-count"></span>
-      </div>
-      <span class="archive-hero__desc">에세이, 저널, 룩북을 올립니다.</span>
-    </div>
-
-    <div class="archive-filter container--wide" id="archive-filter">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="essay">Essay</button>
-      <button class="filter-btn" data-filter="journal">Journal</button>
-      <button class="filter-btn" data-filter="lookbook">Lookbook</button>
+      <span class="section-label">ARCHIVE</span>
+      <p class="about-preamble" data-reveal>에세이, 저널, 룩북을 올립니다.</p>
+      <p class="about-zero-label"><span id="archive-count"></span></p>
     </div>
 
     <!-- 리스트 -->
@@ -111,34 +102,18 @@
         var countEl = document.getElementById('archive-count');
         if (countEl) countEl.textContent = posts.length + ' pieces';
 
-        posts.forEach(function (p) {
-          var issueNum = (p.issue || '').match(/(\d{3}|\d{2}|\d{1})/);
-          issueNum = issueNum ? issueNum[0].padStart(3, '0') : '—';
+        posts.forEach(function (p, i) {
+          var num = String(i + 1).padStart(3, '0');
 
           var item = document.createElement('a');
           item.href = p.slug + '/';
           item.className = 'archive-list-item';
-          item.dataset.type = (p.type || 'essay').toLowerCase();
           item.setAttribute('data-reveal', '');
           item.innerHTML =
-            '<span class="archive-list-item__issue">' + issueNum + '</span>' +
-            '<span class="archive-list-item__type">' + (p.type || 'Essay') + '</span>' +
+            '<span class="archive-list-item__issue">' + num + '</span>' +
             '<span class="archive-list-item__title">' + p.title + '</span>' +
-            '<span class="archive-list-item__date">' + p.date + '</span>' +
-            '<span class="archive-list-item__arrow">→</span>';
+            '<span class="archive-list-item__date">' + p.date + '</span>';
           list.appendChild(item);
-        });
-
-        /* 필터 토글 */
-        document.querySelectorAll('.filter-btn').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var f = this.dataset.filter;
-            document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
-            this.classList.add('active');
-            document.querySelectorAll('.archive-list-item').forEach(function (item) {
-              item.style.display = (f === 'all' || item.dataset.type === f) ? '' : 'none';
-            });
-          });
         });
 
         /* Intersection reveal */

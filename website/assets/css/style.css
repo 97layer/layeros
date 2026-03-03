@@ -6541,98 +6541,53 @@ body.home-radical::after {
   }
 }
 
-/* ─── Entry Sequence (Cinematic Preloader) ─── */
+/* ─── Entry Sequence ─── */
 .home-preloader {
   position: fixed;
   inset: 0;
   background-color: rgba(227, 226, 224, 1.0);
-  /* var(--bg) */
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 2.0s cubic-bezier(0.4, 0, 0.2, 1), visibility 2.0s;
+}
+
+/* Phase 1: 배경이 녹으며 필드가 비쳐든다 */
+.home-preloader.is-revealing {
+  background-color: rgba(227, 226, 224, 0);
+  transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .home-preloader__logo {
   width: 64px;
   height: auto;
   opacity: 0;
-  /* 타이핑 모션 (왼쪽에서 오른쪽으로 패스 드러남) */
-  clip-path: inset(0 100% 0 0);
-  filter: blur(4px);
-  animation:
-    logo-type-emerge 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards,
-    preloader-pulse 3.6s infinite ease-in-out 1.8s;
+  transform: scale(0.96);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+  animation: logo-emerge 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@keyframes logo-type-emerge {
-  0% {
-    opacity: 0;
-    clip-path: inset(0 100% 0 0);
-    filter: blur(4px);
-    transform: translateX(-10px);
-  }
-
-  100% {
-    opacity: 0.45;
-    clip-path: inset(0 0 0 0);
-    filter: blur(0px);
-    transform: translateX(0);
-  }
+@keyframes logo-emerge {
+  0%   { opacity: 0;   transform: scale(0.96); filter: blur(8px); }
+  100% { opacity: 0.5; transform: scale(1.0);  filter: blur(0);   }
 }
 
-@keyframes preloader-pulse {
-
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: scale(1);
-    filter: blur(0px);
-  }
-
-  50% {
-    opacity: 0.55;
-    transform: scale(1.02);
-    filter: blur(0.5px);
-  }
-}
-
-@keyframes logo-dissolve {
-  0% {
-    opacity: 0.45;
-    clip-path: inset(0 0 0 0);
-    transform: scale(1) translateX(0) skewX(0deg);
-    filter: blur(0px) brightness(1);
-  }
-
-  20% {
-    opacity: 0.8;
-    transform: scale(1.05) translateX(2px) skewX(-2deg);
-    filter: blur(2px) brightness(2);
-  }
-
-  100% {
-    opacity: 0;
-    clip-path: inset(0 0 0 100%);
-    /* 오른쪽으로 타이핑하며 지워짐 */
-    transform: scale(1.2) translateX(10px) skewX(10deg);
-    filter: blur(24px) brightness(5);
-  }
-}
-
+/* Phase 2: 로고 퇴장 + 프리로더 제거 */
 body.is-loaded .home-preloader {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 2.2s var(--ease-out), visibility 2.2s;
+  transition: opacity 0.5s ease, visibility 0.5s;
 }
 
 body.is-loaded .home-preloader__logo {
-  /* 디지털 파편화: 블러, 스켈링, 광도 폭발, 비틀림을 결합한 해체 */
-  animation: logo-dissolve 1.8s var(--ease-out) forwards;
+  animation: logo-exit 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes logo-exit {
+  0%   { opacity: 0.5; transform: scale(1.0);  filter: blur(0);   }
+  100% { opacity: 0;   transform: scale(1.04); filter: blur(5px); }
 }
 
 /* ─── Home Scroll Space — field-bg 클로즈업 구간 ─── */
@@ -7000,10 +6955,10 @@ body.is-loaded .home-preloader__logo {
 
 @media (max-width: 768px) {
   .has-subnav .page-main {
-    padding-top: 100px;
+    padding-top: 108px; /* 60px nav + 44px subnav + 4px gap */
   }
   .has-subnav .art-container {
-    padding-top: calc(96px + var(--space-md));
+    padding-top: calc(104px + var(--space-md)); /* 60px nav + 44px subnav */
   }
 }
 
@@ -7011,6 +6966,12 @@ body.is-loaded .home-preloader__logo {
   .site-subnav {
     gap: var(--space-sm);
     padding: 0 var(--space-md);
+    height: 44px;
+  }
+  .site-subnav__link {
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 }
 
@@ -8732,8 +8693,8 @@ body.is-loaded .home-preloader__logo {
 
 .archive-list-item {
   display: grid;
-  grid-template-columns: 3rem 5.5rem 1fr 7.5rem 1.2rem;
-  align-items: baseline;
+  grid-template-columns: 3rem 1fr 7rem;
+  align-items: start;
   gap: var(--space-sm);
   padding: 0.9rem 0;
   border-bottom: 1px solid var(--line);
@@ -8797,11 +8758,6 @@ body.is-loaded .home-preloader__logo {
     padding: 0.8rem 0;
   }
 
-  .archive-list-item__type,
-  .archive-list-item__date {
-    display: none;
-  }
-
   .archive-list-item__title {
     font-size: 0.88rem;
   }
@@ -8855,34 +8811,35 @@ body.is-loaded .home-preloader__logo {
 /* ─── Practice Sub-Nav Tabs ─── */
 .practice-tabs {
   display: flex;
-  gap: 0.4rem;
-  margin-bottom: 2rem;
+  gap: 0;
+  margin-bottom: var(--space-lg);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
 }
 .practice-tabs::-webkit-scrollbar { display: none; }
 
 .practice-tab {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-sub);
   text-decoration: none;
-  padding: 0.4rem 0.85rem;
+  padding: 0.6rem 1.2rem 0.6rem 0;
   white-space: nowrap;
-  border: 1px solid var(--border);
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 .practice-tab.active {
   color: var(--text);
-  border-color: var(--text);
-  background: rgba(0,0,0,0.05);
+  border-bottom-color: var(--text);
 }
 .practice-tab:hover {
   color: var(--text);
-  border-color: var(--text-sub);
 }
 
 /* ─── Practice Shop Items (Directing / Product) ─── */
@@ -9436,11 +9393,11 @@ body.page-about { overflow-x: hidden; }
   /* 모바일 scroll-margin-top — nav(60px) + toc bar(28px) */
   .about-section { scroll-margin-top: 92px; }
 
-  /* 인디케이터 모바일: 헤더 하단 서브바 — nav(60px) 바로 아래 */
+  /* 인디케이터 모바일: subnav(60+44=104px) 바로 아래 */
   #about-toc-float {
     left: 0;
     right: 0;
-    top: 60px;
+    top: 104px;
     bottom: auto;
     padding: 5px 1rem;
     border-bottom: 1px solid var(--border);
@@ -9592,7 +9549,11 @@ body.page-about { overflow-x: hidden; }
   z-index: 1;
   padding-top: 120px;
 }
+.practice-section {
+  padding: 0;
+}
 .practice-section .service-hero {
+  padding-top: var(--space-md);
   padding-bottom: var(--space-md);
 }
 .practice-section-footer {
@@ -10151,4 +10112,22 @@ body.page-about { overflow-x: hidden; }
 .page-lab .wave-bg,
 body:not(.home-radical) .wave-bg {
   overflow: hidden;
+}
+
+/* ── practice: 탭 390px에서 전부 노출 ── */
+@media (max-width: 480px) {
+  .practice-tab {
+    padding: 0.6rem 0.8rem 0.6rem 0;
+    font-size: 0.65rem;
+  }
+}
+
+/* ── nav-brand: 모바일 touch target 최소 44px 확보 ── */
+@media (max-width: 768px) {
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
 }

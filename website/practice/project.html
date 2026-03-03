@@ -15,7 +15,7 @@
 <link href="https://cdn.jsdelivr.net" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="../assets/css/style.css?v=58523445" rel="stylesheet"/>
+<link href="../assets/css/style.css?v=5fbf4a42" rel="stylesheet"/>
 <script>
 (function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
 </script>
@@ -63,7 +63,7 @@
     적합한 분을 선정해 개별 연락드립니다.
   </p>
 
-  <form class="project-form" action="#" method="POST">
+  <form class="project-form" id="project-form" action="#" method="POST">
     <div class="form-field">
       <label class="form-label" for="proj-instagram">Instagram <span style="color:var(--text-sub)">(필수)</span></label>
       <input class="form-input" id="proj-instagram" type="text" name="instagram" placeholder="@username" required>
@@ -111,6 +111,30 @@
 
 </div>
 </main>
+<script>
+(function () {
+  var form = document.getElementById('project-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var ig = document.getElementById('proj-instagram').value.trim();
+    var contact = document.getElementById('proj-contact').value.trim();
+    var hair = (form.querySelector('[name=hair_length]:checked') || {}).value || '미입력';
+    var consent = (form.querySelector('[name=photo_consent]:checked') || {}).value || '미입력';
+    var message = document.getElementById('proj-message').value.trim();
+    var body = [
+      'Instagram: ' + ig,
+      '연락처: ' + (contact || '미입력'),
+      '머리 길이: ' + hair,
+      '촬영 동의: ' + consent,
+      '',
+      '헤어 고민 / 신청 동기:',
+      message || '(없음)'
+    ].join('\n');
+    window.location.href = 'mailto:hello@woohwahae.kr?subject=[Project 신청] ' + encodeURIComponent(ig) + '&body=' + encodeURIComponent(body);
+  });
+})();
+</script>
 <script defer src="../assets/js/site.js?v=2055c213"></script>
 
 <!-- COMPONENT:footer -->
