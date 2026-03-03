@@ -8029,10 +8029,9 @@ body.is-loaded .home-preloader__logo {
 
 .footer-mid {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
 /* 모든 footer 링크 — 전역 a border-bottom 상속 차단 */
@@ -8108,12 +8107,6 @@ body.is-loaded .home-preloader__logo {
 @media (max-width: 640px) {
   .site-footer {
     margin-top: 2rem;
-  }
-
-  .footer-mid {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
   }
 
   .footer-base {
@@ -9144,9 +9137,7 @@ body.page-about { overflow-x: hidden; }
   margin-bottom: var(--space-lg);
 }
 .about-declaration {
-  margin-top: var(--space-md);
-  padding-top: var(--space-sm);
-  border-top: 1px solid var(--line);
+  margin-top: var(--space-lg);
   font-size: 1rem;
   font-weight: 400;
   color: var(--text);
