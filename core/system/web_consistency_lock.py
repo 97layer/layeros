@@ -37,11 +37,12 @@ WEB_PERMISSIONS = {
 }
 
 # 어조 규칙 (practice.md Part II-8 기반)
+# 에세이 본문만 한다체. UI 카피/페이지 설명은 문체 강제 없음.
 TONE_RULES = {
-    "archive": "한다체",  # 에세이, 독백적
+    "archive": None,       # 에세이 본문은 한다체이나 페이지 단위 강제 제거
     "practice": "합니다체",  # 서비스, 고객 지향
-    "about": "합니다체",  # 소개, 공식적
-    "home": "한다체"  # 홈은 에세이 스타일
+    "about": "합니다체",    # 소개, 공식적
+    "home": None           # 문체 강제 없음
 }
 
 
@@ -168,8 +169,8 @@ def validate_changes(agent_id: str) -> bool:
                 continue
             content = file.read_text(encoding="utf-8")
 
-            if expected_tone == "한다체" and "합니다" in content:
-                logger.warning("⚠️  어조 불일치: %s에 합니다체 발견 (기대: 한다체)", file.name)
+            if expected_tone is None:
+                pass  # 문체 강제 없음
             elif expected_tone == "합니다체" and "한다." in content:
                 logger.warning("⚠️  어조 불일치: %s에 한다체 발견 (기대: 합니다체)", file.name)
 

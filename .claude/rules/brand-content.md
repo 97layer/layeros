@@ -15,7 +15,7 @@ globs: directives/practice.md,knowledge/**
 - knowledge/ 내 신규 파일은 반드시 asset_registry.json에 등록
 - 금지 파일명: temp_, untitled_, 무제
 
-## 콘텐츠 어조 분기
-- archive: 한다체 (~한다/~이다), 사색적
-- magazine: 합니다체 (~합니다/~입니다), 독자 지향
-- 기본값: archive
+## 콘텐츠 어조
+- **에세이 본문**: 한다체 (~한다/~이다)
+- **UI 카피 / 페이지 설명 / 레이블**: 문체 강제 없음, 사실 서술
+- 과장 금지, 수식어 최소화

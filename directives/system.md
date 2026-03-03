@@ -284,10 +284,10 @@ python core/system/web_consistency_lock.py --release [AGENT_ID]
 ### 어조 규칙 강제
 | 섹션 | 어조 |
 |------|------|
-| archive/* | 한다체 (에세이, 독백) |
+| archive/* | 자연체 (에세이, 독백) |
 | practice/* | 합니다체 (서비스, 고객) |
 | about/* | 합니다체 (공식 소개) |
-| home | 한다체 (에세이 스타일) |
+| home | 자연체 |
 
 **원칙**: 여러 에이전트가 동시 웹 수정 금지. AD가 비주얼 전담.
 

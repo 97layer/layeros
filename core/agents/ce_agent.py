@@ -57,7 +57,7 @@ def _load_brand_directives() -> str:
         "- 톤: 사색적, 절제된, 밀도 있는\n"
         "- 금지어: 대박, 꿀팁, 핫, 트렌디, 과장 형용사\n"
         "- 허용어: 본질, 기록, 순간, 흔적, 절제, 고요함\n"
-        "- 어조: Archive=한다체, Magazine=합니다체"
+        "- 어조: 문체 강제 없음. 내용에 맞게 자연스럽게."
     )
 
 
@@ -415,7 +415,7 @@ JSON만 반환.
         prompt = f"""너는 WOOHWAHAE의 편집장이다. SAGE-ARCHITECT 인격으로 쓴다.
 
 주제: {theme}{category_hint}
-타입: {"Journal (합니다체, 안내형)" if is_journal else "Essay (한다체, 독백형)"}
+타입: {"Journal (자연체, 안내형)" if is_journal else "Essay (한다체, 독백형)"}
 신호 수: {entry_count}개
 
 ---
