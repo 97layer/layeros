@@ -10664,6 +10664,16 @@ body.page-about { overflow-x: hidden; }
   .archive-list-item {
     padding: var(--space-md) 0;
   }
+
+  /* ── archive: 검색 모바일 full-width ── */
+  .archive-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+  }
+  .archive-search {
+    width: 100%;
+  }
 }
 
 /* ── footer: touch target — site-footer 내부는 unset으로 오버라이드됨 ── */
@@ -10756,7 +10766,6 @@ html[data-nav-dir="back"] ::view-transition-new(root) { animation-name: vt-slide
   font-size: 0.875rem;
   color: var(--text-sub);
   line-height: 1.65;
-  flex: 1;
   margin: 0;
 }
 .practice-section-card__arrow {
