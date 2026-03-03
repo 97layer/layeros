@@ -80,6 +80,16 @@ def _escape_html(text: str) -> str:
             .replace('>', '&gt;'))
 
 
+_TG_MAX = 4000  # Telegram 4096자 한도 — 여유분 확보
+
+
+def _tg(text: str, max_len: int = _TG_MAX) -> str:
+    """Telegram 메시지 길이 제한. 초과 시 말미 잘라냄."""
+    if len(text) <= max_len:
+        return text
+    return text[:max_len] + "\n…[잘림]"
+
+
 def admin_only(func):
     """ADMIN_TELEGRAM_ID만 커맨드 실행 가능"""
     async def wrapper(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -796,10 +806,7 @@ class TelegramSecretaryV6:
                 placeholder = await update.message.reply_text("💭 사유 중...")
                 try:
                     response = self.engine.chat(str(update.effective_user.id), text)
-                    escaped = _escape_html(response)
-                    if len(escaped) > 4000:
-                        escaped = escaped[:3980] + "\n\n<i>[응답이 길어 잘렸습니다]</i>"
-                    await placeholder.edit_text(escaped, parse_mode=constants.ParseMode.HTML)
+                    await placeholder.edit_text(_tg(_escape_html(response)), parse_mode=constants.ParseMode.HTML)
                 except Exception as chat_e:
                     logger.error("Chat engine error: %s", chat_e)
                     await placeholder.edit_text("죄송합니다. 응답 생성 중 오류가 발생했습니다.")
@@ -1345,7 +1352,7 @@ class TelegramSecretaryV6:
                 lines.append(f"<b>{_escape_html(theme)}</b>\n  {cnt}개 신호 | {last} | {ready}\n")
 
             lines.append("/publish [테마] 로 즉시 발행")
-            await update.message.reply_text('\n'.join(lines), parse_mode=constants.ParseMode.HTML)
+            await update.message.reply_text(_tg('\n'.join(lines)), parse_mode=constants.ParseMode.HTML)
 
         except Exception as e:
             logger.error("corpus_command error: %s", e)
