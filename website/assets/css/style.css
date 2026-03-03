@@ -73,51 +73,40 @@
   --max-content: 680px;
   --max-wide: 960px;
 
-  /* Glassmorphism System (Apple-like) */
-  --glass-surface: rgba(255, 255, 255, 0);
-  /* Create Pure Glass (Only Blur) */
-  --glass-blur: saturate(180%) blur(20px);
-  /* The secret sauce for vibrancy */
-  --glass-border: rgba(0, 0, 0, 0.05);
-  /* Ultra-subtle cut */
+  /* ━━━ 소거 (消去) — 수평성의 언어 ━━━
+     이 사이트의 시각 언어는 수평선으로 말한다.
+     박스 없음. 그림자 없음. 선 하나로 위계를 만든다. */
+  --rule: 1px solid var(--line);          /* 기본 수평선 */
+  --rule-strong: 1px solid var(--text);   /* 강조 수평선 (선택적) */
 
-  /* Transitions - Premium Feel */
-  /* Apple-style ease out expo */
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration: 0.6s;
-  /* Slower, more deliberate */
-  --duration-slow: 1.2s;
+  /* ━━━ 여백 (餘白) — 의미 있는 공백 ━━━
+     숫자가 아닌 역할로 네이밍. 쌓이는 것이 아니라 비우는 것. */
+  --gap-within: var(--space-sm);          /* 요소 내부 간격 */
+  --gap-items: var(--space-md);           /* 목록/카드 사이 */
+  --gap-section: var(--space-lg);         /* 섹션 간 */
+  --gap-breath: var(--space-xl);          /* 호흡 여백 — 큰 섹션 사이 */
+  --gap-void: var(--space-2xl);           /* 페이지 레벨 void */
+  --indent: 1.5rem;                       /* 에디토리얼 들여쓰기 */
 
-  /* Wave / Frequency System — 브랜드 파동 철학 기반 */
-  /* 기준: 인간 호흡 ~0.26Hz → 주기 3.8s */
+  /* ━━━ 모션 — 호흡 주기 기반 ━━━
+     기준: 인간 호흡 ~0.26Hz → 3.8s 주기 */
   --breath: 3.8s;
   --breath-half: 1.9s;
   --breath-quarter: 0.95s;
-  /* 여백 강제: 60%+ */
-  --whitespace-void: 60vh;
-  /* easing 계열 */
+  --duration: 0.6s;
+  --duration-slow: 1.2s;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  /* 내쉬는 곡선 */
   --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
-  /* 들이쉬고 내쉬는 곡선 */
-  --ease-wave: cubic-bezier(0.37, 0, 0.63, 1);
-  /* 파동 = 정현파에 가까운 S곡선 */
+  --ease-wave: cubic-bezier(0.37, 0, 0.63, 1);  /* 정현파 근사 S곡선 */
 
-  /* Shadow tokens — 절제된 깊이 */
+  /* ━━━ 절제된 깊이 ━━━ */
   --shadow-sm: 0 4px 30px rgba(0, 0, 0, 0.03);
-  /* 부드러운 ambient shadow */
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.06);
-  /* hover 상태, 카드 */
 
-  /* Radius tokens — 해체주의적 각진 형태 고수 */
-  --radius-none: 0;
-  --radius-sm: 0;
-  --radius-md: 0;
+  /* ━━━ 형태 — 각진 것이 원칙 ━━━ */
+  --radius: 0;
   --radius-full: 50%;
-
-  /* Margiela Stitch Specifics */
-  --stitch-size: 8px;
-  --stitch-thickness: 1px;
 }
 
 /* 시간대별 호흡 주기 변조 */
