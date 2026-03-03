@@ -9326,9 +9326,23 @@ body.page-about { overflow-x: hidden; }
   .editor-link:last-child { border-bottom: 1px solid var(--line); }
   .appendix-drawer { padding: var(--space-lg) var(--space-md); }
 
-  /* 인디케이터 모바일: 공간 부족으로 텍스트 침범 → 숨김 */
+  /* 인디케이터 모바일: 하단 전체폭 바로 전환 — 텍스트 침범 없음 */
   #about-toc-float {
-    display: none !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 6px 1rem;
+    border-top: 1px solid var(--border);
+    border-left: none;
+    font-size: 0.58rem;
+    text-align: right;
+    background: var(--bg);
+  }
+
+  /* 콘텐츠 하단 패딩 — 바 높이만큼 확보 */
+  .page-about main,
+  .page-about .container--wide {
+    padding-bottom: 2.5rem;
   }
 }
 
