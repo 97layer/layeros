@@ -8066,6 +8066,7 @@ body.is-loaded .home-preloader__logo {
   display: flex;
   align-items: center;
   gap: 1.2rem;
+  padding: 0;
 }
 
 .footer-base {
