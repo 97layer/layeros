@@ -6374,6 +6374,10 @@ body.home-radical::after {
   transform: translateY(0);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
 /* ─── Wave BG SVG (Practice, About) ─── */
 /* Wave BG Removed */
 
@@ -7612,12 +7616,26 @@ body.is-loaded .home-preloader__logo {
   color: var(--text-faint);
 }
 
+/* ─── Reading Progress Bar ─── */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0%;
+  background: var(--text-sub);
+  z-index: 300;
+  pointer-events: none;
+  transition: width 0.08s linear;
+}
+
 /* ─── About Unified ─── */
 
 .about-section {
   max-width: var(--max-content);
   margin: 0 auto;
   padding: 0 var(--space-md) 1.25rem;
+  scroll-margin-top: 96px;
 }
 
 .about-section__label {
@@ -9322,6 +9340,9 @@ body.page-about { overflow-x: hidden; }
   .editor-link:nth-child(3) { border-bottom: none; }
   .editor-link:last-child { border-bottom: 1px solid var(--line); }
   .appendix-drawer { padding: var(--space-lg) var(--space-md); }
+
+  /* 모바일 scroll-margin-top — nav(60px) + toc bar(28px) */
+  .about-section { scroll-margin-top: 92px; }
 
   /* 인디케이터 모바일: 헤더 하단 서브바 — nav(60px) 바로 아래 */
   #about-toc-float {
