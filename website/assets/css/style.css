@@ -108,6 +108,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
 }
 
 body {
@@ -6790,7 +6791,7 @@ body.is-loaded .home-hero__nav {
 
 .home-nav-item {
   display: grid;
-  grid-template-columns: 3rem 1fr auto;
+  grid-template-columns: 3rem 1fr auto auto;
   align-items: center;
   gap: 0 1rem;
   padding: 1.8rem 0;
@@ -6838,6 +6839,17 @@ body.is-loaded .home-hero__nav {
   transform: translateX(0.4rem);
 }
 
+.home-nav-item__sub {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: var(--fw-light);
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  text-align: right;
+  align-self: center;
+  transition: opacity 0.5s var(--ease-out);
+}
+
 .home-nav-item__arrow {
   font-family: var(--font-mono);
   font-size: 0.9rem;
@@ -6855,12 +6867,16 @@ body.is-loaded .home-hero__nav {
 
 @media (max-width: 640px) {
   .home-nav-item {
-    grid-template-columns: 2.5rem 1fr;
+    grid-template-columns: 2.5rem 1fr auto;
     padding: 1.5rem 0;
   }
 
   .home-nav-item__arrow {
     display: none;
+  }
+
+  .home-nav-item__sub {
+    font-size: 0.55rem;
   }
 
   .home-nav-item__name {
@@ -8893,8 +8909,9 @@ body.is-loaded .home-hero__nav {
   scrollbar-width: none;
   border-bottom: 1px solid var(--border);
 }
-/* about-intro 안에서는 practice-tabs 자체 border 제거 (about-intro가 border 담당) */
-.about-intro .practice-tabs { border-bottom: none; margin-bottom: 0; }
+/* about-intro / page-intro 안에서는 practice-tabs 자체 border 제거 (컨테이너가 border 담당) */
+.about-intro .practice-tabs,
+.page-intro .practice-tabs { border-bottom: none; margin-bottom: 0; }
 .practice-tabs::-webkit-scrollbar { display: none; }
 
 .practice-tab {
@@ -8923,7 +8940,7 @@ body.is-loaded .home-hero__nav {
 .archive-controls {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--space-md);
   flex-wrap: wrap;
 }
@@ -8940,9 +8957,10 @@ body.is-loaded .home-hero__nav {
   color: var(--text-faint);
   background: none;
   border: none;
-  padding: 0;
+  border-bottom: 0.5px solid rgba(26, 26, 26, 0.1);
+  padding: 0 0 0.15rem;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 .archive-filter__btn.is-active { color: var(--text); }
 .archive-filter__btn:hover { color: var(--text-sub); }
@@ -9530,7 +9548,7 @@ body::after {
 /* === 섹션 페이지 공통 (archive / practice / lab) === */
 .page-intro {
   padding-top: var(--space-md);
-  padding-bottom: 0;
+  padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--line);
   margin-bottom: var(--space-lg);
 }
