@@ -14,7 +14,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="/assets/css/style.css?v=d23de7eb" rel="stylesheet"/>
+<link href="/assets/css/style.css?v=109a12e5" rel="stylesheet"/>
 <style>
 /* ─────────────────────────────────────────────
    WOOSUNHO PAGE — sticky sidebar layout
@@ -243,59 +243,47 @@
 .ws-contact-link:first-child { border-top: 1px solid var(--line); }
 .ws-contact-link:hover { color: var(--text-sub); }
 
-/* ── Works grid ── */
-.wk-grid {
+/* ── Works ── */
+/* project strip */
+.wk-proj { margin-bottom: 1.6rem; }
+.wk-proj__hd {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.45rem;
 }
-.wk-card {
+.wk-proj__name {
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.wk-proj__rule { flex: 1; height: 1px; background: var(--line); }
+.wk-proj__imgs {
   display: flex;
-  align-items: flex-start;
-  gap: 1.4rem;
-  padding: 1.4rem 0;
-  border-top: 1px solid var(--line);
-  cursor: pointer;
+  gap: 0.4rem;
+  height: 160px;
 }
-.wk-card:last-child { border-bottom: 1px solid var(--line); }
-.wk-card__thumb {
-  flex: 0 0 200px;
+.wk-proj--wide .wk-proj__imgs { height: 200px; }
+/* misc masonry */
+.wk-grid { columns: 3; column-gap: 0.4rem; }
+/* shared item */
+.wk-item {
+  position: relative;
   overflow: hidden;
-  background: var(--bg-dark);
+  cursor: zoom-in;
+  flex: 1;
+  min-width: 0;
+  break-inside: avoid;
+  margin-bottom: 0.4rem;
 }
-.wk-card__thumb img {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: opacity 0.25s;
-}
-.wk-card:hover .wk-card__thumb img { opacity: 0.82; }
-.wk-card__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding-top: 0.2rem;
-}
-.wk-card__num {
-  font-family: var(--font-mono);
-  font-size: 0.54rem;
-  letter-spacing: 0.12em;
-  color: var(--text-faint);
-}
-.wk-card__name {
-  font-size: 0.82rem;
-  font-weight: 300;
-  color: var(--text);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  margin: 0;
-}
-.wk-card__count {
-  font-family: var(--font-mono);
-  font-size: 0.52rem;
-  letter-spacing: 0.08em;
-  color: var(--text-faint);
-}
+.wk-proj__imgs .wk-item { margin-bottom: 0; height: 100%; }
+.wk-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.25s; }
+.wk-grid .wk-item img { height: auto; }
+.wk-item:hover img { opacity: 0.84; }
 /* lightbox */
 .wk-lb {
   display: none;
@@ -303,15 +291,15 @@
   inset: 0;
   background: rgba(26,26,26,0.94);
   z-index: 9999;
+  cursor: zoom-out;
   align-items: center;
   justify-content: center;
 }
 .wk-lb.open { display: flex; }
-.wk-lb__img {
-  max-width: min(88vw, 960px);
-  max-height: 88vh;
+.wk-lb img {
+  max-width: min(92vw, 960px);
+  max-height: 90vh;
   object-fit: contain;
-  display: block;
 }
 .wk-lb__close {
   position: absolute;
@@ -325,31 +313,6 @@
   transition: color 0.2s;
 }
 .wk-lb__close:hover { color: rgba(255,255,255,0.8); }
-.wk-lb__nav {
-  position: absolute;
-  top: 50%; transform: translateY(-50%);
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.4);
-  cursor: pointer;
-  user-select: none;
-  padding: 1rem 1.4rem;
-  transition: color 0.2s;
-  line-height: 1;
-}
-.wk-lb__nav:hover { color: rgba(255,255,255,0.85); }
-.wk-lb__prev { left: 0.4rem; }
-.wk-lb__next { right: 0.4rem; }
-.wk-lb__caption {
-  position: absolute;
-  bottom: 1.4rem; left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.3);
-  white-space: nowrap;
-}
 
 /* ── Mobile ── */
 @media (max-width: 720px) {
@@ -384,7 +347,9 @@
 }
 
 @media (max-width: 720px) {
-  .wk-card__thumb { flex: 0 0 120px; }
+  .wk-proj__imgs { height: 120px; }
+  .wk-proj--wide .wk-proj__imgs { height: 150px; }
+  .wk-grid { columns: 2; }
 }
 @media (max-width: 480px) {
   .ws-sidebar__inner {
@@ -572,251 +537,174 @@
       </section>
 
       <!-- 작업물 -->
-<section class="ws-section">
-  <p class="ws-section-label">작업물</p>
-  <div class="wk-grid" id="wk-grid">
-<div class="wk-card" data-gallery='["/woosunho/works/01/1d4f7b2a-1ef8-4b2f-8008-bf7b87594cbf_rw_1200.jpg", "/woosunho/works/01/2069d378-6d6b-48d7-807c-19b9312b8c50_rw_1200.jpg", "/woosunho/works/01/cdc46e44-2c4d-4d4e-974b-438b0c42db8f_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/01/1d4f7b2a-1ef8-4b2f-8008-bf7b87594cbf_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">01</span>
-    
-    <span class="wk-card__count">3 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/015-malvie-magazine/malvie-01.jpg", "/woosunho/works/015-malvie-magazine/malvie-02.jpg", "/woosunho/works/015-malvie-magazine/malvie-03.jpg", "/woosunho/works/015-malvie-magazine/malvie-04.jpg", "/woosunho/works/015-malvie-magazine/malvie-05.jpg", "/woosunho/works/015-malvie-magazine/malvie-06.jpg", "/woosunho/works/015-malvie-magazine/malvie-07.jpg", "/woosunho/works/015-malvie-magazine/malvie-08.jpg", "/woosunho/works/015-malvie-magazine/malvie-09.jpg", "/woosunho/works/015-malvie-magazine/malvie-10.jpg", "/woosunho/works/015-malvie-magazine/malvie-11.jpg", "/woosunho/works/015-malvie-magazine/malvie-12.jpg", "/woosunho/works/015-malvie-magazine/malvie-13.jpg", "/woosunho/works/015-malvie-magazine/malvie-14.jpg", "/woosunho/works/015-malvie-magazine/malvie-15.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/015-malvie-magazine/malvie-01.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">15</span>
-    <p class="wk-card__name">Malvie Magazine</p>
-    <span class="wk-card__count">15 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-01.jpg", "/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-02.jpg", "/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-03.jpg", "/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-04.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-01.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">16</span>
-    <p class="wk-card__name">Milbon Da Hairshow</p>
-    <span class="wk-card__count">4 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/018-milbon-da-hairshow/6e47cbb1-f309-4982-b9a0-b0b4eaf8888f_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/018-milbon-da-hairshow/6e47cbb1-f309-4982-b9a0-b0b4eaf8888f_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">18</span>
-    <p class="wk-card__name">Milbon Da Hairshow</p>
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/02/ba1a9f11-1d27-4fe1-b937-e5b4923bfaae_rw_1200.jpg", "/woosunho/works/02/c2a411f5-2369-4c9a-9415-aa94095fa2d5_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/02/ba1a9f11-1d27-4fe1-b937-e5b4923bfaae_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">02</span>
-    
-    <span class="wk-card__count">2 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/028-milbon-da-ad/759370f5-5c08-47b5-990f-791714c812bd_rw_1200.jpg", "/woosunho/works/028-milbon-da-ad/bbb6ec5d-aad5-444d-8b5c-180de05e837a_rw_1920.jpg", "/woosunho/works/028-milbon-da-ad/bc35007a-2eb9-4019-a50c-c311750f50fd_rw_3840.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/028-milbon-da-ad/759370f5-5c08-47b5-990f-791714c812bd_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">28</span>
-    <p class="wk-card__name">Milbon Da Ad</p>
-    <span class="wk-card__count">3 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/03/0a641763-9207-4140-bfde-5e240354b091_rw_1200.jpg", "/woosunho/works/03/63702ded-7f95-4b24-bdb0-1e70bdc27790_rw_1200.jpg", "/woosunho/works/03/81f3b466-f084-4e46-8778-e75b353c230c_rw_1200.jpg", "/woosunho/works/03/c5d43b9d-7351-4155-8ad4-1059970352fa_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/03/0a641763-9207-4140-bfde-5e240354b091_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">03</span>
-    
-    <span class="wk-card__count">4 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/04/3b81f0dd-b4bc-4a25-bcc0-87fe6b2bc30e_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/04/3b81f0dd-b4bc-4a25-bcc0-87fe6b2bc30e_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">04</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/05/741c1e04-ca85-4cbf-8409-fec80beb9049_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/05/741c1e04-ca85-4cbf-8409-fec80beb9049_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">05</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/06/02590189-662f-4595-add2-fac8777f8025_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/06/02590189-662f-4595-add2-fac8777f8025_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">06</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/07/515a88ed-0da3-47d1-93df-cbfe1335372a_rw_1200.jpg", "/woosunho/works/07/d91d0324-1de1-4a73-838d-70f24070d06c_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/07/515a88ed-0da3-47d1-93df-cbfe1335372a_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">07</span>
-    
-    <span class="wk-card__count">2 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/08/4262683f-af0d-4f33-9820-8389d19dfb0b_rw_1200.jpg", "/woosunho/works/08/dcf96367-1a9e-4cbe-8dda-c5312f393fe2_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/08/4262683f-af0d-4f33-9820-8389d19dfb0b_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">08</span>
-    
-    <span class="wk-card__count">2 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/09/36e9695a-df2e-4f1a-8c3a-872c624ec9d9_rw_1200.jpg", "/woosunho/works/09/79f5d5d1-9a70-4fc1-9558-e459eb2c3546_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/09/36e9695a-df2e-4f1a-8c3a-872c624ec9d9_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">09</span>
-    
-    <span class="wk-card__count">2 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/10/11c2373e-0c9c-46a4-b366-f45e1a1727b0_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/10/11c2373e-0c9c-46a4-b366-f45e1a1727b0_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">10</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/11-khal-lude/ced6a405-b4b0-4703-b6b8-db8b76d4b7ab_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/11-khal-lude/ced6a405-b4b0-4703-b6b8-db8b76d4b7ab_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">11</span>
-    <p class="wk-card__name">Khal Lude</p>
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/12-park-jane/6ee9dc99-1d0d-4fe5-984d-ca4561171344_rw_1200.jpg", "/woosunho/works/12-park-jane/adbc8bf8-0a81-45ef-8b9b-eb2567aaf5b8_rw_1200.jpg", "/woosunho/works/12-park-jane/ee7e2a22-1a55-4fe1-8f6c-348d512cab06_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/12-park-jane/6ee9dc99-1d0d-4fe5-984d-ca4561171344_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">12</span>
-    <p class="wk-card__name">Park Jane</p>
-    <span class="wk-card__count">3 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/13-milbon/14d64542-6eec-4940-8844-470c14f2d3ea_rw_1200.jpg", "/woosunho/works/13-milbon/4c8cb57f-8c76-43e7-9d34-bd407b299684_rw_1200.jpg", "/woosunho/works/13-milbon/d71938b0-3db2-42a3-a375-055db0d50e03_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/13-milbon/14d64542-6eec-4940-8844-470c14f2d3ea_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">13</span>
-    <p class="wk-card__name">Milbon</p>
-    <span class="wk-card__count">3 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/14-nike-x-over-the-pitch/a15fa07e-c72d-4638-a9d8-9891762ab607_rw_1200.jpg", "/woosunho/works/14-nike-x-over-the-pitch/bb0e545e-ce21-46c5-821a-752fc62115c1_rw_1200.jpg", "/woosunho/works/14-nike-x-over-the-pitch/d6ac4c55-cb59-4ecb-bfd4-8406efdc9b4b_rw_1200.jpg", "/woosunho/works/14-nike-x-over-the-pitch/e55b3af8-c3be-4945-9978-ccaba8f7bfe8_rw_1200.jpg", "/woosunho/works/14-nike-x-over-the-pitch/e81fa9bf-696b-4719-b557-136aeb0ba1be_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/14-nike-x-over-the-pitch/a15fa07e-c72d-4638-a9d8-9891762ab607_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">14</span>
-    <p class="wk-card__name">Nike × Over The Pitch</p>
-    <span class="wk-card__count">5 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/17-idws/0297535e-288c-4985-93ea-5423b68dd550_rw_1200.jpg", "/woosunho/works/17-idws/f3eb1c12-2764-4eda-8897-f551e7c187d8_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/17-idws/0297535e-288c-4985-93ea-5423b68dd550_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">17</span>
-    <p class="wk-card__name">Idws</p>
-    <span class="wk-card__count">2 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/19-fashionweek/2b04643e-8ba7-49eb-bd08-d5ab04a23699_rw_1200.jpg", "/woosunho/works/19-fashionweek/a8a67a60-baeb-46b5-b83c-213510a0e334_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/19-fashionweek/2b04643e-8ba7-49eb-bd08-d5ab04a23699_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">19</span>
-    <p class="wk-card__name">Fashionweek</p>
-    <span class="wk-card__count">2 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/20/751b152e-4f95-430f-8018-5ecea452ba14_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/20/751b152e-4f95-430f-8018-5ecea452ba14_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">20</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/21/62688d9b-dcb8-4505-9ca2-9550e796bc4c_rw_1200.jpg", "/woosunho/works/21/a9d090ad-aae4-49f8-b3c3-25cc34e2b96b_rw_1200.jpg", "/woosunho/works/21/d6e55017-a328-48f2-a9b3-43c3c7d52840_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/21/62688d9b-dcb8-4505-9ca2-9550e796bc4c_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">21</span>
-    
-    <span class="wk-card__count">3 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/22/db98c79e-cea8-46b3-9aa1-8f3d11421823_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/22/db98c79e-cea8-46b3-9aa1-8f3d11421823_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">22</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/23/0e8d1de8-9be2-480e-ba35-09d3c0bdc002_rw_1200.jpg", "/woosunho/works/23/1a37bbec-2884-4b74-847a-2aab03f075dd_rw_1200.jpg", "/woosunho/works/23/2f1afcf0-04a4-4a26-99d4-bac9d5ec185e_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/23/0e8d1de8-9be2-480e-ba35-09d3c0bdc002_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">23</span>
-    
-    <span class="wk-card__count">3 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/24/67fadb17-493a-4678-858d-2df0ca735a7e_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/24/67fadb17-493a-4678-858d-2df0ca735a7e_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">24</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/25/10a92caa-be03-4853-89d1-18a2a4b08863_rw_1200.jpg", "/woosunho/works/25/23332642-34be-4aee-8364-374c7e79a914_rw_1200.jpg", "/woosunho/works/25/43ed30ac-986f-47e0-adf9-50b19452af43_rw_1200.jpg", "/woosunho/works/25/5083208e-cb28-4303-9fb5-064f34d7b9ba_rw_1200.jpg", "/woosunho/works/25/557b5244-581f-40c5-9845-73365d36c59d_rw_1200.jpg", "/woosunho/works/25/a81f8537-0dc5-4ba1-9cc9-d7de217e022d_rw_1200.jpg", "/woosunho/works/25/c5524eab-ee25-4861-ad05-f43781185d68_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/25/10a92caa-be03-4853-89d1-18a2a4b08863_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">25</span>
-    
-    <span class="wk-card__count">7 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/26/29905dae-d208-416e-89e6-535176c79eeb_rw_1200.jpg", "/woosunho/works/26/a2f29bca-1f81-4300-86b3-13cd18ee4156_rw_1200.jpg", "/woosunho/works/26/a899cc56-b151-4f34-ae5b-f551d3783960_rw_1200.jpg", "/woosunho/works/26/caed52ce-f62e-4d4a-9a4d-10c85302c299_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/26/29905dae-d208-416e-89e6-535176c79eeb_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">26</span>
-    
-    <span class="wk-card__count">4 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/27/e27c3444-7194-4b6e-90b9-380fedbd309d_rw_1200.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/27/e27c3444-7194-4b6e-90b9-380fedbd309d_rw_1200.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">27</span>
-    
-    <span class="wk-card__count">1 image</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/29/3130008e-e949-4be8-b13e-d8701453ccb3_rw_1920.jpg", "/woosunho/works/29/476abcb4-9f83-4ca0-9229-66fd5d323faa_rw_1920.jpg", "/woosunho/works/29/65aa3f93-9a9d-4ff5-84d7-8aabefca300e_rw_1920.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/29/3130008e-e949-4be8-b13e-d8701453ccb3_rw_1920.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">29</span>
-    
-    <span class="wk-card__count">3 images</span>
-  </div>
-</div>
-<div class="wk-card" data-gallery='["/woosunho/works/30/0221676c-6e44-4380-a100-59beb81f5800_rw_3840.jpg", "/woosunho/works/30/2bb3398c-1065-4042-bce0-29c52f380740.jpg", "/woosunho/works/30/9e41c190-3e76-4d47-b911-11866ff2deb2_rw_1920.jpg", "/woosunho/works/30/e12b1ab0-818e-4232-a9b7-3272acc106f5_rw_3840.jpg", "/woosunho/works/30/ef85a2ed-fc9c-4743-9476-c979d1055d79_rw_3840.jpg"]'>
-  <div class="wk-card__thumb"><img src="/woosunho/works/30/0221676c-6e44-4380-a100-59beb81f5800_rw_3840.jpg" alt="" loading="lazy"></div>
-  <div class="wk-card__meta">
-    <span class="wk-card__num">30</span>
-    
-    <span class="wk-card__count">5 images</span>
-  </div>
-</div>
-  </div>
-</section>
+      <section class="ws-section">
+        <p class="ws-section-label">작업물</p>
+
+        <!-- MALVIE Magazine -->
+        <div class="wk-proj wk-proj--wide">
+          <div class="wk-proj__hd"><span class="wk-proj__name">MALVIE Magazine vol.42</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-01.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-01.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-02.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-02.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-03.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-03.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-04.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-04.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-05.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-05.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-06.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-06.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-07.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-07.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-08.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-08.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-09.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-09.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-10.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-10.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-11.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-11.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-12.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-12.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-13.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-13.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-14.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-14.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/015-malvie-magazine/malvie-15.jpg"><img src="/woosunho/works/015-malvie-magazine/malvie-15.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Milbon DA Hair Show (016) -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Milbon DA Link — Seoul</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-01.jpg"><img src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-01.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-02.jpg"><img src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-02.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-03.jpg"><img src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-03.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-04.jpg"><img src="/woosunho/works/016-milbon-da-hairshow/milbon-hairshow-04.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+                <!-- Nike × Over the Pitch -->
+        <div class="wk-proj wk-proj--wide">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Nike × Over the Pitch</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/14-nike-x-over-the-pitch/a15fa07e-c72d-4638-a9d8-9891762ab607_rw_1200.jpg"><img src="/woosunho/works/14-nike-x-over-the-pitch/a15fa07e-c72d-4638-a9d8-9891762ab607_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/14-nike-x-over-the-pitch/bb0e545e-ce21-46c5-821a-752fc62115c1_rw_1200.jpg"><img src="/woosunho/works/14-nike-x-over-the-pitch/bb0e545e-ce21-46c5-821a-752fc62115c1_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/14-nike-x-over-the-pitch/d6ac4c55-cb59-4ecb-bfd4-8406efdc9b4b_rw_1200.jpg"><img src="/woosunho/works/14-nike-x-over-the-pitch/d6ac4c55-cb59-4ecb-bfd4-8406efdc9b4b_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/14-nike-x-over-the-pitch/e55b3af8-c3be-4945-9978-ccaba8f7bfe8_rw_1200.jpg"><img src="/woosunho/works/14-nike-x-over-the-pitch/e55b3af8-c3be-4945-9978-ccaba8f7bfe8_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/14-nike-x-over-the-pitch/e81fa9bf-696b-4719-b557-136aeb0ba1be_rw_1200.jpg"><img src="/woosunho/works/14-nike-x-over-the-pitch/e81fa9bf-696b-4719-b557-136aeb0ba1be_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Milbon DA AD -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Milbon DA AD — Tokyo</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/028-milbon-da-ad/bc35007a-2eb9-4019-a50c-c311750f50fd_rw_3840.jpg"><img src="/woosunho/works/028-milbon-da-ad/bc35007a-2eb9-4019-a50c-c311750f50fd_rw_3840.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/028-milbon-da-ad/bbb6ec5d-aad5-444d-8b5c-180de05e837a_rw_1920.jpg"><img src="/woosunho/works/028-milbon-da-ad/bbb6ec5d-aad5-444d-8b5c-180de05e837a_rw_1920.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/028-milbon-da-ad/759370f5-5c08-47b5-990f-791714c812bd_rw_1200.jpg"><img src="/woosunho/works/028-milbon-da-ad/759370f5-5c08-47b5-990f-791714c812bd_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Seoul Fashion Week -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Seoul Fashion Week — UL:KIN</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/19-fashionweek/2b04643e-8ba7-49eb-bd08-d5ab04a23699_rw_1200.jpg"><img src="/woosunho/works/19-fashionweek/2b04643e-8ba7-49eb-bd08-d5ab04a23699_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/19-fashionweek/a8a67a60-baeb-46b5-b83c-213510a0e334_rw_1200.jpg"><img src="/woosunho/works/19-fashionweek/a8a67a60-baeb-46b5-b83c-213510a0e334_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- IDWS -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">IDWS</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/17-idws/0297535e-288c-4985-93ea-5423b68dd550_rw_1200.jpg"><img src="/woosunho/works/17-idws/0297535e-288c-4985-93ea-5423b68dd550_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/17-idws/f3eb1c12-2764-4eda-8897-f551e7c187d8_rw_1200.jpg"><img src="/woosunho/works/17-idws/f3eb1c12-2764-4eda-8897-f551e7c187d8_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Park Jane -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Park Jane</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/12-park-jane/6ee9dc99-1d0d-4fe5-984d-ca4561171344_rw_1200.jpg"><img src="/woosunho/works/12-park-jane/6ee9dc99-1d0d-4fe5-984d-ca4561171344_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/12-park-jane/adbc8bf8-0a81-45ef-8b9b-eb2567aaf5b8_rw_1200.jpg"><img src="/woosunho/works/12-park-jane/adbc8bf8-0a81-45ef-8b9b-eb2567aaf5b8_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/12-park-jane/ee7e2a22-1a55-4fe1-8f6c-348d512cab06_rw_1200.jpg"><img src="/woosunho/works/12-park-jane/ee7e2a22-1a55-4fe1-8f6c-348d512cab06_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Milbon -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Milbon</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs">
+            <div class="wk-item" data-src="/woosunho/works/13-milbon/14d64542-6eec-4940-8844-470c14f2d3ea_rw_1200.jpg"><img src="/woosunho/works/13-milbon/14d64542-6eec-4940-8844-470c14f2d3ea_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/13-milbon/4c8cb57f-8c76-43e7-9d34-bd407b299684_rw_1200.jpg"><img src="/woosunho/works/13-milbon/4c8cb57f-8c76-43e7-9d34-bd407b299684_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/13-milbon/d71938b0-3db2-42a3-a375-055db0d50e03_rw_1200.jpg"><img src="/woosunho/works/13-milbon/d71938b0-3db2-42a3-a375-055db0d50e03_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Khal Lude -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Khal Lude</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs" style="max-width:36%">
+            <div class="wk-item" data-src="/woosunho/works/11-khal-lude/ced6a405-b4b0-4703-b6b8-db8b76d4b7ab_rw_1200.jpg"><img src="/woosunho/works/11-khal-lude/ced6a405-b4b0-4703-b6b8-db8b76d4b7ab_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Milbon DA Hair Show -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">Milbon DA Hair Show</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-proj__imgs" style="max-width:36%">
+            <div class="wk-item" data-src="/woosunho/works/018-milbon-da-hairshow/6e47cbb1-f309-4982-b9a0-b0b4eaf8888f_rw_1200.jpg"><img src="/woosunho/works/018-milbon-da-hairshow/6e47cbb1-f309-4982-b9a0-b0b4eaf8888f_rw_1200.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- 기타 작업 -->
+        <div class="wk-proj">
+          <div class="wk-proj__hd"><span class="wk-proj__name">작업</span><span class="wk-proj__rule"></span></div>
+          <div class="wk-grid">
+            <div class="wk-item" data-src="/woosunho/works/01/1d4f7b2a-1ef8-4b2f-8008-bf7b87594cbf_rw_1200.jpg"><img src="/woosunho/works/01/1d4f7b2a-1ef8-4b2f-8008-bf7b87594cbf_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/01/2069d378-6d6b-48d7-807c-19b9312b8c50_rw_1200.jpg"><img src="/woosunho/works/01/2069d378-6d6b-48d7-807c-19b9312b8c50_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/01/cdc46e44-2c4d-4d4e-974b-438b0c42db8f_rw_1200.jpg"><img src="/woosunho/works/01/cdc46e44-2c4d-4d4e-974b-438b0c42db8f_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/02/ba1a9f11-1d27-4fe1-b937-e5b4923bfaae_rw_1200.jpg"><img src="/woosunho/works/02/ba1a9f11-1d27-4fe1-b937-e5b4923bfaae_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/02/c2a411f5-2369-4c9a-9415-aa94095fa2d5_rw_1200.jpg"><img src="/woosunho/works/02/c2a411f5-2369-4c9a-9415-aa94095fa2d5_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/03/0a641763-9207-4140-bfde-5e240354b091_rw_1200.jpg"><img src="/woosunho/works/03/0a641763-9207-4140-bfde-5e240354b091_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/03/63702ded-7f95-4b24-bdb0-1e70bdc27790_rw_1200.jpg"><img src="/woosunho/works/03/63702ded-7f95-4b24-bdb0-1e70bdc27790_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/03/81f3b466-f084-4e46-8778-e75b353c230c_rw_1200.jpg"><img src="/woosunho/works/03/81f3b466-f084-4e46-8778-e75b353c230c_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/03/c5d43b9d-7351-4155-8ad4-1059970352fa_rw_1200.jpg"><img src="/woosunho/works/03/c5d43b9d-7351-4155-8ad4-1059970352fa_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/04/3b81f0dd-b4bc-4a25-bcc0-87fe6b2bc30e_rw_1200.jpg"><img src="/woosunho/works/04/3b81f0dd-b4bc-4a25-bcc0-87fe6b2bc30e_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/05/741c1e04-ca85-4cbf-8409-fec80beb9049_rw_1200.jpg"><img src="/woosunho/works/05/741c1e04-ca85-4cbf-8409-fec80beb9049_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/06/02590189-662f-4595-add2-fac8777f8025_rw_1200.jpg"><img src="/woosunho/works/06/02590189-662f-4595-add2-fac8777f8025_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/07/515a88ed-0da3-47d1-93df-cbfe1335372a_rw_1200.jpg"><img src="/woosunho/works/07/515a88ed-0da3-47d1-93df-cbfe1335372a_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/07/d91d0324-1de1-4a73-838d-70f24070d06c_rw_1200.jpg"><img src="/woosunho/works/07/d91d0324-1de1-4a73-838d-70f24070d06c_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/08/4262683f-af0d-4f33-9820-8389d19dfb0b_rw_1200.jpg"><img src="/woosunho/works/08/4262683f-af0d-4f33-9820-8389d19dfb0b_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/08/dcf96367-1a9e-4cbe-8dda-c5312f393fe2_rw_1200.jpg"><img src="/woosunho/works/08/dcf96367-1a9e-4cbe-8dda-c5312f393fe2_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/09/36e9695a-df2e-4f1a-8c3a-872c624ec9d9_rw_1200.jpg"><img src="/woosunho/works/09/36e9695a-df2e-4f1a-8c3a-872c624ec9d9_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/09/79f5d5d1-9a70-4fc1-9558-e459eb2c3546_rw_1200.jpg"><img src="/woosunho/works/09/79f5d5d1-9a70-4fc1-9558-e459eb2c3546_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/10/11c2373e-0c9c-46a4-b366-f45e1a1727b0_rw_1200.jpg"><img src="/woosunho/works/10/11c2373e-0c9c-46a4-b366-f45e1a1727b0_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/20/751b152e-4f95-430f-8018-5ecea452ba14_rw_1200.jpg"><img src="/woosunho/works/20/751b152e-4f95-430f-8018-5ecea452ba14_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/21/62688d9b-dcb8-4505-9ca2-9550e796bc4c_rw_1200.jpg"><img src="/woosunho/works/21/62688d9b-dcb8-4505-9ca2-9550e796bc4c_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/21/a9d090ad-aae4-49f8-b3c3-25cc34e2b96b_rw_1200.jpg"><img src="/woosunho/works/21/a9d090ad-aae4-49f8-b3c3-25cc34e2b96b_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/21/d6e55017-a328-48f2-a9b3-43c3c7d52840_rw_1200.jpg"><img src="/woosunho/works/21/d6e55017-a328-48f2-a9b3-43c3c7d52840_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/22/db98c79e-cea8-46b3-9aa1-8f3d11421823_rw_1200.jpg"><img src="/woosunho/works/22/db98c79e-cea8-46b3-9aa1-8f3d11421823_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/23/0e8d1de8-9be2-480e-ba35-09d3c0bdc002_rw_1200.jpg"><img src="/woosunho/works/23/0e8d1de8-9be2-480e-ba35-09d3c0bdc002_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/23/1a37bbec-2884-4b74-847a-2aab03f075dd_rw_1200.jpg"><img src="/woosunho/works/23/1a37bbec-2884-4b74-847a-2aab03f075dd_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/23/2f1afcf0-04a4-4a26-99d4-bac9d5ec185e_rw_1200.jpg"><img src="/woosunho/works/23/2f1afcf0-04a4-4a26-99d4-bac9d5ec185e_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/24/67fadb17-493a-4678-858d-2df0ca735a7e_rw_1200.jpg"><img src="/woosunho/works/24/67fadb17-493a-4678-858d-2df0ca735a7e_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/25/10a92caa-be03-4853-89d1-18a2a4b08863_rw_1200.jpg"><img src="/woosunho/works/25/10a92caa-be03-4853-89d1-18a2a4b08863_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/25/23332642-34be-4aee-8364-374c7e79a914_rw_1200.jpg"><img src="/woosunho/works/25/23332642-34be-4aee-8364-374c7e79a914_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/25/43ed30ac-986f-47e0-adf9-50b19452af43_rw_1200.jpg"><img src="/woosunho/works/25/43ed30ac-986f-47e0-adf9-50b19452af43_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/25/5083208e-cb28-4303-9fb5-064f34d7b9ba_rw_1200.jpg"><img src="/woosunho/works/25/5083208e-cb28-4303-9fb5-064f34d7b9ba_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/25/557b5244-581f-40c5-9845-73365d36c59d_rw_1200.jpg"><img src="/woosunho/works/25/557b5244-581f-40c5-9845-73365d36c59d_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/25/a81f8537-0dc5-4ba1-9cc9-d7de217e022d_rw_1200.jpg"><img src="/woosunho/works/25/a81f8537-0dc5-4ba1-9cc9-d7de217e022d_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/25/c5524eab-ee25-4861-ad05-f43781185d68_rw_1200.jpg"><img src="/woosunho/works/25/c5524eab-ee25-4861-ad05-f43781185d68_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/26/29905dae-d208-416e-89e6-535176c79eeb_rw_1200.jpg"><img src="/woosunho/works/26/29905dae-d208-416e-89e6-535176c79eeb_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/26/a2f29bca-1f81-4300-86b3-13cd18ee4156_rw_1200.jpg"><img src="/woosunho/works/26/a2f29bca-1f81-4300-86b3-13cd18ee4156_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/26/a899cc56-b151-4f34-ae5b-f551d3783960_rw_1200.jpg"><img src="/woosunho/works/26/a899cc56-b151-4f34-ae5b-f551d3783960_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/26/caed52ce-f62e-4d4a-9a4d-10c85302c299_rw_1200.jpg"><img src="/woosunho/works/26/caed52ce-f62e-4d4a-9a4d-10c85302c299_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/27/e27c3444-7194-4b6e-90b9-380fedbd309d_rw_1200.jpg"><img src="/woosunho/works/27/e27c3444-7194-4b6e-90b9-380fedbd309d_rw_1200.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/29/3130008e-e949-4be8-b13e-d8701453ccb3_rw_1920.jpg"><img src="/woosunho/works/29/3130008e-e949-4be8-b13e-d8701453ccb3_rw_1920.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/29/476abcb4-9f83-4ca0-9229-66fd5d323faa_rw_1920.jpg"><img src="/woosunho/works/29/476abcb4-9f83-4ca0-9229-66fd5d323faa_rw_1920.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/29/65aa3f93-9a9d-4ff5-84d7-8aabefca300e_rw_1920.jpg"><img src="/woosunho/works/29/65aa3f93-9a9d-4ff5-84d7-8aabefca300e_rw_1920.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/30/0221676c-6e44-4380-a100-59beb81f5800_rw_3840.jpg"><img src="/woosunho/works/30/0221676c-6e44-4380-a100-59beb81f5800_rw_3840.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/30/2bb3398c-1065-4042-bce0-29c52f380740.jpg"><img src="/woosunho/works/30/2bb3398c-1065-4042-bce0-29c52f380740.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/30/9e41c190-3e76-4d47-b911-11866ff2deb2_rw_1920.jpg"><img src="/woosunho/works/30/9e41c190-3e76-4d47-b911-11866ff2deb2_rw_1920.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/30/e12b1ab0-818e-4232-a9b7-3272acc106f5_rw_3840.jpg"><img src="/woosunho/works/30/e12b1ab0-818e-4232-a9b7-3272acc106f5_rw_3840.jpg" alt="" loading="lazy"></div>
+            <div class="wk-item" data-src="/woosunho/works/30/ef85a2ed-fc9c-4743-9476-c979d1055d79_rw_3840.jpg"><img src="/woosunho/works/30/ef85a2ed-fc9c-4743-9476-c979d1055d79_rw_3840.jpg" alt="" loading="lazy"></div>
+          </div>
+        </div>
+
+      </section>
 
       <!-- 연락 -->
       <section class="ws-section">
@@ -868,74 +756,21 @@
 
 <script defer src="/assets/js/site.js"></script>
 <script>
-// Lightbox — folder gallery mode
+// Lightbox
 (function () {
   var lb = document.createElement('div');
   lb.className = 'wk-lb';
-  lb.innerHTML = [
-    '<span class="wk-lb__close">ESC</span>',
-    '<span class="wk-lb__nav wk-lb__prev">&#8592;</span>',
-    '<img class="wk-lb__img" src="" alt="">',
-    '<span class="wk-lb__nav wk-lb__next">&#8594;</span>',
-    '<span class="wk-lb__caption"></span>'
-  ].join('');
+  lb.innerHTML = '<span class="wk-lb__close">ESC</span><img src="" alt="">';
   document.body.appendChild(lb);
-
-  var lbImg   = lb.querySelector('.wk-lb__img');
-  var caption = lb.querySelector('.wk-lb__caption');
-  var gallery = [];   // current folder's srcs
-  var idx     = 0;
-
-  function show(i) {
-    idx = (i + gallery.length) % gallery.length;
-    lbImg.src = gallery[idx];
-    if (gallery.length > 1) {
-      caption.textContent = (idx + 1) + ' / ' + gallery.length;
-    } else {
-      caption.textContent = '';
-    }
-  }
-
-  function open(srcs, startIdx) {
-    gallery = srcs;
-    lb.classList.add('open');
-    show(startIdx || 0);
-  }
-
-  function close() {
-    lb.classList.remove('open');
-    lbImg.src = '';
-    gallery = [];
-  }
-
-  document.addEventListener('click', function (e) {
-    var item = e.target.closest('.wk-card[data-gallery]');
-    if (item) {
-      try {
-        var srcs = JSON.parse(item.dataset.gallery);
-        open(srcs, 0);
-      } catch (err) {}
-    }
+  var lbImg = lb.querySelector('img');
+  function open(src) { lbImg.src = src; lb.classList.add('open'); }
+  function close() { lb.classList.remove('open'); lbImg.src = ''; }
+  document.querySelectorAll('.wk-item').forEach(function (el) {
+    el.addEventListener('click', function () { open(el.dataset.src); });
   });
-
-  lb.querySelector('.wk-lb__prev').addEventListener('click', function (e) {
-    e.stopPropagation(); show(idx - 1);
-  });
-  lb.querySelector('.wk-lb__next').addEventListener('click', function (e) {
-    e.stopPropagation(); show(idx + 1);
-  });
-  lb.querySelector('.wk-lb__close').addEventListener('click', function (e) {
-    e.stopPropagation(); close();
-  });
-  lb.addEventListener('click', function (e) {
-    if (e.target === lb) close();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape')     close();
-    if (e.key === 'ArrowLeft')  show(idx - 1);
-    if (e.key === 'ArrowRight') show(idx + 1);
-  });
+  lb.addEventListener('click', function (e) { if (e.target !== lbImg) close(); });
+  lb.querySelector('.wk-lb__close').addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 })();
 </script>
 <script>
