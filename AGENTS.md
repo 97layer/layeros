@@ -1,0 +1,115 @@
+쓸때없는  공감금지다 능동과 비판적으로 사고해라
+
+# AGENTS.md — Runtime Guardrail SSOT
+
+작업 시작 전 이 문서를 기준으로 세션을 고정한다. 이 문서는 실행 전 체크리스트와 금지 규칙의 단일 기준이다.
+
+## Mandatory Read Order
+1. `directives/the_origin.md`
+2. `directives/sage_architect.md`
+3. `directives/practice.md`
+4. `directives/system.md`
+5. `CLAUDE.md`
+
+## Mandatory Startup
+1. `bash core/scripts/session_bootstrap.sh`
+2. 출력이 `READY`인지 확인
+3. `BLOCKED`면 누락 항목을 복구한 뒤 재실행
+
+## Required Skills (must exist)
+1. `/Users/97layer/.codex/skills/playwright/SKILL.md`
+2. `/Users/97layer/.codex/skills/screenshot/SKILL.md`
+3. `/Users/97layer/.codex/skills/.system/skill-creator/SKILL.md`
+4. `/Users/97layer/.codex/skills/.system/skill-installer/SKILL.md`
+
+## Skill Trigger Rule
+1. 브라우저 자동화/시각 검증/실제 렌더 점검 작업은 `playwright` 사용.
+2. 시스템 캡처 요청은 `screenshot` 사용.
+3. 스킬 생성/설치 요청은 `.system` 스킬 사용.
+4. 태스크가 스킬 설명과 일치하면 해당 스킬을 반드시 사용.
+
+## Web Work Lock Protocol
+1. 시작: `python3 core/system/web_consistency_lock.py --acquire AGENT --task "..."`
+2. 검증: `python3 core/system/web_consistency_lock.py --validate AGENT`
+3. 종료: `python3 core/system/web_consistency_lock.py --release AGENT`
+4. 락 없이 웹 파일 수정 금지.
+
+## Web Contract
+1. 공개 HTML은 `head/nav/footer` 컴포넌트 규약 유지.
+2. 인라인 스타일 및 페이지 내부 `<style>`는 공통 CSS로 이관.
+3. 네비/푸터 하드코딩 분기 금지.
+4. 공통 인터랙션 로직은 단일 JS 소스에서 유지.
+
+## Hard Bans
+1. 규약 파일을 읽지 않고 구현 시작 금지.
+2. `web_work_lock` 무시 금지.
+3. 검증 없이 배포/반영 금지.
+4. 임시 파일/임시 이름으로 루트 오염 금지.
+
+## Release Gate (Default)
+1. `python3 core/system/visual_validator.py` 에러 0.
+2. `python3 core/scripts/build.py --components --bust` 성공.
+3. 주요 경로 렌더/핵심 인터랙션 스모크 통과.
+
+## MCP Trigger Rule (Mandatory)
+1. 비자명 작업은 시작 전에 `plan-council` 트리거 검토.
+2. 구조적 트레이드오프/비가역 변경 전 `sequential-thinking` 최소 1회 실행.
+3. 외부 라이브러리/버전 의존 이슈는 `context7` 우선 조회.
+4. 노트북 기반 장기 맥락 필요 시 `notebooklm` 사용.
+5. 도구 트리거 SSOT는 `.claude/rules/proactive-tools.md`를 따른다.
+
+## Communication Consistency (Mandatory)
+1. 사용자 응답 기본 톤은 `존댓말(합니다체)`.
+2. 과장/추측/애매한 표현을 금지하고 사실-근거 순서로 답변한다.
+3. 모델/환경 상태가 불안정하면 먼저 리스크와 영향 범위를 명시한다.
+
+## Anti-Hallucination Protocol (Mandatory)
+1. 근거 없으면 단정하지 않는다.
+2. 검증 불가 사실은 `모름/검증 필요`로 처리한다.
+3. 사실 응답 전 `python3 core/system/evidence_guard.py --check`를 유지한다.
+4. 비자명 사실/판단은 `knowledge/system/evidence_log.jsonl`에 남긴다.
+
+## Plan Council Protocol (Mandatory)
+1. 비자명 구현은 `core/scripts/plan_dispatch.sh "<요청>" --auto`를 기본 진입으로 사용.
+2. 수동 협의는 `core/system/plan_council.py --task "<요청>" --mode preflight`로 수행.
+3. 협의 결과의 `steps/risks/checks`를 구현 전에 공유하고 따르며, 실패 시 하드스톱한다.
+4. 결과 로그는 `knowledge/system/plan_council_reports.jsonl`에 남겨야 한다.
+5. 협의 공유 시 `timestamp + models_used + status + reliability + gate`를 항상 포함한다.
+6. `exit 3 (degraded/caution)`는 명시적 승인 전 구현 금지.
+
+## Chat Alias Protocol (Mandatory)
+1. `/plan <요청>` 입력은 내부적으로 `bash core/scripts/plan_dispatch.sh "<요청>" --manual`에 매핑한다.
+2. `/plan-council <요청>`은 `python3 core/system/plan_council.py --task "<요청>" --mode preflight`를 호출한다.
+
+## Model Role Routing (Mandatory)
+1. `Claude`: 기획/리스크 설계
+2. `Codex`: 코드 생성/수정
+3. `Gemini`: 검증/비평
+4. 역할 역전 금지: Plan 없이 Code 시작 금지, Verify 없는 고위험 반영 금지.
+
+## Filesystem Hard Rules (Mandatory)
+
+파일 생성 전 반드시 이 규칙을 따른다. 위반 시 커밋 훅이 차단한다.
+
+### 루트(/) 허용 파일 — 이 외 절대 생성 금지
+- `CLAUDE.md`, `README.md`, `AGENTS.md`, `.gitignore`, `.eleventy.js` 계열 dotfile
+
+### 허용 경로 매핑
+| 파일 유형 | 허용 경로 |
+|-----------|-----------|
+| Python (.py) | `core/agents/` `core/system/` `core/scripts/` `core/tests/` `core/admin/` |
+| Markdown (.md) | `directives/` `knowledge/` |
+| HTML/CSS/JS | `website/` |
+| JSON (데이터) | `knowledge/system/` `knowledge/signals/` `knowledge/corpus/` `knowledge/service/` |
+| 설정 파일 | `.claude/` `.github/` |
+
+### 절대 생성 금지
+- `src/` — Eleventy 스캐폴드 경로. 현재 프로젝트는 `website/` 직접 편집 방식
+- `package.json`, `package-lock.json` — 루트 금지
+- `woohwahae_cms.db`, `*.db` — DB 파일 로컬 생성 금지 (VM이 source of truth)
+- `output/`, `.local_node/`, `.playwright-cli/` — 빌드/캐시 아티팩트, gitignore 대상
+- `gemini_cli.py` 등 임시 스크립트를 루트에 생성 금지
+
+### archive/ 명명 규칙
+`website/archive/` 하위 파일은 반드시 `index.html` 또는 `index.json`만 허용.
+proto_*.html, _gen-*.html 등 프로토타입은 `website/lab/`에 생성.

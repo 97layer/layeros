@@ -73,7 +73,7 @@ FORBIDDEN_NAMES = [
 ]
 
 # 루트 허용 파일
-ROOT_ALLOWED = ["CLAUDE.md", "README.md", ".gitignore", ".env", ".ai_rules"]
+ROOT_ALLOWED = ["CLAUDE.md", "README.md", "AGENTS.md", ".gitignore", ".env", ".ai_rules"]
 
 
 def validate_write(path: Path) -> Tuple[bool, str]:
