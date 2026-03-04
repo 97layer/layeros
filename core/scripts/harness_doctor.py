@@ -15,6 +15,7 @@ import argparse
 import importlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass, asdict
@@ -32,8 +33,17 @@ REQUIRED_FILES = (
     "core/scripts/harness_status.sh",
     "core/scripts/run_web_rebuild_prep.sh",
     "core/scripts/web_rebuild_prep.py",
+    "core/scripts/pipeline_resilience_smoke.py",
+    "core/scripts/pipeline_resilience_runner.sh",
+    "core/scripts/pipeline_resilience_install_cron.sh",
+    "core/scripts/hooks/pre-commit",
+    "core/scripts/hooks/pre-push",
+    "core/scripts/hooks/post-commit",
+    "core/scripts/hooks/trigger_autodeploy.sh",
+    "core/scripts/hooks/install_git_hooks.sh",
     "core/scripts/plan_dispatch.sh",
     "core/scripts/plan_dispatch_daily_report.py",
+    "core/scripts/plan_dispatch_pending_replay.py",
     "core/scripts/skill_tool_audit.py",
     "core/system/plan_council.py",
     "core/system/plan_dispatch_metrics.py",
@@ -246,6 +256,46 @@ def check_plan_council() -> CheckResult:
         short = (text[-1] if text else "plan council self-check failed")[:180]
         return CheckResult("plan-council", "fail", short)
     return CheckResult("plan-council", "pass", "claude+gemini planning council ready")
+
+
+def check_council_worker() -> CheckResult:
+    """
+    Enforce asynchronous council queue consumer availability.
+    Required by default (COUNCIL_WORKER_REQUIRED=1).
+    """
+    required = str(os.getenv("COUNCIL_WORKER_REQUIRED", "1")).strip().lower() in {"1", "true", "yes", "y", "on"}
+    timer_unit = os.getenv("COUNCIL_WORKER_TIMER_UNIT", "council-worker.timer")
+    service_unit = os.getenv("COUNCIL_WORKER_SERVICE_UNIT", "council-worker.service")
+    process_pattern = os.getenv("COUNCIL_WORKER_PROCESS_PATTERN", "core/daemons/council_worker.py")
+    pending_dir = PROJECT_ROOT / ".infra" / "queue" / "council" / "pending"
+    pending_count = len(list(pending_dir.glob("*.json"))) if pending_dir.exists() else 0
+
+    active_signals: List[str] = []
+    if shutil.which("systemctl"):
+        for unit in (timer_unit, service_unit):
+            code, out, _ = run_command(["systemctl", "is-active", unit])
+            if code == 0 and out.strip() == "active":
+                active_signals.append(f"systemd:{unit}")
+
+    if shutil.which("pgrep"):
+        code, out, _ = run_command(["pgrep", "-f", process_pattern])
+        if code == 0 and out.strip():
+            active_signals.append("process:pgrep")
+
+    if active_signals:
+        return CheckResult(
+            "council-worker",
+            "pass",
+            f"active via {', '.join(active_signals)} pending={pending_count}",
+        )
+
+    detail = (
+        f"inactive pending={pending_count} timer={timer_unit} service={service_unit} "
+        f"pattern={process_pattern}"
+    )
+    if required:
+        return CheckResult("council-worker", "fail", detail)
+    return CheckResult("council-worker", "warn", detail)
 
 
 def check_gateway_contract() -> CheckResult:
@@ -487,6 +537,87 @@ def check_plan_dispatch_daily_report() -> CheckResult:
     )
 
 
+def check_plan_dispatch_pending_queue() -> CheckResult:
+    try:
+        max_age_hours = float(os.getenv("PLAN_DISPATCH_PENDING_MAX_AGE_HOURS", "24"))
+    except Exception:
+        max_age_hours = 24.0
+    try:
+        warn_count = int(os.getenv("PLAN_DISPATCH_PENDING_WARN_COUNT", "5"))
+    except Exception:
+        warn_count = 5
+    code, out, err = run_command(
+        [
+            "python3",
+            "core/scripts/plan_dispatch_pending_replay.py",
+            "--dry-run",
+            "--limit",
+            "500",
+            "--max-age-hours",
+            str(max_age_hours),
+            "--json",
+        ]
+    )
+    if code != 0:
+        short = (err or out or "plan_dispatch_pending_replay dry-run failed").splitlines()
+        msg = (short[-1] if short else "plan_dispatch_pending_replay dry-run failed")[:180]
+        return CheckResult("plan-pending", "warn", msg)
+
+    try:
+        payload = parse_json_output(out)
+    except Exception as exc:  # noqa: BLE001
+        return CheckResult("plan-pending", "warn", f"invalid json ({exc})")
+
+    try:
+        open_total = int(payload.get("open_retryable_total", payload.get("open_total", 0)))
+    except Exception:
+        open_total = 0
+    try:
+        stale_total = int(payload.get("stale_total", 0))
+    except Exception:
+        stale_total = 0
+    try:
+        oldest_open_age = float(payload.get("oldest_open_age_hours", 0.0))
+    except Exception:
+        oldest_open_age = 0.0
+    try:
+        oldest_stale_age = float(payload.get("oldest_stale_age_hours", 0.0))
+    except Exception:
+        oldest_stale_age = 0.0
+
+    if stale_total > 0:
+        return CheckResult(
+            "plan-pending",
+            "fail",
+            (
+                f"stale_total={stale_total} "
+                f"oldest_stale_age_hours={oldest_stale_age:.2f} "
+                f"(max_age_hours={max_age_hours:.2f})"
+            ),
+        )
+
+    if open_total >= max(1, warn_count):
+        return CheckResult(
+            "plan-pending",
+            "warn",
+            (
+                f"open_retryable_total={open_total} "
+                f">= warn_count={max(1, warn_count)} "
+                f"oldest_open_age_hours={oldest_open_age:.2f}"
+            ),
+        )
+
+    return CheckResult(
+        "plan-pending",
+        "pass",
+        (
+            f"open_retryable_total={open_total} "
+            f"oldest_open_age_hours={oldest_open_age:.2f} "
+            f"stale_total={stale_total}"
+        ),
+    )
+
+
 def check_skill_tool_audit() -> CheckResult:
     code, out, err = run_command(["python3", "core/scripts/skill_tool_audit.py", "--json"])
     if code != 0 and not out:
@@ -536,6 +667,88 @@ def check_model_role_routing() -> CheckResult:
     return CheckResult("role-routing", "fail", detail)
 
 
+def check_pipeline_resilience_smoke() -> CheckResult:
+    code, out, err = run_command(["python3", "core/scripts/pipeline_resilience_smoke.py"])
+    if code != 0:
+        merged = f"{out}\n{err}".lower()
+        if "queue not clean before smoke" in merged:
+            return CheckResult("pipeline-smoke", "warn", "queue busy; smoke skipped")
+        text = (err or out or "pipeline resilience smoke failed").splitlines()
+        short = (text[-1] if text else "pipeline resilience smoke failed")[:180]
+        return CheckResult("pipeline-smoke", "fail", short)
+
+    try:
+        payload = parse_json_output(out)
+    except Exception as exc:  # noqa: BLE001
+        return CheckResult("pipeline-smoke", "warn", f"invalid json ({exc})")
+
+    tasks = payload.get("tasks", {})
+    if not isinstance(tasks, dict):
+        return CheckResult("pipeline-smoke", "fail", "tasks payload missing")
+
+    sa_mode = (tasks.get("sa") or {}).get("analysis_mode")
+    ce_mode = (tasks.get("ce") or {}).get("analysis_mode")
+    ce_status = (tasks.get("ce") or {}).get("status")
+    cd_mode = (tasks.get("cd") or {}).get("review_mode")
+    cd_decision = (tasks.get("cd") or {}).get("decision")
+    queue_after = payload.get("queue_after", {})
+    pending = int((queue_after or {}).get("pending", -1))
+    processing = int((queue_after or {}).get("processing", -1))
+
+    if sa_mode != "fallback_local":
+        return CheckResult("pipeline-smoke", "fail", f"sa_mode={sa_mode}")
+    if ce_mode != "fallback_local" or ce_status != "draft_for_cd":
+        return CheckResult("pipeline-smoke", "fail", f"ce_mode={ce_mode} ce_status={ce_status}")
+    if cd_mode != "fallback_local" or cd_decision not in {"approve", "revise", "reject"}:
+        return CheckResult("pipeline-smoke", "fail", f"cd_mode={cd_mode} decision={cd_decision}")
+    if pending != 0 or processing != 0:
+        return CheckResult("pipeline-smoke", "fail", f"queue_after pending={pending} processing={processing}")
+
+    return CheckResult(
+        "pipeline-smoke",
+        "pass",
+        f"sa/ce/cd fallback chain ok (decision={cd_decision})",
+    )
+
+
+def check_git_hook_automation() -> CheckResult:
+    code, out, _ = run_command(["git", "config", "--get", "core.hooksPath"])
+    hooks_path = out.strip() if code == 0 else ""
+    if hooks_path != "core/scripts/hooks":
+        return CheckResult("git-hooks", "fail", f"core.hooksPath={hooks_path or '(unset)'}")
+
+    required = (
+        PROJECT_ROOT / "core/scripts/hooks/pre-commit",
+        PROJECT_ROOT / "core/scripts/hooks/pre-push",
+        PROJECT_ROOT / "core/scripts/hooks/post-commit",
+        PROJECT_ROOT / "core/scripts/hooks/trigger_autodeploy.sh",
+    )
+    missing = [str(p.relative_to(PROJECT_ROOT)) for p in required if not p.exists()]
+    if missing:
+        return CheckResult("git-hooks", "fail", f"missing: {', '.join(missing)}")
+
+    auto_deploy = (run_command(["git", "config", "--get", "woohwahae.autodeploy"])[1] or "").strip().lower()
+    branch = (run_command(["git", "config", "--get", "woohwahae.autodeployBranch"])[1] or "").strip()
+    target = (run_command(["git", "config", "--get", "woohwahae.autodeployTarget"])[1] or "").strip()
+    prepush_mode = (run_command(["git", "config", "--get", "woohwahae.prepushMode"])[1] or "").strip()
+
+    if auto_deploy != "true":
+        return CheckResult("git-hooks", "warn", "autodeploy disabled")
+
+    if not branch:
+        branch = "main(default)"
+    if not target:
+        target = "all(default)"
+    if not prepush_mode:
+        prepush_mode = "lite(default)"
+
+    return CheckResult(
+        "git-hooks",
+        "pass",
+        f"autodeploy=true branch={branch} target={target} prepush={prepush_mode}",
+    )
+
+
 def check_tests(run_tests: bool) -> CheckResult:
     if not run_tests:
         return CheckResult("tests", "warn", "skipped (--run-tests not set)")
@@ -552,8 +765,10 @@ def check_tests(run_tests: bool) -> CheckResult:
             "core/tests/test_plan_dispatch_metrics.py",
             "core/tests/test_plan_dispatch_replay.py",
             "core/tests/test_plan_dispatch_daily_report.py",
+            "core/tests/test_plan_dispatch_pending_replay.py",
             "core/tests/test_monitor_dashboard.py",
             "core/tests/test_harness_doctor_asset_registry.py",
+            "core/tests/test_harness_doctor_council_worker.py",
             "core/tests/test_progress_graph.py",
         ],
         extra_env=env,
@@ -653,12 +868,16 @@ def main() -> int:
         check_env(),
         check_gateway_contract(),
         check_plan_council(),
+        check_council_worker(),
         check_plan_dispatch(),
         check_plan_dispatch_observability(),
         check_plan_dispatch_replay(),
         check_plan_dispatch_daily_report(),
+        check_plan_dispatch_pending_queue(),
         check_skill_tool_audit(),
         check_model_role_routing(),
+        check_pipeline_resilience_smoke(),
+        check_git_hook_automation(),
         check_work_lock(),
         check_asset_registry_integrity(),
         check_tests(args.run_tests),

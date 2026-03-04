@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Trigger auto push/deploy after commit when enabled.
+
+set -euo pipefail
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+if [[ "${SKIP_LOCAL_HOOKS:-0}" == "1" ]]; then
+  exit 0
+fi
+
+cd "$REPO_ROOT"
+
+ENABLED="$(git config --bool --get woohwahae.autodeploy || echo false)"
+if [[ "$ENABLED" != "true" ]]; then
+  exit 0
+fi
+
+nohup bash core/scripts/hooks/trigger_autodeploy.sh >/tmp/woohwahae-autodeploy-hook.log 2>&1 &
+

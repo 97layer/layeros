@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Gate push with evidence/code audit + resilience smoke + configurable ops gate.
+
+set -euo pipefail
+REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+if [[ "${SKIP_LOCAL_HOOKS:-0}" == "1" ]]; then
+  exit 0
+fi
+
+cd "$REPO_ROOT"
+
+python3 core/system/evidence_guard.py --check
+bash core/scripts/hooks/run_code_audit.sh
+python3 core/scripts/pipeline_resilience_smoke.py
+
+MODE="$(git config --get woohwahae.prepushMode || echo lite)"
+case "$MODE" in
+  off)
+    ;;
+  lite)
+    bash core/scripts/ops_gate.sh --skip-smoke --skip-payment
+    ;;
+  full)
+    bash core/scripts/ops_gate.sh
+    ;;
+  *)
+    echo "[pre-push] invalid woohwahae.prepushMode: $MODE" >&2
+    exit 1
+    ;;
+esac
+
