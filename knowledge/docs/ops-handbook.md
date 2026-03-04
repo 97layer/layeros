@@ -33,6 +33,8 @@
 - 게이트: `bash core/scripts/ops_gate.sh`  (visual + 스모크 + 결제 회귀)
 - 롤백: `bash core/scripts/ops_rollback.sh`  (`--to legacy|gateway`)
 - 알람체크: `python3 core/scripts/ops_alert_check.py --log-file .infra/logs/woohwahae-gateway.log`
+- 알람 러너: `bash core/scripts/ops_alert_runner.sh`
+- 알람 크론 설치: `bash core/scripts/ops_alert_install_cron.sh --schedule "*/5 * * * *"`
 
 ## 8. 신규 에이전트 추가 규칙
 - 새 지침 파일 생성 금지: 역할 규칙은 `directives/practice.md` 내 섹션만 추가/수정.
