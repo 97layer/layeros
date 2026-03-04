@@ -1131,48 +1131,54 @@ def _parse_agent_events(limit: int = 80) -> list:
         except (IOError, OSError):
             continue
         for line in lines[-30:]:
+            line = line.strip()
+            if not line:
+                continue
             try:
                 d = json.loads(line)
             except json.JSONDecodeError:
                 continue
-            ts_raw = d.get('timestamp') or d.get('ts') or d.get('created_at') or ''
-            # timestamp 정규화
-            ts_str = ts_raw[:19].replace('T', ' ') if ts_raw else ''
-            try:
-                ts_sort = ts_raw[:19]
-            except Exception:
-                ts_sort = ''
+
+            ts_raw = d.get('timestamp') or d.get('ts') or d.get('started_at') or ''
+            ts_str = str(ts_raw)[:19].replace('T', ' ') if ts_raw else ''
+            ts_sort = str(ts_raw)[:19] if ts_raw else ''
 
             if source_key == 'web_work_history':
+                # 구조: {locked, agent, task, started_at, initial_state, final_state}
                 agent = d.get('agent', 'System')
-                action = d.get('action', '')
-                detail = d.get('detail', '')
-                body = action
-                if detail:
-                    body = '%s — %s' % (action, str(detail)[:120])
+                task = str(d.get('task', ''))[:120]
+                locked = d.get('locked', False)
+                state = '작업 시작' if locked else '작업 완료'
+                body = '%s — %s' % (state, task)
                 events.append({'agent': agent, 'body': body, 'ts': ts_str, 'sort': ts_sort, 'source': source_key})
 
             elif source_key == 'plan_council_reports':
+                # 구조: {timestamp, mode, task, claude, gemini, consensus}
                 task = str(d.get('task', ''))[:80]
-                status = d.get('status', '')
-                steps = d.get('steps', [])
+                consensus = d.get('consensus', {})
+                status = consensus.get('status', d.get('status', ''))
+                steps = consensus.get('steps', [])
                 body = '[%s] %s' % (status, task)
                 if steps:
                     body += '\n' + '\n'.join('• %s' % s for s in steps[:3])
                 events.append({'agent': 'PlanCouncil', 'body': body, 'ts': ts_str, 'sort': ts_sort, 'source': source_key})
 
             elif source_key == 'evidence_log':
-                claim = str(d.get('claim', ''))[:100]
+                # 구조: {timestamp, claim, evidence_type, source}
+                claim = str(d.get('claim', ''))[:120]
                 ev_type = d.get('evidence_type', '')
                 body = '[%s] %s' % (ev_type, claim)
                 events.append({'agent': 'System', 'body': body, 'ts': ts_str, 'sort': ts_sort, 'source': source_key})
 
             elif source_key == 'harness_doctor_reports':
-                status = d.get('status', '')
-                issues = d.get('issues', [])
-                body = 'Harness Doctor: %s' % status
-                if issues:
-                    body += '\n' + '\n'.join('⚠ %s' % i for i in issues[:3])
+                # 구조: {timestamp, score, overall, checks}
+                score = d.get('score', '')
+                overall = d.get('overall', '')
+                checks = d.get('checks', [])
+                body = 'Harness Doctor: %s (점수 %s)' % (overall, score)
+                fails = [c.get('name', '') for c in checks if isinstance(c, dict) and c.get('status') == 'fail']
+                if fails:
+                    body += '\n' + '\n'.join('⚠ %s' % f for f in fails[:3])
                 events.append({'agent': 'HarnessDoctor', 'body': body, 'ts': ts_str, 'sort': ts_sort, 'source': source_key})
 
     events.sort(key=lambda e: e.get('sort', ''), reverse=False)
