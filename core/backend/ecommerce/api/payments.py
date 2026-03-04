@@ -34,6 +34,19 @@ _PROCESSED_WEBHOOK_EVENTS: set[str] = set()
 _PROCESSED_WEBHOOK_EVENT_ORDER: list[str] = []
 
 
+def _commit_or_rollback(db: Session, *, context: str) -> None:
+    """Commit DB changes and rollback on failure to keep session reusable."""
+    try:
+        db.commit()
+    except Exception as exc:
+        db.rollback()
+        _logger.exception("database commit failed during %s", context)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Database commit failed",
+        ) from exc
+
+
 def _load_processed_webhook_events() -> None:
     if not _WEBHOOK_EVENT_CACHE_FILE.exists():
         return
@@ -132,7 +145,7 @@ def create_intent(
 
     order.payment_transaction_id = intent.id
     order.payment_gateway = "stripe"
-    db.commit()
+    _commit_or_rollback(db, context="payment intent update")
 
     return {
         "order_id": order.id,
@@ -205,7 +218,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     elif event_type == "payment_intent.payment_failed":
         order.payment_status = PaymentStatus.FAILED.value
 
-    db.commit()
+    _commit_or_rollback(db, context="stripe webhook update")
     _mark_webhook_event_processed(event_id)
     return {"received": True, "idempotent": False}
 
@@ -224,7 +237,7 @@ def mark_paid_manually(
     order.payment_status = PaymentStatus.PAID.value
     if not order.paid_at:
         order.paid_at = datetime.now(timezone.utc)
-    db.commit()
+    _commit_or_rollback(db, context="manual paid fallback")
     db.refresh(order)
     return {
         "order_id": order.id,

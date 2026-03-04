@@ -131,3 +131,69 @@ def test_payment_webhook_idempotent_persists_after_reload(ecommerce_client, monk
         )
     assert second.status_code == 200
     assert second.json()["idempotent"] is True
+
+
+def test_payment_webhook_rolls_back_when_commit_fails(ecommerce_client, monkeypatch):
+    client, _ = ecommerce_client
+    payments_module = importlib.import_module("core.backend.ecommerce.api.payments")
+    payments_module._PROCESSED_WEBHOOK_EVENTS.clear()
+    payments_module._PROCESSED_WEBHOOK_EVENT_ORDER.clear()
+
+    payment_intent_id = "pi_test_commit_fail_1"
+
+    fake_event = {
+        "id": "evt_test_commit_fail_1",
+        "type": "payment_intent.succeeded",
+        "data": {"object": {"id": payment_intent_id}},
+    }
+    monkeypatch.setattr(
+        payments_module,
+        "construct_webhook_event",
+        lambda *_args, **_kwargs: fake_event,
+    )
+
+    base_module = importlib.import_module("core.backend.ecommerce.models.base")
+    probe_session = base_module.SessionLocal()
+    session_cls = probe_session.__class__
+    probe_session.close()
+
+    rollback_called = {"value": False}
+    original_rollback = session_cls.rollback
+
+    class FakeOrder:
+        payment_status = "pending"
+        paid_at = None
+
+    fake_order = FakeOrder()
+
+    class FakeQuery:
+        def filter(self, *_args, **_kwargs):
+            return self
+
+        def first(self):
+            return fake_order
+
+    def fake_query(self, *_args, **_kwargs):
+        return FakeQuery()
+
+    def failing_commit(self):
+        raise RuntimeError("forced db failure")
+
+    def tracking_rollback(self):
+        rollback_called["value"] = True
+        return original_rollback(self)
+
+    monkeypatch.setattr(session_cls, "query", fake_query, raising=True)
+    monkeypatch.setattr(session_cls, "commit", failing_commit, raising=True)
+    monkeypatch.setattr(session_cls, "rollback", tracking_rollback, raising=True)
+
+    resp = client.post(
+        "/api/v1/payments/webhook",
+        content=b"{}",
+        headers={"Stripe-Signature": "t=1,v1=fake"},
+    )
+
+    assert resp.status_code == 500
+    assert resp.json()["detail"] == "Database commit failed"
+    assert rollback_called["value"] is True
+    assert payments_module._is_processed_webhook_event(fake_event["id"]) is False
