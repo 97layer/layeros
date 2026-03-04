@@ -7,6 +7,7 @@
 #   ./deploy.sh all          코드 pull + active 서비스 전체 재시작
 #   ./deploy.sh web          Cloudflare Pages 안내
 #   ./deploy.sh <서비스명>   특정 서비스 재시작 (active만 허용)
+#   ./deploy.sh council-worker-install  council-worker systemd 타이머 설치
 #   ./deploy.sh gateway-install  unified gateway(systemd) 설치/재시작
 #   ./deploy.sh gateway-status   unified gateway 상태 확인
 #   ./deploy.sh admin-cutover    gateway 준비 + /admin 안전 컷오버
@@ -393,6 +394,22 @@ m = re.search(r'location /admin/ \\{.*?proxy_pass\\s+http://127\\.0\\.0\\.1:(\\d
 print('active_admin_port=' + (m.group(1) if m else 'unknown'))
 PY
     "
+    ;;
+
+  council-worker-install)
+    echo "=== council-worker systemd 타이머 설치 ==="
+    ssh ${VM_HOST} "bash -s" <<'COUNCIL_EOF'
+set -euo pipefail
+APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+cd "$APP_PATH"
+git fetch origin main && git reset --hard origin/main
+sudo cp ".infra/systemd/council-worker.service" /etc/systemd/system/council-worker.service
+sudo cp ".infra/systemd/council-worker.timer"   /etc/systemd/system/council-worker.timer
+sudo systemctl daemon-reload
+sudo systemctl enable --now council-worker.timer
+echo "council-worker 타이머 상태:"
+sudo systemctl status council-worker.timer --no-pager
+COUNCIL_EOF
     ;;
 
   gateway-install)

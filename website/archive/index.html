@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=91646ca8">
+<link rel="stylesheet" href="/assets/css/style.css?v=839e16af">
 <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
 <!-- /COMPONENT:head -->
 </head>
@@ -54,40 +54,6 @@
     
     
   </div>
-  <section class="archive-stats container--wide" id="archive-stats" aria-live="polite">
-    <div class="stat-card">
-      <p class="stat-label">TOTAL</p>
-      <p class="stat-value" id="stat-total">0</p>
-      <p class="stat-caption">모든 기록</p>
-    </div>
-    <div class="stat-card">
-      <p class="stat-label">ESSAY</p>
-      <p class="stat-value" id="stat-essay">0</p>
-      <p class="stat-caption">문장과 사유</p>
-    </div>
-    <div class="stat-card">
-      <p class="stat-label">JOURNAL</p>
-      <p class="stat-value" id="stat-journal">0</p>
-      <p class="stat-caption">과정의 단면</p>
-    </div>
-    <div class="stat-card">
-      <p class="stat-label">LOOKBOOK</p>
-      <p class="stat-value" id="stat-lookbook">0</p>
-      <p class="stat-caption">질감과 실루엣</p>
-    </div>
-    <div class="stat-card">
-      <p class="stat-label">PLAYLIST</p>
-      <p class="stat-value" id="stat-playlist">0</p>
-      <p class="stat-caption">시간의 리듬</p>
-    </div>
-  </section>
-
-  <section class="mini-index container--wide" aria-label="최근 기록 미니 인덱스">
-    <ul class="mini-index__list" id="mini-index">
-      <li class="mini-index__item">기록을 불러오는 중입니다.</li>
-    </ul>
-  </section>
-
   <section class="archive-ledger container--wide" id="archive-ledger" aria-label="모든 기록">
     <div class="ledger-filter" aria-label="타입 필터">
       <button class="filter-btn is-active" data-filter-type="all" type="button">All</button>
@@ -104,21 +70,12 @@
 </main>
 <script>
   (function () {
-    var stats = {
-      total: document.getElementById('stat-total'),
-      essay: document.getElementById('stat-essay'),
-      journal: document.getElementById('stat-journal'),
-      lookbook: document.getElementById('stat-lookbook'),
-      playlist: document.getElementById('stat-playlist')
-    };
-
-    var miniList = document.getElementById('mini-index');
     var ledger = document.getElementById('ledger-list');
     var filterButtons = Array.prototype.slice.call(document.querySelectorAll('[data-filter-type]'));
     var allPosts = [];
     var currentFilter = 'all';
 
-    if (!miniList || !ledger) return;
+    if (!ledger) return;
 
     var TYPE_META = {
       essay: { label: 'Essay', caption: '문장과 사유' },
@@ -181,34 +138,6 @@
       return 'Read';
     }
 
-    function renderStats(posts) {
-      var counts = { total: posts.length, essay: 0, journal: 0, lookbook: 0, playlist: 0 };
-      posts.forEach(function (post) {
-        counts[post.type] += 1;
-      });
-      Object.keys(stats).forEach(function (key) {
-        if (stats[key]) stats[key].textContent = String(counts[key] || 0);
-      });
-    }
-
-    function renderMiniIndex(posts) {
-      if (!posts.length) {
-        miniList.innerHTML = '<li class="mini-index__item">표시할 기록이 없습니다.</li>';
-        return;
-      }
-      var items = posts.slice(0, 8).map(function (post) {
-        return [
-          '<li class="mini-index__item">',
-          '<a href="', escapeHtml(post.url), '">',
-          '<span class="mini-index__meta">', escapeHtml(post.issue), ' · ', escapeHtml(post.date), '</span>',
-          '<span>', escapeHtml(post.title), '</span>',
-          '</a>',
-          '</li>'
-        ].join('');
-      });
-      miniList.innerHTML = items.join('');
-    }
-
     function renderLedger(posts) {
       if (!posts.length) {
         ledger.innerHTML = '<li class="ledger__placeholder">표시할 기록이 없습니다.</li>';
@@ -247,19 +176,13 @@
       .then(function (response) { return response.json(); })
       .then(function (raw) {
         if (!Array.isArray(raw) || !raw.length) {
-          renderStats([]);
-          renderMiniIndex([]);
           renderLedger([]);
           return;
         }
         allPosts = sortPosts(raw.map(normalize));
-        renderStats(allPosts);
-        renderMiniIndex(allPosts);
         applyFilter(currentFilter);
       })
       .catch(function () {
-        renderStats([]);
-        renderMiniIndex([]);
         renderLedger([]);
       });
 
