@@ -100,6 +100,19 @@ PROMPTS = [
         "filename": "lookbook-08-absence.jpg",
         "prompt": "Dark interior room, gray fog outside a single tall window, an empty coat hook on the wall beside it, no coat, strong window light casting one long shadow. " + SHARED,
     },
+    # ─── CGI / Surreal render series ───
+    {
+        "filename": "lookbook-12-render-a.jpg",
+        "prompt": "A single white peony flower made entirely of shattered porcelain fragments, disintegrating in zero gravity, each shard perfectly lit with ray-traced reflections, absolute black void. Hyper-realistic 3D CGI render, Octane/Blender aesthetic, ultra-sharp. analog 35mm film grain, no text, no logo, 3:4 portrait",
+    },
+    {
+        "filename": "lookbook-13-render-b.jpg",
+        "prompt": "An impossibly thin vertical sheet of dark water suspended mid-air, its surface a perfect mirror, a single white flower reflection visible in it but no flower above. Black void. Hyperrealistic CGI render, ray-traced caustics, photorealistic 3D visualization, studio lighting. analog 35mm film grain, no text, no logo, 3:4 portrait",
+    },
+    {
+        "filename": "lookbook-14-render-c.jpg",
+        "prompt": "A single strand of black hair magnified to monumental scale, frozen mid-fall, forming an architectural curve against pure white fog. Hyper-detailed CGI visualization, studio lighting, subsurface scattering on the hair strand, perfect rendering. analog 35mm film grain, no text, no logo, 3:4 portrait",
+    },
     # ─── Light series — 라이트 그레이 배경, 헤어 에디토리얼 ───
     {
         "filename": "lookbook-09-cut.jpg",
