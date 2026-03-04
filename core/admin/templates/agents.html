@@ -2,28 +2,63 @@
 {% block title %}에이전트{% endblock %}
 {% block content %}
 <div class="agents-wrap">
-  <div class="agents-header">
-    <span class="agents-title">에이전트 채널</span>
-    <span class="agents-status" id="conn-status">● 연결 중</span>
-  </div>
-
-  <div class="agents-feed" id="feed">
-    {% for ev in events %}
-    {% set meta = agent_meta.get(ev.agent, {'label': ev.agent, 'color': '#9a9a9a'}) %}
-    <div class="msg-row">
-      <div class="msg-avatar" style="background:{{ meta.color }}">
-        {{ (meta.label[:2]) }}
+  <div class="agents-window">
+    <div class="window-bar">
+      <div class="window-dots">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
       </div>
-      <div class="msg-body">
-        <div class="msg-meta">
-          <span class="msg-agent">{{ meta.label }}</span>
-          <span class="msg-ts">{{ ev.ts }}</span>
-        </div>
-        <div class="msg-text">{{ ev.body }}</div>
-      </div>
+      <div class="window-title">Agent Console · live</div>
+      <span class="agents-status" id="conn-status">● 연결 중</span>
     </div>
-    {% endfor %}
-    <div id="feed-end"></div>
+
+    <div class="agents-top">
+      <div class="pill">최근 {{ events|length }}건</div>
+      <div class="pill mono">SSE 1s</div>
+      <div class="pill mono">자동 스크롤 <input type="checkbox" id="auto-scroll" checked></div>
+      <div class="pill mono">
+        에이전트
+        <select id="agent-filter">
+          <option value="all">전체</option>
+          {% for key, meta in agent_meta.items() %}
+          <option value="{{ key }}">{{ meta.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button class="btn-ghost" id="manual-refresh" type="button">↻ 새로고침</button>
+    </div>
+
+    {% if source_stats %}
+    <div class="agents-sources">
+      {% for s in source_stats %}
+      <div class="source-chip {% if not s.exists %}missing{% endif %}">
+        {{ s.key }} · {{ s.count }}건
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="agents-feed" id="feed">
+      {% if events %}
+        {% for ev in events %}
+        {% set meta = agent_meta.get(ev.agent, {'label': ev.agent, 'color': '#9a9a9a'}) %}
+        <div class="msg-row" data-agent="{{ ev.agent }}">
+          <div class="msg-avatar" style="background:{{ meta.color }}">
+            {{ (meta.label[:2]) }}
+          </div>
+          <div class="msg-body">
+            <div class="msg-meta">
+              <span class="msg-agent">{{ meta.label }}</span>
+              <span class="msg-ts">{{ ev.ts }}</span>
+            </div>
+            <div class="msg-text">{{ ev.body }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">최근 이벤트가 없습니다.</div>
+      {% endif %}
+      <div id="feed-end"></div>
+    </div>
   </div>
 </div>
 
@@ -32,29 +67,93 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 48px);
-  background: var(--bg, #E3E2E0);
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+    var(--bg, #E3E2E0);
+  background-size: 12px 12px;
 }
-.agents-header {
+.agents-window {
+  margin: 1rem;
+  border: 1px solid var(--line, #EFEEED);
+  background: rgba(255,255,255,0.82);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 2rem);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.window-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem 0.75rem;
+  padding: 0.55rem 0.9rem;
+  background: #f5f3f1;
   border-bottom: 1px solid var(--line, #EFEEED);
   flex-shrink: 0;
-}
-.agents-title {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-sub, #4a4a4a);
+  letter-spacing: 0.02em;
 }
+.window-dots { display: flex; gap: 6px; }
+.window-dots .dot {
+  width: 12px; height: 12px; border-radius: 3px;
+  display: inline-block;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+}
+.window-dots .red { background: #f55; }
+.window-dots .yellow { background: #f7c94c; }
+.window-dots .green { background: #6ac46a; }
+.window-title { color: var(--text-sub, #4a4a4a); font-size: 0.85rem; }
 .agents-status {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.7rem;
   color: #9a9a9a;
   transition: color 0.3s;
 }
+.agents-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px dashed var(--line, #EFEEED);
+  background: rgba(255,255,255,0.6);
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--line, #EFEEED);
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--text-sub, #4a4a4a);
+  background: #fff;
+}
+.pill select {
+  border: 1px solid var(--line, #EFEEED);
+  background: #fff;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.78rem;
+}
+.pill.mono { font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.03em; }
+.agents-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem 0.6rem;
+  border-bottom: 1px dashed var(--line, #EFEEED);
+}
+.source-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--line, #EFEEED);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text-sub, #4a4a4a);
+}
+.source-chip.missing { opacity: 0.5; text-decoration: line-through; }
 .agents-status.live { color: #5a8a5a; }
 
 .agents-feed {
@@ -65,6 +164,36 @@
   flex-direction: column;
   gap: 1.2rem;
 }
+
+.agents-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid var(--line, #EFEEED);
+}
+.ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-sub, #4a4a4a);
+}
+.ctrl select {
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--line, #EFEEED);
+  background: #fff;
+}
+.ctrl.inline {
+  gap: 0.4rem;
+}
+.btn-ghost {
+  border: 1px solid var(--line, #EFEEED);
+  background: transparent;
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+}
+.btn-ghost:hover { border-color: var(--text-faint, #7A7A74); }
 
 .msg-row {
   display: flex;
@@ -121,15 +250,23 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+.empty-state {
+  padding: 1rem 1.5rem;
+  color: var(--text-faint, #7A7A74);
+  font-size: 0.9rem;
+}
 </style>
 
 <script>
 const feed = document.getElementById('feed');
 const status = document.getElementById('conn-status');
 const end = document.getElementById('feed-end');
+const filterSel = document.getElementById('agent-filter');
+const autoScroll = document.getElementById('auto-scroll');
+const manualRefresh = document.getElementById('manual-refresh');
 
 function scrollBottom() {
-  end.scrollIntoView({ behavior: 'smooth' });
+  if (autoScroll.checked) end.scrollIntoView({ behavior: 'smooth' });
 }
 scrollBottom();
 
@@ -140,6 +277,7 @@ function appendMsg(data) {
   const meta = agentMeta[data.agent] || { label: data.agent, color: '#9a9a9a' };
   const row = document.createElement('div');
   row.className = 'msg-row';
+  row.dataset.agent = data.agent;
   const initials = (meta.label || data.agent).slice(0, 2);
   row.innerHTML = `
     <div class="msg-avatar" style="background:${meta.color}">${initials}</div>
@@ -176,5 +314,14 @@ function connect() {
   };
 }
 connect();
+
+filterSel.addEventListener('change', () => {
+  const target = filterSel.value;
+  document.querySelectorAll('.msg-row').forEach(row => {
+    row.style.display = (target === 'all' || row.dataset.agent === target) ? 'flex' : 'none';
+  });
+});
+
+manualRefresh.addEventListener('click', () => window.location.reload());
 </script>
 {% endblock %}

@@ -51,7 +51,9 @@ SIGNALS_DIR = BASE_DIR / 'knowledge' / 'signals'
 MEMORY_FILE = BASE_DIR / 'knowledge' / 'long_term_memory.json'
 AUDIT_LOG_FILE = BASE_DIR / 'knowledge' / 'reports' / 'audit.log'
 SERVICE_FILE = BASE_DIR / 'knowledge' / 'service' / 'items.json'
+BOOKING_FILE = BASE_DIR / 'knowledge' / 'service' / 'booking.json'
 TELEGRAM_LOG_FILE = BASE_DIR / 'logs' / 'telegram.log'
+ADMIN_PASSWORD_OVERRIDE_FILE = BASE_DIR / 'knowledge' / 'system' / 'admin_password_hash.json'
 SYSTEMD_SERVICES = ['97layer-telegram', '97layer-ecosystem', '97layer-gardener', 'woohwahae-backend', 'cortex-admin']
 
 # ─── App ───
@@ -97,7 +99,37 @@ app.config.update(
 _admin_hash = os.getenv('ADMIN_PASSWORD_HASH')
 if not _admin_hash:
     raise RuntimeError("ADMIN_PASSWORD_HASH 환경변수 필수. .env에 설정하세요.")
-ADMIN_PASSWORD_HASH = _admin_hash
+
+
+def _load_admin_password_hash(default_hash: str) -> str:
+    if not ADMIN_PASSWORD_OVERRIDE_FILE.exists():
+        return default_hash
+    try:
+        payload = json.loads(ADMIN_PASSWORD_OVERRIDE_FILE.read_text(encoding='utf-8'))
+        override_hash = str(payload.get('password_hash', '')).strip()
+        if override_hash:
+            return override_hash
+    except (json.JSONDecodeError, OSError):
+        pass
+    return default_hash
+
+
+def _save_admin_password_hash(password_hash: str) -> None:
+    ADMIN_PASSWORD_OVERRIDE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    ADMIN_PASSWORD_OVERRIDE_FILE.write_text(
+        json.dumps(
+            {
+                'password_hash': password_hash,
+                'updated_at': datetime.utcnow().isoformat() + 'Z',
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding='utf-8',
+    )
+
+
+ADMIN_PASSWORD_HASH = _load_admin_password_hash(_admin_hash)
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'}
 ALLOWED_MIME = {'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'}
@@ -124,9 +156,103 @@ def _audit(action: str, detail: str = '') -> None:
     audit_logger.info("ip=%s action=%s detail=%s", ip, action, detail)
 
 
+# ─── Booking storage helpers ───
+_booking_lock = threading.Lock()
+
+
+def _booking_default() -> dict:
+    return {"bookings": [], "cards": [], "visit_logs": []}
+
+
+def _atomic_write(path: Path, payload: dict) -> None:
+    tmp_path = path.with_suffix('.tmp')
+    tmp_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8'
+    )
+    tmp_path.replace(path)
+
+
+def _load_bookings() -> dict:
+    BOOKING_FILE.parent.mkdir(parents=True, exist_ok=True)
+    if not BOOKING_FILE.exists():
+        return _booking_default()
+    try:
+        return json.loads(BOOKING_FILE.read_text(encoding='utf-8'))
+    except (json.JSONDecodeError, OSError):
+        logger.error("booking.json parse error — resetting to default")
+        return _booking_default()
+
+
+def _save_bookings(data: dict) -> None:
+    with _booking_lock:
+        _atomic_write(BOOKING_FILE, data)
+
+
+def _next_booking_id(data: dict) -> str:
+    existing = [b.get('id', '') for b in data.get('bookings', [])]
+    nums = []
+    for bid in existing:
+        if isinstance(bid, str) and bid.startswith('b') and bid[1:].isdigit():
+            nums.append(int(bid[1:]))
+    nxt = max(nums) + 1 if nums else 1
+    return f"b{nxt:04d}"
+
+
+BOOKING_STATUSES = ['pending', 'confirmed', 'done']
+
+
+def _find_booking(data: dict, booking_id: str):
+    for b in data.get('bookings', []):
+        if b.get('id') == booking_id:
+            return b
+    return None
+
+
+def _upsert_card(data: dict, card: dict):
+    # replace existing card for booking_id
+    cards = data.setdefault('cards', [])
+    updated = False
+    for idx, c in enumerate(cards):
+        if c.get('booking_id') == card.get('booking_id'):
+            cards[idx] = card
+            updated = True
+            break
+    if not updated:
+        cards.append(card)
+
+
 # B8: 로그인 실패 카운터 (인메모리, 재시작 시 초기화)
-_login_attempts: dict = defaultdict(int)
+_login_attempts: dict = defaultdict(list)
 LOGIN_MAX_ATTEMPTS = 10
+LOGIN_WINDOW_SECONDS = 15 * 60
+
+
+def _client_ip() -> str:
+    forwarded = request.headers.get('X-Forwarded-For', '').strip()
+    if forwarded:
+        return forwarded.split(',')[0].strip()[:64]
+    return (request.remote_addr or 'unknown')[:64]
+
+
+def _prune_login_attempts(ip: str, now_ts=None) -> list:
+    if now_ts is None:
+        now_ts = time.time()
+    cutoff = now_ts - LOGIN_WINDOW_SECONDS
+    attempts = _login_attempts.get(ip, [])
+    fresh = [ts for ts in attempts if ts >= cutoff]
+    _login_attempts[ip] = fresh
+    return fresh
+
+
+def _is_login_limited(ip: str) -> bool:
+    return len(_prune_login_attempts(ip)) >= LOGIN_MAX_ATTEMPTS
+
+
+def _record_login_failure(ip: str) -> int:
+    attempts = _prune_login_attempts(ip)
+    attempts.append(time.time())
+    _login_attempts[ip] = attempts
+    return len(attempts)
 
 
 # ─── B3: CSRF ───
@@ -209,23 +335,23 @@ def login_required(f):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    ip = request.remote_addr
+    ip = _client_ip()
     if request.method == 'POST':
-        # B8: rate limiting
-        if _login_attempts[ip] >= LOGIN_MAX_ATTEMPTS:
+        # B8: sliding window rate limiting
+        if _is_login_limited(ip):
             _audit('login_blocked', 'too_many_attempts')
             return jsonify({'error': '로그인 시도 횟수 초과. 잠시 후 다시 시도하세요.'}), 429
 
         password = request.form.get('password', '')
         if check_password_hash(ADMIN_PASSWORD_HASH, password):
-            _login_attempts[ip] = 0
+            _login_attempts.pop(ip, None)
             session['logged_in'] = True
             session.permanent = True
             _audit('login_success')
             return redirect(url_for('dashboard'))
 
-        _login_attempts[ip] += 1
-        _audit('login_failed', 'attempt_%d' % _login_attempts[ip])
+        attempt_count = _record_login_failure(ip)
+        _audit('login_failed', 'attempt_%d' % attempt_count)
         flash('비밀번호가 올바르지 않습니다.')
     return render_template('login.html')
 
@@ -732,6 +858,150 @@ def ritual_portal_link(client_id):
     })
 
 
+# ─── Booking (예약/카드/로그) ───
+
+
+@app.route('/bookings')
+@login_required
+def bookings_dashboard():
+    data = _load_bookings()
+    bookings = sorted(data.get('bookings', []), key=lambda b: b.get('created_at', ''), reverse=True)
+    _audit('bookings_view')
+    return render_template(
+        'bookings.html',
+        bookings=bookings,
+        stats={
+            'pending': sum(1 for b in bookings if b.get('status') == 'pending'),
+            'confirmed': sum(1 for b in bookings if b.get('status') == 'confirmed'),
+            'done': sum(1 for b in bookings if b.get('status') == 'done'),
+        },
+    )
+
+
+@app.route('/bookings/add', methods=['POST'])
+@login_required
+def bookings_add():
+    payload = request.form
+    name = payload.get('name', '').strip()
+    if not name:
+        flash('이름은 필수입니다.')
+        return redirect(url_for('bookings_dashboard'))
+
+    data = _load_bookings()
+    booking_id = _next_booking_id(data)
+    now = datetime.utcnow().isoformat() + 'Z'
+    booking = {
+        'id': booking_id,
+        'name': name,
+        'phone': payload.get('phone', '').strip(),
+        'email': payload.get('email', '').strip(),
+        'preferred_date': payload.get('preferred_date', '').strip(),
+        'preferred_time': payload.get('preferred_time', '').strip(),
+        'service': payload.get('service', '').strip(),
+        'note': payload.get('note', '').strip(),
+        'client_id': payload.get('client_id', '').strip(),
+        'status': 'pending',
+        'created_at': now,
+        'updated_at': now,
+    }
+
+    card = {
+        'booking_id': booking_id,
+        'wash_freq': payload.get('wash_freq', '').strip(),
+        'dry_method': payload.get('dry_method', '').strip(),
+        'product': payload.get('product', '').strip(),
+        'note': payload.get('card_note', '').strip(),
+        'updated_at': now,
+    }
+    if any(card.values()):
+        booking['card'] = card
+        _upsert_card(data, card)
+
+    data.setdefault('bookings', []).append(booking)
+    _save_bookings(data)
+    _audit('booking_add', f"id={booking_id} name={name}")
+    flash('예약이 추가되었습니다.')
+    return redirect(url_for('bookings_dashboard'))
+
+
+@app.route('/bookings/<booking_id>/update', methods=['POST'])
+@login_required
+def bookings_update(booking_id):
+    data = _load_bookings()
+    booking = _find_booking(data, booking_id)
+    if not booking:
+        flash('예약을 찾을 수 없습니다.')
+        return redirect(url_for('bookings_dashboard'))
+
+    payload = request.form
+    status = payload.get('status', booking.get('status', 'pending')).strip()
+    if status in BOOKING_STATUSES:
+        booking['status'] = status
+    booking['preferred_date'] = payload.get('preferred_date', booking.get('preferred_date', '')).strip()
+    booking['preferred_time'] = payload.get('preferred_time', booking.get('preferred_time', '')).strip()
+    booking['service'] = payload.get('service', booking.get('service', '')).strip()
+    booking['note'] = payload.get('note', booking.get('note', '')).strip()
+    booking['client_id'] = payload.get('client_id', booking.get('client_id', '')).strip()
+
+    now = datetime.utcnow().isoformat() + 'Z'
+    card = {
+        'booking_id': booking_id,
+        'wash_freq': payload.get('wash_freq', '').strip(),
+        'dry_method': payload.get('dry_method', '').strip(),
+        'product': payload.get('product', '').strip(),
+        'note': payload.get('card_note', '').strip(),
+        'updated_at': now,
+    }
+    if any(card.values()):
+        booking['card'] = card
+        _upsert_card(data, card)
+
+    # 방문 기록 생성 (옵션)
+    if booking.get('client_id') and payload.get('make_visit') == '1' and _MODULES_AVAILABLE:
+        try:
+            rm = get_ritual_module()
+            rm.add_visit(
+                client_id=booking['client_id'],
+                service=booking.get('service', '') or '방문',
+                public_note=payload.get('public_note', '').strip(),
+                notes=booking.get('note', ''),
+                next_visit_weeks=int(payload.get('next_visit_weeks', '0') or 0),
+            )
+            visit_log = {
+                'id': f"v{len(data.get('visit_logs', [])) + 1:04d}",
+                'booking_id': booking_id,
+                'client_id': booking['client_id'],
+                'service': booking.get('service', ''),
+                'created_at': now,
+            }
+            data.setdefault('visit_logs', []).append(visit_log)
+            booking['status'] = 'done'
+            flash('방문 기록이 생성되었습니다.')
+        except Exception as e:
+            logger.error("booking visit add error: %s", e)
+            flash('방문 기록 생성에 실패했습니다.')
+
+    booking['updated_at'] = now
+    _save_bookings(data)
+    _audit('booking_update', f"id={booking_id} status={booking.get('status')}")
+    flash('예약이 업데이트되었습니다.')
+    return redirect(url_for('bookings_dashboard'))
+
+
+@app.route('/bookings/<booking_id>/delete', methods=['POST'])
+@login_required
+def bookings_delete(booking_id):
+    data = _load_bookings()
+    before = len(data.get('bookings', []))
+    data['bookings'] = [b for b in data.get('bookings', []) if b.get('id') != booking_id]
+    data['cards'] = [c for c in data.get('cards', []) if c.get('booking_id') != booking_id]
+    data['visit_logs'] = [v for v in data.get('visit_logs', []) if v.get('booking_id') != booking_id]
+    _save_bookings(data)
+    _audit('booking_delete', f"id={booking_id} removed={before - len(data['bookings'])}")
+    flash('예약이 삭제되었습니다.')
+    return redirect(url_for('bookings_dashboard'))
+
+
 # ─── SSE 실시간 스트림 ───
 
 # 메모리 캐시 (TTL 기반, 스레드 안전)
@@ -845,7 +1115,12 @@ def _cmd_restart_service(params: dict) -> dict:
             ['sudo', 'systemctl', 'restart', name],
             capture_output=True, text=True, timeout=10
         )
-        return {'ok': result.returncode == 0, 'output': result.stderr.strip()}
+        details = (result.stdout or '') + ("\n" + result.stderr if result.stderr else '')
+        return {
+            'ok': result.returncode == 0,
+            'returncode': result.returncode,
+            'output': details.strip(),
+        }
     except subprocess.TimeoutExpired:
         return {'ok': False, 'error': 'timeout'}
 
@@ -896,13 +1171,23 @@ _COMMAND_HANDLERS = {
 @login_required
 def command_api():
     data = request.get_json(silent=True) or {}
+    if not isinstance(data, dict):
+        return jsonify({'ok': False, 'error': '잘못된 JSON 본문'}), 400
+
     action = data.get('action', '')
     params = data.get('params', {})
+    if not isinstance(params, dict):
+        return jsonify({'ok': False, 'error': 'params는 객체(JSON object)여야 합니다.'}), 400
 
     if action not in _COMMAND_HANDLERS:
         return jsonify({'ok': False, 'error': '알 수 없는 명령: %s' % action}), 400
 
-    result = _COMMAND_HANDLERS[action](params)
+    try:
+        result = _COMMAND_HANDLERS[action](params)
+    except Exception as e:
+        logger.error("command_api handler error: %s", e, exc_info=True)
+        result = {'ok': False, 'error': '명령 실행 중 내부 오류'}
+
     _audit('command', 'action=%s' % action)
     return jsonify(result)
 
@@ -939,13 +1224,20 @@ def service_add():
         flash('이름은 필수입니다.')
         return redirect(url_for('service_admin'))
 
+    price_raw = request.form.get('price', '0').strip()
+    try:
+        price = int(price_raw) if price_raw else 0
+    except ValueError:
+        flash('가격은 숫자만 입력하세요.')
+        return redirect(url_for('service_admin'))
+
     items = _load_service_items()
     item_id = 'item_%03d' % (len(items) + 1)
     items.append({
         'item_id': item_id,
         'name': name,
         'category': request.form.get('category', 'service'),
-        'price': int(request.form.get('price', 0)),
+        'price': price,
         'active': True,
         'description': request.form.get('description', '').strip(),
         'url': request.form.get('url', '').strip(),
@@ -1064,10 +1356,11 @@ def settings_password():
         flash('새 비밀번호가 일치하지 않습니다.')
         return redirect(url_for('settings_panel'))
 
-    # 세션 내 해시 갱신 (재시작 전까지 유효)
+    # 런타임 + 영속 파일 해시 동기화
     ADMIN_PASSWORD_HASH = generate_password_hash(new_pw, method='pbkdf2:sha256')
+    _save_admin_password_hash(ADMIN_PASSWORD_HASH)
     _audit('password_changed')
-    flash('비밀번호가 변경되었습니다. .env의 ADMIN_PASSWORD_HASH도 업데이트하세요.')
+    flash('비밀번호가 변경되어 영속 저장되었습니다.')
     return redirect(url_for('settings_panel'))
 
 
@@ -1189,13 +1482,23 @@ def _parse_agent_events(limit: int = 80) -> list:
 @login_required
 def agents_panel():
     events = _parse_agent_events(limit=80)
-    return render_template('agents.html', events=events, agent_meta=_AGENT_META)
+    source_stats = []
+    for source_key, path in _AGENT_JSONL_SOURCES:
+        if path.exists():
+            try:
+                count = len(path.read_text(encoding='utf-8').strip().splitlines())
+            except Exception:
+                count = 0
+        else:
+            count = 0
+        source_stats.append({'key': source_key, 'count': count, 'exists': path.exists()})
+    return render_template('agents.html', events=events, agent_meta=_AGENT_META, source_stats=source_stats)
 
 
 @app.route('/api/agents/stream')
 @login_required
 def agents_stream():
-    """SSE: 에이전트 이벤트 실시간 스트림 (5초 폴링)."""
+    """SSE: 에이전트 이벤트 실시간 스트림 (1초 폴링)."""
     # 마지막으로 전송한 이벤트 개수 추적
     sent_count = [0]
 
@@ -1204,6 +1507,8 @@ def agents_stream():
         while True:
             try:
                 events = _parse_agent_events(limit=100)
+                if sent_count[0] > len(events):
+                    sent_count[0] = 0
                 new_events = events[sent_count[0]:]
                 if new_events:
                     for ev in new_events:
@@ -1224,7 +1529,7 @@ def agents_stream():
                 break
             except Exception as e:
                 logger.error("agents_stream error: %s", e)
-            time.sleep(5)
+            time.sleep(1)
 
     return Response(
         generate(),
@@ -1261,8 +1566,7 @@ def handle_error(e):
     logger.error("unhandled error: %s", e, exc_info=True)
     if request.path.startswith('/api/'):
         return jsonify({'error': '내부 오류'}), 500
-    flash('내부 오류가 발생했습니다.')
-    return redirect(url_for('dashboard'))
+    return Response('Internal server error', status=500, mimetype='text/plain')
 
 
 # ─── Helpers ───
