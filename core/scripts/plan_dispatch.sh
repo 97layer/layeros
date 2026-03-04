@@ -181,7 +181,30 @@ PY
   exit 0
 fi
 
-COUNCIL_JSON="$(python3 "$PLAN_COUNCIL_SCRIPT" --task "$TASK" --mode preflight --json 2>/dev/null || true)"
+# exit code 계약: 0=go, 1=hard_stop, 2=needs_clarification, 3=degraded_single
+COUNCIL_JSON=""
+COUNCIL_EXIT=0
+COUNCIL_JSON="$(python3 "$PLAN_COUNCIL_SCRIPT" --task "$TASK" --mode preflight --json 2>/dev/null)" || COUNCIL_EXIT=$?
+
+if [[ "$COUNCIL_EXIT" -eq 1 ]]; then
+  echo "━━━ PLAN COUNCIL: HARD STOP ━━━" >&2
+  echo "두 모델 모두 호출 실패 (네트워크/키 오류)." >&2
+  echo "구현 금지. 원인 확인 후 재시도하세요." >&2
+  exit 1
+fi
+
+if [[ "$COUNCIL_EXIT" -eq 2 ]]; then
+  echo "━━━ PLAN COUNCIL: NEEDS CLARIFICATION ━━━" >&2
+  echo "Claude/Gemini 모두 범위 불명확으로 판정." >&2
+  echo "사용자에게 요청 범위 확인 후 재실행하세요." >&2
+  exit 2
+fi
+
+if [[ "$COUNCIL_EXIT" -eq 3 ]]; then
+  echo "━━━ PLAN COUNCIL: DEGRADED (한 모델만 응답) ━━━" >&2
+  echo "단일 모델 기준으로 진행합니다. 리스크 주의." >&2
+fi
+
 python3 - "$TASK" "$MODE" "$CLASSIFY_JSON" "$COUNCIL_JSON" <<'PY'
 import json
 import sys
