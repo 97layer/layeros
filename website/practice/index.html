@@ -16,8 +16,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=06a5fd9d">
-<script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
 <!-- /COMPONENT:head -->
 </head>
 <body class="page-practice">
@@ -48,37 +48,44 @@
   <div class="page-intro container--wide">
     <p class="page-preamble">헤어, 디렉팅, 프로젝트, 제품.</p>
     
+    
+    <div class="section-controls" data-reveal>
+      <nav class="archive-filter"
+           aria-label="프랙티스 섹션"
+           id="practice-sections">
+        
+        
+          
+            
+              <a class="section-chip archive-filter__btn"
+                 href="/practice/atelier.html">001. 아틀리에 · 오프라인 헤어 공간</a>
+            
+          
+            
+              <a class="section-chip archive-filter__btn"
+                 href="/practice/direction.html">002. 디렉팅 · 시각 연출과 브랜드 자문</a>
+            
+          
+            
+              <a class="section-chip archive-filter__btn"
+                 href="/practice/project.html">003. 프로젝트 · 협업 기반 디자인 프로젝트</a>
+            
+          
+            
+              <a class="section-chip archive-filter__btn"
+                 href="/practice/product.html">004. 제품 · 기록과 도구 아카이브</a>
+            
+          
+        
+        
+      </nav>
+    </div>
+    
   </div>
-  <div class="practice-section-grid container--wide">
-  <a class="practice-section-card" href="/practice/atelier.html" data-reveal>
-    <span class="practice-section-card__num">01.</span>
-    <strong class="practice-section-card__title">Atelier</strong>
-    <p class="practice-section-card__lead">WOOHWAHAE 첫 번째 오프라인 공간.</p>
-    <span class="practice-section-card__arrow">→</span>
-  </a>
-  <a class="practice-section-card" href="/practice/direction.html" data-reveal>
-    <span class="practice-section-card__num">02.</span>
-    <strong class="practice-section-card__title">Directing</strong>
-    <p class="practice-section-card__lead">시각 연출, 브랜드 자문, 에디토리얼.</p>
-    <span class="practice-section-card__arrow">→</span>
-  </a>
-  <a class="practice-section-card" href="/practice/project.html" data-reveal>
-    <span class="practice-section-card__num">03.</span>
-    <strong class="practice-section-card__title">Project</strong>
-    <p class="practice-section-card__lead">헤어 디자인 프로젝트 신청.</p>
-    <span class="practice-section-card__arrow">→</span>
-  </a>
-  <a class="practice-section-card practice-section-card--inactive" href="/practice/product.html" data-reveal>
-    <span class="practice-section-card__num">04.</span>
-    <strong class="practice-section-card__title">Product</strong>
-    <p class="practice-section-card__lead">기록과 도구.</p>
-    <span class="practice-section-card__tag">준비 중</span>
-  </a>
-</div>
-
+  
 </main>
 
-<script defer src="/assets/js/site.js?v=711c1f0c"></script>
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
   <div class="footer-inner">

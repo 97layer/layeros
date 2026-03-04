@@ -4,68 +4,23 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta description="Playlist — WOOHWAHAE. A curated ambient soundscape for profound focus." />
+    <meta name="description" content="Playlist — WOOHWAHAE. A curated ambient soundscape for profound focus." />
     <title>Atmosphere — WOOHWAHAE</title>
-    <meta content="#E3E2E0" name="theme-color" />
-    <link href="/assets/media/brand/symbol.png" rel="icon" type="image/png" />
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="/assets/css/style.css?v=06a5fd9d" rel="stylesheet" />
+    <!-- COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+<!-- /COMPONENT:head -->
 
     <!-- UI Enhancement Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
-    <style>
-        .playlist-hero {
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        .audio-status {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            color: var(--text-faint);
-            margin-top: var(--space-lg);
-            text-transform: uppercase;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .audio-status.is-visible {
-            opacity: 1;
-        }
-
-        .play-trigger {
-            background: none;
-            border: 1px solid var(--line);
-            padding: var(--space-md) var(--space-xl);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.6s var(--ease);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .play-trigger:hover {
-            border-color: var(--text);
-            letter-spacing: 0.2em;
-        }
-
-        .play-trigger.is-playing {
-            background: var(--text);
-            color: var(--bg);
-            border-color: var(--text);
-        }
-    </style>
 </head>
 
 <body class="page-playlist">
@@ -97,7 +52,7 @@
 
     <main class="playlist-hero">
         <span class="section-label" data-reveal>AMBIENT SOUNDSCAPE</span>
-        <h1 class="longform-title" data-reveal style="margin-bottom: var(--space-md);">Atmosphere</h1>
+        <h1 class="longform-title" data-reveal>Atmosphere</h1>
         <button class="play-trigger" id="playBtn" data-reveal>ENTER SILENCE</button>
         <div class="audio-status" id="audioStatus">Resonate with the 3.8s breath cycle.</div>
     </main>
@@ -131,7 +86,7 @@
 </footer>
 <!-- /COMPONENT:footer -->
 
-    <script src="/assets/js/site.js?v=711c1f0c" defer></script>
+    <script src="/assets/js/site.js?v=53abfa73" defer></script>
     <script>
         let audioCtx, mainGain, oscillators = [], isPlaying = false;
 

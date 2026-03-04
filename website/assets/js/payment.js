@@ -98,12 +98,13 @@ function handlePaymentSuccess() {
 
     if (productId === 'manual_pdf') {
       downloadHTML = `
-        <div style="margin-top: 2rem; padding: 1.5rem; background: #f5f5f5; border-left: 3px solid #2C2C2C;">
-          <strong style="font-size: 1.1rem;">📥 다운로드</strong><br><br>
-          <a href="../products/atelier-manual.html" target="_blank" style="display: inline-block; padding: 0.75rem 1.5rem; background: #2C2C2C; color: #FAFAF7; text-decoration: none; font-family: monospace; font-size: 0.9rem;">
+        <div class="payment-download-card">
+          <strong class="payment-download-title">다운로드</strong><br><br>
+          <a href="../products/atelier-manual.html" target="_blank" class="payment-download-link">
             Atelier Manual 보기 →
-          </a><br><br>
-          <small style="color: #5A5A5A; line-height: 1.6;">
+          </a>
+          <br><br>
+          <small class="payment-download-note">
             브라우저에서 <strong>Cmd/Ctrl + P</strong>를 눌러<br>
             "PDF로 저장"을 선택하세요.
           </small>
@@ -111,12 +112,13 @@ function handlePaymentSuccess() {
       `;
     } else if (productId === 'slow_object_001') {
       downloadHTML = `
-        <div style="margin-top: 2rem; padding: 1.5rem; background: #f5f5f5; border-left: 3px solid #2C2C2C;">
-          <strong style="font-size: 1.1rem;">📥 다운로드</strong><br><br>
-          <a href="../products/slow-object-001-scissors.html" target="_blank" style="display: inline-block; padding: 0.75rem 1.5rem; background: #2C2C2C; color: #FAFAF7; text-decoration: none; font-family: monospace; font-size: 0.9rem;">
+        <div class="payment-download-card">
+          <strong class="payment-download-title">다운로드</strong><br><br>
+          <a href="../products/slow-object-001-scissors.html" target="_blank" class="payment-download-link">
             Slow Object Report #001 보기 →
-          </a><br><br>
-          <small style="color: #5A5A5A; line-height: 1.6;">
+          </a>
+          <br><br>
+          <small class="payment-download-note">
             브라우저에서 <strong>Cmd/Ctrl + P</strong>를 눌러<br>
             "PDF로 저장"을 선택하세요.
           </small>
@@ -135,7 +137,12 @@ function handlePaymentFail() {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   const message = urlParams.get('message');
+  const errorInfo = document.getElementById('error-info');
 
   console.error('결제 실패:', { code, message });
-  alert(`결제에 실패했습니다.\n${message}`);
+  if (errorInfo) {
+    const msg = message || '결제 처리 중 문제가 발생했습니다.';
+    errorInfo.textContent = code ? `[${code}] ${msg}` : msg;
+    return;
+  }
 }

@@ -13,6 +13,9 @@ import pytest
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT))
 
+# pytest 임시 디렉터리(/tmp) 쓰기 허용을 위해 guard 비활성화
+os.environ.setdefault("LAYER_DISABLE_FILESYSTEM_GUARD", "1")
+
 # 테스트 환경변수 — 실제 환경 오염 방지
 _TEST_PASSWORD = 'test-password-2026'
 

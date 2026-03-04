@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Exp.027 Renewal Visual Board. 단일 화면에 색·타입·레이아웃 방향을 압축한 리뉴얼 시안."/>
+  <meta property="og:title" content="Exp.027 Renewal Visual Board — WOOHWAHAE Lab"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://woohwahae.kr/lab/demo-renewal-visual.html"/>
+  <title>Exp.027 Renewal Visual Board — WOOHWAHAE Lab</title>
+  <!-- COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+<!-- /COMPONENT:head -->
+</head>
+<body class="page-lab page-lab-visual">
+<!-- COMPONENT:nav -->
+<nav class="site-nav" id="site-nav">
+  <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+    <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
+    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
+    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/lab/"><span class="numeric-tag">04.</span>Lab</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
+</nav>
+<div class="nav-overlay" id="nav-overlay">
+  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
+  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
+  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
+</div>
+<!-- /COMPONENT:nav -->
+
+<main class="page-main">
+  <section class="page-intro container--wide" data-reveal>
+    <p class="page-preamble">Exp.027 / Renewal Visual Board</p>
+    <h1 class="visual-hero__title">선과 밀도의 최소 단위로 리뉴얼 톤을 고정</h1>
+    <p class="visual-hero__lead">색상·타입·레이아웃을 한 화면에 압축해 방향성을 검증하는 보드입니다. Glass를 걷어내고 선과 여백만 남긴 상태를 기준값으로 제안합니다.</p>
+  </section>
+
+  <section class="visual-board container--wide" data-reveal>
+    <article class="visual-card visual-card--palette">
+      <header class="visual-card__header">
+        <p class="visual-card__eyebrow">Palette</p>
+        <h2 class="visual-card__title">Warm Gray Monolith</h2>
+        <p class="visual-card__desc">배경 2계층 + 텍스트 3계층 + 네이비 포인트. Glass 배제, 질감은 그레인 레이어로 최소화.</p>
+      </header>
+      <div class="visual-swatches">
+        <div class="visual-swatch" data-tone="bg"></div>
+        <div class="visual-swatch" data-tone="bg-dark"></div>
+        <div class="visual-swatch" data-tone="text"></div>
+        <div class="visual-swatch" data-tone="text-sub"></div>
+        <div class="visual-swatch" data-tone="navy"></div>
+      </div>
+      <dl class="visual-legend">
+        <div><dt>Surface</dt><dd>--bg / --bg-dark</dd></div>
+        <div><dt>Ink</dt><dd>--text / --text-sub</dd></div>
+        <div><dt>Accent</dt><dd>--navy (선택적)</dd></div>
+      </dl>
+    </article>
+
+    <article class="visual-card visual-card--type">
+      <header class="visual-card__header">
+        <p class="visual-card__eyebrow">Type Scale</p>
+        <h2 class="visual-card__title">행간 1.6, 억제된 대비</h2>
+        <p class="visual-card__desc">Pretendard 본문 + Plex Mono 라벨. 제목은 자간 -0.03em, 본문 -0.01em.</p>
+      </header>
+      <div class="visual-type-scale">
+        <div class="type-row type-row--h1">
+          <p class="type-label">H1 / 2.2rem / 300</p>
+          <p class="type-display">덜어냈을 때 남는 구조</p>
+        </div>
+        <div class="type-row type-row--h2">
+          <p class="type-label">H2 / 1.6rem / 300</p>
+          <p class="type-display">페이지 리듬은 여백이 만든다</p>
+        </div>
+        <div class="type-row type-row--body">
+          <p class="type-label">Body / 1rem / 400</p>
+          <p class="type-body">설명은 건조하게, 정보는 선명하게. Glass와 그림자는 줄이고 선과 간격만 남긴다.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="visual-card visual-card--layout">
+      <header class="visual-card__header">
+        <p class="visual-card__eyebrow">Layout Skeleton</p>
+        <h2 class="visual-card__title">비대칭 수직 리스트</h2>
+        <p class="visual-card__desc">좌측 정보축, 우측 모듈형 카드. 여백 60% 확보, 선형 구분선만 사용.</p>
+      </header>
+      <div class="visual-layout">
+        <div class="layout-stack">
+          <div class="layout-block layout-block--thin"></div>
+          <div class="layout-block layout-block--main"></div>
+          <div class="layout-block layout-block--grid">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="layout-block layout-block--foot"></div>
+        </div>
+        <div class="layout-notes">
+          <p>그리드: 8 / 16 / 32px 배수</p>
+          <p>패딩: var(--space-lg)</p>
+          <p>구분선: var(--line), 1px</p>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
+<!-- COMPONENT:footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-wordmark">WOOHWAHAE</div>
+    <div class="footer-mid">
+      <nav class="footer-nav">
+        <a href="/archive/">Archive</a>
+        <a href="/practice/">Practice</a>
+        <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+      </nav>
+      <div class="footer-contact-row">
+        <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
+        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+        <a href="tel:05071393-2075">0507-1393-2075</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
+      <div class="footer-legal">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <span>&copy; 2025 WOOHWAHAE</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /COMPONENT:footer -->
+</body>
+</html>

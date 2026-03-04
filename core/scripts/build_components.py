@@ -28,11 +28,7 @@ COMPONENTS_DIR = WEBSITE_DIR / "_components"
 
 # 제외 디렉토리/파일
 EXCLUDE_DIRS = {"_components", "_templates"}
-EXCLUDE_FILES = {"404.html"}
-
-# 페이지별 footer 매핑: 어느 섹션이 어떤 footer를 쓰는지
-FOOTER_CONTACT_SECTIONS = {"", "practice", "about", "woosunho"}
-FOOTER_ARCHIVE_SECTIONS = {"archive"}
+EXCLUDE_FILES = set()
 
 # 마커 패턴
 MARKER_RE = re.compile(
@@ -60,10 +56,10 @@ def get_section(filepath: Path) -> str:
 
 
 def get_footer_type(filepath: Path) -> str:
-    """페이지에 맞는 footer 타입 반환."""
-    section = get_section(filepath)
-    if section in FOOTER_ARCHIVE_SECTIONS:
-        return "footer-archive"
+    """페이지에 맞는 footer 타입 반환.
+
+    2026-03 이후 공개 페이지는 footer-contact 단일 컴포넌트를 사용한다.
+    """
     return "footer-contact"
 
 
@@ -95,9 +91,6 @@ def get_target_files(specific_file: str = None) -> list:
             continue
         # 제외 파일
         if rel.name in EXCLUDE_FILES:
-            continue
-        # proto_*.html 등 프로토타입 제외
-        if rel.name.startswith("proto"):
             continue
         # _gen- 접두사 제외
         if rel.name.startswith("_gen"):

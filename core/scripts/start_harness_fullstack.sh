@@ -94,10 +94,22 @@ fi
 
 # Load .env for local runs (systemd environments already inject this).
 if [[ -f "$PROJECT_ROOT/.env" ]]; then
-  set -a
-  # shellcheck disable=SC1091
-  source "$PROJECT_ROOT/.env"
-  set +a
+  if "$PYTHON_BIN" -c "import dotenv" >/dev/null 2>&1; then
+    while IFS= read -r kv; do
+      [[ -z "$kv" ]] && continue
+      export "$kv"
+    done < <("$PYTHON_BIN" - <<'PY'
+from dotenv import dotenv_values
+
+for key, value in dotenv_values(".env").items():
+    if not key or value is None:
+        continue
+    print(f"{key}={value}")
+PY
+)
+  else
+    echo "WARN: python-dotenv not importable in $PYTHON_BIN. skipping .env load."
+  fi
 fi
 
 if [[ -z "${GOOGLE_API_KEY:-}" && -z "${GEMINI_API_KEY:-}" ]]; then

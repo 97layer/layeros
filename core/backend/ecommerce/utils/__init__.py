@@ -6,6 +6,7 @@ from .auth import (
     decode_access_token,
     get_current_user,
     get_current_active_admin,
+    ACCESS_TOKEN_EXPIRE_MINUTES,
 )
 from .redis_client import redis_client
 
@@ -16,5 +17,6 @@ __all__ = [
     "decode_access_token",
     "get_current_user",
     "get_current_active_admin",
+    "ACCESS_TOKEN_EXPIRE_MINUTES",
     "redis_client",
 ]

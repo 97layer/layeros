@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Exp.026 Renewal Decision Board. 리뉴얼 우선순위와 정보 구조를 한 화면에서 점검하는 실행형 데모."/>
+  <meta property="og:title" content="Exp.026 Renewal Decision Board — WOOHWAHAE Lab"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://woohwahae.kr/lab/demo-renewal-decision-board.html"/>
+  <title>Exp.026 Renewal Decision Board — WOOHWAHAE Lab</title>
+  <!-- COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+<!-- /COMPONENT:head -->
+</head>
+<body class="page-lab page-lab-renewal">
+<!-- COMPONENT:nav -->
+<nav class="site-nav" id="site-nav">
+  <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+    <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
+    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
+    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/lab/"><span class="numeric-tag">04.</span>Lab</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
+</nav>
+<div class="nav-overlay" id="nav-overlay">
+  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
+  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
+  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
+</div>
+<!-- /COMPONENT:nav -->
+
+<main class="page-main">
+  <section class="page-intro container--wide">
+    <p class="page-preamble">Exp.026 / 리뉴얼 의사결정을 계획서가 아니라 실제 인터페이스 위에서 검증하는 실행형 보드.</p>
+  </section>
+
+  <section class="container--wide renewal-live" data-reveal>
+    <header class="renewal-live__header">
+      <p class="renewal-live__eyebrow">Renewal Decision Board</p>
+      <h1 class="renewal-live__title">정체성, 구조, 운영을 같은 화면에서 동시에 비교</h1>
+      <p class="renewal-live__lead">탭 전환으로 핵심 결정을 빠르게 점검합니다. 방향은 유지하고, 우선순위만 선명하게 분리합니다.</p>
+      <div class="renewal-live__meta">
+        <span>Identity Lock</span>
+        <span>IA Priority</span>
+        <span>Ops Clarity</span>
+      </div>
+    </header>
+
+    <article class="renewal-demo" id="decision-board">
+      <div class="renewal-demo__bar">
+        <div class="renewal-demo__dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="renewal-demo__tabs" role="tablist" aria-label="결정 보드 탭">
+          <button class="renewal-tab is-active" data-decision-view="identity" role="tab" aria-selected="true">Identity</button>
+          <button class="renewal-tab" data-decision-view="ia" role="tab" aria-selected="false">IA</button>
+          <button class="renewal-tab" data-decision-view="ops" role="tab" aria-selected="false">Ops</button>
+          <button class="renewal-tab" data-decision-view="rollout" role="tab" aria-selected="false">Rollout</button>
+        </div>
+        <div class="renewal-demo__vp" role="tablist" aria-label="프리뷰 폭">
+          <button class="renewal-vp-btn" data-decision-vp="390" role="tab" aria-selected="false">390</button>
+          <button class="renewal-vp-btn" data-decision-vp="768" role="tab" aria-selected="false">768</button>
+          <button class="renewal-vp-btn is-active" data-decision-vp="1440" role="tab" aria-selected="true">1440</button>
+        </div>
+      </div>
+
+      <div class="renewal-demo__canvas" id="decision-canvas">
+        <section class="renewal-screen is-active" data-decision-panel="identity">
+          <header class="renewal-section-head">
+            <p>Identity Axis</p>
+            <h2>보이는 스타일보다 브랜드 좌표를 먼저 고정</h2>
+          </header>
+          <div class="renewal-home-hero">
+            <div>
+              <p class="renewal-home-hero__kicker">North Star</p>
+              <h3 class="renewal-home-hero__title">덜어낸 구조 위에 필요한 감각만 남긴다.</h3>
+              <p class="renewal-home-hero__copy">헤드라인, 여백, 동선 규칙을 먼저 정하고 장식은 마지막에 검토하는 흐름.</p>
+            </div>
+            <aside class="renewal-home-kpi" aria-label="브랜드 기준">
+              <article><p>Tone Drift</p><span>0%</span></article>
+              <article><p>Copy Noise</p><span>-31%</span></article>
+              <article><p>Visual Debt</p><span>-24%</span></article>
+            </aside>
+          </div>
+          <div class="renewal-home-sections">
+            <article><p>Rule 01</p><h3>헤더·내비·푸터 규약 고정</h3><span>페이지별 분기 금지</span></article>
+            <article><p>Rule 02</p><h3>색상 토큰 외 직접색 금지</h3><span>명시적 디자인 부채 차단</span></article>
+            <article><p>Rule 03</p><h3>카피 온도 일관 유지</h3><span>채널별 문체 규약 준수</span></article>
+          </div>
+        </section>
+
+        <section class="renewal-screen" data-decision-panel="ia">
+          <header class="renewal-section-head">
+            <p>IA Axis</p>
+            <h2>진입 경로와 우선순위를 카드가 아니라 구조로 정리</h2>
+          </header>
+          <div class="renewal-archive-toolbar">
+            <button>01. Core</button>
+            <button>02. Flow</button>
+            <button>03. Utility</button>
+            <input type="search" placeholder="경로 검색" aria-label="경로 검색"/>
+          </div>
+          <ul class="renewal-archive-list">
+            <li><strong>Home → Archive</strong><span>브랜드 서사 진입 / 1클릭</span></li>
+            <li><strong>Home → Practice</strong><span>서비스 탐색 / 1클릭</span></li>
+            <li><strong>Practice → Contact</strong><span>예약 전환 / 2클릭</span></li>
+            <li><strong>Product → Payment</strong><span>구매 흐름 / 2클릭</span></li>
+            <li><strong>Any → Legal</strong><span>정책 확인 / 푸터 고정</span></li>
+          </ul>
+        </section>
+
+        <section class="renewal-screen renewal-screen--ops" data-decision-panel="ops">
+          <div class="ops-hero">
+            <div class="ops-hero__copy">
+              <p class="renewal-label">Ops Axis</p>
+              <h2>이탈 상황에서 복귀 동선을 먼저 배치</h2>
+              <p>결제 실패, 404, 법무 페이지를 개별 처리하지 않고 하나의 운영 문법으로 묶어 복구 속도를 높입니다.</p>
+              <div class="ops-hero__tags">
+                <span>Payment</span><span>404</span><span>Legal</span>
+              </div>
+            </div>
+            <div class="ops-metrics">
+              <article><p>Recovery Step</p><strong>2 Step</strong><small>문제 인지 후 복귀</small></article>
+              <article><p>Error Exit</p><strong>-36%</strong><small>이탈률 시뮬레이션</small></article>
+              <article><p>Policy Reach</p><strong>+22%</strong><small>법무 접근성</small></article>
+            </div>
+          </div>
+          <div class="ops-grid">
+            <article class="ops-card">
+              <div class="ops-card__head"><p class="renewal-label">Fail UX</p><span class="ops-badge ops-badge--warn">Hot</span></div>
+              <h3>결제 실패 메시지 재구성</h3>
+              <ol class="ops-steps">
+                <li>실패 원인과 주문번호 즉시 노출</li>
+                <li>재시도 버튼을 1순위 배치</li>
+                <li>상담/홈 복귀 경로를 동일 위치 고정</li>
+              </ol>
+            </article>
+            <article class="ops-card">
+              <div class="ops-card__head"><p class="renewal-label">Legal UX</p><span class="ops-badge ops-badge--info">Core</span></div>
+              <h3>법무 페이지 가독 규격</h3>
+              <ul class="ops-bullets">
+                <li>66ch 본문 폭과 line-height 1.8</li>
+                <li>약관/정책 섹션 위계 통일</li>
+                <li>모든 링크 포커스 대비 보강</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="renewal-screen" data-decision-panel="rollout">
+          <header class="renewal-section-head">
+            <p>Rollout Axis</p>
+            <h2>적용 순서를 고정해 리스크를 분리</h2>
+          </header>
+          <div class="renewal-product-layout">
+            <article class="renewal-product-main">
+              <p class="renewal-label">Phase Plan</p>
+              <h3>1) 구조 / 2) 카피 / 3) 인터랙션 / 4) 운영</h3>
+              <p>기능 추가보다 중복 제거를 먼저 수행하고, 페이지별 우선순위를 검증 게이트와 함께 진행합니다.</p>
+              <div class="renewal-product-price">
+                <span>4 Sprint Window</span>
+                <small>각 스프린트 종료 시 시각 검증</small>
+              </div>
+            </article>
+            <aside class="renewal-product-side">
+              <p class="renewal-label">Gate</p>
+              <ul>
+                <li>visual_validator 에러 0</li>
+                <li>component/build 재생성 성공</li>
+                <li>핵심 경로 모바일/데스크톱 스모크</li>
+              </ul>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script defer src="/assets/js/site.js"></script>
+<script defer src="/assets/js/lab-renewal-decision-board.js"></script>
+<!-- COMPONENT:footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-wordmark">WOOHWAHAE</div>
+    <div class="footer-mid">
+      <nav class="footer-nav">
+        <a href="/archive/">Archive</a>
+        <a href="/practice/">Practice</a>
+        <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+      </nav>
+      <div class="footer-contact-row">
+        <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
+        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+        <a href="tel:05071393-2075">0507-1393-2075</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
+      <div class="footer-legal">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <span>&copy; 2025 WOOHWAHAE</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /COMPONENT:footer -->
+</body>
+</html>

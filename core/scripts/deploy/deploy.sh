@@ -7,6 +7,9 @@
 #   ./deploy.sh all          코드 pull + active 서비스 전체 재시작
 #   ./deploy.sh web          Cloudflare Pages 안내
 #   ./deploy.sh <서비스명>   특정 서비스 재시작 (active만 허용)
+#   ./deploy.sh gateway-install  unified gateway(systemd) 설치/재시작
+#   ./deploy.sh gateway-status   unified gateway 상태 확인
+#   ./deploy.sh admin-cutover    gateway 준비 + /admin 안전 컷오버
 #   ./deploy.sh --status     서비스 상태 확인
 #   ./deploy.sh --list       배포 가능 서비스 목록
 
@@ -24,6 +27,7 @@ fi
 
 VM_HOST=$(python3 -c "import json; d=json.load(open('$VM_SERVICES_JSON')); print(d['vm']['host_alias'])")
 VM_PATH=$(python3 -c "import json; d=json.load(open('$VM_SERVICES_JSON')); print(d['vm']['app_path'])")
+VM_USER=$(python3 -c "import json; d=json.load(open('$VM_SERVICES_JSON')); print(d['vm'].get('user', ''))")
 SERVICES_ACTIVE=$(python3 -c "import json; d=json.load(open('$VM_SERVICES_JSON')); print(' '.join(d['active'].keys()))")
 
 # 서비스가 active 목록에 있는지 확인
@@ -33,6 +37,108 @@ import json, sys
 d = json.load(open('$VM_SERVICES_JSON'))
 sys.exit(0 if '$1' in d['active'] else 1)
 " 2>/dev/null
+}
+
+gateway_install_remote() {
+  ssh ${VM_HOST} "bash -s" <<EOF
+set -euo pipefail
+
+APP_PATH="${VM_PATH}"
+RUN_USER="${VM_USER}"
+if [ -z "\$RUN_USER" ]; then
+  RUN_USER="\$(id -un)"
+fi
+
+if [ ! -d "\$APP_PATH" ]; then
+  echo "ERROR: app path not found (\$APP_PATH)" >&2
+  exit 1
+fi
+
+PY_BIN=""
+for CANDIDATE in "\$APP_PATH/.venv/bin/python3" "python3"; do
+  if [ "\$CANDIDATE" = "python3" ]; then
+    command -v python3 >/dev/null 2>&1 || continue
+  elif [ ! -x "\$CANDIDATE" ]; then
+    continue
+  fi
+
+  if "\$CANDIDATE" -c "import uvicorn" >/dev/null 2>&1; then
+    PY_BIN="\$CANDIDATE"
+    break
+  fi
+done
+
+if [ -z "\$PY_BIN" ]; then
+  echo "ERROR: uvicorn import 가능한 python 인터프리터를 찾지 못했습니다." >&2
+  exit 1
+fi
+
+mkdir -p "\$APP_PATH/.infra/logs"
+
+cat > /tmp/woohwahae-gateway.service <<UNIT
+[Unit]
+Description=WOOHWAHAE Unified Gateway (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=\$RUN_USER
+WorkingDirectory=\$APP_PATH
+EnvironmentFile=-\$APP_PATH/.env
+ExecStart=\$PY_BIN -m uvicorn core.backend.main:app --host 127.0.0.1 --port 8082
+Restart=always
+RestartSec=3
+StandardOutput=append:\$APP_PATH/.infra/logs/woohwahae-gateway.log
+StandardError=append:\$APP_PATH/.infra/logs/woohwahae-gateway.log
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+sudo install -m 644 /tmp/woohwahae-gateway.service /etc/systemd/system/woohwahae-gateway.service
+sudo systemctl daemon-reload
+sudo systemctl enable woohwahae-gateway
+sudo systemctl restart woohwahae-gateway
+sleep 2
+
+echo "gateway_service=\$(systemctl is-active woohwahae-gateway 2>/dev/null || echo not-found)"
+ss -tlnp | grep 8082 >/dev/null || { echo "8082 NOT LISTENING"; exit 1; }
+
+curl -fsS --max-time 4 http://127.0.0.1:8082/healthz >/tmp/woohwahae-gateway-healthz.json
+python3 - <<'PY'
+import json
+from pathlib import Path
+
+payload = json.loads(Path('/tmp/woohwahae-gateway-healthz.json').read_text(encoding='utf-8'))
+print("gateway_health_status=" + str(payload.get("status")))
+print("gateway_orchestrator_running=" + str(((payload.get("orchestrator") or {}).get("running"))))
+PY
+EOF
+}
+
+gateway_status_remote() {
+  ssh ${VM_HOST} "bash -s" <<'EOF'
+set -euo pipefail
+
+echo "gateway_service=$(systemctl is-active woohwahae-gateway 2>/dev/null || echo not-found)"
+if ss -tlnp | grep -q 8082; then
+  echo "gateway_port=8082_listening"
+else
+  echo "gateway_port=8082_not_listening"
+fi
+
+if curl -fsS --max-time 4 http://127.0.0.1:8082/healthz >/tmp/woohwahae-gateway-healthz.json; then
+  python3 - <<'PY'
+import json
+from pathlib import Path
+payload = json.loads(Path('/tmp/woohwahae-gateway-healthz.json').read_text(encoding='utf-8'))
+print("gateway_health_status=" + str(payload.get("status")))
+print("gateway_plan_council_status=" + str(((payload.get("plan_council") or {}).get("status"))))
+PY
+else
+  echo "gateway_health_status=unreachable"
+fi
+EOF
 }
 
 case "${1:-pull}" in
@@ -67,9 +173,19 @@ for name, info in d['inactive'].items():
     echo "[2/3] corpus 군집 마이그레이션..."
     ssh ${VM_HOST} "cd ${VM_PATH} && python3 core/scripts/migrate_corpus_clusters.py"
     echo "[3/3] active 서비스 전체 재시작 (${SERVICES_ACTIVE})..."
-    ssh ${VM_HOST} "sudo systemctl restart ${SERVICES_ACTIVE}"
+    ssh ${VM_HOST} "
+      set -e
+      for s in ${SERVICES_ACTIVE}; do
+        if systemctl list-unit-files | grep -q \"^\${s}\\.service\"; then
+          sudo systemctl restart \${s}
+          printf '%-25s restarted\n' \${s}
+        else
+          printf '%-25s skipped(not-found)\n' \${s}
+        fi
+      done
+    "
     sleep 3
-    ssh ${VM_HOST} "for s in ${SERVICES_ACTIVE}; do printf '%-25s %s\n' \$s \$(systemctl is-active \$s); done"
+    ssh ${VM_HOST} "for s in ${SERVICES_ACTIVE}; do printf '%-25s %s\n' \$s \$(systemctl is-active \$s 2>/dev/null || echo 'not-found'); done"
     ;;
 
   pull)
@@ -151,6 +267,33 @@ for name, info in d['inactive'].items():
       else
         echo 'FLASK_SECRET_KEY 이미 존재'
       fi
+      # FLASK_ADMIN_PASSWORD_HASH 없으면 기존 ADMIN_PASSWORD_HASH 재사용 또는 신규 생성
+      if ! grep -q '^FLASK_ADMIN_PASSWORD_HASH=' \$ENV_FILE 2>/dev/null; then
+        if grep -q '^ADMIN_PASSWORD_HASH=' \$ENV_FILE 2>/dev/null; then
+          H=\$(grep '^ADMIN_PASSWORD_HASH=' \$ENV_FILE | tail -n1 | cut -d= -f2-)
+          echo \"FLASK_ADMIN_PASSWORD_HASH=\$H\" >> \$ENV_FILE
+          echo 'FLASK_ADMIN_PASSWORD_HASH 추가 (ADMIN_PASSWORD_HASH 재사용)'
+        else
+          H=\$(python3 - <<'PY'
+import secrets
+from werkzeug.security import generate_password_hash
+print(generate_password_hash(secrets.token_urlsafe(18), method='pbkdf2:sha256'))
+PY
+)
+          echo \"FLASK_ADMIN_PASSWORD_HASH=\$H\" >> \$ENV_FILE
+          echo 'FLASK_ADMIN_PASSWORD_HASH 신규 생성'
+        fi
+      else
+        echo 'FLASK_ADMIN_PASSWORD_HASH 이미 존재'
+      fi
+      # FASTAPI_ADMIN_PASSWORD_HASH 없으면 Flask 해시와 동기화
+      if ! grep -q '^FASTAPI_ADMIN_PASSWORD_HASH=' \$ENV_FILE 2>/dev/null; then
+        H=\$(grep '^FLASK_ADMIN_PASSWORD_HASH=' \$ENV_FILE | tail -n1 | cut -d= -f2-)
+        echo \"FASTAPI_ADMIN_PASSWORD_HASH=\$H\" >> \$ENV_FILE
+        echo 'FASTAPI_ADMIN_PASSWORD_HASH 추가 (FLASK_ADMIN_PASSWORD_HASH 동기화)'
+      else
+        echo 'FASTAPI_ADMIN_PASSWORD_HASH 이미 존재'
+      fi
       # .env 현재 키 목록 확인 (값 제외)
       grep -o '^[^=]*' \$ENV_FILE | sort
     "
@@ -184,6 +327,106 @@ for name, info in d['inactive'].items():
     echo ""
     echo "=== 포트 5001 리스닝 확인 ==="
     ssh ${VM_HOST} "sudo ss -tlnp | grep 5001 || echo '5001 NOT LISTENING'"
+    ;;
+
+  admin-route-status)
+    echo "=== api.woohwahae.kr /admin 라우팅 상태 ==="
+    ssh ${VM_HOST} "python3 - <<'PY'
+import pathlib
+import re
+import sys
+
+conf = pathlib.Path('/etc/nginx/nginx.conf')
+if not conf.exists():
+    print('nginx.conf not found')
+    sys.exit(1)
+
+text = conf.read_text(encoding='utf-8', errors='ignore')
+match = re.search(r'location /admin/ \{.*?proxy_pass\\s+http://127\\.0\\.0\\.1:(\\d+)/;.*?\}', text, re.S)
+if not match:
+    print('/admin location block not found')
+    sys.exit(1)
+
+port = match.group(1)
+if port == '5001':
+    target = 'legacy-cortex-admin'
+elif port == '8082':
+    target = 'unified-gateway'
+else:
+    target = 'custom'
+
+print(f'admin_route_target={target}')
+print(f'admin_route_port={port}')
+PY"
+    ;;
+
+  admin-route-switch)
+    TARGET_MODE="${2:-}"
+    if [ "$TARGET_MODE" != "legacy" ] && [ "$TARGET_MODE" != "gateway" ]; then
+      echo "Usage: deploy.sh admin-route-switch [legacy|gateway]" >&2
+      exit 1
+    fi
+
+    if [ "$TARGET_MODE" = "legacy" ]; then
+      TARGET_PORT="5001"
+      TARGET_LABEL="legacy-cortex-admin"
+    else
+      TARGET_PORT="8082"
+      TARGET_LABEL="unified-gateway"
+    fi
+
+    echo "api.woohwahae.kr /admin 라우팅 전환 → ${TARGET_LABEL} (${TARGET_PORT})"
+    ssh ${VM_HOST} "
+      set -e
+      CONF=/etc/nginx/nginx.conf
+      TS=\$(date +%Y%m%d_%H%M%S)
+      sudo cp \$CONF \${CONF}.bak.admin-route.\${TS}
+      sudo sed -i -E '/location \\/admin\\//,/\\}/ s|proxy_pass http://127.0.0.1:[0-9]+/;|proxy_pass http://127.0.0.1:${TARGET_PORT}/;|' \$CONF
+      sudo nginx -t
+      sudo systemctl reload nginx
+      echo 'switched to ${TARGET_LABEL}'
+      python3 - <<'PY'
+import pathlib
+import re
+text = pathlib.Path('/etc/nginx/nginx.conf').read_text(encoding='utf-8', errors='ignore')
+m = re.search(r'location /admin/ \\{.*?proxy_pass\\s+http://127\\.0\\.0\\.1:(\\d+)/;.*?\\}', text, re.S)
+print('active_admin_port=' + (m.group(1) if m else 'unknown'))
+PY
+    "
+    ;;
+
+  gateway-install)
+    echo "=== unified gateway(systemd) 설치/재시작 ==="
+    gateway_install_remote
+    ;;
+
+  gateway-status)
+    echo "=== unified gateway 상태 확인 ==="
+    gateway_status_remote
+    ;;
+
+  admin-cutover)
+    echo "[1/5] backend 환경 보강..."
+    "$0" backend-init
+
+    echo "[2/5] unified gateway 설치/재시작..."
+    "$0" gateway-install
+
+    echo "[3/5] /admin 라우팅 → gateway(8082) 전환..."
+    "$0" admin-route-switch gateway
+
+    echo "[4/5] canary 확인 (https://api.woohwahae.kr/admin/)..."
+    ADMIN_CODE="$(curl -ksS -o /dev/null -w "%{http_code}" https://api.woohwahae.kr/admin/ || true)"
+    if [ "$ADMIN_CODE" != "200" ] && [ "$ADMIN_CODE" != "302" ]; then
+      echo "canary failed: /admin http_code=$ADMIN_CODE → legacy 롤백"
+      "$0" admin-route-switch legacy
+      exit 1
+    fi
+    echo "canary ok: /admin http_code=$ADMIN_CODE"
+
+    echo "[5/5] 최종 상태 확인"
+    "$0" admin-route-status
+    "$0" gateway-status
     ;;
 
   ssl-check)

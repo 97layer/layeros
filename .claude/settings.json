@@ -6,6 +6,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": ".claude/hooks/plan-council.sh"
+          },
+          {
+            "type": "command",
             "command": ".claude/hooks/proactive-advisor.sh"
           }
         ]

@@ -21,18 +21,29 @@
         list.appendChild(item);
       });
 
-      var obs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
-        });
-      }, { threshold: 0.05 });
-      document.querySelectorAll('[data-reveal]').forEach(function (el) { obs.observe(el); });
+      /* site.js reveal 리듬과 동기화: threshold/rootMargin/stagger 동일 */
+      var revealTargets = list.querySelectorAll('.archive-list-item[data-reveal]');
+      revealTargets.forEach(function (el, i) {
+        el.style.transitionDelay = (i % 9 * 0.08) + 's';
+      });
+      if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+        revealTargets.forEach(function (el) { obs.observe(el); });
+      } else {
+        revealTargets.forEach(function (el) { el.classList.add('is-visible'); });
+      }
 
       var activeFilter = 'all';
       var searchQuery = '';
-      if (countEl) countEl.textContent = posts.length + ' / ' + posts.length;
-
       var countEl = document.getElementById('archive-count');
+      if (countEl) countEl.textContent = posts.length + ' / ' + posts.length;
 
       function applyFilters() {
         var items = list.querySelectorAll('.archive-list-item');

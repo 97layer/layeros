@@ -9,17 +9,17 @@
 <meta content="website" property="og:type"/>
 <meta content="https://woohwahae.kr/product/" property="og:url"/>
 <title>Product — WOOHWAHAE</title>
-<meta content="#E3E2E0" name="theme-color"/>
-<link href="/assets/media/brand/symbol.png" rel="icon" type="image/png"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://cdn.jsdelivr.net" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="/assets/css/style.css?v=06a5fd9d" rel="stylesheet"/>
-<script>
-(function () { var h = new Date().getHours(); document.documentElement.className = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; })();
-</script>
+<!-- COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+<!-- /COMPONENT:head -->
 </head>
 <body class="page-product">
 
@@ -291,13 +291,13 @@
 
       // 장바구니 아이템 렌더링
       if (cart.length === 0) {
-        cartItems.innerHTML = '<p style="text-align: center; color: var(--text-faint); padding: 2rem;">장바구니가 비어 있다.</p>';
+        cartItems.innerHTML = '<p class="cart-empty-msg">장바구니가 비어 있다.</p>';
         if (cartCount) cartCount.style.display = 'none';
       } else {
         cartItems.innerHTML = cart.map((item, index) => `
           <div class="cart-item">
             <div class="cart-item-image">
-              <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;">
+              <img src="${item.image}" alt="${item.name}" class="cart-item-image__img">
             </div>
             <div class="cart-item-info">
               <div class="cart-item-name">${item.name}</div>
@@ -419,6 +419,6 @@
 </footer>
 <!-- /COMPONENT:footer -->
 
-<script defer src="/assets/js/site.js?v=711c1f0c"></script>
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
 </body>
 </html>

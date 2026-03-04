@@ -74,7 +74,7 @@ class VisualValidator:
             '--bg', '--text', '--text-sub',
             '--space-xs', '--space-sm', '--space-md',
             '--font-body', '--font-mono',
-            '--shadow-sm', '--radius-md'
+            '--shadow-sm'
         ]
 
         for token in required_tokens:

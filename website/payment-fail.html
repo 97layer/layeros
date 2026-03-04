@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>결제 실패 — WOOHWAHAE</title>
-<link href="assets/css/style.css?v=06a5fd9d" rel="stylesheet"/>
-<script defer="" src="assets/js/payment.js"></script>
+<!-- COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+<!-- /COMPONENT:head -->
+<script defer src="/assets/js/payment.js"></script>
 </head>
-<body onload="handlePaymentFail()"><!-- COMPONENT:nav -->
+<body class="page-payment-fail" onload="handlePaymentFail()">
+<!-- COMPONENT:nav -->
 <nav class="site-nav" id="site-nav">
   <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
     <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
@@ -30,38 +40,24 @@
   <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
   <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
 </div>
-<!-- /COMPONENT:nav --><main class="container--wide" style="padding-top: var(--space-xl); min-height: 60vh;">
-<div class="mag-row mag-row--intro fade-in">
-<div class="mag-label">
-<p class="section-label">Payment Failed</p>
-<p class="mag-heading">결제<br/>실패</p>
-</div>
-<div class="mag-body">
-<p class="lead">결제가 완료되지 않았습니다.</p>
-<p id="error-info">오류 정보를 확인하는 중...</p>
-<p style="margin-top: 2rem;">
-          문제가 계속되면 hello@woohwahae.kr로 문의해주세요.
-        </p>
-<a class="cta-inline" href="/practice/" style="margin-top: 2rem;">다시 시도하기 →</a>
-</div>
-</div>
+<!-- /COMPONENT:nav -->
+<main class="container--wide page-status-main">
+  <div class="mag-row mag-row--intro fade-in">
+    <div class="mag-label">
+      <p class="section-label">Payment Failed</p>
+      <p class="mag-heading">결제<br/>실패</p>
+    </div>
+    <div class="mag-body">
+      <p class="lead">결제가 완료되지 않았습니다.</p>
+      <p id="error-info">오류 정보를 확인하는 중...</p>
+      <p class="page-status-note">
+        문제가 계속되면 hello@woohwahae.kr로 문의해주세요.
+      </p>
+      <a class="cta-inline page-status-cta" href="/practice/">다시 시도하기 →</a>
+    </div>
+  </div>
 </main>
-<script src="assets/js/main.js?v=51eb750d"></script>
-<script>
-    // 오류 정보 표시
-    function handlePaymentFail() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      const message = urlParams.get('message');
-
-      if (code && message) {
-        document.getElementById('error-info').innerHTML = `
-          <strong>오류 코드:</strong> ${code}<br>
-          <strong>오류 메시지:</strong> ${decodeURIComponent(message)}
-        `;
-      }
-    }
-  </script>
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
 
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
@@ -90,5 +86,6 @@
     </div>
   </div>
 </footer>
-<!-- /COMPONENT:footer --></body>
+<!-- /COMPONENT:footer -->
+</body>
 </html>

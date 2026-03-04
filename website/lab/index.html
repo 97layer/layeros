@@ -16,8 +16,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=06a5fd9d">
-<script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
 <!-- /COMPONENT:head -->
 </head>
 <body class="page-lab">
@@ -47,13 +47,55 @@
 <main class="page-main">
   <div class="page-intro container--wide">
     <p class="page-preamble">웹 렌더링, 모션, 인터랙션 프로토타입. 완성 전 단계의 날것 실험들.</p>
-    <nav class="archive-filter" aria-label="Lab filters" id="lab-filter">
-  <button class="archive-filter__btn is-active" data-filter="all">01. All</button>
-  <button class="archive-filter__btn" data-filter="platform">02. Platform Build</button>
-  <button class="archive-filter__btn" data-filter="hair">03. Hair Architect</button>
-  <button class="archive-filter__btn" data-filter="kinetic">04. Kinematics</button>
-  <button class="archive-filter__btn" data-filter="pro">05. Pro System</button>
-</nav>
+    
+    
+    <div class="section-controls" data-reveal>
+      <nav class="archive-filter"
+           aria-label="랩 필터"
+           id="lab-filter">
+        
+        
+          
+            
+              <button class="section-chip archive-filter__btn is-active"
+                      data-filter="all">
+                001. 전체
+              </button>
+            
+          
+            
+              <button class="section-chip archive-filter__btn"
+                      data-filter="platform">
+                002. 플랫폼 빌드
+              </button>
+            
+          
+            
+              <button class="section-chip archive-filter__btn"
+                      data-filter="hair">
+                003. 헤어 아키텍트
+              </button>
+            
+          
+            
+              <button class="section-chip archive-filter__btn"
+                      data-filter="kinetic">
+                004. 키네틱스
+              </button>
+            
+          
+            
+              <button class="section-chip archive-filter__btn"
+                      data-filter="pro">
+                005. 프로 시스템
+              </button>
+            
+          
+        
+        
+      </nav>
+    </div>
+    
   </div>
   <div class="lab-grid container--wide" id="labGrid">
   <a class="lab-card" data-category="hair" href="demo-bob-silhouette.html">
@@ -186,6 +228,13 @@
     <p class="lab-card-desc">AI 비디오 에이전트(Luma, Runway 등) 생성 영상 기반 인트로 시스템. 고화질 MP4 렌더링 및 타이포그래피 시퀀스 통합.</p>
     <div class="lab-card-tags"><span class="lab-card-tag">AI Video</span><span class="lab-card-tag">MP4</span><span class="lab-card-tag">Intro System</span></div>
   </a>
+  <a class="lab-card" data-category="platform" href="concept-sprint-v2.html">
+    <svg class="lab-card-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
+    <p class="lab-card-num">Exp.020 [SPRINT]</p>
+    <h2 class="lab-card-title">Concept Sprint V2 Interior</h2>
+    <p class="lab-card-desc">브랜드 코어를 유지한 상태에서 방향/인테리어(동선, 재료, 조명)를 실시간 전환 검증하는 풀 데모 콘솔.</p>
+    <div class="lab-card-tags"><span class="lab-card-tag">Sprint</span><span class="lab-card-tag">Interior</span><span class="lab-card-tag">A/B</span></div>
+  </a>
   <a class="lab-card" data-category="platform" href="prototype-master-cut.html">
     <svg class="lab-card-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
     <p class="lab-card-num">Exp.021 [MASTER]</p>
@@ -207,12 +256,26 @@
     <p class="lab-card-desc">파격과 절제 사이의 균형점을 찾기 위한 마스터 템플릿. 정밀한 수직축 시스템과 탈-글래스모피즘을 통해 WOOHWAHAE의 본질적 우아함을 복구합니다.</p>
     <div class="lab-card-tags"><span class="lab-card-tag">Equilibrium</span><span class="lab-card-tag">Precision</span><span class="lab-card-tag">Elegance</span></div>
   </a>
-  <a class="lab-card" data-category="platform" href="demo-ritual-flow.html">
+  <a class="lab-card" data-category="platform" href="full-renewal-showcase.html">
     <svg class="lab-card-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
-    <p class="lab-card-num">Exp.024</p>
-    <h2 class="lab-card-title">Zero Point Console</h2>
-    <p class="lab-card-desc">소거 깊이 슬라이더와 레이어 토글로 신호와 잡음을 분리하는 실험. 남은 좌표만 기록하는 관찰형 UI.</p>
-    <div class="lab-card-tags"><span class="lab-card-tag">UI/UX</span><span class="lab-card-tag">Interaction</span><span class="lab-card-tag">Minimal</span></div>
+    <p class="lab-card-num">Exp.024 [RENEWAL]</p>
+    <h2 class="lab-card-title">Full Renewal Showcase</h2>
+    <p class="lab-card-desc">웹페이지 전체 리뉴얼 형태를 한 화면에서 검토하는 통합 시안. 전 페이지 문법, 배치 순서, 검증 게이트를 동시 시뮬레이션.</p>
+    <div class="lab-card-tags"><span class="lab-card-tag">Sitewide</span><span class="lab-card-tag">Renewal</span><span class="lab-card-tag">System</span></div>
+  </a>
+  <a class="lab-card" data-category="platform" href="renewal-render.html">
+    <svg class="lab-card-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    <p class="lab-card-num">Exp.025 [RENDER]</p>
+    <h2 class="lab-card-title">Live Render Switcher</h2>
+    <p class="lab-card-desc">홈·어바웃·아카이브·프랙티스·상품·결제·법무·404 실제 페이지를 탭으로 전환해 바로 보는 렌더링 데모.</p>
+    <div class="lab-card-tags"><span class="lab-card-tag">Render</span><span class="lab-card-tag">Live</span><span class="lab-card-tag">Preview</span></div>
+  </a>
+  <a class="lab-card" data-category="platform" href="demo-renewal-decision-board.html">
+    <svg class="lab-card-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    <p class="lab-card-num">Exp.026 [BOARD]</p>
+    <h2 class="lab-card-title">Renewal Decision Board</h2>
+    <p class="lab-card-desc">정체성·정보구조·운영 동선을 탭으로 전환하며 리뉴얼 우선순위를 점검하는 실행형 의사결정 데모.</p>
+    <div class="lab-card-tags"><span class="lab-card-tag">Roadmap</span><span class="lab-card-tag">IA</span><span class="lab-card-tag">Ops</span></div>
   </a>
 </div>
 
@@ -224,7 +287,8 @@
       '001': '2025.10.12', '002': '2025.10.21', '003': '2025.11.10', '004': '2025.11.23',
       '005': '2025.12.11', '006': '2025.12.28', '007': '2026.01.04', '008': '2026.01.15',
       '009': '2026.01.28', '010': '2026.02.02', '011': '2026.02.05', '012': '2026.02.10',
-      '013': '2026.02.16', '014': '2026.02.19', '015': '2026.02.20', '024': '2026.03.04'
+      '013': '2026.02.16', '014': '2026.02.19', '015': '2026.02.20', '020': '2026.03.04',
+      '024': '2026.03.04', '025': '2026.03.04', '026': '2026.03.04'
     };
     document.querySelectorAll('.lab-card-num').forEach(function (el) {
       var match = el.innerText.match(/Exp\.(\d{3})/);
@@ -262,7 +326,7 @@
     });
   });
 </script>
-<script defer src="/assets/js/site.js?v=711c1f0c"></script>
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
   <div class="footer-inner">

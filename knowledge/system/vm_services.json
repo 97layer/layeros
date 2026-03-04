@@ -1,6 +1,6 @@
 {
   "_doc": "VM 배포 대상 서비스 레지스트리 (SSOT). deploy.sh + command-guard hook이 참조.",
-  "_updated": "2026-02-27",
+  "_updated": "2026-03-04",
   "active": {
     "97layer-telegram": {
       "port": null,
@@ -18,17 +18,16 @@
       "port": 5000,
       "role": "고객 API/결제/예약"
     },
+    "woohwahae-gateway": {
+      "port": 8082,
+      "role": "통합 게이트웨이(FastAPI): /admin + harness API"
+    },
     "cortex-admin": {
       "port": 5001,
       "role": "대시보드 + 세컨드 브레인"
     }
   },
   "inactive": {
-    "fastapi-cms": {
-      "port": 8082,
-      "file": "core/backend/main.py",
-      "reason": "미사용 — 인라인 CMS, 프로덕션 미가동"
-    },
     "gallery-api": {
       "port": 8083,
       "file": null,

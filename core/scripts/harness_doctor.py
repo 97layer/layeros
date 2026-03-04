@@ -27,6 +27,7 @@ REPORT_FILE = PROJECT_ROOT / "knowledge" / "system" / "harness_doctor_reports.js
 
 REQUIRED_FILES = (
     "core/scripts/start_harness_fullstack.sh",
+    "core/scripts/harness_status.sh",
     "core/scripts/run_web_rebuild_prep.sh",
     "core/scripts/web_rebuild_prep.py",
     "core/scripts/plan_dispatch.sh",
@@ -135,10 +136,29 @@ def check_env() -> CheckResult:
 
 
 def check_work_lock() -> CheckResult:
-    lock_path = PROJECT_ROOT / "knowledge" / "system" / "work_lock.json"
-    if not lock_path.exists():
-        return CheckResult("work-lock", "warn", "work_lock.json absent (treated as unlocked)")
-    return CheckResult("work-lock", "pass", "work_lock.json present")
+    primary_path = PROJECT_ROOT / "knowledge" / "system" / "web_work_lock.json"
+    legacy_path = PROJECT_ROOT / "knowledge" / "system" / "work_lock.json"
+
+    if not primary_path.exists():
+        return CheckResult("work-lock", "fail", "web_work_lock.json missing")
+
+    try:
+        primary_payload = json.loads(primary_path.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001
+        return CheckResult("work-lock", "fail", f"invalid web_work_lock.json ({exc})")
+
+    locked = primary_payload.get("locked")
+    if locked is True:
+        return CheckResult("work-lock", "warn", "web_work_lock.json is locked=true")
+
+    if legacy_path.exists():
+        try:
+            json.loads(legacy_path.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001
+            return CheckResult("work-lock", "warn", f"legacy work_lock.json invalid ({exc})")
+        return CheckResult("work-lock", "pass", "web_work_lock + legacy work_lock present")
+
+    return CheckResult("work-lock", "pass", "web_work_lock.json present (legacy work_lock omitted)")
 
 
 def check_plan_council() -> CheckResult:

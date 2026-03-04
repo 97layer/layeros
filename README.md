@@ -24,11 +24,24 @@ website/             얼굴 — woohwahae.kr (Cloudflare Pages)
 ## 실행
 
 ```bash
+# 리빌드 전 필수 게이트 (lock + 시각검증 + 빌드 + localhost:9700 스모크)
+bash core/scripts/run_web_rebuild_prep.sh --agent HUMAN --task "ui-ux rebuild"
+
 # 빌드
 python3 core/scripts/build.py
 
 # 배포 (Cloudflare Pages)
 git push origin main
+```
+
+## 하네스 풀스택 (로컬 협업)
+
+```bash
+# SA/AD/CE/CD + Orchestrator + Scout
+bash core/scripts/start_harness_fullstack.sh
+
+# Gardener/Monitor까지 포함
+bash core/scripts/start_harness_fullstack.sh --with-gardener --with-monitor
 ```
 
 ---

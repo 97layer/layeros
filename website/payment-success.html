@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>결제 완료 — WOOHWAHAE</title>
-<link href="assets/css/style.css?v=06a5fd9d" rel="stylesheet"/>
-<script defer="" src="assets/js/payment.js"></script>
+<!-- COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+<!-- /COMPONENT:head -->
+<script defer src="/assets/js/payment.js"></script>
 </head>
-<body onload="handlePaymentSuccess()"><!-- COMPONENT:nav -->
+<body class="page-payment-success" onload="handlePaymentSuccess()">
+<!-- COMPONENT:nav -->
 <nav class="site-nav" id="site-nav">
   <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
     <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
@@ -30,40 +40,26 @@
   <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
   <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
 </div>
-<!-- /COMPONENT:nav --><main class="container--wide" style="padding-top: var(--space-xl); min-height: 60vh;">
-<div class="mag-row mag-row--intro fade-in">
-<div class="mag-label">
-<p class="section-label">Payment Success</p>
-<p class="mag-heading">결제<br/>완료</p>
-</div>
-<div class="mag-body">
-<p class="lead">결제가 완료되었습니다.</p>
-<p id="order-info">주문 정보를 확인하는 중...</p>
-<div id="download-info"></div>
-<p style="margin-top: 2rem;">
-          구매하신 상품은 등록하신 이메일로도 전송됩니다.<br/>
-          문의사항은 hello@woohwahae.kr로 연락 주세요.
-        </p>
-<a class="cta-inline" href="practice/" style="margin-top: 2rem;">Practice로 돌아가기 →</a>
-</div>
-</div>
+<!-- /COMPONENT:nav -->
+<main class="container--wide page-status-main">
+  <div class="mag-row mag-row--intro fade-in">
+    <div class="mag-label">
+      <p class="section-label">Payment Success</p>
+      <p class="mag-heading">결제<br/>완료</p>
+    </div>
+    <div class="mag-body">
+      <p class="lead">결제가 완료되었습니다.</p>
+      <p id="order-info">주문 정보를 확인하는 중...</p>
+      <div id="download-info"></div>
+      <p class="page-status-note">
+        구매하신 상품은 등록하신 이메일로도 전송됩니다.<br/>
+        문의사항은 hello@woohwahae.kr로 연락 주세요.
+      </p>
+      <a class="cta-inline page-status-cta" href="/practice/">Practice로 돌아가기 →</a>
+    </div>
+  </div>
 </main>
-<script src="assets/js/main.js?v=51eb750d"></script>
-<script>
-    // 주문 정보 표시
-    function handlePaymentSuccess() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const orderId = urlParams.get('orderId');
-      const amount = urlParams.get('amount');
-
-      if (orderId && amount) {
-        document.getElementById('order-info').innerHTML = `
-          <strong>주문번호:</strong> ${orderId}<br>
-          <strong>결제금액:</strong> ${parseInt(amount).toLocaleString()}원
-        `;
-      }
-    }
-  </script>
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
 
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
@@ -92,5 +88,6 @@
     </div>
   </div>
 </footer>
-<!-- /COMPONENT:footer --></body>
+<!-- /COMPONENT:footer -->
+</body>
 </html>

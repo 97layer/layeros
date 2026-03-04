@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Exp.024 Zero Point Console. 소거의 깊이를 조절하며 신호와 잡음을 분리하는 UI 실험."/>
+  <title>Exp.024 — Zero Point Console · WOOHWAHAE Lab</title>
+  <link rel="icon" href="/assets/media/brand/symbol.png" type="image/png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"/>
+  <link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c"/>
+  <style>
+    .ritual-shell {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      min-height: 62vh;
+    }
+
+    .ritual-col {
+      padding: var(--space-md);
+    }
+
+    .ritual-col + .ritual-col {
+      border-left: 1px solid var(--line);
+    }
+
+    .ritual-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: var(--ls-wide);
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: var(--space-sm);
+    }
+
+    .ritual-title {
+      font-size: clamp(1.4rem, 2vw, 1.95rem);
+      font-weight: var(--fw-light);
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: var(--space-sm);
+      max-width: 20ch;
+    }
+
+    .ritual-copy {
+      font-size: 0.86rem;
+      color: var(--text-sub);
+      line-height: 1.75;
+      max-width: 58ch;
+      margin-bottom: var(--space-md);
+    }
+
+    .ritual-density {
+      border: 1px solid var(--line);
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .ritual-density__meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: var(--ls-label);
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+
+    .ritual-density input[type='range'] {
+      width: 100%;
+      accent-color: #1a1a1a;
+    }
+
+    .slot-list {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .slot-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--line);
+      padding: 0.85rem 0.9rem;
+      text-align: left;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: baseline;
+      gap: 0.85rem;
+      cursor: pointer;
+      transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+    }
+
+    .slot-btn:hover,
+    .slot-btn.is-active {
+      background: var(--bg-dark);
+      border-color: #d4d3cf;
+    }
+
+    .slot-time {
+      font-family: var(--font-mono);
+      font-size: 0.61rem;
+      letter-spacing: var(--ls-label);
+      color: var(--text-faint);
+      text-transform: uppercase;
+      width: 4.5rem;
+      flex-shrink: 0;
+    }
+
+    .slot-name {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+      line-height: 1.45;
+    }
+
+    .slot-note {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      line-height: 1.45;
+    }
+
+    .mode-group {
+      display: flex;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text-faint);
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      padding: 0.45rem 0.6rem;
+      cursor: pointer;
+      transition: background var(--duration) var(--ease), color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+    }
+
+    .mode-btn.is-active {
+      background: #1a1a1a;
+      color: #e3e2e0;
+      border-color: #1a1a1a;
+    }
+
+    .journey {
+      border: 1px solid var(--line);
+      padding: 1rem;
+      display: grid;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
+      background: rgba(255, 255, 255, 0.34);
+    }
+
+    .journey-item {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.7rem;
+    }
+
+    .journey-item:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .journey-num {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      color: var(--text-faint);
+      letter-spacing: var(--ls-wide);
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+
+    .journey-head {
+      font-size: 0.88rem;
+      font-weight: var(--fw-regular);
+      line-height: 1.45;
+      margin-bottom: 0.2rem;
+      color: var(--text);
+    }
+
+    .journey-copy {
+      font-size: 0.74rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+    }
+
+    .ritual-log {
+      border-top: 1px solid var(--line);
+      padding-top: 0.8rem;
+      font-size: 0.74rem;
+      color: var(--text-sub);
+      line-height: 1.7;
+      min-height: 3.5rem;
+    }
+
+    @media (max-width: 980px) {
+      .ritual-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .ritual-col + .ritual-col {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .ritual-col {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="page-lab">
+<!-- COMPONENT:nav -->
+<nav class="site-nav" id="site-nav">
+  <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+    <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
+    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
+    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/lab/"><span class="numeric-tag">04.</span>Lab</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
+</nav>
+<div class="nav-overlay" id="nav-overlay">
+  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
+  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
+  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
+</div>
+<!-- /COMPONENT:nav -->
+
+<main class="page-main">
+  <section class="page-intro container--wide">
+    <p class="page-preamble">Exp.024 / 소거의 깊이를 시각화하고, 남는 신호만 기록하는 인터페이스.</p>
+    <h1 class="section-title" style="font-size:0.9rem; letter-spacing:0.11em;">Zero Point Console</h1>
+  </section>
+
+  <section class="container--wide ritual-shell">
+    <div class="ritual-col">
+      <p class="ritual-label">Erasure Depth</p>
+      <h2 class="ritual-title">덧씌워진 것을 걷어낼 때 무엇이 남는지 확인합니다.</h2>
+      <p class="ritual-copy">추가하지 않습니다. 소거의 깊이를 움직이며 드러나는 신호만 기록합니다. 빠른 결론 대신 남은 것의 질감을 본다.</p>
+
+      <div class="ritual-density">
+        <div class="ritual-density__meta">
+          <span>Depth</span>
+          <span id="density-value">45%</span>
+        </div>
+        <input id="density-range" type="range" min="0" max="100" value="45"/>
+      </div>
+
+      <div class="slot-list" id="slot-list">
+        <button class="slot-btn is-active" data-log="주변 소음을 끄고, 배경 노이즈를 걷어냅니다.">
+          <span class="slot-time">Layer A</span>
+          <span>
+            <span class="slot-name">Surface Noise</span>
+            <span class="slot-note">알림, 음악, 시각 잔상</span>
+          </span>
+        </button>
+        <button class="slot-btn" data-log="습관적으로 반복되는 패턴을 붙잡아 둡니다.">
+          <span class="slot-time">Layer B</span>
+          <span>
+            <span class="slot-name">Habit Layer</span>
+            <span class="slot-note">자동 반응, 일상 루틴</span>
+          </span>
+        </button>
+        <button class="slot-btn" data-log="타인의 서사와 비교 프레임을 걷어냅니다.">
+          <span class="slot-time">Layer C</span>
+          <span>
+            <span class="slot-name">External Narrative</span>
+            <span class="slot-note">평가, 순위, 속도</span>
+          </span>
+        </button>
+        <button class="slot-btn" data-log="덧씌워진 것이 걷힌 뒤 남은 좌표를 기록합니다.">
+          <span class="slot-time">Layer D</span>
+          <span>
+            <span class="slot-name">Core Pattern</span>
+            <span class="slot-note">리듬, 무게, 방향</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="ritual-col">
+      <p class="ritual-label">Stance</p>
+      <div class="mode-group" id="mode-group">
+        <button class="mode-btn is-active" data-mode="observe">Observe</button>
+        <button class="mode-btn" data-mode="compose">Compose</button>
+        <button class="mode-btn" data-mode="rest">Rest</button>
+      </div>
+
+      <div class="journey">
+        <article class="journey-item">
+          <p class="journey-num">01</p>
+          <h3 class="journey-head">무엇을 지울지 본다</h3>
+          <p class="journey-copy" id="mode-copy">처음에는 관찰만 합니다. 덧씌워진 것을 인지하는 것부터 시작합니다.</p>
+        </article>
+        <article class="journey-item">
+          <p class="journey-num">02</p>
+          <h3 class="journey-head">줄이고 남긴다</h3>
+          <p class="journey-copy">단서를 줄이고, 남은 것의 질감과 무게를 기록합니다.</p>
+        </article>
+        <article class="journey-item">
+          <p class="journey-num">03</p>
+          <h3 class="journey-head">영점에 닻을 건다</h3>
+          <p class="journey-copy">돌아올 좌표를 한 줄로 남깁니다. 다음 선택의 기준이 됩니다.</p>
+        </article>
+      </div>
+
+      <div class="ritual-log" id="ritual-log">주변 소음을 끄고, 배경 노이즈를 걷어냅니다.</div>
+    </div>
+  </section>
+</main>
+
+<script>
+  (function () {
+    var densityRange = document.getElementById('density-range');
+    var densityValue = document.getElementById('density-value');
+    var slotList = document.getElementById('slot-list');
+    var ritualLog = document.getElementById('ritual-log');
+    var modeGroup = document.getElementById('mode-group');
+    var modeCopy = document.getElementById('mode-copy');
+
+    densityRange.addEventListener('input', function () {
+      densityValue.textContent = densityRange.value + '%';
+    });
+
+    slotList.addEventListener('click', function (e) {
+      var button = e.target.closest('.slot-btn');
+      if (!button) return;
+      document.querySelectorAll('.slot-btn').forEach(function (item) {
+        item.classList.remove('is-active');
+      });
+      button.classList.add('is-active');
+      ritualLog.textContent = button.getAttribute('data-log');
+    });
+
+    modeGroup.addEventListener('click', function (e) {
+      var button = e.target.closest('.mode-btn');
+      if (!button) return;
+      document.querySelectorAll('.mode-btn').forEach(function (item) {
+        item.classList.remove('is-active');
+      });
+      button.classList.add('is-active');
+
+      var mode = button.getAttribute('data-mode');
+      if (mode === 'compose') {
+        modeCopy.textContent = '남은 신호를 조합해 한 줄 요약을 만듭니다. 필요한 것만 배열합니다.';
+      } else if (mode === 'rest') {
+        modeCopy.textContent = '깊이를 더하지 않습니다. 드러난 상태를 그대로 둡니다.';
+      } else {
+        modeCopy.textContent = '처음에는 관찰만 합니다. 덧씌워진 것을 인지하는 것부터 시작합니다.';
+      }
+    });
+  })();
+</script>
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
+
+<!-- COMPONENT:footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-wordmark">WOOHWAHAE</div>
+    <div class="footer-mid">
+      <nav class="footer-nav">
+        <a href="/archive/">Archive</a>
+        <a href="/practice/">Practice</a>
+        <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+      </nav>
+      <div class="footer-contact-row">
+        <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
+        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+        <a href="tel:05071393-2075">0507-1393-2075</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
+      <div class="footer-legal">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <span>&copy; 2025 WOOHWAHAE</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /COMPONENT:footer -->
+</body>
+</html>

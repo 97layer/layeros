@@ -3,5 +3,39 @@
   "description": "WOOHWAHAE Lab — 실험 아카이브. 웹 렌더링, 모션, 인터랙션 프로토타입.",
   "og_url": "https://woohwahae.kr/lab/",
   "body_class": "page-lab",
-  "preamble": "웹 렌더링, 모션, 인터랙션 프로토타입. 완성 전 단계의 날것 실험들."
+  "preamble": "웹 렌더링, 모션, 인터랙션 프로토타입. 완성 전 단계의 날것 실험들.",
+  "concept_board": {
+    "aria": "랩 디자인 컨셉",
+    "label": "Lab Concept / Structured Rawness",
+    "items": [
+      {
+        "num": "01",
+        "title": "Archive of Making",
+        "copy": "완성 결과가 아니라 제작 과정과 판단 흔적을 먼저 보여준다."
+      },
+      {
+        "num": "02",
+        "title": "Monotone Precision",
+        "copy": "색은 절제하고 간격과 수평선으로 리듬을 만든다."
+      },
+      {
+        "num": "03",
+        "title": "Fast Scan UI",
+        "copy": "카드 메타를 위로 끌어올려 10초 내 탐색이 가능하게 한다."
+      }
+    ]
+  },
+  "controls": {
+    "id": "lab-filter",
+    "aria": "랩 필터",
+    "layout": "list",
+    "items": [
+      { "label": "001. 전체", "filter": "all", "active": true },
+      { "label": "002. 플랫폼 빌드", "filter": "platform" },
+      { "label": "003. 헤어 아키텍트", "filter": "hair" },
+      { "label": "004. 키네틱스", "filter": "kinetic" },
+      { "label": "005. 프로 시스템", "filter": "pro" }
+    ],
+    "show_count": false
+  }
 }

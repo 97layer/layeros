@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Exp.020 Concept Sprint V2. 브랜드 코어를 유지하면서 공간 인테리어 문법까지 함께 검증하는 방향성 데모."/>
+  <meta property="og:title" content="Exp.020 Concept Sprint V2 Interior — WOOHWAHAE Lab"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://woohwahae.kr/lab/concept-sprint-v2.html"/>
+  <title>Exp.020 Concept Sprint V2 Interior — WOOHWAHAE Lab</title>
+  <!-- COMPONENT:head -->
+<meta name="theme-color" content="#E3E2E0">
+<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+<!-- /COMPONENT:head -->
+</head>
+<body class="page-lab page-lab-sprint">
+<!-- COMPONENT:nav -->
+<nav class="site-nav" id="site-nav">
+  <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+    <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
+    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
+    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/lab/"><span class="numeric-tag">04.</span>Lab</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
+</nav>
+<div class="nav-overlay" id="nav-overlay">
+  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
+  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
+  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <a href="/lab/"><span class="nav-overlay__num">04.</span>Lab</a>
+</div>
+<!-- /COMPONENT:nav -->
+
+<main class="page-main">
+  <section class="page-intro container--wide">
+    <p class="page-preamble">Exp.020 / 브랜드 코어는 유지하고, 인테리어 문법까지 포함해 두 방향을 실시간 검증하는 컨셉 스프린트.</p>
+  </section>
+
+  <section class="container--wide sprint-shell" data-reveal>
+    <header class="sprint-head">
+      <div class="sprint-headline">
+        <p class="sprint-kicker">Concept Sprint Interior</p>
+        <h1 class="sprint-title">Direction Console / Full Demo</h1>
+        <p class="sprint-subcopy">공간 톤, 동선, 재료, 조명까지 같이 테스트하는 확정 전 인테리어 프리뷰.</p>
+      </div>
+      <div class="sprint-toggle" id="sprint-toggle" role="tablist" aria-label="컨셉 트랙 선택">
+        <button class="sprint-btn is-active" data-sprint-concept="a" role="tab" aria-selected="true">Track A / Quiet Grid</button>
+        <button class="sprint-btn" data-sprint-concept="b" role="tab" aria-selected="false">Track B / Ritual Flow</button>
+      </div>
+    </header>
+
+    <div class="sprint-summary">
+      <article class="sprint-metric">
+        <p class="sprint-metric__label">Consistency</p>
+        <p class="sprint-metric__value" id="sprint-metric-consistency">86</p>
+      </article>
+      <article class="sprint-metric">
+        <p class="sprint-metric__label">Sensory Depth</p>
+        <p class="sprint-metric__value" id="sprint-metric-sensory">71</p>
+      </article>
+      <article class="sprint-metric">
+        <p class="sprint-metric__label">Operational Fit</p>
+        <p class="sprint-metric__value" id="sprint-metric-operational">88</p>
+      </article>
+      <article class="sprint-metric">
+        <p class="sprint-metric__label">Risk Load</p>
+        <p class="sprint-metric__value" id="sprint-metric-risk">36</p>
+      </article>
+    </div>
+
+    <div class="sprint-board">
+      <article class="sprint-panel">
+        <p class="sprint-panel__id" id="sprint-current-id">Track A</p>
+        <h2 class="sprint-panel__title" id="sprint-current-name">Quiet Grid</h2>
+        <p class="sprint-panel__thesis" id="sprint-thesis">정보 밀도를 낮추고 구조 신뢰를 우선. 운영 페이지까지 같은 문법으로 연결한다.</p>
+
+        <dl class="sprint-spec">
+          <div><dt>Type</dt><dd id="sprint-type">IBM Plex Mono 비중 확대, 본문은 Pretendard 최소 단위 유지</dd></div>
+          <div><dt>Motion</dt><dd id="sprint-motion">0.24s 단발성 전환, 과한 easing 제거</dd></div>
+          <div><dt>Layout</dt><dd id="sprint-layout">2열 기준선 고정, 카드/컨트롤 간격 계단식 통일</dd></div>
+          <div><dt>Interior</dt><dd id="sprint-interior">직선 동선, 노출형 수납, 낮은 대비의 재료 배합</dd></div>
+          <div><dt>Risk</dt><dd id="sprint-risk">정서적 임팩트가 약해질 수 있음</dd></div>
+        </dl>
+
+        <div class="sprint-intensity">
+          <label for="sprint-intensity">Intensity</label>
+          <input id="sprint-intensity" type="range" min="20" max="100" value="58"/>
+          <span id="sprint-intensity-value">58</span>
+        </div>
+        <div class="sprint-intensity">
+          <label for="sprint-openness">Openness</label>
+          <input id="sprint-openness" type="range" min="25" max="100" value="64"/>
+          <span id="sprint-openness-value">64</span>
+        </div>
+      </article>
+
+      <aside class="sprint-stage is-concept-a" id="sprint-stage" aria-live="polite">
+        <div class="sprint-stage__frame">
+          <p class="sprint-stage__label" id="sprint-stage-label">Quiet Grid</p>
+          <p class="sprint-stage__copy" id="sprint-stage-copy">정보는 선형으로, 결정은 빠르게.</p>
+          <div class="sprint-stage__scene" id="sprint-stage-scene">
+            <button class="sprint-zone is-active" type="button" data-zone="entry">
+              <span class="sprint-zone__name">Entry</span>
+              <span class="sprint-zone__meta">도입 리셉션</span>
+            </button>
+            <button class="sprint-zone" type="button" data-zone="consult">
+              <span class="sprint-zone__name">Consult</span>
+              <span class="sprint-zone__meta">상담/기록</span>
+            </button>
+            <button class="sprint-zone" type="button" data-zone="cut">
+              <span class="sprint-zone__name">Cut</span>
+              <span class="sprint-zone__meta">메인 작업대</span>
+            </button>
+            <button class="sprint-zone" type="button" data-zone="finish">
+              <span class="sprint-zone__name">Finish</span>
+              <span class="sprint-zone__meta">스타일링/촬영</span>
+            </button>
+          </div>
+          <p class="sprint-stage__zone-note" id="sprint-zone-note">입구에서 핵심 축이 바로 읽히게 구성합니다.</p>
+          <div class="sprint-stage__bars">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="sprint-interior">
+      <article class="sprint-interior-card">
+        <h3 class="sprint-interior__title">Material Palette</h3>
+        <ul class="sprint-material-list" id="sprint-material-list" aria-label="재료 팔레트"></ul>
+      </article>
+      <article class="sprint-interior-card">
+        <h3 class="sprint-interior__title">Lighting Balance</h3>
+        <div class="sprint-light-grid" id="sprint-light-grid" aria-label="조명 분포"></div>
+      </article>
+      <article class="sprint-interior-card">
+        <h3 class="sprint-interior__title">Circulation Script</h3>
+        <ol class="sprint-flow-list" id="sprint-flow-list" aria-label="동선 단계"></ol>
+      </article>
+    </div>
+
+    <footer class="sprint-gate">
+      <div class="sprint-gate__item">
+        <p class="sprint-gate__label">Gate 01</p>
+        <p class="sprint-gate__copy">브랜드 코어(톤/타입/색) 훼손 없음</p>
+      </div>
+      <div class="sprint-gate__item">
+        <p class="sprint-gate__label">Gate 02</p>
+        <p class="sprint-gate__copy">운영 페이지까지 동일 문법 전개 가능</p>
+      </div>
+      <div class="sprint-gate__item">
+        <p class="sprint-gate__label">Gate 03</p>
+        <p class="sprint-gate__copy">390 / 768 / 1440 오버플로 제로 유지</p>
+      </div>
+    </footer>
+  </section>
+</main>
+
+<script defer src="/assets/js/site.js"></script>
+<script defer src="/assets/js/lab-concept-sprint.js"></script>
+
+<!-- COMPONENT:footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-wordmark">WOOHWAHAE</div>
+    <div class="footer-mid">
+      <nav class="footer-nav">
+        <a href="/archive/">Archive</a>
+        <a href="/practice/">Practice</a>
+        <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+      </nav>
+      <div class="footer-contact-row">
+        <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
+        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+        <a href="tel:05071393-2075">0507-1393-2075</a>
+      </div>
+    </div>
+    <div class="footer-base">
+      <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
+      <div class="footer-legal">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <span>&copy; 2025 WOOHWAHAE</span>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- /COMPONENT:footer -->
+</body>
+</html>

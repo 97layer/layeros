@@ -216,28 +216,37 @@ def main():
     run_all = not (args.archive or args.sections or args.components or args.easter or args.bust)
 
     logger.info("═══ LAYER OS Build Pipeline ═══")
+    failures = []
 
     # 1. Archive (에세이 생성)
     if run_all or args.archive:
-        run_script("build_archive.py", dry_run=args.dry_run)
+        if not run_script("build_archive.py", dry_run=args.dry_run):
+            failures.append("build_archive.py")
 
     # 2. Section Pages (archive / practice / lab Jinja2 조립)
     if run_all or args.sections or args.components:
-        run_script("build_sections.py", dry_run=args.dry_run)
+        if not run_script("build_sections.py", dry_run=args.dry_run):
+            failures.append("build_sections.py")
 
     # 3. Components (nav/footer/head 주입)
     if run_all or args.components:
-        run_script("build_components.py", dry_run=args.dry_run)
+        if not run_script("build_components.py", dry_run=args.dry_run):
+            failures.append("build_components.py")
 
     # 3. Easter Log (about 이스터에그 타임스탬프+수치 갱신)
     if run_all or args.easter:
         logger.info("─── easter log ───")
-        inject_easter_log(dry_run=args.dry_run)
+        if not inject_easter_log(dry_run=args.dry_run):
+            failures.append("inject_easter_log")
 
     # 4. Cache Busting
     if run_all or args.bust:
         logger.info("─── cache bust ───")
         bust_cache(dry_run=args.dry_run)
+
+    if failures:
+        logger.error("❌ Build failed: %s", ", ".join(failures))
+        sys.exit(1)
 
     logger.info("═══ Build Complete ═══")
 

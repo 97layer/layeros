@@ -3,5 +3,20 @@
   "description": "에세이, 저널, 룩북. 소거라는 렌즈로 세상을 읽는 기록들.",
   "og_url": "https://woohwahae.kr/archive/",
   "body_class": "page-archive",
-  "preamble": "에세이, 저널, 룩북을 올립니다."
+  "preamble": "에세이, 저널, 룩북을 올립니다.",
+  "controls": {
+    "id": "archive-type-filter",
+    "aria": "아카이브 필터",
+    "layout": "inline_search",
+    "search": true,
+    "search_id": "archive-search",
+    "search_placeholder": "검색",
+    "show_count": false,
+    "items": [
+      { "label": "001. 전체", "filter": "all", "active": true },
+      { "label": "002. 에세이", "filter": "essay" },
+      { "label": "003. 저널", "filter": "journal" },
+      { "label": "004. 룩북", "filter": "lookbook" }
+    ]
+  }
 }

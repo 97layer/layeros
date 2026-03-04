@@ -33,8 +33,11 @@ UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 SECRET_KEY = require_env('FLASK_SECRET_KEY')
 DEBUG = False
 
-# Authentication — 해시 기반, 평문 fallback 제거
-ADMIN_PASSWORD_HASH = require_env('FLASK_ADMIN_PASSWORD_HASH')
+# Authentication — 우선순위: FLASK_ADMIN_PASSWORD_HASH → ADMIN_PASSWORD_HASH(legacy)
+_admin_hash = os.getenv('FLASK_ADMIN_PASSWORD_HASH') or os.getenv('ADMIN_PASSWORD_HASH')
+if not _admin_hash:
+    raise RuntimeError("FLASK_ADMIN_PASSWORD_HASH 또는 ADMIN_PASSWORD_HASH 환경변수 필수. .env에 설정하세요.")
+ADMIN_PASSWORD_HASH = _admin_hash
 
 # Content settings
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max upload

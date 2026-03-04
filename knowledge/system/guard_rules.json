@@ -7,15 +7,33 @@
     "note": "Gardener가 자동 진화. 수동 수정 시 JSON 유효성 확인 필수."
   },
   "allowed_top_dirs": [
-    "directives", "core", "knowledge", "website", "scripts",
-    "skills", "tests", ".claude", ".github", ".git", ".infra",
-    "archive", "google-cloud-sdk"
+    "directives",
+    "core",
+    "knowledge",
+    "website",
+    "scripts",
+    "skills",
+    "tests",
+    ".claude",
+    ".github",
+    ".git",
+    ".infra",
+    "archive",
+    "google-cloud-sdk"
   ],
   "allowed_root_files": [
-    "CLAUDE.md", "README.md", "requirements.txt",
-    "Dockerfile", "docker-compose.yml", "nginx.conf",
-    ".gitignore", ".dockerignore", ".driveignore",
-    ".ai_rules", ".env", ".env.example"
+    "CLAUDE.md",
+    "README.md",
+    "requirements.txt",
+    "Dockerfile",
+    "docker-compose.yml",
+    "nginx.conf",
+    ".gitignore",
+    ".dockerignore",
+    ".driveignore",
+    ".ai_rules",
+    ".env",
+    ".env.example"
   ],
   "forbidden_name_prefixes": [
     "SESSION_SUMMARY_",
@@ -44,5 +62,21 @@
     "audit_",
     "weekly_"
   ],
-  "violation_patterns": {}
+  "violation_patterns": {
+    "woohwahae_cms.db_": {
+      "count": 4,
+      "first_seen": "2026-03-04T02:44:00.049176+00:00",
+      "last_seen": "2026-03-04T03:35:27.931242+00:00"
+    },
+    "AGENTS.md_": {
+      "count": 3,
+      "first_seen": "2026-03-04T02:44:00.050358+00:00",
+      "last_seen": "2026-03-04T03:34:50.165004+00:00"
+    },
+    "gemini_cli.py_": {
+      "count": 1,
+      "first_seen": "2026-03-04T02:44:00.051247+00:00",
+      "last_seen": "2026-03-04T02:44:00.051247+00:00"
+    }
+  }
 }

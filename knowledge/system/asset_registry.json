@@ -976,10 +976,422 @@
           "by": "bot_templates"
         }
       ]
+    },
+    {
+      "id": "AST-2026-03-091",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T02:12:42.759711",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T02:12:42.759834",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-092",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T02:13:24.239661",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T02:13:24.239819",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-093",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T02:21:35.669427",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T02:21:35.669594",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-094",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T02:21:49.860468",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T02:21:49.860578",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-095",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T02:22:15.454986",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T02:22:15.455179",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-096",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T02:23:10.393965",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T02:23:10.394075",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-097",
+      "type": "system",
+      "source": "agent",
+      "created_at": "2026-03-04T10:10:38.939046",
+      "path": "knowledge/system/web_work_lock.json",
+      "status": "captured",
+      "metadata": {},
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T10:10:38.939191",
+          "by": "agent"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-098",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T10:49:33.484404",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T10:49:33.484540",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-099",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T10:50:41.802585",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T10:50:41.802752",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-100",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T10:51:55.619161",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T10:51:55.619297",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-101",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:27:01.986847",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:27:01.986852",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-102",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:29:06.123205",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:29:06.123209",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-103",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:33:31.977246",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:33:31.977254",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-104",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:39:07.119252",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:39:07.119261",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-105",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:44:41.597288",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:44:41.597291",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-106",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:45:38.332067",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:45:38.332070",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-107",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:48:53.338358",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:48:53.338361",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-108",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T11:51:21.967451",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T11:51:21.967457",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-109",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T12:00:28.362781",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T12:00:28.362784",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-110",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T12:07:52.006060",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T12:07:52.006064",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-111",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T12:18:50.159583",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T12:18:50.159587",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-112",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T12:26:13.024283",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T12:26:13.024385",
+          "by": "unit_test"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-113",
+      "type": "test",
+      "source": "unit_test",
+      "created_at": "2026-03-04T12:26:54.054565",
+      "path": "tests/test_asset_temp.json",
+      "status": "captured",
+      "metadata": {
+        "automated": true
+      },
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T12:26:54.054568",
+          "by": "unit_test"
+        }
+      ]
     }
   ],
   "stats": {
-    "total": 90,
+    "total": 113,
     "by_type": {
       "signal": 39,
       "content": 24,
@@ -989,12 +1401,13 @@
       "report": 2,
       "document": 3,
       "page": 2,
-      "test": 3,
+      "test": 25,
       "directive": 1,
-      "module": 1
+      "module": 1,
+      "system": 1
     },
     "by_status": {
-      "captured": 36,
+      "captured": 59,
       "completed": 1,
       "analyzed": 14,
       "stored": 1,

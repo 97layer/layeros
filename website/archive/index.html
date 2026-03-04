@@ -16,8 +16,8 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=06a5fd9d">
-<script>(function(){var h=new Date().getHours();document.documentElement.className=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';})();</script>
+<link rel="stylesheet" href="/assets/css/style.css?v=ca19fa9c">
+<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
 <!-- /COMPONENT:head -->
 </head>
 <body class="page-archive">
@@ -47,16 +47,60 @@
 <main class="page-main">
   <div class="page-intro container--wide">
     <p class="page-preamble">에세이, 저널, 룩북을 올립니다.</p>
-    <nav class="archive-filter" aria-label="Archive filter" id="archive-type-filter">
-  <div class="archive-filter__item">
-    <button class="archive-filter__btn is-active" data-filter="all">01. All</button>
-    <input class="archive-search" id="archive-search" type="search" placeholder="검색" autocomplete="off" spellcheck="false">
-  </div>
-  <button class="archive-filter__btn" data-filter="essay">02. Essay</button>
-  <button class="archive-filter__btn" data-filter="journal">03. Journal</button>
-  <button class="archive-filter__btn" data-filter="lookbook">04. Lookbook</button>
-  <p class="archive-count" id="archive-count"></p>
-</nav>
+    
+    
+    <div class="section-controls" data-reveal>
+      <nav class="archive-filter"
+           aria-label="아카이브 필터"
+           id="archive-type-filter">
+        
+        
+          
+          <div class="archive-filter__item">
+            
+              
+                <button class="section-chip archive-filter__btn is-active"
+                        data-filter="all">
+                  001. 전체
+                </button>
+              
+            
+            
+              <input class="section-search archive-search"
+                     id="archive-search"
+                     type="search"
+                     placeholder="검색"
+                     autocomplete="off"
+                     spellcheck="false">
+            
+          </div>
+          
+            
+              <button class="section-chip archive-filter__btn"
+                      data-filter="essay">
+                002. 에세이
+              </button>
+            
+          
+            
+              <button class="section-chip archive-filter__btn"
+                      data-filter="journal">
+                003. 저널
+              </button>
+            
+          
+            
+              <button class="section-chip archive-filter__btn"
+                      data-filter="lookbook">
+                004. 룩북
+              </button>
+            
+          
+        
+        
+      </nav>
+    </div>
+    
   </div>
   <div class="archive-list container--wide" id="archive-list">
   <!-- JS로 index.json 기반 렌더링 -->
@@ -86,18 +130,29 @@
         list.appendChild(item);
       });
 
-      var obs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
-        });
-      }, { threshold: 0.05 });
-      document.querySelectorAll('[data-reveal]').forEach(function (el) { obs.observe(el); });
+      /* site.js reveal 리듬과 동기화: threshold/rootMargin/stagger 동일 */
+      var revealTargets = list.querySelectorAll('.archive-list-item[data-reveal]');
+      revealTargets.forEach(function (el, i) {
+        el.style.transitionDelay = (i % 9 * 0.08) + 's';
+      });
+      if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+        revealTargets.forEach(function (el) { obs.observe(el); });
+      } else {
+        revealTargets.forEach(function (el) { el.classList.add('is-visible'); });
+      }
 
       var activeFilter = 'all';
       var searchQuery = '';
-      if (countEl) countEl.textContent = posts.length + ' / ' + posts.length;
-
       var countEl = document.getElementById('archive-count');
+      if (countEl) countEl.textContent = posts.length + ' / ' + posts.length;
 
       function applyFilters() {
         var items = list.querySelectorAll('.archive-list-item');
@@ -131,7 +186,7 @@
     })
     .catch(function () { console.warn('archive: index.json 없음'); });
 </script>
-<script defer src="/assets/js/site.js?v=711c1f0c"></script>
+<script defer src="/assets/js/site.js?v=53abfa73"></script>
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
   <div class="footer-inner">

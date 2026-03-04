@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Sitewide live render switcher for WOOHWAHAE renewal."/>
+  <title>Live Render — WOOHWAHAE</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    :root { --glass-bg: rgba(255,255,255,0.7); }
+    body { background: linear-gradient(180deg,#e4e3e1 0%,#dfddd9 100%); }
+    .layout { max-width: 1280px; margin: 0 auto; padding: 1.4rem 1.1rem 2rem; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line); padding-bottom:0.7rem; }
+    .topbar__brand { display:flex; align-items:center; gap:0.6rem; font-family:var(--font-mono); letter-spacing:0.12em; text-transform:uppercase; font-size:0.62rem; }
+    .topbar__nav { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .pill { border:1px solid var(--line); padding:0.34rem 0.55rem; font-family:var(--font-mono); font-size:0.55rem; letter-spacing:0.08em; text-transform:uppercase; background:rgba(255,255,255,0.55); }
+    .pill--cta { background:#1a1a1a; color:#e3e2e0; border-color:#1a1a1a; }
+
+    .hero { display:grid; grid-template-columns: 1.1fr 0.9fr; gap:1rem; border:1px solid var(--line); background:var(--glass-bg); padding:1rem; margin:1rem 0; }
+    .hero h1 { margin:0; font-size:1.4rem; letter-spacing:-0.02em; line-height:1.25; }
+    .hero p { margin:0.4rem 0 0; font-size:0.82rem; line-height:1.8; color:var(--text-sub); }
+    .hero__tags { display:flex; flex-wrap:wrap; gap:0.3rem; margin-top:0.6rem; }
+    .hero__tags span { border:1px solid var(--line); padding:0.26rem 0.42rem; font-family:var(--font-mono); font-size:0.5rem; letter-spacing:0.08em; text-transform:uppercase; background:rgba(255,255,255,0.4); }
+    .hero__stat { display:grid; gap:0.4rem; }
+    .hero__stat article { border:1px solid var(--line); background:rgba(255,255,255,0.4); padding:0.55rem; }
+    .hero__stat p { margin:0 0 0.1rem; font-family:var(--font-mono); font-size:0.5rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); }
+    .hero__stat strong { display:block; font-size:0.9rem; }
+    .hero__stat small { display:block; font-size:0.6rem; color:var(--text-sub); }
+
+    .grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:0.6rem; }
+    .card { border:1px solid var(--line); background:var(--glass-bg); padding:0.75rem; display:grid; gap:0.28rem; }
+    .card h2 { margin:0; font-size:0.95rem; letter-spacing:-0.01em; }
+    .card p { margin:0; font-size:0.7rem; line-height:1.65; color:var(--text-sub); }
+    .card small { font-family:var(--font-mono); font-size:0.5rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); }
+
+    .cases { margin:1rem 0; }
+    .cases__grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:0.6rem; }
+    .case { border:1px solid var(--line); background:rgba(255,255,255,0.55); padding:0.72rem; }
+    .case h3 { margin:0 0 0.14rem; font-size:0.85rem; }
+    .case span { display:block; font-size:0.62rem; color:var(--text-sub); }
+
+    .process { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:0.55rem; margin:1rem 0; }
+    .step { border:1px solid var(--line); background:rgba(255,255,255,0.45); padding:0.65rem; }
+    .step p { margin:0 0 0.12rem; font-family:var(--font-mono); font-size:0.52rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); }
+    .step h4 { margin:0; font-size:0.78rem; }
+    .step span { font-size:0.64rem; color:var(--text-sub); line-height:1.6; }
+
+    .cta { border:1px solid var(--line); background:#1a1a1a; color:#e3e2e0; padding:0.9rem; display:flex; justify-content:space-between; align-items:center; gap:0.6rem; margin-top:1rem; }
+    .cta h3 { margin:0; font-size:0.95rem; letter-spacing:-0.01em; }
+    .cta a { border:1px solid #e3e2e0; color:#e3e2e0; text-decoration:none; font-family:var(--font-mono); font-size:0.55rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.34rem 0.5rem; }
+
+    @media (max-width:980px){ .hero{grid-template-columns:1fr;} .grid{grid-template-columns:1fr 1fr;} .cases__grid{grid-template-columns:1fr;} .process{grid-template-columns:1fr 1fr;} }
+    @media (max-width:640px){ .grid{grid-template-columns:1fr;} .process{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body class="page-lab">
+  <main class="page-main">
+    <section class="layout">
+      <div class="topbar">
+        <div class="topbar__brand"><img src="/assets/media/brand/symbol.png" alt="" width="20" height="20">WOOHWAHAE OPS</div>
+        <div class="topbar__nav">
+          <span class="pill">Brand</span>
+          <span class="pill">Web</span>
+          <span class="pill">Ops</span>
+          <span class="pill pill--cta">Book a Call</span>
+        </div>
+      </div>
+
+      <section class="hero">
+        <div>
+          <h1>브랜딩 컨설턴시로 재구성한 웹 리뉴얼 샘플</h1>
+          <p>브랜드 톤을 지키면서 운영까지 품은 일관된 레이아웃. 홈부터 결제·법무·404까지 한 문법으로 묶었다.</p>
+          <div class="hero__tags">
+            <span>Identity Safe</span><span>Ops Ready</span><span>Responsive</span>
+          </div>
+        </div>
+        <div class="hero__stat">
+          <article><p>Time to Clarity</p><strong>3.2s</strong><small>주요 가치 인지</small></article>
+          <article><p>Ops Bounce</p><strong>-38%</strong><small>결제/404 이탈</small></article>
+          <article><p>Design Debt</p><strong>-54%</strong><small>중복 스타일 제거</small></article>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <small>Brand Layer</small>
+          <h2>Home / About</h2>
+          <p>서사형 히어로 + 명확한 내비 리듬. About는 원문 보존, 리듬만 정렬.</p>
+        </article>
+        <article class="card">
+          <small>Content Layer</small>
+          <h2>Archive</h2>
+          <p>필터/검색/카드 메타를 단일 소스(site.js)로 통합해 충돌 제거.</p>
+        </article>
+        <article class="card">
+          <small>Service Layer</small>
+          <h2>Practice / Product</h2>
+          <p>서비스·상품·결제 플로우를 같은 버튼/폼/메타 톤으로 정렬.</p>
+        </article>
+      </section>
+
+      <section class="cases">
+        <div class="cases__grid">
+          <article class="case">
+            <h3>Payment Fail</h3>
+            <span>실패 원인, 재시도, 상담, 홈 복귀를 1뎁스로 배치.</span>
+          </article>
+          <article class="case">
+            <h3>Privacy / Terms</h3>
+            <span>공통 head/nav/footer 주입 + 66ch 본문 + AA 대비.</span>
+          </article>
+          <article class="case">
+            <h3>Playlist</h3>
+            <span>메인 카드 문법 재사용, 콘텐츠 태그 통일.</span>
+          </article>
+          <article class="case">
+            <h3>404</h3>
+            <span>문제 설명 + 추천 경로 + 홈 CTA를 한 블록에.</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="process">
+        <article class="step"><p>Phase 0</p><h4>Bootstrap Lock</h4><span>필수 컴포넌트/스킬 없으면 실행 거부.</span></article>
+        <article class="step"><p>Phase 1</p><h4>Style Normalize</h4><span>중복 CSS/JS 단일 소스.</span></article>
+        <article class="step"><p>Phase 2</p><h4>Component Authority</h4><span>head/nav/footer 계약 강제.</span></article>
+        <article class="step"><p>Phase 3+</p><h4>Brand → Ops</h4><span>Home/About/Archive 후 Ops/결제/법무.</span></article>
+      </section>
+
+      <section class="cta">
+        <div>
+          <h3>이 톤으로 바로 적용? 필요한 페이지 먼저 말해줘.</h3>
+          <p style=\"margin:0; font-size:0.7rem; color:#e3e2e0;\">Ops 우선 또는 홈 우선, 어떤 배치든 바로 렌더링해서 보여줄 수 있다.</p>
+        </div>
+        <a href=\"#\" aria-disabled=\"true\">Start Implementation</a>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

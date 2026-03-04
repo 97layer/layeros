@@ -58,11 +58,15 @@ directives/
 
 ```bash
 cat knowledge/agent_hub/state.md   # 시스템 현재 상태
-cat knowledge/system/work_lock.json              # 잠금 확인
+cat knowledge/system/web_work_lock.json          # 잠금 확인 (SSOT)
+cat knowledge/system/agent_runtime_contract.json # 모델 독립 실행 계약
+cat .claude/rules/plan-council.md                # 실행 전 계획 협의 규칙
+cat .claude/rules/model-role-routing.md          # 모델 역할 라우팅
+cat .claude/rules/anti-hallucination.md          # 환각 방지 실행 규칙
 ```
 
 state.md 미확인 = CRITICAL VIOLATION.
-work_lock 잠금 상태 = STOP.
+web_work_lock 잠금 상태 = STOP.
 
 ### 5.2 파일 생성 전 확인
 

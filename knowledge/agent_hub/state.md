@@ -187,6 +187,12 @@ ssh 97layer-vm "for s in 97layer-telegram 97layer-ecosystem 97layer-gardener woo
 
 work_lock: unlocked
 
+### [2026-03-04] Communication prefs (Codex)
+
+- 톤: 동료 모드, 반말 유지 (사용자 요청 시까지 일관 적용)
+- 응답 규칙: 목표 우선 한 줄, 근거 병기, 선택지는 2~3개 번호, 로그는 최소 요약, 매 응답 끝에 실행 가능한 다음 스텝 제안
+- 적용 범위: Codex CLI 세션 전체
+
 
 ## 🌱 Gardener 자동 업데이트
 최종 실행: 2026-03-01 09:50
@@ -197,4 +203,3 @@ work_lock: unlocked
 
 **개념 사고 수준** (세션 간 연속성 앵커)
 - (아직 충분한 신호 미축적)
-

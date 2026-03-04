@@ -17,7 +17,81 @@
 <main class="page-main">
   <div class="page-intro container--wide">
     <p class="page-preamble">{{ preamble }}</p>
-    {% if controls %}{{ controls | safe }}{% endif %}
+    {% if concept_board %}
+    <section class="lab-concept-board" data-reveal aria-label="{{ concept_board.get('aria', '랩 디자인 컨셉') }}">
+      <p class="lab-concept-board__label">{{ concept_board.get('label', '') }}</p>
+      <div class="lab-concept-board__grid">
+        {% for item in concept_board.get('items', []) %}
+        <article class="lab-concept-board__item">
+          <p class="lab-concept-board__num">{{ item.get('num', '') }}</p>
+          <h2 class="lab-concept-board__title">{{ item.get('title', '') }}</h2>
+          <p class="lab-concept-board__copy">{{ item.get('copy', '') }}</p>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+    {% if controls_struct %}
+    <div class="section-controls" data-reveal>
+      <nav class="archive-filter"
+           aria-label="{{ controls_struct.get('aria', '') }}"
+           id="{{ controls_struct.get('id', 'section-controls') }}">
+        {% set items = controls_struct.get('items', []) %}
+        {% if controls_struct.get('layout') == 'inline_search' %}
+          {% set first = items[0] if items else None %}
+          <div class="archive-filter__item">
+            {% if first %}
+              {% if first.get('href') %}
+                <a class="section-chip archive-filter__btn{% if first.get('active') %} is-active{% endif %}"
+                   href="{{ first.get('href') }}">{{ first.get('label') }}</a>
+              {% else %}
+                <button class="section-chip archive-filter__btn{% if first.get('active') %} is-active{% endif %}"
+                        {% if first.get('filter') %}data-filter="{{ first.get('filter') }}"{% endif %}>
+                  {{ first.get('label') }}
+                </button>
+              {% endif %}
+            {% endif %}
+            {% if controls_struct.get('search') %}
+              <input class="section-search archive-search"
+                     id="{{ controls_struct.get('search_id', 'archive-search') }}"
+                     type="search"
+                     placeholder="{{ controls_struct.get('search_placeholder', '검색') }}"
+                     autocomplete="off"
+                     spellcheck="false">
+            {% endif %}
+          </div>
+          {% for item in items[1:] %}
+            {% if item.get('href') %}
+              <a class="section-chip archive-filter__btn{% if item.get('active') %} is-active{% endif %}"
+                 href="{{ item.get('href') }}">{{ item.get('label') }}</a>
+            {% else %}
+              <button class="section-chip archive-filter__btn{% if item.get('active') %} is-active{% endif %}"
+                      {% if item.get('filter') %}data-filter="{{ item.get('filter') }}"{% endif %}>
+                {{ item.get('label') }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for item in items %}
+            {% if item.get('href') %}
+              <a class="section-chip archive-filter__btn{% if item.get('active') %} is-active{% endif %}"
+                 href="{{ item.get('href') }}">{{ item.get('label') }}</a>
+            {% else %}
+              <button class="section-chip archive-filter__btn{% if item.get('active') %} is-active{% endif %}"
+                      {% if item.get('filter') %}data-filter="{{ item.get('filter') }}"{% endif %}>
+                {{ item.get('label') }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if controls_struct.get('show_count') %}
+          <p class="archive-count" id="{{ controls_struct.get('count_id', 'archive-count') }}"></p>
+        {% endif %}
+      </nav>
+    </div>
+    {% elif controls %}
+      {{ controls | safe }}
+    {% endif %}
   </div>
   {{ body | safe }}
 </main>

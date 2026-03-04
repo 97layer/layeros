@@ -1,12 +1,14 @@
 # 능동적 도구 활용 규칙
 
 globs: **
+source_of_truth: AGENTS.md
 
 ## 도구 트리거
 
 | 도구 | 사용 조건 |
 |------|----------|
-| **sequential-thinking** | 3개+ 선택지 트레이드오프 / 비가역적 구조 변경 전 / "~낫지 않나?" 판단 요구 |
+| **plan-council** | 비자명 구현/다중 파일 수정/하네스 변경 전: `python3 core/system/plan_council.py --task \"...\" --mode preflight` |
+| **sequential-thinking** | 비자명 작업 기본 1회 + 3개+ 선택지 트레이드오프 / 비가역적 구조 변경 전 / "~낫지 않나?" 판단 요구 |
 | **context7** | 외부 라이브러리 API 사용 / 버전별 차이가 중요한 수정 |
 | **notebooklm** | 브랜드 철학 깊은 맥락 필요 / 에세이 관련 작업 |
 | **context_snippet** | 서브에이전트 스폰 전: `python3 core/scripts/context_snippet.py [infra\|pipeline\|web\|content\|design\|agent\|state]` |

@@ -456,6 +456,35 @@ async def queue_task_create(
     }
 
 
+@app.get("/api/admin/overview")
+async def admin_overview(
+    request: Request,
+    token: Optional[str] = None,
+):
+    check_admin(request, token)
+
+    health = await healthz()
+    harness = await harness_status()
+
+    with SessionLocal() as db:
+        pages = db.query(Content.page).distinct().all()
+
+    return {
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "health": health,
+        "harness": harness,
+        "pages": [p[0] for p in pages],
+        "endpoints": {
+            "healthz": "/healthz",
+            "harness_status": "/harness/status",
+            "queue_pending": "/queue/pending",
+            "cms_root": "/cms/",
+            "upload_root": "/upload/",
+            "commerce_root": "/commerce/",
+        },
+    }
+
+
 # ─── 관리자 패널 ──────────────────────────────────────────────
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -466,50 +495,135 @@ async def admin_panel():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WOOHWAHAE CMS Admin</title>
+    <title>WOOHWAHAE Control Plane</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; background: #f5f5f5; padding: 40px; }
-        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { font-size: 28px; margin-bottom: 30px; color: #333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; background: #f1f1f1; padding: 24px; color: #181818; }
+        .container { max-width: 1280px; margin: 0 auto; background: white; padding: 28px; border-radius: 12px; box-shadow: 0 2px 18px rgba(0,0,0,0.08); }
+        h1 { font-size: 26px; margin-bottom: 16px; color: #222; }
+        h2 { font-size: 18px; margin-bottom: 14px; color: #222; }
         .login-form { max-width: 400px; margin: 100px auto; }
-        input[type="password"] { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
-        button { background: #000; color: white; padding: 12px 24px; font-size: 16px; border: none; border-radius: 4px; cursor: pointer; }
+        input[type="password"], input[type="text"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #d7d7d7;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+        textarea { min-height: 84px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+        button { background: #111; color: white; padding: 10px 14px; font-size: 14px; border: none; border-radius: 6px; cursor: pointer; }
         button:hover { background: #333; }
         .admin-panel { display: none; }
         .admin-panel.active { display: block; }
-        .page-selector { margin-bottom: 30px; }
-        select { padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px; }
-        .content-editor { margin-top: 30px; }
+        .toolbar { margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .toolbar button.secondary { background: #4b5563; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .card { border: 1px solid #e4e4e4; border-radius: 10px; padding: 16px; background: #fafafa; }
+        .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+        .metric { background: #fff; border: 1px solid #e9e9e9; border-radius: 8px; padding: 10px; }
+        .metric .k { font-size: 12px; color: #666; margin-bottom: 4px; }
+        .metric .v { font-size: 16px; font-weight: 600; color: #1f2937; word-break: break-word; }
+        .quick-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+        .quick-links a { color: #0f4ea8; text-decoration: none; font-size: 13px; }
+        .quick-links a:hover { text-decoration: underline; }
+        .status-chip { display: inline-block; font-size: 12px; padding: 4px 8px; border-radius: 999px; color: #fff; background: #6b7280; }
+        .status-chip.ok { background: #16a34a; }
+        .status-chip.degraded { background: #d97706; }
+        .status-chip.fail { background: #dc2626; }
+        .json-box { background: #111827; color: #f3f4f6; border-radius: 8px; padding: 12px; font-size: 12px; overflow: auto; max-height: 280px; }
+        .page-selector { margin-bottom: 14px; display: flex; gap: 10px; align-items: center; }
+        .page-selector select { margin-bottom: 0; max-width: 240px; }
+        .content-editor { margin-top: 10px; }
         .editable-item { background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #e0e0e0; }
         .editable-item h3 { font-size: 14px; color: #666; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .editable-item textarea { width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ddd; border-radius: 4px; min-height: 100px; font-family: inherit; resize: vertical; }
+        .editable-item textarea { width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ddd; border-radius: 4px; min-height: 100px; font-family: inherit; resize: vertical; margin-bottom: 0; }
         .save-btn { background: #4CAF50; margin-top: 10px; }
         .status { margin-left: 10px; padding: 5px 10px; border-radius: 3px; font-size: 14px; display: inline-block; }
         .status.success { background: #d4edda; color: #155724; }
         .status.error { background: #f8d7da; color: #721c24; }
+        .inline-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .label { font-size: 13px; color: #555; margin-bottom: 6px; display: block; }
+        @media (max-width: 900px) {
+            .metrics { grid-template-columns: 1fr; }
+            .inline-row { grid-template-columns: 1fr; }
+            .page-selector { flex-direction: column; align-items: flex-start; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>WOOHWAHAE CMS</h1>
+        <h1>WOOHWAHAE Control Plane</h1>
         <div id="loginForm" class="login-form">
             <h2>관리자 로그인</h2>
             <input type="password" id="password" placeholder="비밀번호 입력">
             <button onclick="login()">로그인</button>
         </div>
         <div id="adminPanel" class="admin-panel">
-            <div class="page-selector">
-                <label>페이지 선택:</label>
-                <select id="pageSelect" onchange="loadPageContent()">
-                    <option value="">페이지를 선택하세요</option>
-                    <option value="index">메인 페이지</option>
-                    <option value="about">About</option>
-                    <option value="practice">Practice</option>
-                </select>
-                <button onclick="openPage()">페이지 미리보기</button>
+            <div class="toolbar">
+                <button onclick="loadSystemStatus()">운영 상태 새로고침</button>
+                <button class="secondary" onclick="loadPageContent()">콘텐츠 다시 불러오기</button>
+                <span id="globalStatus" class="status-chip">idle</span>
             </div>
-            <div id="contentEditor" class="content-editor"></div>
+
+            <div class="grid">
+                <section class="card">
+                    <h2>운영 대시보드</h2>
+                    <div class="metrics">
+                        <div class="metric"><div class="k">Gateway</div><div class="v" id="mGateway">-</div></div>
+                        <div class="metric"><div class="k">Orchestrator</div><div class="v" id="mOrchestrator">-</div></div>
+                        <div class="metric"><div class="k">Plan Council</div><div class="v" id="mPlan">-</div></div>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric"><div class="k">Queue Pending</div><div class="v" id="qPending">0</div></div>
+                        <div class="metric"><div class="k">Queue Processing</div><div class="v" id="qProcessing">0</div></div>
+                        <div class="metric"><div class="k">Queue Completed</div><div class="v" id="qCompleted">0</div></div>
+                    </div>
+                    <div class="quick-links" id="quickLinks"></div>
+                    <p style="font-size:12px;color:#666;margin-top:10px;">Mounted Services</p>
+                    <pre class="json-box" id="mountJson">{}</pre>
+                </section>
+
+                <section class="card">
+                    <h2>작업 큐 주입</h2>
+                    <div class="inline-row">
+                        <div>
+                            <label class="label" for="taskAgent">Agent</label>
+                            <select id="taskAgent">
+                                <option value="SA">SA</option>
+                                <option value="AD">AD</option>
+                                <option value="CE">CE</option>
+                                <option value="CD">CD</option>
+                                <option value="Ralph">Ralph</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label" for="taskType">Task Type</label>
+                            <input type="text" id="taskType" value="analyze_signal">
+                        </div>
+                    </div>
+                    <label class="label" for="taskPayload">Payload(JSON)</label>
+                    <textarea id="taskPayload">{\"source\":\"admin_console\"}</textarea>
+                    <button onclick="createQueueTask()">큐 등록</button>
+                    <span id="taskStatus" class="status"></span>
+                </section>
+
+                <section class="card">
+                    <h2>콘텐츠 편집</h2>
+                    <div class="page-selector">
+                        <label class="label" for="pageSelect" style="margin:0;">페이지:</label>
+                        <select id="pageSelect" onchange="loadPageContent()">
+                            <option value="">페이지를 선택하세요</option>
+                            <option value="index">메인 페이지</option>
+                            <option value="about">About</option>
+                            <option value="practice">Practice</option>
+                        </select>
+                        <button onclick="openPage()">페이지 미리보기</button>
+                    </div>
+                    <div id="contentEditor" class="content-editor"></div>
+                </section>
+            </div>
         </div>
     </div>
     <script>
@@ -542,6 +656,55 @@ async def admin_panel():
         function showAdminPanel() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('adminPanel').classList.add('active');
+            loadSystemStatus();
+        }
+
+        function setGlobalStatus(text, level) {
+            const el = document.getElementById('globalStatus');
+            el.textContent = text;
+            el.className = 'status-chip ' + (level || '');
+        }
+
+        async function loadSystemStatus() {
+            if (!adminToken) return;
+            setGlobalStatus('loading', '');
+            try {
+                const response = await fetch('/api/admin/overview?token=' + encodeURIComponent(adminToken));
+                if (!response.ok) {
+                    throw new Error('status load failed');
+                }
+                const data = await response.json();
+                const health = data.health || {};
+                const harness = data.harness || {};
+                const queue = (harness.queue && harness.queue.counts) || {};
+                const mounts = health.services || {};
+
+                document.getElementById('mGateway').textContent = health.status || '-';
+                document.getElementById('mOrchestrator').textContent = ((health.orchestrator || {}).running ? 'running' : 'down');
+                document.getElementById('mPlan').textContent = ((health.plan_council || {}).status || '-');
+
+                document.getElementById('qPending').textContent = String(queue.pending || 0);
+                document.getElementById('qProcessing').textContent = String(queue.processing || 0);
+                document.getElementById('qCompleted').textContent = String(queue.completed || 0);
+                document.getElementById('mountJson').textContent = JSON.stringify(mounts, null, 2);
+
+                const quickLinks = document.getElementById('quickLinks');
+                quickLinks.innerHTML = '';
+                const endpoints = data.endpoints || {};
+                Object.keys(endpoints).forEach(function(key) {
+                    const a = document.createElement('a');
+                    a.href = endpoints[key];
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.textContent = key;
+                    quickLinks.appendChild(a);
+                });
+
+                const level = health.status === 'ok' ? 'ok' : (health.status || '').toLowerCase();
+                setGlobalStatus('system ' + (health.status || 'unknown'), level);
+            } catch (error) {
+                setGlobalStatus('system error', 'fail');
+            }
         }
 
         async function loadPageContent() {
@@ -565,6 +728,50 @@ async def admin_panel():
                 }
             } catch (error) {
                 editor.innerHTML = '<p>콘텐츠를 불러오는데 실패했습니다.</p>';
+            }
+        }
+
+        async function createQueueTask() {
+            if (!adminToken) return;
+            const agentType = document.getElementById('taskAgent').value;
+            const taskType = document.getElementById('taskType').value.trim();
+            const payloadRaw = document.getElementById('taskPayload').value.trim();
+            const status = document.getElementById('taskStatus');
+
+            let payload = {};
+            if (!taskType) {
+                status.className = 'status error';
+                status.textContent = 'task_type 필요';
+                return;
+            }
+            try {
+                payload = payloadRaw ? JSON.parse(payloadRaw) : {};
+            } catch (e) {
+                status.className = 'status error';
+                status.textContent = 'payload JSON 오류';
+                return;
+            }
+
+            try {
+                const response = await fetch('/queue/task?token=' + encodeURIComponent(adminToken), {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        agent_type: agentType,
+                        task_type: taskType,
+                        payload: payload
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error('queue task failed');
+                }
+                const data = await response.json();
+                status.className = 'status success';
+                status.textContent = '등록 완료: ' + data.task_id;
+                loadSystemStatus();
+            } catch (error) {
+                status.className = 'status error';
+                status.textContent = '등록 실패';
             }
         }
 

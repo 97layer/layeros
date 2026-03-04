@@ -16,9 +16,11 @@ from pathlib import Path
 
 try:
     from jinja2 import Environment, FileSystemLoader
+    JINJA_AVAILABLE = True
 except ImportError:
-    print("jinja2 없음 — pip3 install jinja2")
-    sys.exit(1)
+    Environment = None
+    FileSystemLoader = None
+    JINJA_AVAILABLE = False
 
 ROOT = Path(__file__).resolve().parents[2]
 WEB = ROOT / "website"
@@ -45,7 +47,8 @@ def build_page(page_id: str, out_path: Path) -> None:
     page_dir = PAGES_DIR / page_id
     meta = json.loads(_read(page_dir / "meta.json"))
 
-    controls = _read(page_dir / "controls.html").strip() or None
+    controls_struct = meta.get("controls")
+    controls = None if controls_struct else (_read(page_dir / "controls.html").strip() or None)
     body = _read(page_dir / "body.html")
     page_script = _read(page_dir / "script.html").strip() or None
 
@@ -58,6 +61,7 @@ def build_page(page_id: str, out_path: Path) -> None:
         og_url=meta["og_url"],
         body_class=meta["body_class"],
         preamble=meta["preamble"],
+        controls_struct=controls_struct,
         controls=controls,
         body=body,
         page_script=page_script,
@@ -71,6 +75,16 @@ def build_page(page_id: str, out_path: Path) -> None:
 
 def main() -> None:
     print("─── section pages ───")
+    if not JINJA_AVAILABLE:
+        missing = [p for p in PAGE_MAP.values() if not p.exists()]
+        if missing:
+            print("jinja2 없음 — pip3 install jinja2")
+            for path in missing:
+                print(f"누락: {path.relative_to(ROOT)}")
+            sys.exit(1)
+        print("jinja2 없음 — 기존 section 페이지 유지(스킵)")
+        return
+
     for page_id, out_path in PAGE_MAP.items():
         build_page(page_id, out_path)
 

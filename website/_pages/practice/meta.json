@@ -3,5 +3,16 @@
   "description": "헤어 아틀리에, 디렉팅, 프로젝트. 소거라는 태도가 공간과 실천이 되는 곳.",
   "og_url": "https://woohwahae.kr/practice/",
   "body_class": "page-practice",
-  "preamble": "헤어, 디렉팅, 프로젝트, 제품."
+  "preamble": "헤어, 디렉팅, 프로젝트, 제품.",
+  "controls": {
+    "id": "practice-sections",
+    "aria": "프랙티스 섹션",
+    "layout": "list",
+    "items": [
+      { "label": "001. 아틀리에 · 오프라인 헤어 공간", "href": "/practice/atelier.html" },
+      { "label": "002. 디렉팅 · 시각 연출과 브랜드 자문", "href": "/practice/direction.html" },
+      { "label": "003. 프로젝트 · 협업 기반 디자인 프로젝트", "href": "/practice/project.html" },
+      { "label": "004. 제품 · 기록과 도구 아카이브", "href": "/practice/product.html" }
+    ]
+  }
 }

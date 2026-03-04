@@ -12,7 +12,8 @@
         : h < 18 ? 'time-day'
             : h < 22 ? 'time-evening'
                 : 'time-night';
-    document.documentElement.className = cls;
+    document.documentElement.classList.remove('time-dawn', 'time-day', 'time-evening', 'time-night');
+    document.documentElement.classList.add(cls);
 
     /* ─── Nav 토글 ─── */
     var toggle = document.getElementById('nav-toggle');
@@ -110,6 +111,7 @@
     (function () {
         var siteNav = document.getElementById('site-nav');
         if (!siteNav) return;
+        if (document.querySelector('.site-subnav')) return;
 
         var path = window.location.pathname;
         /* 홈(/)에서는 숨김 */
@@ -127,6 +129,15 @@
             { key: 'about', label: 'About', href: '/about/' },
             { key: 'lab', label: 'Lab', href: '/lab/' }
         ];
+
+        /* 상단 탭 active 통일: 현재 경로에 맞춰 nav/overlay 모두 강조 */
+        document.querySelectorAll('.nav-links a, .nav-overlay a').forEach(function (a) {
+            var href = a.getAttribute('href') || '';
+            var isActive = href !== '/' && path.indexOf(href) === 0;
+            a.classList.toggle('active', isActive);
+            var num = a.querySelector('.numeric-tag, .nav-overlay__num');
+            if (num) num.classList.toggle('numeric-tag--active', isActive);
+        });
 
         var subnav = document.createElement('div');
         subnav.className = 'site-subnav';
