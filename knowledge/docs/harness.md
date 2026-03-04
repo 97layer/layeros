@@ -1,6 +1,6 @@
 # HARNESS — WOOHWAHAE 풀스택 아키텍처 SSOT
 
-> **위치**: `knowledge/system/harness.md` (아키텍처 문서. 에이전트 지시문 아님)
+> **위치**: `knowledge/docs/harness.md` (아키텍처 문서. 에이전트 지시문 아님)
 > **상위**: directives/the_origin.md → sage_architect.md → system.md
 > **역할**: 브랜드가 하나의 유기체로 작동하는 레이어 구조 및 데이터 흐름 정의
 > **권한**: PROPOSE (구조 변경 시 순호 승인 필요)
@@ -200,7 +200,7 @@ CE 산출물
 | 입력 | `knowledge/corpus/entries/` 누적 데이터 |
 | 출력 | CE 트리거 신호 + 주간 Telegram 리포트 + PROPOSE 개선안 |
 | 소거 렌즈 | "신호의 지층화". 군집이 충분히 쌓일 때까지 기다린다. 서두르지 않는다 |
-| 수정 권한 | FROZEN(the_origin, sage_architect) / PROPOSE(agents/*.md) / AUTO(state.md, signals) |
+| 수정 권한 | FROZEN(the_origin, sage_architect) / PROPOSE(practice.md 역할 섹션) / AUTO(state.md, signals) |
 | 구현 상태 | ✅ 새벽 3시 데몬. 주간 리포트 자동화 |
 | 갭 | 군집 성숙 판별 기준이 양적 임계치 기반. "공명 가능성" 같은 질적 기준 미반영 |
 
@@ -273,9 +273,9 @@ knowledge/clients/ + knowledge/corpus/ + website/archive/
 | 에이전트/모듈 | 코드 경로 | 입력 경로 | 출력 경로 | 지시 문서 |
 |---|---|---|---|---|
 | Scout | `core/agents/scout_agent.py` | 외부 RSS | `knowledge/signals/` | — |
-| SA | `core/agents/sa_agent.py` | `knowledge/signals/` | `knowledge/corpus/entries/` | `directives/agents/sa.md` |
-| CE | `core/agents/ce_agent.py` | corpus + Gardener 트리거 | 에세이 태스크 | `directives/agents/ce.md` |
-| AD | `core/agents/ad_agent.py` | CE 완료 태스크 | 시각 컨셉 태스크 | `directives/agents/ad.md` |
+| SA | `core/agents/sa_agent.py` | `knowledge/signals/` | `knowledge/corpus/entries/` | `directives/practice.md §II-10` |
+| CE | `core/agents/ce_agent.py` | corpus + Gardener 트리거 | 에세이 태스크 | `directives/practice.md §II-11` |
+| AD | `core/agents/ad_agent.py` | CE 완료 태스크 | 시각 컨셉 태스크 | `directives/practice.md §I-10` |
 | Ralph | `core/utils/essay_quality_validator.py` | CE 산출물 | QA 점수/통과 신호 | `sage_architect.md §6.5` |
 | Publisher | `core/system/content_publisher.py` | AD 완료 + CD 승인 | `knowledge/assets/published/` | `sage_architect.md §4` |
 | Gardener | `core/agents/gardener.py` | `knowledge/corpus/entries/` | CE 트리거 + Telegram | `directives/system.md §2` |
@@ -327,7 +327,7 @@ knowledge/clients/ + knowledge/corpus/ + website/archive/
 | 어조/언어 규격 | `directives/sage_architect.md` |
 | 운영 프로토콜 | `directives/system.md` |
 | 시각/서비스 규격 | `directives/practice.md` |
-| 에이전트 역할 발현 | `directives/agents/sa.md`, `ce.md`, `ad.md` |
+| 에이전트 역할 발현 | `directives/practice.md` §I-10, §II-10, §II-11 |
 | 수정 권한 3단계 | FROZEN / PROPOSE / AUTO (system.md §2) |
 
 ---

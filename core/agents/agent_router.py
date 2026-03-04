@@ -13,13 +13,12 @@ from typing import Optional, Dict
 
 logger = logging.getLogger(__name__)
 
-AGENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "directives", "agents")
 DIRECTIVES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "directives")
 AGENT_REGISTRY: Dict[str, Dict[str, str]] = {
     # CD는 sage_architect.md §10에 흡수됨
-    "AD": {"file": "ad.md", "name": "Art Director", "label": "AD"},
-    "CE": {"file": "ce.md", "name": "Chief Editor", "label": "CE"},
-    "SA": {"file": "sa.md", "name": "Strategy Analyst", "label": "SA"},
+    "AD": {"file": "practice.md", "section": "I-10", "name": "Art Director", "label": "AD"},
+    "CE": {"file": "practice.md", "section": "II-11", "name": "Chief Editor", "label": "CE"},
+    "SA": {"file": "practice.md", "section": "II-10", "name": "Strategy Analyst", "label": "SA"},
 }
 
 # 에이전트별 필독 문서 매핑 (practice.md 통합본)
@@ -65,16 +64,17 @@ class AgentRouter:
             self.skill_engine = None
 
     def _load_all_directives(self) -> None:
-        """디렉티브 마크다운에서 에이전트 규칙 로드"""
+        """practice.md에서 에이전트 섹션 로드"""
+        from core.system.directive_loader import load_section
+
         for key, info in AGENT_REGISTRY.items():
-            filepath = os.path.join(AGENT_DIR, info["file"])
-            try:
-                with open(filepath, "r", encoding="utf-8") as f:
-                    lines = [line.strip() for line in f.readlines()]
-                    self.directives[key] = "\n".join([l for l in lines if l and not l.startswith("---")])
-                logger.debug("Loaded agent directive: %s", key)
-            except FileNotFoundError:
-                logger.error("Agent directive not found: %s", filepath)
+            section = info.get("section")
+            content = load_section(info["file"], section, max_chars=3000)
+            if content:
+                self.directives[key] = content
+                logger.debug("Loaded agent directive: %s (%s)", key, section)
+            else:
+                logger.error("Agent directive not found: %s %s", info["file"], section)
 
     def _load_brand_directives(self, agent_key: str) -> str:
         """에이전트별 Brand OS 문서 로드"""

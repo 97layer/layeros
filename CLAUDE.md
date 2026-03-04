@@ -13,6 +13,8 @@ startup hook이 자동 로드하는 것:
 8. `.claude/rules/model-role-routing.md` — 모델 역할 라우팅 규칙
 9. `.claude/rules/anti-hallucination.md` — 환각 방지 실행 규칙
 10. `knowledge/system/agent_runtime_contract.json` — 모델 독립 실행 계약
+11. `knowledge/docs/reference-map.md` — 작업별 위치 안내
+12. `knowledge/docs/ops-handbook.md` — 실행 체크리스트
 
 `web_work_lock` 잠금 시 STOP.
 파일 생성 전: `filesystem_cache.json` 확인. 배치 규칙: `directives/system.md §10`.

@@ -3,7 +3,7 @@
 > **Version**: 10.0 (통합)
 > **역할**: 에이전트 실행 프로토콜 + 파일 배치 규칙 + AI 거버넌스.
 >         sage_architect.md(인격)가 '무엇을 사고하는가'라면, 이 문서는 '어떻게 실행하는가'.
-> **Authority**: sage_architect.md > the_origin.md > system.md > practice.md > agents/*.md
+> **Authority**: sage_architect.md > the_origin.md > system.md > practice.md(역할 섹션)
 
 ---
 
@@ -24,7 +24,7 @@
 | Tier | 대상 | 제어 |
 |------|------|------|
 | **FROZEN** | `the_origin.md`, `sage_architect.md` | CD 고유 권한. 임의 수정 금지 |
-| **PROPOSE** | `agents/*.md`, `practice.md` | 피드백 루프 (승인제 변경) |
+| **PROPOSE** | `practice.md`(역할 섹션 포함) | 피드백 루프 (승인제 변경) |
 | **AUTO** | `state.md`, `signals/`, `memory` | 비동기 상태 기록 |
 
 ---
@@ -46,8 +46,7 @@ directives/
 ├── sage_architect.md        ← 인격 SSOT + 용어 사전 (FROZEN)
 ├── system.md                ← 운영 매뉴얼 (현재 파일)
 ├── practice.md              ← Part I 시각 / Part II 언어 / Part III 공간
-└── agents/
-    └── sa.md, ce.md, ad.md  ← 역할 발현
+└── (agents/*.md 통합: practice.md 역할 섹션으로 흡수)
 ```
 
 ---
@@ -106,16 +105,16 @@ python core/system/handoff.py --register-asset <path> <type> <source>
 CONTEXT_SLOTS = {
     "slot_1": "sage_architect.md",        # 인격 + 용어 (필수)
     "slot_2": "practice.md",               # Part I 시각 / Part II 언어 / Part III 공간
-    "slot_3": "agents/{role}.md",         # 역할별
+    "slot_3": "practice.md 역할 섹션",     # 역할별
     "slot_4": "(reserved)",               # 확장용
 }
 ```
 
 | Agent | 필수 | 선택 |
 |-------|------|------|
-| **CE** | 1, 2 | 3 (ce.md) |
-| **SA** | 1, 2 | 3 (sa.md) |
-| **AD** | 1, 2 | 3 (ad.md) |
+| **CE** | 1, 2 | 3 (practice.md §II-11) |
+| **SA** | 1, 2 | 3 (practice.md §II-10) |
+| **AD** | 1, 2 | 3 (practice.md §I-10) |
 | **Ralph** | 1 | STAP 섹션만 |
 
 ---
@@ -228,7 +227,7 @@ ALWAYS_CACHED = ["sage_architect.md"]
 
 ### 온디맨드
 ```python
-ON_DEMAND = ["practice.md", "agents/*.md", "the_origin.md"]
+ON_DEMAND = ["practice.md", "the_origin.md"]
 ```
 
 ### 무효화 트리거
@@ -244,8 +243,7 @@ graph TD
     A[the_origin.md] --> B[sage_architect.md]
     B --> C[system.md]
     C --> D[practice.md]
-    D --> E[agents/*.md]
-    E --> F[Output]
+    D --> F[Output]
     F --> G[STAP Gate]
     G -->|Pass| H[Publish]
     G -->|Fail| D

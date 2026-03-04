@@ -6,7 +6,7 @@ Gardener — LAYER OS 자가진화 에이전트
 
 수정 권한 3단계:
   FROZEN  — 절대 불가 (the_origin.md, sage_architect.md)
-  PROPOSE — 순호 승인 후 적용 (agents/*.md, practice.md)
+  PROPOSE — 순호 승인 후 적용 (practice.md 역할 섹션)
   AUTO    — 자동 갱신 (state.md, signals/, memory)
 
 Author: LAYER OS
@@ -50,11 +50,15 @@ FROZEN = {
 }
 
 PROPOSE = {
-    # 에이전트 행동 지침 — 순호 승인 필요
-    "sa.md",
-    "ad.md",
-    "ce.md",
-    "vd.md",   # Visual Director — 룩북 비주얼 시그니처 진화
+    # 에이전트 행동 지침 — practice.md 내 역할 섹션
+    "practice.md",
+}
+
+ROLE_SECTION_MAP = {
+    "sa": "II-10",
+    "ce": "II-11",
+    "ad": "I-10",
+    "vd": "I-11",
 }
 
 # AUTO: long_term_memory.json, state.md → 기존 SA/CE가 이미 처리
@@ -165,12 +169,15 @@ class Gardener(ProactiveScan):
 
         return stats
 
-    def _load_directive(self, filename: str) -> str:
-        """에이전트 지시어 로드"""
-        path = self.directives_dir / 'agents' / filename
-        if path.exists():
-            return path.read_text(encoding='utf-8')
-        return ""
+    def _load_directive(self, role_key: str) -> str:
+        """practice.md에서 역할 섹션 로드"""
+        from core.system.directive_loader import load_section
+
+        key = role_key.replace('.md', '').lower()
+        section = ROLE_SECTION_MAP.get(key)
+        if not section:
+            return ""
+        return load_section("practice.md", section, max_chars=1200)
 
     # ── 분석 + 제안 생성 ──────────────────────────
 
@@ -181,8 +188,8 @@ class Gardener(ProactiveScan):
         """
         proposals = []
 
-        # sa.md 분석 — SA 집중 테마 업데이트 제안
-        joon_content = self._load_directive('sa.md')
+        # practice.md §II-10 분석 — SA 집중 테마 업데이트 제안
+        joon_content = self._load_directive('sa')
         if joon_content and stats['top_themes']:
             themes_str = ', '.join(f"{t}({c}회)" for t, c in stats['top_themes'][:5])
             prompt = f"""너는 LAYER OS Gardener다.
@@ -194,10 +201,10 @@ class Gardener(ProactiveScan):
 - 상위 테마: {themes_str}
 - 상위 개념: {', '.join(k for k, _ in stats['top_concepts'][:5])}
 
-현재 sa.md 일부:
+현재 practice.md §II-10 일부:
 {joon_content[:800]}
 
-질문: 이 데이터를 보면 sa.md에서 어떤 부분을 미세조정하면 좋을까?
+질문: 이 데이터를 보면 practice.md §II-10에서 어떤 부분을 미세조정하면 좋을까?
 - 집중할 테마/카테고리 업데이트가 필요한가?
 - 분석 기준에서 놓치고 있는 패턴이 있는가?
 
@@ -224,15 +231,15 @@ JSON만 출력."""
                     if result.get('needs_update'):
                         proposals.append({
                             'id': f"joon_{datetime.now().strftime('%Y%m%d')}",
-                            'target_file': 'sa.md',
-                            'section': result.get('section', '분석 집중 영역'),
+                            'target_file': 'practice.md',
+                            'section': result.get('section', 'II-10'),
                             'reason': result.get('reason', ''),
                             'proposed_addition': result.get('proposed_addition', ''),
                             'status': 'pending',
                             'created_at': datetime.now().isoformat(),
                         })
             except Exception as e:
-                logger.warning("sa.md 분석 실패: %s", e)
+                logger.warning("practice.md §II-10 분석 실패: %s", e)
 
         return proposals
 

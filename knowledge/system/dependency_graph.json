@@ -13,7 +13,6 @@
       "dependents": [
         "directives/system.md",
         "directives/practice.md",
-        "directives/agents/*.md",
         "website/**/*.html",
         "CLAUDE.md"
       ],
@@ -30,9 +29,8 @@
       "dependencies": ["directives/the_origin.md"],
       "dependents": [
         "website/assets/css/style.css",
-        "directives/agents/ad.md",
-        "directives/agents/ce.md",
-        "directives/agents/sa.md",
+        "core/system/directive_loader.py",
+        "core/agents/agent_router.py",
         "website/_templates/*.html",
         "knowledge/service/items.json",
         "knowledge/corpus/essay-001.md"

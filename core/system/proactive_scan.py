@@ -31,7 +31,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # 권한 경계 (gardener.py FROZEN 상수와 동기화)
 FROZEN_FILES = {"the_origin.md", "sage_architect.md"}
-PROPOSE_FILES = {"sa.md", "ad.md", "ce.md", "practice.md"}
+PROPOSE_FILES = {"practice.md"}
 
 # Ralph Loop Loop3 금지 패턴 (sage_architect.md §6.5)
 _CLICHE_A = re.compile(r"중요합니다|필요합니다|생각합니다|가능합니다|좋습니다")

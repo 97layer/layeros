@@ -59,12 +59,13 @@ TASK_SECTIONS: Dict[str, List[Dict[str, str]]] = {
 
 AGENT_SECTIONS: Dict[str, List[Dict[str, str]]] = {
     "SA": [
+        {"file": "the_origin.md", "section": None},  # 브랜드 공명 필터 기준
         {"file": "sage_architect.md", "section": "§1"},
         {"file": "sage_architect.md", "section": "§9"},
         {"file": "practice.md", "section": "II-4"},
         {"file": "practice.md", "section": "II-5"},
         {"file": "practice.md", "section": "II-9"},
-        {"file": "agents/sa.md", "section": None},
+        {"file": "practice.md", "section": "II-10"},
     ],
     "CE": [
         {"file": "sage_architect.md", "section": "§4"},
@@ -72,12 +73,12 @@ AGENT_SECTIONS: Dict[str, List[Dict[str, str]]] = {
         {"file": "sage_architect.md", "section": "§6"},
         {"file": "sage_architect.md", "section": "§9"},
         {"file": "practice.md", "section": "Part II"},
-        {"file": "agents/ce.md", "section": None},
+        {"file": "practice.md", "section": "II-11"},
     ],
     "AD": [
         {"file": "sage_architect.md", "section": "§9"},
         {"file": "practice.md", "section": "Part I"},
-        {"file": "agents/ad.md", "section": None},
+        {"file": "practice.md", "section": "I-10"},
     ],
     "CD": [
         {"file": "sage_architect.md", "section": "§10"},

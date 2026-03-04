@@ -10,6 +10,8 @@
 3. `directives/practice.md`
 4. `directives/system.md`
 5. `CLAUDE.md`
+6. `knowledge/docs/reference-map.md` (작업별 경로 안내)
+7. `knowledge/docs/ops-handbook.md` (운영 체크리스트)
 
 ## Mandatory Startup
 1. `bash core/scripts/session_bootstrap.sh`
@@ -102,6 +104,11 @@
 | HTML/CSS/JS | `website/` |
 | JSON (데이터) | `knowledge/system/` `knowledge/signals/` `knowledge/corpus/` `knowledge/service/` |
 | 설정 파일 | `.claude/` `.github/` |
+
+### New Agent Rule
+- 새 에이전트 지침용 `.md`를 추가 생성하지 않는다. 역할 지침은 `directives/practice.md` 내 섹션(예: I-10, II-10, II-11)에만 추가한다.
+- 새 역할을 만들 경우: `directive_loader.py` AGENT_SECTIONS, `core/agents/agent_router.py` DEFAULT_SECTIONS/키워드 맵을 함께 수정한다.
+- `core/scripts/structure_audit.py`는 directives/ 신규 .md를 미등록 파일로 경고한다.
 
 ### 절대 생성 금지
 - `src/` — Eleventy 스캐폴드 경로. 현재 프로젝트는 `website/` 직접 편집 방식

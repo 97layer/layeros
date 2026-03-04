@@ -30,15 +30,6 @@ EXPECTED_DIRECTIVES = {
     "directives/sage_architect.md",
     "directives/system.md",
     "directives/practice.md",
-    "directives/harness.md",
-    "directives/agents/sa.md",
-    "directives/agents/ce.md",
-    "directives/agents/ad.md",
-    "directives/agents/vd.md",
-    "directives/practice/writing_guide.md",
-    "directives/harness.md",
-    "directives/agents/vd.md",
-    "directives/practice/writing_guide.md",
 }
 
 
@@ -75,8 +66,6 @@ def check_dead_references() -> List[str]:
                     IGNORE_REFS = {
                         "README.md", "CLAUDE.md", "SKILL.md",
                         "source.md", "raw_content.md", "state.md",
-                        # 에이전트 코드 내 축약 참조 (agents/ 접두사 없이)
-                        "sa.md", "ce.md", "ad.md",
                         # 삭제된 파일 (코드 내 문자열 잔존 가능)
                         "practice.md", "sage_architect.md", "the_origin.md",
                         "system.md",
