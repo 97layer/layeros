@@ -388,6 +388,27 @@ def self_check(require_both: bool = False) -> int:
     return 0
 
 
+def _exit_code(payload: Dict[str, Any]) -> int:
+    """Exit code contract:
+    0 = ready + go          → 구현 진행 가능
+    1 = degraded (둘 다)    → HARD STOP. 네트워크/키 오류. 구현 금지.
+    2 = needs_clarification → 범위 불명확. 사용자 확인 후 진행.
+    3 = degraded (한 모델)  → 단일 모델. 리스크 명시 후 진행 여부 판단.
+    """
+    consensus = payload.get("consensus", {})
+    status = consensus.get("status", "degraded")
+    decision = consensus.get("decision", "go")
+    models_used = consensus.get("models_used", [])
+
+    if status == "degraded" and not models_used:
+        return 1  # 둘 다 실패
+    if status == "degraded":
+        return 3  # 한 모델만 성공
+    if decision == "needs_clarification":
+        return 2  # 범위 불명확
+    return 0  # ready + go
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Plan council (Claude + Gemini)")
     parser.add_argument("--task", help="Task text for planning")
@@ -412,11 +433,11 @@ def main() -> int:
 
     if args.json:
         print(json.dumps(payload, ensure_ascii=False))
-        return 0
+        return _exit_code(payload)
 
     if args.mode == "hook":
         print(_render_hook_text(payload, max_items=max(1, args.max_items)))
-        return 0
+        return _exit_code(payload)
 
     consensus = payload.get("consensus", {})
     print(f"status: {consensus.get('status')}")
@@ -431,7 +452,7 @@ def main() -> int:
     print("checks:")
     for check in consensus.get("checks", []):
         print(f"- {check}")
-    return 0
+    return _exit_code(payload)
 
 
 if __name__ == "__main__":
