@@ -30,6 +30,13 @@ from datetime import datetime
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
+# Load .env if present (API keys)
+try:
+    from dotenv import load_dotenv
+    load_dotenv(PROJECT_ROOT / ".env")
+except Exception:
+    pass
+
 from core.system.agent_watcher import AgentWatcher
 from core.system.queue_manager import Task
 from core.system.agent_logger import get_logger
