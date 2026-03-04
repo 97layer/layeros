@@ -29,9 +29,14 @@
 - 웹 락 해제: core/system/web_consistency_lock.py --release <AGENT>
 - 서비스 재시작: (VM) systemctl restart <services>  # 필요 시
 
-## 7. 신규 에이전트 추가 규칙
+## 7. 운영전환 최소 세팅 (게이트/롤백/알람)
+- 게이트: `bash core/scripts/ops_gate.sh`  (visual + 스모크 + 결제 회귀)
+- 롤백: `bash core/scripts/ops_rollback.sh`  (`--to legacy|gateway`)
+- 알람체크: `python3 core/scripts/ops_alert_check.py --log-file .infra/logs/woohwahae-gateway.log`
+
+## 8. 신규 에이전트 추가 규칙
 - 새 지침 파일 생성 금지: 역할 규칙은 `directives/practice.md` 내 섹션만 추가/수정.
-- 라우터/로더 동기화: 새 역할을 만들면 `core/system/directive_loader.py` AGENT_SECTIONS와 `core/agents/agent_router.py` 매핑을 함께 수정.
+- 라우터/로더 동기화: 새 역할을 만들면 `core/system/directive_loader.py` AGENT_SECTIONS와 `core/agents/agent_router.py` 매핑을 동시 수정.
 - 감사 확인: `python3 core/scripts/structure_audit.py`는 미등록 directives/*.md를 경고하므로 실행 후 0건인지 확인.
 - 캐시/슬라이스: 필요 시 `core/scripts/render_directives.py --agent <KEY>`로 섹션 슬라이스 생성해 텔레그램/에이전트에 캐시 주입.
 
