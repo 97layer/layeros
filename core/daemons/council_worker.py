@@ -28,6 +28,7 @@ REPORTS = PROJECT_ROOT / "knowledge/system/plan_council_reports.jsonl"
 COUNCIL_ROOM = PROJECT_ROOT / "knowledge/agent_hub/council_room.md"
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+_WARNED_NO_TELEGRAM = False
 
 
 def load_env():
@@ -69,7 +70,11 @@ def append_council_room(entry: Dict):
 
 
 def notify_telegram(entry: Dict):
+    global _WARNED_NO_TELEGRAM
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        if not _WARNED_NO_TELEGRAM:
+            print("[council_worker] TELEGRAM_* env missing — notifications skipped", file=sys.stderr)
+            _WARNED_NO_TELEGRAM = True
         return
     text = (
         f"[Council] {entry['task']}\n"
