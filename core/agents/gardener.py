@@ -1177,68 +1177,111 @@ JSON만 출력.""" % (messages_text, initiated_str)
         """
         logger.info("🌱 Gardener 사이클 시작 (지난 %d일)", days)
 
-        # 1. 데이터 수집
-        stats = self._collect_stats(days)
-        logger.info(
-            "📊 신호:%d / SA분석:%d / 평균점수:%s",
-            stats['signal_count'], stats['sa_analyzed'], stats['avg_score']
-        )
+        # 1. 데이터 수집 (실패 시 빈 stats로 계속 진행)
+        try:
+            stats = self._collect_stats(days)
+            logger.info(
+                "📊 신호:%d / SA분석:%d / 평균점수:%s",
+                stats['signal_count'], stats['sa_analyzed'], stats['avg_score']
+            )
+        except Exception as e:
+            logger.warning("step 1 (_collect_stats) 실패: %s", e)
+            stats = {'signal_count': 0, 'sa_analyzed': 0, 'avg_score': 0,
+                     'top_themes': [], 'top_concepts': [], 'period_days': days}
 
-        # 2. 개념 진화 기록 (핵심: 대화가 쌓일수록 사고가 깊어지는 구조)
-        self._evolve_concept_memory(stats)
+        # 2. 개념 진화 기록
+        try:
+            self._evolve_concept_memory(stats)
+        except Exception as e:
+            logger.warning("step 2 (_evolve_concept_memory) 실패: %s", e)
 
-        # 2.5. 대화 패턴 학습 (텔레그램 대화 히스토리 → MEMORY 자동 갱신)
-        conv_patterns = self._analyze_conversation_patterns()
-        if conv_patterns.get('active_concerns'):
-            logger.info("💬 현재 관심사: %s", conv_patterns['active_concerns'])
+        # 2.5. 대화 패턴 학습
+        conv_patterns = {}
+        try:
+            conv_patterns = self._analyze_conversation_patterns()
+            if conv_patterns.get('active_concerns'):
+                logger.info("💬 현재 관심사: %s", conv_patterns['active_concerns'])
+        except Exception as e:
+            logger.warning("step 2.5 (_analyze_conversation_patterns) 실패: %s", e)
 
-        # 3. QUANTA 성장 일지 갱신 (상태 스냅샷 → 사고 수준 앵커로)
-        self._update_quanta_with_growth(stats)
+        # 3. QUANTA 성장 일지 갱신
+        try:
+            self._update_quanta_with_growth(stats)
+        except Exception as e:
+            logger.warning("step 3 (_update_quanta_with_growth) 실패: %s", e)
 
-        # 4. Corpus 군집 성숙도 점검 → 익은 것 에세이 트리거 (핵심 신규)
-        corpus_result = self._check_corpus_clusters()
+        # 4. Corpus 군집 성숙도 점검
+        corpus_result = {}
+        try:
+            corpus_result = self._check_corpus_clusters()
+        except Exception as e:
+            logger.warning("step 4 (_check_corpus_clusters) 실패: %s", e)
 
         # 5. Growth Module 월간 집계 자동 기록
-        self._record_growth_snapshot()
+        try:
+            self._record_growth_snapshot()
+        except Exception as e:
+            logger.warning("step 5 (_record_growth_snapshot) 실패: %s", e)
 
         # 6. 재방문 시기 고객 알림
-        self._check_revisit_due()
+        try:
+            self._check_revisit_due()
+        except Exception as e:
+            logger.warning("step 6 (_check_revisit_due) 실패: %s", e)
 
-        # 7. Guard 룰 자동 진화 (quarantine 패턴 5회+ → forbidden 등록)
-        self._evolve_guard_rules()
+        # 7. Guard 룰 자동 진화
+        try:
+            self._evolve_guard_rules()
+        except Exception as e:
+            logger.warning("step 7 (_evolve_guard_rules) 실패: %s", e)
 
         # 8. PROPOSE 생성 (신호가 10개 이상일 때만)
         new_proposals = []
-        if stats['signal_count'] >= 10:
-            new_proposals = self._analyze_and_propose(stats)
-            if new_proposals:
-                self.pending.extend(new_proposals)
-                self._save_pending()
-                logger.info("📝 새 제안 %d개 생성", len(new_proposals))
-        else:
-            logger.info("⏭️  신호 부족 (%d개) — 제안 생략", stats['signal_count'])
+        try:
+            if stats['signal_count'] >= 10:
+                new_proposals = self._analyze_and_propose(stats)
+                if new_proposals:
+                    self.pending.extend(new_proposals)
+                    self._save_pending()
+                    logger.info("📝 새 제안 %d개 생성", len(new_proposals))
+            else:
+                logger.info("⏭️  신호 부족 (%d개) — 제안 생략", stats['signal_count'])
+        except Exception as e:
+            logger.warning("step 8 (_analyze_and_propose) 실패: %s", e)
 
-        # 9. 지연 결정 조건 평가 → 충족 시 텔레그램 제안
-        deferred_triggered = self._check_deferred_decisions(stats)
-        if deferred_triggered:
-            logger.info("⏰ 지연 결정 트리거: %d건", len(deferred_triggered))
+        # 9. 지연 결정 조건 평가
+        deferred_triggered = []
+        try:
+            deferred_triggered = self._check_deferred_decisions(stats)
+            if deferred_triggered:
+                logger.info("⏰ 지연 결정 트리거: %d건", len(deferred_triggered))
+        except Exception as e:
+            logger.warning("step 9 (_check_deferred_decisions) 실패: %s", e)
 
-        # 10. 기계적 수정 이슈 감지 → 텔레그램 인라인 버튼 발송
-        mechanical_actions = self._check_mechanical_issues()
-        if mechanical_actions:
-            logger.info("🔧 기계적 수정 제안: %d건", len(mechanical_actions))
+        # 10. 기계적 수정 이슈 감지
+        mechanical_actions = []
+        try:
+            mechanical_actions = self._check_mechanical_issues()
+            if mechanical_actions:
+                logger.info("🔧 기계적 수정 제안: %d건", len(mechanical_actions))
+        except Exception as e:
+            logger.warning("step 10 (_check_mechanical_issues) 실패: %s", e)
 
-        # 11. 회고 분석 (decision_log → 패턴 → memory 반영)
-        retro = self._retrospective_analysis()
-        if retro:
-            logger.info("회고: 총 결정 %d건, 거절 패턴 %s",
-                        sum(retro.get('decision_counts', {}).values()),
-                        list(retro.get('reject_targets', {}).keys()))
+        # 11. 회고 분석
+        retro = {}
+        try:
+            retro = self._retrospective_analysis()
+            if retro:
+                logger.info("회고: 총 결정 %d건, 거절 패턴 %s",
+                            sum(retro.get('decision_counts', {}).values()),
+                            list(retro.get('reject_targets', {}).keys()))
+        except Exception as e:
+            logger.warning("step 11 (_retrospective_analysis) 실패: %s", e)
 
-        # 12. Duel 자율 실행 (TODO/FIXME/propose_queue에서 태스크 선정 → Claude vs Gemini)
+        # 12. Duel 자율 실행 (내부 try/except 있음)
         duel_result = self._run_duel_auto()
 
-        # 13. Brand Scout — 외부 RSS 신호 자동 수집
+        # 13. Brand Scout (내부 try/except 있음)
         scout_result = self._run_brand_scout()
 
         return {
