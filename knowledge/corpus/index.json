@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "created_at": "2026-02-18T00:00:00",
-  "last_updated": "2026-03-04T12:35:44.590761",
+  "last_updated": "2026-03-04T23:57:52.586138",
   "clusters": {
     "슬로우라이프": {
       "theme": "슬로우라이프",
@@ -67,6 +67,81 @@
       ],
       "first_seen": "2026-03-04T12:35:44.590148",
       "last_seen": "2026-03-04T12:35:44.590148",
+      "maturity": "accumulating",
+      "essay_issued": null
+    },
+    "리듬": {
+      "theme": "리듬",
+      "entry_ids": [
+        "entry_text_20260304_224301"
+      ],
+      "first_seen": "2026-03-04T23:02:46.610139",
+      "last_seen": "2026-03-04T23:02:46.610139",
+      "maturity": "accumulating",
+      "essay_issued": null
+    },
+    "집중": {
+      "theme": "집중",
+      "entry_ids": [
+        "entry_text_20260304_224301",
+        "entry_text_20260304_224201"
+      ],
+      "first_seen": "2026-03-04T23:02:46.610139",
+      "last_seen": "2026-03-04T23:05:08.201251",
+      "maturity": "accumulating",
+      "essay_issued": null
+    },
+    "소거": {
+      "theme": "소거",
+      "entry_ids": [
+        "entry_text_20260304_224001"
+      ],
+      "first_seen": "2026-03-04T23:02:51.628275",
+      "last_seen": "2026-03-04T23:02:51.628275",
+      "maturity": "accumulating",
+      "essay_issued": null
+    },
+    "비움": {
+      "theme": "비움",
+      "entry_ids": [
+        "entry_text_20260304_224001"
+      ],
+      "first_seen": "2026-03-04T23:02:51.628275",
+      "last_seen": "2026-03-04T23:02:51.628275",
+      "maturity": "accumulating",
+      "essay_issued": null
+    },
+    "질감": {
+      "theme": "질감",
+      "entry_ids": [
+        "entry_text_20260304_224101"
+      ],
+      "first_seen": "2026-03-04T23:05:54.643018",
+      "last_seen": "2026-03-04T23:05:54.643018",
+      "maturity": "accumulating",
+      "essay_issued": null
+    },
+    "시각 기록": {
+      "theme": "시각 기록",
+      "entry_ids": [
+        "entry_text_20260304_224101"
+      ],
+      "first_seen": "2026-03-04T23:05:54.643018",
+      "last_seen": "2026-03-04T23:05:54.643018",
+      "maturity": "accumulating",
+      "essay_issued": null
+    },
+    "기록": {
+      "theme": "기록",
+      "entry_ids": [
+        "entry_text_20260304_232729",
+        "entry_text_20260304_233152",
+        "entry_text_20260304_233216",
+        "entry_text_20260304_235355",
+        "entry_text_20260304_235752"
+      ],
+      "first_seen": "2026-03-04T23:27:29.197303",
+      "last_seen": "2026-03-04T23:57:52.585506",
       "maturity": "accumulating",
       "essay_issued": null
     }

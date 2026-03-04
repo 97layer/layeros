@@ -31,6 +31,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
+    tenant_id = Column(String(64), index=True, nullable=False, default="woohwahae")
     order_number = Column(String(50), unique=True, index=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 

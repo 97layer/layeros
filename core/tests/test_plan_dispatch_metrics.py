@@ -5,9 +5,15 @@ plan_dispatch_metrics 단위 테스트
 
 from __future__ import annotations
 
+import os
+import subprocess
 from pathlib import Path
 
 from core.system.plan_dispatch_metrics import append_metric, summarize_metrics
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PLAN_METRICS_SCRIPT = PROJECT_ROOT / "core" / "system" / "plan_dispatch_metrics.py"
 
 
 def test_append_and_summary_counts(tmp_path: Path):
@@ -45,3 +51,43 @@ def test_append_and_summary_counts(tmp_path: Path):
     assert summary["reason_counts"]["simple_task"] == 1
     assert summary["complexity_counts"]["medium"] == 1
     assert summary["complexity_counts"]["simple"] == 1
+
+
+def test_cli_respects_env_default_metrics_log(tmp_path: Path):
+    env_log = tmp_path / "env_metrics.jsonl"
+    env = os.environ.copy()
+    env["PLAN_DISPATCH_METRICS_LOG"] = str(env_log)
+
+    proc = subprocess.run(
+        [
+            "python3",
+            str(PLAN_METRICS_SCRIPT),
+            "--append",
+            "--task",
+            "env-default-log-check",
+            "--mode",
+            "manual",
+            "--phase",
+            "blocked",
+            "--reason",
+            "hard_stop_model_unavailable",
+            "--executed",
+            "false",
+            "--complexity",
+            "high",
+            "--score",
+            "4",
+            "--fallback",
+            "true",
+            "--json",
+        ],
+        cwd=str(PROJECT_ROOT),
+        capture_output=True,
+        text=True,
+        env=env,
+        check=False,
+    )
+    assert proc.returncode == 0, proc.stderr or proc.stdout
+    assert env_log.exists()
+    rows = [line for line in env_log.read_text(encoding="utf-8").splitlines() if line.strip()]
+    assert len(rows) == 1

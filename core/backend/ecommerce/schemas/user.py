@@ -32,6 +32,7 @@ class UserUpdate(BaseModel):
 class UserResponse(UserBase):
     """User response schema."""
     id: int
+    tenant_id: str
     is_active: bool
     is_verified: bool
     is_admin: bool
@@ -76,3 +77,4 @@ class TokenData(BaseModel):
     """JWT token payload data."""
     user_id: Optional[int] = None
     email: Optional[str] = None
+    tenant_id: Optional[str] = None

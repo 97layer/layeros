@@ -363,6 +363,70 @@ def logout():
     return redirect(url_for('login'))
 
 
+def _archive_entry_is_pending(entry: dict) -> bool:
+    raw_url = str(entry.get('url', '')).strip()
+    slug = str(entry.get('slug', '')).strip().lower()
+    if raw_url in {'#', '/#'}:
+        return True
+    return 'mock-' in slug
+
+
+def _archive_entry_public_url(entry: dict) -> str:
+    raw_url = str(entry.get('url', '')).strip()
+    if raw_url and raw_url not in {'#', '/#'}:
+        if raw_url.startswith('/') or raw_url.startswith('http://') or raw_url.startswith('https://'):
+            return raw_url
+        return '/archive/' + raw_url.lstrip('./')
+    slug = str(entry.get('slug', '')).strip()
+    if slug:
+        return f'/archive/{slug}/'
+    return '/archive/'
+
+
+def _archive_entry_sort_key(entry: dict) -> datetime:
+    date_text = str(entry.get('date', '')).strip()
+    if not date_text:
+        return datetime.min
+    for fmt in ('%Y.%m.%d', '%Y-%m-%d', '%Y/%m/%d'):
+        try:
+            return datetime.strptime(date_text, fmt)
+        except ValueError:
+            continue
+    return datetime.min
+
+
+def _build_archive_board(posts: list[dict]) -> dict:
+    pending_count = 0
+    rows = []
+    for item in posts:
+        pending = _archive_entry_is_pending(item)
+        if pending:
+            pending_count += 1
+        slug = str(item.get('slug', '')).strip()
+        rows.append({
+            'type': item.get('type') or 'Entry',
+            'issue': item.get('issue') or 'Issue',
+            'title': item.get('title') or 'Untitled',
+            'preview': item.get('preview') or '',
+            'date': item.get('date') or 'N/A',
+            'status': 'pending' if pending else 'live',
+            'status_label': 'PENDING' if pending else 'LIVE',
+            'action_label': '편집' if pending else '열기',
+            'action_url': url_for('archive_edit', slug=slug) if (pending and slug) else _archive_entry_public_url(item),
+            'sort_key': _archive_entry_sort_key(item),
+        })
+    rows.sort(key=lambda row: row['sort_key'], reverse=True)
+    for row in rows:
+        row.pop('sort_key', None)
+    total = len(posts)
+    return {
+        'total': total,
+        'pending': pending_count,
+        'published': max(total - pending_count, 0),
+        'rows': rows,
+    }
+
+
 # ─── Dashboard ───
 @app.route('/')
 @login_required
@@ -393,6 +457,7 @@ def dashboard():
             logger.error("dashboard growth_snapshot error: %s", e)
 
     signal_count = len(list(SIGNALS_DIR.glob('*.json'))) if SIGNALS_DIR.exists() else 0
+    archive_board = _build_archive_board(posts)
 
     return render_template('dashboard.html',
                            post_count=len(posts),
@@ -400,6 +465,7 @@ def dashboard():
                            signal_count=signal_count,
                            due_clients=due_clients,
                            growth_snapshot=growth_snapshot,
+                           archive_board=archive_board,
                            today=today,
                            period=period)
 
@@ -1553,7 +1619,17 @@ def forbidden(e):
 def not_found(e):
     if request.path.startswith('/api/'):
         return jsonify({'error': '없는 경로'}), 404
-    return render_template('dashboard.html', post_count=0, pipeline_count=0), 404
+    return render_template(
+        'dashboard.html',
+        post_count=0,
+        pipeline_count=0,
+        signal_count=0,
+        due_clients=[],
+        growth_snapshot={},
+        archive_board={'total': 0, 'published': 0, 'pending': 0, 'rows': []},
+        today=datetime.now().strftime('%Y-%m-%d'),
+        period=datetime.now().strftime('%Y-%m'),
+    ), 404
 
 
 @app.errorhandler(429)

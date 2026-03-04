@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from ..models import get_db, Product
 from ..schemas import CartItemAdd, CartItemUpdate, CartResponse, CartItemResponse
-from ..utils import redis_client
+from ..utils import get_public_tenant_id, redis_client
 
 router = APIRouter(prefix="/cart", tags=["Cart"])
 
@@ -21,13 +21,21 @@ def get_session_id(x_session_id: Optional[str] = Header(None)) -> str:
     return x_session_id
 
 
+def get_tenant_scoped_session_id(
+    session_id: str = Depends(get_session_id),
+    tenant_id: str = Depends(get_public_tenant_id),
+) -> str:
+    """Namespace cart session by tenant to prevent cross-tenant collisions."""
+    return f"{tenant_id}:{session_id}"
+
+
 @router.get("", response_model=CartResponse)
 def get_cart(
-    session_id: str = Depends(get_session_id),
+    scoped_session_id: str = Depends(get_tenant_scoped_session_id),
     db: Session = Depends(get_db)
 ):
     """Get cart contents for session."""
-    cart_items = redis_client.get_cart(session_id) or []
+    cart_items = redis_client.get_cart(scoped_session_id) or []
 
     # Enrich with product details
     response_items = []
@@ -63,7 +71,7 @@ def get_cart(
 @router.post("/items", status_code=status.HTTP_201_CREATED)
 def add_to_cart(
     item: CartItemAdd,
-    session_id: str = Depends(get_session_id),
+    scoped_session_id: str = Depends(get_tenant_scoped_session_id),
     db: Session = Depends(get_db)
 ):
     """Add item to cart."""
@@ -89,7 +97,7 @@ def add_to_cart(
         )
 
     # Add to cart
-    redis_client.add_item(session_id, item.product_id, item.quantity)
+    redis_client.add_item(scoped_session_id, item.product_id, item.quantity)
 
     return {"message": "Item added to cart"}
 
@@ -98,7 +106,7 @@ def add_to_cart(
 def update_cart_item(
     product_id: int,
     update: CartItemUpdate,
-    session_id: str = Depends(get_session_id),
+    scoped_session_id: str = Depends(get_tenant_scoped_session_id),
     db: Session = Depends(get_db)
 ):
     """Update cart item quantity."""
@@ -117,7 +125,7 @@ def update_cart_item(
                 detail=f"Only {product.stock_quantity} items available"
             )
 
-    redis_client.update_item(session_id, product_id, update.quantity)
+    redis_client.update_item(scoped_session_id, product_id, update.quantity)
 
     return {"message": "Cart updated"}
 
@@ -125,15 +133,15 @@ def update_cart_item(
 @router.delete("/items/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 def remove_from_cart(
     product_id: int,
-    session_id: str = Depends(get_session_id)
+    scoped_session_id: str = Depends(get_tenant_scoped_session_id)
 ):
     """Remove item from cart."""
-    redis_client.remove_item(session_id, product_id)
+    redis_client.remove_item(scoped_session_id, product_id)
     return None
 
 
 @router.delete("", status_code=status.HTTP_204_NO_CONTENT)
-def clear_cart(session_id: str = Depends(get_session_id)):
+def clear_cart(scoped_session_id: str = Depends(get_tenant_scoped_session_id)):
     """Clear all items from cart."""
-    redis_client.clear_cart(session_id)
+    redis_client.clear_cart(scoped_session_id)
     return None

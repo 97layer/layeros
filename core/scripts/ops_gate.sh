@@ -154,7 +154,10 @@ fi
 
 if [[ "$SKIP_PAYMENT" -eq 0 ]]; then
   echo "[ops-gate] payment regressions"
-  pytest -q core/tests/test_ecommerce_payments_router.py core/tests/test_ecommerce_payment_service.py
+  pytest -q \
+    core/tests/test_ecommerce_tenant_context.py \
+    core/tests/test_ecommerce_payments_router.py \
+    core/tests/test_ecommerce_payment_service.py
 fi
 
 echo "[ops-gate] PASS"

@@ -1,0 +1,16 @@
+{
+  "signal_id": "text_20260304_224001",
+  "type": "text_insight",
+  "content": "도입은 짧고 단단해야 한다. 첫 문장에서 관찰을 제시하고 결론은 비워 둔다. 비움이 아니라 소거라는 관점으로, 남는 형태를 따라가며 에세이 한 편을 구성한다.",
+  "captured_at": "2026-03-04T22:40:01+09:00",
+  "from_user": "97layer",
+  "source_channel": "manual",
+  "status": "analyzed",
+  "metadata": {
+    "title": "에세이 씨앗 - 소거의 관찰",
+    "preferred_content_type": "essay",
+    "seed_pack": "content_automation_v1",
+    "analysis_mode": "fallback_local"
+  },
+  "analyzed_at": "2026-03-04T23:02:51.629622"
+}

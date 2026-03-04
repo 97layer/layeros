@@ -229,6 +229,19 @@ if evidence_guard_script.is_file():
         output = (proc.stdout + proc.stderr).strip() or "no output"
         add_issue(f"evidence_guard check failed: {output}")
 
+agents_guardrail_trace_script = ROOT / "core" / "system" / "agents_guardrail_trace.py"
+if agents_guardrail_trace_script.is_file():
+    proc = subprocess.run(
+        [sys.executable, str(agents_guardrail_trace_script), "--check"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0 or "READY" not in proc.stdout:
+        output = (proc.stdout + proc.stderr).strip() or "no output"
+        add_issue(f"agents_guardrail_trace check failed: {output}")
+
 plan_council_path = ensure_file(plan_council_file)
 plan_dispatch_path = ensure_file(plan_dispatch_file)
 ensure_file(plan_council_hook_file)

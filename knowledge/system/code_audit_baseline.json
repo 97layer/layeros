@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "generated_at": "2026-03-05T03:32:00.000000+00:00",
+  "issue_ids": [
+    "terms|AGENTS.md|성공",
+    "terms|AGENTS.md|함께",
+    "terms|core/admin/templates/dashboard.html|연결",
+    "terms|knowledge/agent_hub/state.md|연결",
+    "terms|knowledge/docs/homepage_design_plan_20260304.md|연결",
+    "terms|knowledge/docs/reference-map.md|연결",
+    "terms|website/about/woosunho/index.html|트렌드",
+    "terms|website/archive/essay-004-art-of-waiting/index.html|효율",
+    "terms|website/index.html|연결",
+    "terms|website/practice/atelier.html|특별한",
+    "terms|website/product/index.html|함께"
+  ],
+  "counts": {
+    "paths": 0,
+    "terms": 11,
+    "total_ids": 11
+  }
+}

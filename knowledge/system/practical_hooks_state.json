@@ -1,0 +1,257 @@
+{
+  "tasks": {
+    "fix_agents_whitelist_sync": {
+      "goal": "AGENTS.md 루트 whitelist 누락 버그 수정",
+      "files": [
+        "knowledge/system/guard_rules.json",
+        ".claude/hooks/validate-path.sh"
+      ],
+      "checks": [
+        "python3 -c '...'; bash core/scripts/session_bootstrap.sh"
+      ],
+      "stop_conditions": "AGENTS.md가 계속 루트 위반으로 판정되면 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/knowledge/system/guard_rules.json": "7d020b2740fd5c7132b3b17107066f7f565f1d2f",
+        "/Users/97layer/97layerOS/.claude/hooks/validate-path.sh": "ee308fc30dd40ba5df3d7c6c092efa501b98d4e0"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-04T23:04:15",
+      "updated_at": "2026-03-04T23:04:24"
+    },
+    "task_20260304_231611": {
+      "goal": "홈페이지 IA+카피 초안 작성",
+      "files": [
+        "knowledge/docs/homepage_design_plan_20260304.md"
+      ],
+      "checks": [
+        "python3 core/system/evidence_guard.py --check"
+      ],
+      "stop_conditions": "가드레일 위반 또는 협의 하드스톱 해제 전 웹수정 요구 발생 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/knowledge/docs/homepage_design_plan_20260304.md": "e7f9abbd7689f6ecb6e76959b0778cf9062c0b7c"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-04T23:16:11",
+      "updated_at": "2026-03-04T23:17:08"
+    },
+    "agents_trace_hardening": {
+      "goal": "AGENTS 규칙-실행 연결 자동 역추적 점검기 도입",
+      "files": [
+        "core/system/agents_guardrail_trace.py",
+        "core/scripts/session_bootstrap.sh",
+        "knowledge/system/agent_runtime_contract.json"
+      ],
+      "checks": [
+        "python3 core/system/agents_guardrail_trace.py --check; bash core/scripts/session_bootstrap.sh"
+      ],
+      "stop_conditions": "trace check 또는 bootstrap이 BLOCKED면 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/system/agents_guardrail_trace.py": "f571a682ee165d693b5e5e64fcf2794c5d190026",
+        "/Users/97layer/97layerOS/core/scripts/session_bootstrap.sh": "e774b1944c27aa4858254bf054e60018271730a6",
+        "/Users/97layer/97layerOS/knowledge/system/agent_runtime_contract.json": "e99f978fa268c2fea820f6f8cfdda82a5407e11e"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-04T23:19:04",
+      "updated_at": "2026-03-04T23:19:11"
+    },
+    "task_20260304_232829": {
+      "goal": "archive cinematic monochrome grid 재설계",
+      "files": [
+        "website/archive/index.html",
+        "website/assets/css/style.css",
+        "website/_pages/archive/meta.json",
+        "website/_pages/archive/body.html",
+        "website/_pages/archive/script.html"
+      ],
+      "checks": [
+        "python3 core/system/visual_validator.py; python3 core/scripts/build.py --components --bust; playwright 390/768/1440"
+      ],
+      "stop_conditions": "web lock 실패, plan gate 만료, 또는 비대상 파일 변경 필요 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/index.html": "d8b1f93c2d2fbf1abd18b7798728ff1c19ff6766",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "9ee38e51cf3f29bb1bd9cf3c810db1a50a019f78",
+        "/Users/97layer/97layerOS/website/_pages/archive/meta.json": "1d913ace18859b1fc0663eacfc4fbd3fe69027c9",
+        "/Users/97layer/97layerOS/website/_pages/archive/body.html": "eeaafcfcc9fcb6169f436ccbe4d7b83103ccdea9",
+        "/Users/97layer/97layerOS/website/_pages/archive/script.html": "46adf99511f56174af697d87078e79c0b7ed0991"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-04T23:28:29",
+      "updated_at": "2026-03-04T23:53:32"
+    },
+    "optimize_guardrail_90": {
+      "goal": "allowlist 단일소스화 + pre-commit 선행 trace 검증 추가",
+      "files": [
+        "core/system/filesystem_validator.py",
+        ".claude/hooks/validate-path.sh",
+        "core/scripts/hooks/run_code_audit.sh",
+        "core/system/agents_guardrail_trace.py"
+      ],
+      "checks": [
+        "python3 core/system/agents_guardrail_trace.py --check; bash core/scripts/session_bootstrap.sh; bash core/scripts/hooks/run_code_audit.sh --warn-only"
+      ],
+      "stop_conditions": "trace/bootstrap 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/system/filesystem_validator.py": "82de0969071d60a1b5cfb487c3ec47331b0358e7",
+        "/Users/97layer/97layerOS/.claude/hooks/validate-path.sh": "b4e78aaf6eb605820a82bda2bf7c5a73efbba760",
+        "/Users/97layer/97layerOS/core/scripts/hooks/run_code_audit.sh": "62301d6c2e2f1611397ead0318b8f09d5e807968",
+        "/Users/97layer/97layerOS/core/system/agents_guardrail_trace.py": "fff119052f258b9c0a9ace3c4005c980ba34c4f3"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-04T23:33:04",
+      "updated_at": "2026-03-04T23:33:07"
+    },
+    "plan_dispatch_e2e_opt_20260304": {
+      "goal": "Plan Dispatch 실패 복구/관측 A-Z 고도화",
+      "files": [
+        "core/scripts/plan_dispatch.sh",
+        "core/system/plan_dispatch_metrics.py",
+        "core/scripts/plan_dispatch_pending_replay.py",
+        "core/tests/test_plan_dispatch_smoke.py",
+        "core/tests/test_plan_dispatch_metrics.py"
+      ],
+      "checks": [
+        "python3 -m pytest -q core/tests/test_plan_dispatch_smoke.py core/tests/test_plan_dispatch_metrics.py"
+      ],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/scripts/plan_dispatch.sh": "000243fabd2c75da2cad72b15df078e760d18b33",
+        "/Users/97layer/97layerOS/core/system/plan_dispatch_metrics.py": "de11e6f2c8fcdb1b84efbe613fdbda2a12d156f0",
+        "/Users/97layer/97layerOS/core/scripts/plan_dispatch_pending_replay.py": "0600c3257e37bf333a2b655e8090be85f37e2ab5",
+        "/Users/97layer/97layerOS/core/tests/test_plan_dispatch_smoke.py": "3f2c729fd12a39758f60b0454bd84cf19c61a233",
+        "/Users/97layer/97layerOS/core/tests/test_plan_dispatch_metrics.py": "1032d2ae648ffa08b0cc7f90262842a9f2161f9a"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-04T23:51:20",
+      "updated_at": "2026-03-04T23:57:49"
+    },
+    "task_20260305_000110": {
+      "goal": "archive 리디자인 폐기 및 이전 구조 복원",
+      "files": [
+        "website/_pages/archive/meta.json",
+        "website/_pages/archive/body.html",
+        "website/_pages/archive/script.html",
+        "website/assets/css/style.css",
+        "website/archive/index.html"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py; playwright 390/768/1440"
+      ],
+      "stop_conditions": "web lock 실패 또는 복구 대상 외 파일 수정 필요 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/_pages/archive/meta.json": "40f919abfc679879cd79de3bbfc791bb40c88d2b",
+        "/Users/97layer/97layerOS/website/_pages/archive/body.html": "095787294cbbd0a3964d5cc2d9de261019db5cd4",
+        "/Users/97layer/97layerOS/website/_pages/archive/script.html": "c879fdd83e1ebab212b50279f60e1cfb96b164bb",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "7aae00c38c412c693548624053b81cd015c1c77e",
+        "/Users/97layer/97layerOS/website/archive/index.html": "d1b9082ec6523b6cc47587f219161886b34840d6"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T00:01:10",
+      "updated_at": "2026-03-05T00:05:30"
+    },
+    "plan_dispatch_e2e_opt_20260305": {
+      "goal": "Plan Dispatch pending TTL/cleanup + harness gate 고도화",
+      "files": [
+        "core/scripts/plan_dispatch_pending_replay.py",
+        "core/scripts/harness_doctor.py",
+        "core/scripts/plan_dispatch.sh",
+        "core/tests/test_plan_dispatch_pending_replay.py",
+        "core/tests/test_harness_doctor_council_worker.py",
+        "knowledge/docs/ops-handbook.md"
+      ],
+      "checks": [
+        "python3 -m pytest -q core/tests/test_plan_dispatch_pending_replay.py"
+      ],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/scripts/plan_dispatch_pending_replay.py": "53dc5691f77ec06e220e177067dc776a3abf54e9",
+        "/Users/97layer/97layerOS/core/scripts/harness_doctor.py": "7012aa320f6b0227dc5bd6bebee8ca18c1dbfc46",
+        "/Users/97layer/97layerOS/core/scripts/plan_dispatch.sh": "27518bc8dee24f53122070fccf538ae3c5daada1",
+        "/Users/97layer/97layerOS/core/tests/test_plan_dispatch_pending_replay.py": "18cb485d605733376827e840d528104522295c20",
+        "/Users/97layer/97layerOS/core/tests/test_harness_doctor_council_worker.py": "b510c330c7da9eefc173051631d5614b12ac2fc1",
+        "/Users/97layer/97layerOS/knowledge/docs/ops-handbook.md": "b920008ddb08049ed24d4c73952b346dc29f8057"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T00:02:03",
+      "updated_at": "2026-03-05T00:23:40"
+    },
+    "archive-rollback-20260305": {
+      "goal": "archive 시네마틱 폐기 및 원복 고정",
+      "files": [
+        "website/_pages/archive/meta.json",
+        "website/_pages/archive/body.html",
+        "website/_pages/archive/script.html",
+        "website/archive/index.html"
+      ],
+      "checks": [
+        "python3 core/scripts/build_sections.py",
+        "python3 core/scripts/build_components.py --file website/archive/index.html",
+        "python3 core/scripts/practical_hooks.py mobile-check --urls http://localhost:9700/archive/"
+      ],
+      "stop_conditions": "build_sections가 source 반영 실패 또는 모바일 3뷰 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/_pages/archive/meta.json": "40f919abfc679879cd79de3bbfc791bb40c88d2b",
+        "/Users/97layer/97layerOS/website/_pages/archive/body.html": "095787294cbbd0a3964d5cc2d9de261019db5cd4",
+        "/Users/97layer/97layerOS/website/_pages/archive/script.html": "c879fdd83e1ebab212b50279f60e1cfb96b164bb",
+        "/Users/97layer/97layerOS/website/archive/index.html": "970ba42bde5c377bea73de51edd70f1afeca9895"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T00:24:35",
+      "updated_at": "2026-03-05T00:24:37"
+    },
+    "archive_mobile_polish_20260305": {
+      "goal": "archive 모바일 진입동선/가독성 개선",
+      "files": [
+        "website/archive/index.html",
+        "website/assets/css/style.css"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components"
+      ],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/index.html": "970ba42bde5c377bea73de51edd70f1afeca9895",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "29d3a916d4b2510917359ae37fd2c7b3ec7c1f45"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T00:32:42",
+      "updated_at": "2026-03-05T00:32:44"
+    },
+    "council_issue_loop_20260305": {
+      "goal": "컨실룸 안건 자동감지/세션공유/처리순환 구현",
+      "files": [
+        "core/scripts/council_issue_loop.py",
+        ".claude/hooks/council-room-watch.sh",
+        ".claude/hooks/session-start.sh",
+        ".claude/settings.json",
+        "core/tests/test_council_issue_loop.py",
+        "knowledge/docs/ops-handbook.md"
+      ],
+      "checks": [
+        "pytest -q core/tests/test_council_issue_loop.py;python3 core/system/evidence_guard.py --check"
+      ],
+      "stop_conditions": "plan council exit3 또는 계약 충돌",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/scripts/council_issue_loop.py": null,
+        "/Users/97layer/97layerOS/.claude/hooks/council-room-watch.sh": null,
+        "/Users/97layer/97layerOS/.claude/hooks/session-start.sh": "cce463fa795441195dbdb9790819b4bbe3295fb9",
+        "/Users/97layer/97layerOS/.claude/settings.json": "d67911d326d67413722b6fc8141526fc041fb84a",
+        "/Users/97layer/97layerOS/core/tests/test_council_issue_loop.py": null,
+        "/Users/97layer/97layerOS/knowledge/docs/ops-handbook.md": "b920008ddb08049ed24d4c73952b346dc29f8057"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T00:37:19",
+      "updated_at": "2026-03-05T00:37:21"
+    }
+  }
+}

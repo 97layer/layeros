@@ -147,6 +147,7 @@ class TelegramSecretaryV6:
         self.reminders: Dict[str, dict] = _load_json(REMINDER_PATH, {})
         self.suggestions: Dict[str, dict] = {}
         self.dialog_logger = AgentLogger(
+            agent_id="telegram_dialog",
             name="telegram_dialog",
             log_dir=PROJECT_ROOT / ".infra" / "logs",
             filename="telegram_dialog.jsonl",

@@ -33,13 +33,24 @@ class AgentLogger:
     - error: 오류 발생
     """
 
-    def __init__(self, agent_id: str, project_root: Optional[Path] = None):
+    def __init__(
+        self,
+        agent_id: str,
+        project_root: Optional[Path] = None,
+        name: Optional[str] = None,
+        log_dir: Optional[Path] = None,
+        filename: Optional[str] = None,
+    ):
         """
         Args:
             agent_id: 에이전트 식별자 (예: "ce", "sa", "gardener")
             project_root: 프로젝트 루트 경로 (None이면 자동 탐지)
+            name: 로그에 사용할 별도 이름 (기본: agent_id)
+            log_dir: 로그 디렉터리 강제 지정 (기본: .infra/logs)
+            filename: 이벤트 로그 파일명 강제 지정
         """
-        self.agent_id = agent_id
+        # 파일명/식별자
+        self.agent_id = name or agent_id
 
         # 프로젝트 루트 탐지
         if project_root is None:
@@ -47,11 +58,13 @@ class AgentLogger:
         self.project_root = Path(project_root)
 
         # 로그 디렉토리
-        self.log_dir = self.project_root / ".infra" / "logs"
+        self.log_dir = Path(log_dir) if log_dir else self.project_root / ".infra" / "logs"
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
         # 이벤트 로그 파일
-        self.event_log_path = self.log_dir / f"{agent_id}_events.jsonl"
+        self.event_log_path = (
+            self.log_dir / filename if filename else self.log_dir / f"{agent_id}_events.jsonl"
+        )
 
     def log_event(
         self,
@@ -116,6 +129,16 @@ class AgentLogger:
         """이벤트 로그 초기화 (디버깅용)"""
         if self.event_log_path.exists():
             self.event_log_path.unlink()
+
+    # 레거시 호환: .log(...) → .log_event(...)
+    def log(
+        self,
+        action: str,
+        target: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """호환용 래퍼"""
+        self.log_event(action, target=target, metadata=metadata)
 
     def get_recent_events(self, n: int = 10) -> list:
         """

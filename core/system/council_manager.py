@@ -18,17 +18,20 @@ Gardener ripe cluster → SA/CE/AD 병렬 협의 → Telegram 승인 → CE task
 import os
 import json
 import uuid
+import re
 import logging
 from pathlib import Path
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Dict, Optional
+from typing import Dict, Optional, Set, List
 
 logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 COUNCIL_PENDING_DIR = PROJECT_ROOT / ".infra" / "council"
 COUNCIL_ROOM = PROJECT_ROOT / "knowledge" / "agent_hub" / ("council_room" + ".md")
+DECISION_LOG = PROJECT_ROOT / "knowledge" / "system" / ("decision_log" + ".jsonl")
+PROPOSAL_DECISION_TOKEN_RE = re.compile(r"\(proposal=([A-Za-z0-9_-]+)\)")
 
 # 에이전트별 협의 질문
 _AGENT_QUESTIONS = {
@@ -49,6 +52,78 @@ class CouncilManager:
     def __init__(self):
         COUNCIL_PENDING_DIR.mkdir(parents=True, exist_ok=True)
         self._client = None
+
+    # ─── 정리/복구 ───────────────────────────────────────────────────────────────
+
+    def _collect_processed_proposal_ids(self) -> Set[str]:
+        """
+        처리 완료된 proposal_id 집합을 결정 로그/협의록에서 수집한다.
+        - decision_log: council_approve / council_reject
+        - council_room : 승인/거절 append 포맷의 (proposal=<id>)
+        """
+        processed: Set[str] = set()
+
+        if DECISION_LOG.exists():
+            try:
+                with DECISION_LOG.open("r", encoding="utf-8") as f:
+                    for raw_line in f:
+                        line = raw_line.strip()
+                        if not line:
+                            continue
+                        try:
+                            rec = json.loads(line)
+                        except json.JSONDecodeError:
+                            continue
+                        if rec.get("type") not in {"council_approve", "council_reject"}:
+                            continue
+                        proposal_id = str(rec.get("id", "")).strip()
+                        if proposal_id:
+                            processed.add(proposal_id)
+            except Exception as exc:
+                logger.warning("[Council] decision_log 스캔 실패: %s", exc)
+
+        if COUNCIL_ROOM.exists():
+            try:
+                room_text = COUNCIL_ROOM.read_text(encoding="utf-8")
+                for proposal_id in PROPOSAL_DECISION_TOKEN_RE.findall(room_text):
+                    processed.add(proposal_id)
+            except Exception as exc:
+                logger.warning("[Council] council_room 스캔 실패: %s", exc)
+
+        return processed
+
+    def reconcile_pending_proposals(self, dry_run: bool = False) -> Dict[str, List[str]]:
+        """
+        처리 완료된 proposal이 .infra/council 에 남아있으면 정리한다.
+        Returns:
+            {
+              "deleted": [...],
+              "skipped": [...],
+            }
+        """
+        processed_ids = self._collect_processed_proposal_ids()
+        deleted: List[str] = []
+        skipped: List[str] = []
+
+        for proposal_path in sorted(COUNCIL_PENDING_DIR.glob("*.json")):
+            proposal_id = proposal_path.stem
+            if proposal_id in processed_ids:
+                if not dry_run:
+                    try:
+                        proposal_path.unlink()
+                    except FileNotFoundError:
+                        pass
+                deleted.append(proposal_id)
+            else:
+                skipped.append(proposal_id)
+
+        if deleted:
+            logger.info(
+                "[Council] pending 정리 완료: deleted=%d (%s)",
+                len(deleted),
+                ", ".join(deleted),
+            )
+        return {"deleted": deleted, "skipped": skipped}
 
     # ─── 클라이언트 ───────────────────────────────────────────────────────────
 
@@ -112,6 +187,8 @@ class CouncilManager:
         블로킹 없음. CE task는 Telegram 승인 후 생성.
         Returns: proposal_id or None (GOOGLE_API_KEY 없을 때)
         """
+        # 이전 세션의 처리 완료 proposal이 잔존하면 새 제안 생성 전에 정리한다.
+        self.reconcile_pending_proposals(dry_run=False)
         logger.info("[Council] 협의 시작: %s (%d개 신호)", cluster.get("theme"), cluster.get("entry_count", 0))
 
         try:
@@ -154,6 +231,7 @@ class CouncilManager:
         Telegram 승인 → CE task 생성.
         Returns: task_id or None
         """
+        self.reconcile_pending_proposals(dry_run=False)
         proposal_path = COUNCIL_PENDING_DIR / f"{proposal_id}.json"
         if not proposal_path.exists():
             logger.error("[Council] proposal 없음: %s", proposal_id)
@@ -188,6 +266,7 @@ class CouncilManager:
 
         payload = {
             "mode": "corpus_essay",
+            "source_proposal_id": proposal_id,
             "content_type": cluster.get("content_type", "archive"),
             "theme": cluster["theme"],
             "entry_count": cluster["entry_count"],
@@ -220,6 +299,7 @@ class CouncilManager:
 
     def reject_proposal(self, proposal_id: str):
         """Telegram 거절 → proposal 삭제 + 로그."""
+        self.reconcile_pending_proposals(dry_run=False)
         proposal_path = COUNCIL_PENDING_DIR / f"{proposal_id}.json"
         if not proposal_path.exists():
             logger.warning("[Council] 거절 대상 없음: %s", proposal_id)

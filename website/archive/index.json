@@ -47,7 +47,7 @@
     "title": "소거하는 법",
     "date": "2026.03.01",
     "issue": "Journal 001",
-    "preview": "더하기 전에 묻는 것. 없으면 안 되는가.",
+    "preview": "더하기 전에 반드시 묻습니다. 없으면 안 되는지 확인합니다.",
     "category": "Living",
     "type": "Journal",
     "readMin": 2
@@ -58,7 +58,7 @@
     "title": "리듬 체크",
     "date": "2026.03.05",
     "issue": "Journal 002",
-    "preview": "과속 징후를 메모하고 기준선을 다시 맞춘다.",
+    "preview": "과속 징후를 메모하고 기준선을 다시 맞춥니다.",
     "category": "Living",
     "type": "Journal",
     "readMin": 2
@@ -69,7 +69,7 @@
     "title": "전환 노트",
     "date": "2026.03.07",
     "issue": "Journal 003",
-    "preview": "작업 전환 순간에 남는 소음을 분리해 기록한다.",
+    "preview": "작업 전환 순간에 남는 소음을 분리해 기록합니다.",
     "category": "Living",
     "type": "Journal",
     "readMin": 2
@@ -80,7 +80,7 @@
     "title": "침묵 로그",
     "date": "2026.03.09",
     "issue": "Journal 004",
-    "preview": "말을 줄였을 때 남는 핵심만 적는다.",
+    "preview": "말을 줄였을 때 남는 핵심만 적습니다.",
     "category": "Living",
     "type": "Journal",
     "readMin": 2
@@ -90,7 +90,7 @@
     "title": "시작",
     "date": "2026.02.17",
     "issue": "Issue 001",
-    "preview": "처음 시작하는 순간의 기록. 울산에서, 한 사람에게 집중하겠다는 선택.",
+    "preview": "처음 시작하는 순간의 기록이다. 울산에서 한 사람에게 집중하겠다고 선택했다.",
     "category": "Working",
     "type": "Essay",
     "readMin": 2
@@ -134,7 +134,7 @@
     "title": "Playlist — Slow Frequency",
     "date": "2026.03.04",
     "issue": "Sound 001",
-    "preview": "호흡과 집중을 위한 사운드 레이어.",
+    "preview": "호흡과 집중을 위한 사운드 레이어입니다.",
     "category": "Sound",
     "type": "Playlist",
     "readMin": null
@@ -145,7 +145,7 @@
     "title": "Playlist — Dawn Cut",
     "date": "2026.03.05",
     "issue": "Sound 002",
-    "preview": "아침 루틴의 템포를 낮추는 트랙 셋.",
+    "preview": "아침 루틴의 템포를 낮추는 트랙 셋입니다.",
     "category": "Sound",
     "type": "Playlist",
     "readMin": null
@@ -156,7 +156,7 @@
     "title": "Playlist — Evening Loop",
     "date": "2026.03.07",
     "issue": "Sound 003",
-    "preview": "저녁 집중 구간을 위한 반복 리듬.",
+    "preview": "저녁 집중 구간을 위한 반복 리듬입니다.",
     "category": "Sound",
     "type": "Playlist",
     "readMin": null
@@ -167,7 +167,7 @@
     "title": "Playlist — Midnight Floor",
     "date": "2026.03.09",
     "issue": "Sound 004",
-    "preview": "야간 작업을 위한 저주파 레이어.",
+    "preview": "야간 작업을 위한 저주파 레이어입니다.",
     "category": "Sound",
     "type": "Playlist",
     "readMin": null

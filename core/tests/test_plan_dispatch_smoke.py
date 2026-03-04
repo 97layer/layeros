@@ -74,3 +74,101 @@ def test_auto_fallback_when_classifier_output_is_invalid_json(tmp_path):
     assert dispatcher["executed"] is False
     assert dispatcher["reason"] == "simple_task"
     assert dispatcher["complexity"] == "simple"
+
+
+def test_manual_lite_fallback_marks_metrics_and_pending(tmp_path):
+    fake_council = tmp_path / "fake_council.py"
+    fake_council.write_text(
+        "\n".join(
+            [
+                "import json",
+                "payload = {",
+                "  'timestamp': '2026-03-04T00:00:00+00:00',",
+                "  'consensus': {",
+                "    'status': 'degraded',",
+                "    'models_used': [],",
+                "    'runtime': {'gate_recommendation': 'hard_stop'}",
+                "  }",
+                "}",
+                "print(json.dumps(payload, ensure_ascii=False))",
+                "raise SystemExit(1)",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    fake_lite = tmp_path / "fake_lite.py"
+    fake_lite.write_text(
+        "\n".join(
+            [
+                "import json",
+                "payload = {",
+                "  'timestamp': '2026-03-04T00:00:00+00:00',",
+                "  'mode': 'preflight-lite',",
+                "  'task': 'fallback-task',",
+                "  'consensus': {",
+                "    'status': 'degraded-lite',",
+                "    'models_used': [],",
+                "    'planner_primary': 'offline',",
+                "    'verifier_secondary': 'offline',",
+                "    'intent': 'fallback-task',",
+                "    'approach': 'offline fallback',",
+                "    'steps': [],",
+                "    'risks': [],",
+                "    'checks': [],",
+                "    'decision': 'go'",
+                "  }",
+                "}",
+                "print(json.dumps(payload, ensure_ascii=False))",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    metrics_log = tmp_path / "metrics.jsonl"
+    pending_log = tmp_path / "pending.jsonl"
+    task = "플랜 카운슬 실패 경로 fallback 검증을 위한 비자명 태스크"
+    env = os.environ.copy()
+    env.update(
+        {
+            "PLAN_DISPATCH_COUNCIL_SCRIPT": str(fake_council),
+            "PLAN_DISPATCH_COUNCIL_LITE_SCRIPT": str(fake_lite),
+            "PLAN_DISPATCH_AUTO_LITE_FALLBACK": "1",
+            "PLAN_DISPATCH_COUNCIL_RETRIES": "1",
+            "PLAN_DISPATCH_METRICS_LOG": str(metrics_log),
+            "PLAN_DISPATCH_PENDING_LOG": str(pending_log),
+            "PLAN_DISPATCH_LOG_PENDING": "1",
+            "PLAN_DISPATCH_LOG_METRICS": "1",
+        }
+    )
+
+    proc = subprocess.run(
+        ["bash", str(PLAN_DISPATCH), task, "--manual"],
+        cwd=str(PROJECT_ROOT),
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    assert proc.returncode == 3, f"stderr={proc.stderr}\nstdout={proc.stdout}"
+    payload = json.loads(proc.stdout)
+    assert payload["dispatcher"]["reason"] == "hard_stop_fallback_lite"
+
+    metric_rows = [
+        json.loads(line)
+        for line in metrics_log.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    assert metric_rows
+    last_metric = metric_rows[-1]
+    assert last_metric["reason"] == "hard_stop_fallback_lite"
+    assert last_metric["fallback"] is True
+
+    pending_rows = [
+        json.loads(line)
+        for line in pending_log.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    assert pending_rows
+    assert pending_rows[-1]["reason"] == "hard_stop_fallback_lite"

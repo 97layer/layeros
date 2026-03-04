@@ -20,6 +20,7 @@ import hashlib
 import json
 import os
 import re
+import socket
 import sys
 import time
 from datetime import datetime, timedelta, timezone
@@ -31,6 +32,8 @@ _RETRY_DELAY = float(os.getenv("PLAN_COUNCIL_RETRY_DELAY", "2.0"))
 _RUNTIME_TTL_SECONDS = max(60, int(os.getenv("PLAN_COUNCIL_TTL_SECONDS", "600")))
 _STABILITY_WINDOW = max(3, int(os.getenv("PLAN_COUNCIL_STABILITY_WINDOW", "8")))
 _MIN_RELIABILITY = float(os.getenv("PLAN_COUNCIL_MIN_RELIABILITY", "0.65"))
+_NETCHECK_ENABLED = os.getenv("PLAN_COUNCIL_NETCHECK", "1").lower() in {"1", "true", "yes"}
+_NETCHECK_TIMEOUT = max(0.5, float(os.getenv("PLAN_COUNCIL_NETCHECK_TIMEOUT", "2.5")))
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -38,6 +41,10 @@ REPORT_FILE = PROJECT_ROOT / "knowledge" / "system" / "plan_council_reports.json
 
 DEFAULT_GEMINI_MODEL = os.getenv("PLAN_COUNCIL_GEMINI_MODEL", "gemini-2.5-flash")
 DEFAULT_CLAUDE_MODEL = os.getenv("PLAN_COUNCIL_CLAUDE_MODEL", "claude-sonnet-4-5")
+_NETCHECK_TARGETS = [
+    ("generativelanguage.googleapis.com", 443),
+    ("api.anthropic.com", 443),
+]
 
 
 def _load_env_defaults() -> None:
@@ -142,6 +149,50 @@ def _safe_float(value: Any, default: float = 0.0) -> float:
         return float(value)
     except Exception:
         return default
+
+
+def _network_probe() -> Dict[str, Any]:
+    """
+    Lightweight DNS/TCP probe for model endpoints.
+    Used only as diagnostic metadata when both models fail.
+    """
+    results: List[Dict[str, Any]] = []
+    for host, port in _NETCHECK_TARGETS:
+        dns_ok = False
+        tcp_ok = False
+        dns_error = ""
+        tcp_error = ""
+
+        try:
+            socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
+            dns_ok = True
+        except Exception as exc:  # noqa: BLE001
+            dns_error = str(exc)
+
+        if dns_ok:
+            try:
+                with socket.create_connection((host, port), timeout=_NETCHECK_TIMEOUT):
+                    tcp_ok = True
+            except Exception as exc:  # noqa: BLE001
+                tcp_error = str(exc)
+
+        results.append(
+            {
+                "host": host,
+                "port": port,
+                "dns_ok": dns_ok,
+                "dns_error": dns_error,
+                "tcp_ok": tcp_ok,
+                "tcp_error": tcp_error,
+            }
+        )
+
+    return {
+        "timeout_sec": _NETCHECK_TIMEOUT,
+        "results": results,
+        "all_dns_ok": all(item.get("dns_ok") for item in results),
+        "any_tcp_ok": any(item.get("tcp_ok") for item in results),
+    }
 
 
 def _score_from_status(status: str, models_used: List[str]) -> float:
@@ -506,6 +557,10 @@ def run_council(task: str, mode: str, save: bool = True) -> Dict[str, Any]:
     gemini_plan, gemini_error = _call_gemini(task)
     consensus = _build_consensus(task, claude_plan, gemini_plan)
     timestamp = _now_iso()
+    network_probe: Optional[Dict[str, Any]] = None
+
+    if _NETCHECK_ENABLED and not claude_plan and not gemini_plan:
+        network_probe = _network_probe()
 
     runtime = _build_runtime_meta(
         task=task,
@@ -516,6 +571,20 @@ def run_council(task: str, mode: str, save: bool = True) -> Dict[str, Any]:
         claude_error=claude_error,
         gemini_error=gemini_error,
     )
+    if network_probe is not None:
+        runtime["network_probe"] = network_probe
+
+        if not network_probe.get("any_tcp_ok", False):
+            net_risk = "Model endpoint network probe failed (DNS/TCP). 네트워크/방화벽 점검 필요."
+            risks = consensus.get("risks", [])
+            if isinstance(risks, list) and net_risk not in risks:
+                consensus["risks"] = [net_risk, *risks][:5]
+
+            checks = consensus.get("checks", [])
+            diag_check = "python3 core/system/plan_council.py --self-check --require-both"
+            if isinstance(checks, list) and diag_check not in checks:
+                consensus["checks"] = [diag_check, *checks][:6]
+
     consensus["runtime"] = runtime
 
     if runtime.get("unstable"):
@@ -698,6 +767,13 @@ def main() -> int:
             f"tier={runtime.get('reliability_tier')} "
             f"gate={runtime.get('gate_recommendation')}"
         )
+        net = runtime.get("network_probe")
+        if isinstance(net, dict):
+            print(
+                "network: "
+                f"all_dns_ok={net.get('all_dns_ok')} "
+                f"any_tcp_ok={net.get('any_tcp_ok')}"
+            )
         print(
             "stamp: "
             f"timestamp={runtime.get('status_stamp', {}).get('timestamp', '')} "

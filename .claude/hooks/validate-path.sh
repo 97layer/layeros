@@ -25,12 +25,35 @@ BASENAME=$(basename "$REL_PATH")
 DIRNAME=$(dirname "$REL_PATH")
 
 # 1. 루트에 .md/.json/.txt 파일 (허용 리스트 외) — 차단
-ALLOWED_ROOT_FILES="CLAUDE.md README.md .ai_rules"
+ALLOWED_ROOT_FILES="CLAUDE.md README.md AGENTS.md .ai_rules"
+GUARD_RULES_PATH="$PROJECT_ROOT/knowledge/system/guard_rules.json"
+if [ -f "$GUARD_RULES_PATH" ]; then
+  LOADED_ROOT_FILES=$(python3 - "$GUARD_RULES_PATH" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+try:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    allowed = data.get("allowed_root_files")
+    if isinstance(allowed, list):
+        names = [str(x).strip() for x in allowed if str(x).strip()]
+        if names:
+            print(" ".join(names))
+except Exception:
+    pass
+PY
+)
+  if [ -n "$LOADED_ROOT_FILES" ]; then
+    ALLOWED_ROOT_FILES="$LOADED_ROOT_FILES"
+  fi
+fi
 if [ "$DIRNAME" = "." ]; then
   case "$BASENAME" in
     *.md|*.json|*.txt)
       # 허용 리스트 체크
-      if ! echo "$ALLOWED_ROOT_FILES" | grep -q "\b$BASENAME\b"; then
+      if ! printf "%s\n" $ALLOWED_ROOT_FILES | grep -Fxq "$BASENAME"; then
         echo "[ValidatePath] 🚫 BLOCKED: 루트에 파일 생성 금지 — $BASENAME (허용: $ALLOWED_ROOT_FILES)"
         exit 2
       fi

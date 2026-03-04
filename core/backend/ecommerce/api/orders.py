@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from ..models import get_db, Order, OrderItem, Product, User, OrderStatus, PaymentStatus
 from ..schemas import OrderCreate, OrderUpdate, OrderResponse, OrderListResponse
-from ..utils import get_current_user, get_current_active_admin
+from ..utils import get_authenticated_tenant_id, get_current_user, get_current_active_admin
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
@@ -24,6 +24,7 @@ def generate_order_number() -> str:
 @router.post("", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
 def create_order(
     order_data: OrderCreate,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -70,6 +71,7 @@ def create_order(
 
     # Create order
     order = Order(
+        tenant_id=tenant_id,
         order_number=generate_order_number(),
         user_id=current_user.id,
         subtotal=subtotal,
@@ -113,11 +115,15 @@ def list_orders(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     status: Optional[str] = None,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """List user's orders."""
-    query = db.query(Order).filter(Order.user_id == current_user.id)
+    query = db.query(Order).filter(
+        Order.user_id == current_user.id,
+        Order.tenant_id == tenant_id,
+    )
 
     if status:
         query = query.filter(Order.status == status)
@@ -142,13 +148,15 @@ def list_orders(
 @router.get("/{order_id}", response_model=OrderResponse)
 def get_order(
     order_id: int,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get order details."""
     order = db.query(Order).filter(
         Order.id == order_id,
-        Order.user_id == current_user.id
+        Order.user_id == current_user.id,
+        Order.tenant_id == tenant_id,
     ).first()
 
     if not order:
@@ -164,11 +172,15 @@ def get_order(
 def update_order(
     order_id: int,
     order_data: OrderUpdate,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     db: Session = Depends(get_db),
     admin: None = Depends(get_current_active_admin)
 ):
     """Update order (admin only)."""
-    order = db.query(Order).filter(Order.id == order_id).first()
+    order = db.query(Order).filter(
+        Order.id == order_id,
+        Order.tenant_id == tenant_id,
+    ).first()
     if not order:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -204,13 +216,15 @@ def update_order(
 @router.delete("/{order_id}", status_code=status.HTTP_204_NO_CONTENT)
 def cancel_order(
     order_id: int,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Cancel order (before processing)."""
     order = db.query(Order).filter(
         Order.id == order_id,
-        Order.user_id == current_user.id
+        Order.user_id == current_user.id,
+        Order.tenant_id == tenant_id,
     ).first()
 
     if not order:

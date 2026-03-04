@@ -1,12 +1,14 @@
 """FastAPI application entry point."""
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from .api import auth_router, products_router, cart_router, orders_router, payments_router
 from .config import settings
 from .models import init_db
+from .utils import normalize_tenant_id
 from core.system.security import load_cors_origins
 
 
@@ -33,8 +35,29 @@ app.add_middleware(
     allow_origins=load_cors_origins(default=settings.CORS_ORIGINS),
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "X-Session-ID"],
+    allow_headers=["Authorization", "Content-Type", "X-Session-ID", settings.TENANT_HEADER],
 )
+
+
+@app.middleware("http")
+async def tenant_context_middleware(request: Request, call_next):
+    """Attach tenant context for every request and echo resolved tenant header."""
+    raw_tenant_id = request.headers.get(settings.TENANT_HEADER)
+    if settings.REQUIRE_TENANT_HEADER and not raw_tenant_id:
+        return JSONResponse(
+            status_code=400,
+            content={"detail": f"{settings.TENANT_HEADER} header required"},
+        )
+    candidate = raw_tenant_id or settings.DEFAULT_TENANT_ID
+    try:
+        tenant_id = normalize_tenant_id(candidate)
+    except ValueError as exc:
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
+
+    request.state.tenant_id = tenant_id
+    response = await call_next(request)
+    response.headers[settings.TENANT_HEADER] = tenant_id
+    return response
 
 # Register routers
 API_V1_PREFIX = "/api/v1"

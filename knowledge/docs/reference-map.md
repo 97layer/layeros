@@ -31,6 +31,7 @@
 | 파일 배치 규칙 | AGENTS.md §Filesystem Hard Rules | FROZEN | 생성 경로 제한 |
 | Claude rules | .claude/rules/filesystem.md | FROZEN | 생성/편집 가드 |
 | 실행 프로토콜 | directives/system.md §5, §15 | PROPOSE | 세션/웹락 |
+| Plan Dispatch 재시도 | core/scripts/plan_dispatch_pending_replay.py | AUTO | pending 큐 재실행 |
 | 빌드 | core/scripts/build.py | AUTO | 전체/--components/--bust |
 | 배포 | core/scripts/deploy/deploy.sh (별도) | AUTO | 환경별 실행 |
 | 테스트/감사 | core/scripts/structure_audit.py | AUTO | md 참조 검사 |

@@ -16,11 +16,11 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=839e16af">
+<link rel="stylesheet" href="/assets/css/style.css?v=1a2f99b7">
 <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
 <!-- /COMPONENT:head -->
 </head>
-<body class="page-archive page-archive-ledger">
+<body class="page-archive">
 <!-- COMPONENT:nav -->
 <nav class="site-nav" id="site-nav">
   <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
@@ -54,34 +54,26 @@
     
     
   </div>
-  <section class="archive-ledger container--wide" id="archive-ledger" aria-label="모든 기록">
-    <div class="ledger-filter" aria-label="타입 필터">
-      <button class="filter-btn is-active" data-filter-type="all" type="button">All</button>
-      <button class="filter-btn" data-filter-type="essay" type="button">Essay</button>
-      <button class="filter-btn" data-filter-type="journal" type="button">Journal</button>
-      <button class="filter-btn" data-filter-type="lookbook" type="button">Lookbook</button>
-      <button class="filter-btn" data-filter-type="playlist" type="button">Playlist</button>
-    </div>
-    <ul class="ledger" id="ledger-list">
-      <li class="ledger__placeholder">기록을 불러오는 중입니다.</li>
-    </ul>
-  </section>
+  <section class="archive-editorial container--wide" aria-live="polite">
+  <article class="archive-cover" id="archive-cover">
+    <p class="archive-cover__empty">기록을 불러오는 중입니다.</p>
+  </article>
+  <div class="archive-lanes" id="archive-lanes"></div>
+</section>
 
 </main>
 <script>
   (function () {
-    var ledger = document.getElementById('ledger-list');
-    var filterButtons = Array.prototype.slice.call(document.querySelectorAll('[data-filter-type]'));
-    var allPosts = [];
-    var currentFilter = 'all';
+    var coverEl = document.getElementById('archive-cover');
+    var lanesEl = document.getElementById('archive-lanes');
+    if (!coverEl || !lanesEl) return;
 
-    if (!ledger) return;
-
+    var TYPE_ORDER = ['essay', 'journal', 'lookbook', 'playlist'];
     var TYPE_META = {
-      essay: { label: 'Essay', caption: '문장과 사유' },
-      journal: { label: 'Journal', caption: '과정의 단면' },
-      lookbook: { label: 'Lookbook', caption: '질감과 실루엣' },
-      playlist: { label: 'Playlist', caption: '시간의 리듬' }
+      essay: { serial: '01', label: 'Essay', deck: '문장과 사유의 기록' },
+      journal: { serial: '02', label: 'Journal', deck: '과정과 관찰의 단면' },
+      lookbook: { serial: '03', label: 'Lookbook', deck: '질감과 실루엣의 큐레이션' },
+      playlist: { serial: '04', label: 'Playlist', deck: '시간대별 리듬 아카이브' }
     };
 
     function escapeHtml(value) {
@@ -131,66 +123,106 @@
       });
     }
 
-    function actionLabel(post) {
-      if (post.type === 'playlist') return 'Play';
-      if (typeof post.readMin === 'number' && post.readMin > 0) return String(post.readMin) + ' min';
-      if (post.type === 'lookbook') return 'View';
-      return 'Read';
+    function groupPosts(posts) {
+      var groups = { essay: [], journal: [], lookbook: [], playlist: [] };
+      posts.forEach(function (post) {
+        groups[post.type].push(post);
+      });
+      return groups;
     }
 
-    function renderLedger(posts) {
-      if (!posts.length) {
-        ledger.innerHTML = '<li class="ledger__placeholder">표시할 기록이 없습니다.</li>';
+    function readLabel(post) {
+      return post.readMin && post.readMin > 0 ? String(post.readMin) + ' min' : 'Read';
+    }
+
+    function renderCover(post) {
+      if (!post) {
+        coverEl.innerHTML = '<p class="archive-cover__empty">기록을 불러오지 못했습니다.</p>';
         return;
       }
-      var items = posts.map(function (post, index) {
-        var serial = String(index + 1).padStart(3, '0');
-        var meta = TYPE_META[post.type] || TYPE_META.essay;
-        return [
-          '<li class="ledger__item" data-type="', escapeHtml(post.type), '">',
-          '<div class="ledger__meta">',
-          '<span class="ledger__serial">', serial, '</span>',
-          '<span class="ledger__type">', escapeHtml(meta.label), '</span>',
-          '<span>', escapeHtml(post.issue), '</span>',
-          '<span>', escapeHtml(post.date), '</span>',
-          '</div>',
-          '<h3 class="ledger__title"><a href="', escapeHtml(post.url), '">', escapeHtml(post.title), '</a></h3>',
-          '<p class="ledger__summary">', escapeHtml(post.summary), '</p>',
-          '<div class="ledger__action"><a href="', escapeHtml(post.url), '">', escapeHtml(actionLabel(post)), '</a></div>',
-          '</li>'
-        ].join('');
-      });
-      ledger.innerHTML = items.join('');
+      var typeMeta = TYPE_META[post.type] || TYPE_META.essay;
+      coverEl.innerHTML = [
+        '<div class="archive-cover__shell">',
+        '<div class="archive-cover__rail">',
+        '<p class="archive-cover__kicker">Archive Curated</p>',
+        '<p class="archive-cover__issue">', escapeHtml(post.issue), '</p>',
+        '<p class="archive-cover__label">', escapeHtml(typeMeta.label), '</p>',
+        '</div>',
+        '<div class="archive-cover__main">',
+        '<h2 class="archive-cover__title">', escapeHtml(post.title), '</h2>',
+        '<p class="archive-cover__summary">', escapeHtml(post.summary), '</p>',
+        '<div class="archive-cover__meta"><span>', escapeHtml(post.date), '</span><span>', escapeHtml(readLabel(post)), '</span></div>',
+        '<a class="archive-cover__cta" href="', escapeHtml(post.url), '">Open Record</a>',
+        '</div>',
+        '</div>'
+      ].join('');
     }
 
-    function applyFilter(type) {
-      currentFilter = type;
-      filterButtons.forEach(function (btn) {
-        btn.classList.toggle('is-active', btn.dataset.filterType === type);
-      });
-      var visible = type === 'all' ? allPosts : allPosts.filter(function (post) { return post.type === type; });
-      renderLedger(visible);
+    function laneMiniTemplate(post) {
+      return [
+        '<article class="archive-mini">',
+        '<p class="archive-mini__meta"><span>', escapeHtml(post.issue), '</span><span>', escapeHtml(post.date), '</span></p>',
+        '<h4 class="archive-mini__title">', escapeHtml(post.title), '</h4>',
+        '<a class="archive-mini__link" href="', escapeHtml(post.url), '">Open</a>',
+        '</article>'
+      ].join('');
+    }
+
+    function laneSectionTemplate(type, posts, index) {
+      if (!posts.length) return '';
+      var laneClass = 'archive-lane' + (index % 2 ? ' is-reverse' : '');
+      var meta = TYPE_META[type] || TYPE_META.essay;
+      var feature = posts[0];
+      var rest = posts.slice(1, 6);
+      return [
+        '<section class="', laneClass, '" data-type="', escapeHtml(type), '">',
+        '<header class="archive-lane__head">',
+        '<p class="archive-lane__serial">', escapeHtml(meta.serial), '</p>',
+        '<div class="archive-lane__head-copy">',
+        '<h3 class="archive-lane__label">', escapeHtml(meta.label), '</h3>',
+        '<p class="archive-lane__deck">', escapeHtml(meta.deck), '</p>',
+        '</div>',
+        '</header>',
+        '<div class="archive-lane__body">',
+        '<article class="archive-lane__feature">',
+        '<p class="archive-lane__feature-meta"><span>', escapeHtml(feature.issue), '</span><span>', escapeHtml(feature.date), '</span></p>',
+        '<h4 class="archive-lane__feature-title">', escapeHtml(feature.title), '</h4>',
+        '<p class="archive-lane__feature-summary">', escapeHtml(feature.summary), '</p>',
+        '<div class="archive-lane__feature-foot"><span>', escapeHtml(readLabel(feature)), '</span><a href="', escapeHtml(feature.url), '">Open Record</a></div>',
+        '</article>',
+        '<div class="archive-lane__list">',
+        rest.map(laneMiniTemplate).join(''),
+        '</div>',
+        '</div>',
+        '</section>'
+      ].join('');
+    }
+
+    function renderLanes(posts) {
+      var groups = groupPosts(posts);
+      var laneHtml = TYPE_ORDER.map(function (type, index) {
+        return laneSectionTemplate(type, groups[type], index);
+      }).join('');
+      lanesEl.innerHTML = laneHtml || '<p class="archive-cover__empty">표시할 기록이 없습니다.</p>';
     }
 
     fetch('index.json')
       .then(function (response) { return response.json(); })
       .then(function (raw) {
         if (!Array.isArray(raw) || !raw.length) {
-          renderLedger([]);
+          renderCover(null);
+          renderLanes([]);
           return;
         }
-        allPosts = sortPosts(raw.map(normalize));
-        applyFilter(currentFilter);
+        var posts = sortPosts(raw.map(normalize));
+        var cover = posts.find(function (post) { return post.type === 'essay'; }) || posts[0];
+        renderCover(cover);
+        renderLanes(posts.filter(function (post) { return post.slug !== cover.slug; }));
       })
       .catch(function () {
-        renderLedger([]);
+        renderCover(null);
+        renderLanes([]);
       });
-
-    filterButtons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        applyFilter(btn.dataset.filterType || 'all');
-      });
-    });
   })();
 </script>
 <script defer src="/assets/js/site.js?v=1ce69050"></script>

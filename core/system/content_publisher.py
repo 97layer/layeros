@@ -22,6 +22,7 @@ Created: 2026-02-17
 import os
 import sys
 import json
+import re
 import logging
 import requests
 from pathlib import Path
@@ -111,6 +112,13 @@ class ContentPublisher:
             hashtags = " ".join(_raw_hash)
         essay_title = ce_result.get("essay_title", payload.get("essay_title", ""))
         is_corpus = payload.get("mode") == "corpus_essay" or bool(pull_quote)
+        content_type = self._resolve_content_type(payload, ce_result)
+        tone_target = self._target_telegram_tone(content_type)
+        telegram_summary = self._normalize_telegram_summary(
+            telegram_summary,
+            content_type=content_type,
+            title=essay_title or source_cluster or "기록",
+        )
 
         # 1. 텍스트 파일 저장
         (publish_dir / "instagram_caption.txt").write_text(instagram_caption, encoding="utf-8")
@@ -139,6 +147,8 @@ class ContentPublisher:
             "archive_essay_length": len(archive_essay),
             "has_carousel": bool(carousel_slides),
             "has_pull_quote": bool(pull_quote),
+            "content_type": content_type,
+            "telegram_tone_target": tone_target,
             "cd_brand_score": cd_result.get("brand_score", 0),
             "cd_decision": cd_result.get("decision", "approve"),
             "sa_strategic_score": sa_result.get("strategic_score", 0),
@@ -157,6 +167,11 @@ class ContentPublisher:
         # 4. Telegram push
         # corpus 모드: telegram_summary 우선, 없으면 instagram_caption fallback
         tg_content = telegram_summary if (is_corpus and telegram_summary) else instagram_caption
+        tg_content = self._normalize_telegram_summary(
+            tg_content,
+            content_type=content_type,
+            title=essay_title or source_cluster or "기록",
+        )
         telegram_sent = self._push_to_telegram(
             instagram_caption=tg_content,
             hashtags=hashtags,
@@ -345,6 +360,126 @@ class ContentPublisher:
                 if ko_keyword in theme:
                     return en_keyword
         return UNSPLASH_KEYWORD_MAP["default"]
+
+    def _resolve_content_type(self, payload: Dict, ce_result: Dict) -> str:
+        """발행 입력에서 콘텐츠 타입을 추론한다."""
+        candidates = [
+            ce_result.get("content_type"),
+            payload.get("content_type"),
+            ce_result.get("content_category"),
+            payload.get("content_category"),
+            ce_result.get("essay_title"),
+            payload.get("theme"),
+        ]
+        for raw in candidates:
+            token = self._normalize_content_type_token(raw)
+            if token:
+                return token
+        return "journal"
+
+    def _normalize_content_type_token(self, raw: Any) -> Optional[str]:
+        if raw is None:
+            return None
+        text = str(raw).strip().lower()
+        if not text:
+            return None
+        if any(k in text for k in ("lookbook", "visual")):
+            return "lookbook"
+        if any(k in text for k in ("playlist", "sound", "music")):
+            return "playlist"
+        if any(k in text for k in ("journal", "magazine", "guide")):
+            return "journal"
+        if any(k in text for k in ("essay", "archive", "article")):
+            return "essay"
+        return None
+
+    def _target_telegram_tone(self, content_type: str) -> str:
+        return "plain" if content_type in ("essay", "lookbook") else "polite"
+
+    def _normalize_telegram_summary(self, text: str, content_type: str, title: str) -> str:
+        """텔레그램 3줄 요약 어조를 콘텐츠 타입에 맞게 보정한다."""
+        target = self._target_telegram_tone(content_type)
+        lines = [ln.strip() for ln in str(text or "").splitlines() if ln.strip()]
+
+        title_line = self._cap_line((lines[0] if lines else str(title).strip()) or "기록", 40)
+        core_line = lines[1] if len(lines) > 1 else ""
+
+        if target == "plain":
+            core_line = self._force_plain_tone(core_line or "핵심 관찰을 한 줄로 남긴다.")
+            cta_line = "아카이브에서 이어서 읽는다."
+        else:
+            core_line = self._force_polite_tone(core_line or "핵심 관찰을 한 줄로 남깁니다.")
+            cta_line = "아카이브에서 이어서 읽어봅니다."
+
+        return "\n".join([
+            title_line,
+            self._cap_line(core_line, 40),
+            self._cap_line(cta_line, 40),
+        ])
+
+    def _cap_line(self, text: str, limit: int) -> str:
+        line = str(text or "").strip()
+        if len(line) <= limit:
+            return line
+        return line[: max(0, limit - 3)].rstrip() + "..."
+
+    def _force_plain_tone(self, line: str) -> str:
+        text = str(line or "").strip()
+        if not text:
+            return "핵심 관찰을 한 줄로 남긴다."
+        if re.search(r"(이다|한다|된다|있다|없다|읽는다|맞춘다|올라간다|유지한다|기록한다|적는다)\.$", text):
+            return text
+        replacements = [
+            ("해봤습니다.", "해봤다."),
+            ("했습니다.", "했다."),
+            ("읽어봅니다.", "읽는다."),
+            ("맞춥니다.", "맞춘다."),
+            ("올라갑니다.", "올라간다."),
+            ("유지합니다.", "유지한다."),
+            ("기록합니다.", "기록한다."),
+            ("적습니다.", "적는다."),
+            ("남깁니다.", "남긴다."),
+            ("입니다.", "이다."),
+            ("합니다.", "한다."),
+            ("됩니다.", "된다."),
+            ("있습니다.", "있다."),
+            ("없습니다.", "없다."),
+        ]
+        for src, dst in replacements:
+            if text.endswith(src):
+                return text[: -len(src)] + dst
+        if text.endswith("요."):
+            return text[:-2] + "다."
+        if text.endswith("."):
+            return "핵심 관찰을 한 줄로 남긴다."
+        return "핵심 관찰을 한 줄로 남긴다."
+
+    def _force_polite_tone(self, line: str) -> str:
+        text = str(line or "").strip()
+        if not text:
+            return "핵심 관찰을 한 줄로 남깁니다."
+        if re.search(r"(입니다|합니다|됩니다|있습니다|없습니다|읽어봅니다|맞춥니다|올라갑니다|유지합니다|기록합니다|적습니다|남깁니다)\.$", text):
+            return text
+        replacements = [
+            ("읽는다.", "읽어봅니다."),
+            ("맞춘다.", "맞춥니다."),
+            ("올라간다.", "올라갑니다."),
+            ("유지한다.", "유지합니다."),
+            ("기록한다.", "기록합니다."),
+            ("적는다.", "적습니다."),
+            ("남긴다.", "남깁니다."),
+            ("이다.", "입니다."),
+            ("한다.", "합니다."),
+            ("된다.", "됩니다."),
+            ("있다.", "있습니다."),
+            ("없다.", "없습니다."),
+        ]
+        for src, dst in replacements:
+            if text.endswith(src):
+                return text[: -len(src)] + dst
+        if text.endswith("."):
+            return "핵심 관찰을 한 줄로 남깁니다."
+        return "핵심 관찰을 한 줄로 남깁니다."
 
     def _push_to_telegram(self, instagram_caption: str, hashtags: str,
                           archive_essay: str, image_path: Optional[Dict], meta: Dict) -> bool:

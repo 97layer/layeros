@@ -51,6 +51,56 @@
 
 </div>
 
+<!-- ─── Archive Production Board ─── -->
+<div class="admin-section">
+  <div class="archive-prod-head">
+    <p class="admin-label">ARCHIVE PRODUCTION BOARD</p>
+    <a href="{{ url_for('archive_list') }}" class="archive-prod-link">아카이브 관리 →</a>
+  </div>
+  <div class="archive-prod-stats">
+    <div class="archive-prod-stat">
+      <p class="archive-prod-stat__label">TOTAL</p>
+      <p class="archive-prod-stat__value">{{ archive_board.total }}</p>
+    </div>
+    <div class="archive-prod-stat">
+      <p class="archive-prod-stat__label">PUBLISHED</p>
+      <p class="archive-prod-stat__value">{{ archive_board.published }}</p>
+    </div>
+    <div class="archive-prod-stat">
+      <p class="archive-prod-stat__label">PENDING</p>
+      <p class="archive-prod-stat__value">{{ archive_board.pending }}</p>
+    </div>
+  </div>
+  <div class="archive-prod-filters" role="group" aria-label="아카이브 상태 필터">
+    <button type="button" class="archive-prod-filter is-active" data-filter="all">All</button>
+    <button type="button" class="archive-prod-filter" data-filter="live">Published</button>
+    <button type="button" class="archive-prod-filter" data-filter="pending">Pending</button>
+  </div>
+  <div class="archive-prod-list" id="archive-prod-list">
+    {% if archive_board.rows %}
+    {% for item in archive_board.rows %}
+    <article class="archive-prod-item" data-status="{{ item.status }}">
+      <p class="archive-prod-item__meta">
+        <span>{{ item.type }}</span>
+        <span>{{ item.issue }}</span>
+        <span>{{ item.date }}</span>
+        <span class="archive-prod-item__status archive-prod-item__status--{{ item.status }}">{{ item.status_label }}</span>
+      </p>
+      <h3 class="archive-prod-item__title">{{ item.title }}</h3>
+      <p class="archive-prod-item__preview">{{ item.preview }}</p>
+      {% if item.status == 'live' %}
+      <a class="archive-prod-item__cta" href="{{ item.action_url }}" target="_blank" rel="noopener">{{ item.action_label }}</a>
+      {% else %}
+      <a class="archive-prod-item__cta" href="{{ item.action_url }}">{{ item.action_label }}</a>
+      {% endif %}
+    </article>
+    {% endfor %}
+    {% else %}
+    <p class="archive-prod-empty">아카이브 데이터가 없습니다.</p>
+    {% endif %}
+  </div>
+</div>
+
 <!-- ─── System Status ─── -->
 <div class="admin-section" style="margin-top:2.5rem;">
   <p class="admin-label">SYSTEM STATUS</p>
@@ -200,6 +250,160 @@
 @media (max-width: 768px) {
   .daily-grid { grid-template-columns: 1fr; }
 }
+
+.archive-prod-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.archive-prod-link {
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--text-sub);
+}
+
+.archive-prod-link:hover {
+  color: var(--text);
+}
+
+.archive-prod-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.45rem;
+}
+
+.archive-prod-stat {
+  border: 1px solid var(--line);
+  padding: 0.8rem 0.9rem;
+}
+
+.archive-prod-stat__label {
+  margin: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--text-faint);
+}
+
+.archive-prod-stat__value {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-en);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.archive-prod-filters {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.archive-prod-filter {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-sub);
+  font-size: 0.66rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  padding: 0.32rem 0.65rem;
+  cursor: pointer;
+}
+
+.archive-prod-filter.is-active,
+.archive-prod-filter:hover {
+  background: var(--text);
+  color: #f5f3ed;
+  border-color: var(--text);
+}
+
+.archive-prod-list {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.archive-prod-item {
+  border: 1px solid var(--line);
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.archive-prod-item__meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.55rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+
+.archive-prod-item__status {
+  border: 1px solid currentColor;
+  padding: 0 0.28rem;
+}
+
+.archive-prod-item__status--live {
+  color: var(--success);
+}
+
+.archive-prod-item__status--pending {
+  color: var(--danger);
+}
+
+.archive-prod-item__title {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.archive-prod-item__preview {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--text-sub);
+}
+
+.archive-prod-item__cta {
+  margin-top: 0.2rem;
+  justify-self: start;
+  border: 1px solid var(--line);
+  padding: 0.18rem 0.48rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+}
+
+.archive-prod-item__cta:hover {
+  border-color: var(--text);
+}
+
+.archive-prod-item[hidden] {
+  display: none;
+}
+
+.archive-prod-empty {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--text-sub);
+}
+
+@media (max-width: 980px) {
+  .archive-prod-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .archive-prod-stats {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 
 <script>
@@ -273,5 +477,27 @@ async function runCommand(action, params) {
 function restartSvc(name) {
   runCommand('restart_service', { name });
 }
+
+(function () {
+  const buttons = Array.from(document.querySelectorAll('.archive-prod-filter'));
+  const items = Array.from(document.querySelectorAll('.archive-prod-item'));
+  if (!buttons.length || !items.length) return;
+
+  function applyFilter(filter) {
+    items.forEach((item) => {
+      const status = item.getAttribute('data-status');
+      item.hidden = !(filter === 'all' || status === filter);
+    });
+    buttons.forEach((button) => {
+      button.classList.toggle('is-active', button.dataset.filter === filter);
+    });
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      applyFilter(button.dataset.filter || 'all');
+    });
+  });
+})();
 </script>
 {% endblock %}

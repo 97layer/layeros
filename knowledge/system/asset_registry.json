@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "created_at": "2026-02-16T18:01:14.427889",
-  "last_updated": "2026-03-04T19:00:23",
+  "last_updated": "2026-03-04T23:59:25",
   "assets": [
     {
       "id": "image_tmp2t4zprye_20260217_002322",
@@ -2506,10 +2506,42 @@
           "by": "unit_test"
         }
       ]
+    },
+    {
+      "id": "AST-2026-03-179",
+      "type": "code",
+      "source": "codex",
+      "created_at": "2026-03-04T23:59:25.152670",
+      "path": "core/scripts/plan_dispatch_pending_replay.py",
+      "status": "captured",
+      "metadata": {},
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T23:59:25.152670",
+          "by": "codex"
+        }
+      ]
+    },
+    {
+      "id": "AST-2026-03-180",
+      "type": "code",
+      "source": "codex",
+      "created_at": "2026-03-04T23:59:25.155887",
+      "path": "core/tests/test_plan_dispatch_pending_replay.py",
+      "status": "captured",
+      "metadata": {},
+      "lifecycle": [
+        {
+          "stage": "captured",
+          "at": "2026-03-04T23:59:25.155887",
+          "by": "codex"
+        }
+      ]
     }
   ],
   "stats": {
-    "total": 177,
+    "total": 179,
     "by_type": {
       "signal": 39,
       "content": 23,
@@ -2526,10 +2558,10 @@
       "visual": 1,
       "script": 5,
       "data": 2,
-      "code": 14
+      "code": 16
     },
     "by_status": {
-      "captured": 124,
+      "captured": 126,
       "completed": 1,
       "analyzed": 14,
       "stored": 1,
@@ -2547,7 +2579,7 @@
       "auto": 1,
       "bot_templates": 1,
       "agent": 2,
-      "codex": 24,
+      "codex": 26,
       "codex-progress-auto-hook": 1
     }
   }

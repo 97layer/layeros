@@ -2,9 +2,14 @@
 set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-PLAN_COUNCIL_SCRIPT="$PROJECT_ROOT/core/system/plan_council.py"
+PLAN_COUNCIL_SCRIPT="${PLAN_DISPATCH_COUNCIL_SCRIPT:-$PROJECT_ROOT/core/system/plan_council.py}"
 PLAN_CLASSIFIER_SCRIPT="${PLAN_DISPATCH_CLASSIFIER_SCRIPT:-$PROJECT_ROOT/core/system/plan_dispatch_classifier.py}"
 PLAN_METRICS_SCRIPT="$PROJECT_ROOT/core/system/plan_dispatch_metrics.py"
+PLAN_COUNCIL_LITE_SCRIPT="${PLAN_DISPATCH_COUNCIL_LITE_SCRIPT:-$PROJECT_ROOT/core/scripts/plan_council_lite.py}"
+PLAN_METRICS_LOG="${PLAN_DISPATCH_METRICS_LOG:-$PROJECT_ROOT/knowledge/system/plan_dispatch_metrics.jsonl}"
+PLAN_PENDING_LOG="${PLAN_DISPATCH_PENDING_LOG:-$PROJECT_ROOT/knowledge/system/plan_dispatch_pending.jsonl}"
+PLAN_PENDING_LOCK="${PLAN_DISPATCH_PENDING_LOCK:-$PROJECT_ROOT/knowledge/system/plan_dispatch_pending.lock}"
+LOG_PENDING="${PLAN_DISPATCH_LOG_PENDING:-1}"
 ENV_FILE="$PROJECT_ROOT/.env"
 SAFE_ENV_EXPORT_SCRIPT="$PROJECT_ROOT/core/scripts/safe_env_export.py"
 
@@ -67,6 +72,9 @@ ALLOW_DEGRADED="${PLAN_DISPATCH_ALLOW_DEGRADED:-0}"
 STRICT_RUNTIME="${PLAN_DISPATCH_STRICT_RUNTIME:-1}"
 MIN_RELIABILITY="${PLAN_DISPATCH_MIN_RELIABILITY:-0.65}"
 LOG_METRICS="${PLAN_DISPATCH_LOG_METRICS:-1}"
+COUNCIL_RETRIES="${PLAN_DISPATCH_COUNCIL_RETRIES:-2}"
+COUNCIL_RETRY_DELAY="${PLAN_DISPATCH_COUNCIL_RETRY_DELAY:-2}"
+AUTO_LITE_FALLBACK="${PLAN_DISPATCH_AUTO_LITE_FALLBACK:-0}"
 CLASSIFY_COMPLEXITY="unknown"
 CLASSIFY_SCORE="0"
 CLASSIFIER_FALLBACK="0"
@@ -75,6 +83,7 @@ log_dispatch_metric() {
   local phase="$1"
   local reason="$2"
   local executed="$3"
+  local fallback_value="${4:-$CLASSIFIER_FALLBACK}"
   if [[ "$LOG_METRICS" != "1" ]]; then
     return 0
   fi
@@ -82,6 +91,7 @@ log_dispatch_metric() {
     return 0
   fi
   python3 "$PLAN_METRICS_SCRIPT" --append \
+    --log "$PLAN_METRICS_LOG" \
     --task "$TASK" \
     --mode "$MODE" \
     --phase "$phase" \
@@ -89,11 +99,96 @@ log_dispatch_metric() {
     --executed "$executed" \
     --complexity "$CLASSIFY_COMPLEXITY" \
     --score "$CLASSIFY_SCORE" \
-    --fallback "$CLASSIFIER_FALLBACK" >/dev/null 2>&1 || true
+    --fallback "$fallback_value" >/dev/null 2>&1 || true
+}
+
+append_pending_task() {
+  local reason="$1"
+  local retryable="${2:-true}"
+  local raw_council="${3:-}"
+  if [[ "$LOG_PENDING" != "1" ]]; then
+    return 0
+  fi
+
+  python3 - "$PLAN_PENDING_LOG" "$TASK" "$MODE" "$reason" "$CLASSIFY_COMPLEXITY" "$CLASSIFY_SCORE" "$CLASSIFIER_FALLBACK" "$retryable" "$raw_council" "$PLAN_PENDING_LOCK" <<'PY'
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict
+
+try:
+    import fcntl
+except Exception:
+    fcntl = None
+
+pending_log = Path(sys.argv[1])
+task = (sys.argv[2] or "").strip()
+mode = (sys.argv[3] or "auto").strip().lower() or "auto"
+reason = (sys.argv[4] or "unknown").strip().lower() or "unknown"
+complexity = (sys.argv[5] or "unknown").strip().lower() or "unknown"
+score_raw = (sys.argv[6] or "0").strip()
+classifier_fallback = (sys.argv[7] or "").strip().lower() in {"1", "true", "yes", "y", "on"}
+retryable = (sys.argv[8] or "").strip().lower() in {"1", "true", "yes", "y", "on"}
+raw_council = (sys.argv[9] or "").strip()
+lock_path = Path(sys.argv[10]) if len(sys.argv) > 10 else pending_log.with_suffix(".lock")
+
+try:
+    score = int(score_raw)
+except Exception:
+    score = 0
+
+task_hash = hashlib.sha1(task.encode("utf-8")).hexdigest()[:12] if task else ""
+council: Dict[str, Any] = {}
+if raw_council:
+    try:
+        parsed = json.loads(raw_council)
+        if isinstance(parsed, dict):
+            council = parsed
+    except Exception:
+        council = {}
+
+consensus = council.get("consensus") if isinstance(council.get("consensus"), dict) else {}
+runtime = consensus.get("runtime") if isinstance(consensus.get("runtime"), dict) else {}
+entry = {
+    "timestamp": datetime.now(timezone.utc).isoformat(),
+    "task_hash": task_hash,
+    "task_preview": task[:140],
+    "task": task[:800],
+    "mode": mode,
+    "reason": reason,
+    "complexity": complexity,
+    "score": score,
+    "classifier_fallback": classifier_fallback,
+    "retryable": retryable,
+    "consensus_status": str(consensus.get("status", "")).strip().lower(),
+    "gate_recommendation": str(runtime.get("gate_recommendation", "")).strip().lower(),
+    "models_used": consensus.get("models_used", []) if isinstance(consensus.get("models_used"), list) else [],
+}
+
+pending_log.parent.mkdir(parents=True, exist_ok=True)
+lock_path.parent.mkdir(parents=True, exist_ok=True)
+
+def _append_line() -> None:
+    with pending_log.open("a", encoding="utf-8") as fp:
+        fp.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+if fcntl is None:
+    _append_line()
+else:
+    with lock_path.open("a+", encoding="utf-8") as lock_fp:
+        fcntl.flock(lock_fp.fileno(), fcntl.LOCK_EX)
+        try:
+            _append_line()
+        finally:
+            fcntl.flock(lock_fp.fileno(), fcntl.LOCK_UN)
+PY
 }
 
 if [[ ! -f "$PLAN_COUNCIL_SCRIPT" ]]; then
   log_dispatch_metric "error" "plan_council_missing" "false"
+  append_pending_task "plan_council_missing" "false" ""
   python3 - "$TASK" "$MODE" <<'PY'
 import json
 import sys
@@ -323,18 +418,87 @@ fi
 # exit code 계약: 0=go, 1=hard_stop, 2=needs_clarification, 3=degraded_or_caution
 COUNCIL_JSON=""
 COUNCIL_EXIT=0
-COUNCIL_JSON="$(python3 "$PLAN_COUNCIL_SCRIPT" --task "$TASK" --mode preflight --json 2>/dev/null)" || COUNCIL_EXIT=$?
+if [[ ! "$COUNCIL_RETRIES" =~ ^[0-9]+$ ]] || [[ "$COUNCIL_RETRIES" -lt 1 ]]; then
+  COUNCIL_RETRIES=2
+fi
+
+for ((attempt=1; attempt<=COUNCIL_RETRIES; attempt++)); do
+  COUNCIL_EXIT=0
+  COUNCIL_JSON="$(python3 "$PLAN_COUNCIL_SCRIPT" --task "$TASK" --mode preflight --json 2>/dev/null)" || COUNCIL_EXIT=$?
+
+  # 1=hard_stop(둘 다 실패) 케이스만 재시도 대상
+  if [[ "$COUNCIL_EXIT" -ne 1 ]]; then
+    break
+  fi
+  if [[ "$attempt" -lt "$COUNCIL_RETRIES" ]]; then
+    sleep "$COUNCIL_RETRY_DELAY"
+  fi
+done
 
 if [[ "$COUNCIL_EXIT" -eq 1 ]]; then
+  if [[ "$AUTO_LITE_FALLBACK" == "1" && -f "$PLAN_COUNCIL_LITE_SCRIPT" ]]; then
+    LITE_JSON="$(python3 "$PLAN_COUNCIL_LITE_SCRIPT" --task "$TASK" --json 2>/dev/null || true)"
+    if [[ -n "${LITE_JSON:-}" ]]; then
+      log_dispatch_metric "blocked" "hard_stop_fallback_lite" "false" "1"
+      append_pending_task "hard_stop_fallback_lite" "true" "$LITE_JSON"
+      echo "━━━ PLAN COUNCIL: DEGRADED-LITE FALLBACK ━━━" >&2
+      echo "두 모델 모두 실패하여 offline fallback 기록을 사용합니다. (승인 후 진행 권장)" >&2
+      python3 - "$TASK" "$MODE" "$CLASSIFY_JSON" "$LITE_JSON" <<'PY'
+import json
+import sys
+
+task = sys.argv[1]
+mode = sys.argv[2]
+classifier = json.loads(sys.argv[3])
+raw_lite = (sys.argv[4] or "").strip()
+
+try:
+    payload = json.loads(raw_lite)
+except Exception:
+    payload = {
+        "timestamp": "",
+        "mode": "preflight-lite",
+        "task": task,
+        "consensus": {
+            "status": "degraded-lite",
+            "models_used": [],
+            "planner_primary": "offline",
+            "verifier_secondary": "offline",
+            "intent": task[:120],
+            "approach": "offline fallback parse failed",
+            "steps": [],
+            "risks": ["plan_council_lite parse failed"],
+            "checks": [],
+            "decision": "go",
+        },
+    }
+
+payload["dispatcher"] = {
+    "mode": mode,
+    "executed": True,
+    "reason": "hard_stop_fallback_lite",
+    "complexity": classifier.get("complexity", "unknown"),
+    "score": classifier.get("score", 0),
+}
+
+print(json.dumps(payload, ensure_ascii=False))
+PY
+      exit 3
+    fi
+  fi
+
   log_dispatch_metric "blocked" "hard_stop_model_unavailable" "false"
+  append_pending_task "hard_stop_model_unavailable" "true" "$COUNCIL_JSON"
   echo "━━━ PLAN COUNCIL: HARD STOP ━━━" >&2
   echo "두 모델 모두 호출 실패 (네트워크/키 오류)." >&2
-  echo "구현 금지. 원인 확인 후 재시도하세요." >&2
+  echo "구현 금지. 원인 확인 후 재시도하세요. (retries=${COUNCIL_RETRIES})" >&2
+  echo "self-check: python3 core/system/plan_council.py --self-check --require-both" >&2
   exit 1
 fi
 
 if [[ "$COUNCIL_EXIT" -eq 2 ]]; then
   log_dispatch_metric "blocked" "needs_clarification_model" "false"
+  append_pending_task "needs_clarification_model" "false" "$COUNCIL_JSON"
   echo "━━━ PLAN COUNCIL: NEEDS CLARIFICATION ━━━" >&2
   echo "Claude/Gemini 모두 범위 불명확으로 판정." >&2
   echo "사용자에게 요청 범위 확인 후 재실행하세요." >&2
@@ -346,6 +510,7 @@ if [[ "$COUNCIL_EXIT" -eq 3 ]]; then
   echo "단일 모델 기준으로 진행합니다. 리스크 주의." >&2
   if [[ "$ALLOW_DEGRADED" != "1" ]]; then
     log_dispatch_metric "blocked" "degraded_not_allowed" "false"
+    append_pending_task "degraded_not_allowed" "true" "$COUNCIL_JSON"
     echo "명시적 승인/허용 없이 진행 금지. PLAN_DISPATCH_ALLOW_DEGRADED=1 설정 후 재실행하세요." >&2
     exit 3
   fi
@@ -388,6 +553,7 @@ RUNTIME_REASON="${RUNTIME_GATE#*$'\t'}"
 
 if [[ "$RUNTIME_ACTION" == "hard_stop" ]]; then
   log_dispatch_metric "blocked" "runtime_hard_stop" "false"
+  append_pending_task "runtime_hard_stop" "true" "$COUNCIL_JSON"
   echo "━━━ PLAN COUNCIL: HARD STOP (runtime gate) ━━━" >&2
   echo "$RUNTIME_REASON" >&2
   exit 1
@@ -395,6 +561,7 @@ fi
 
 if [[ "$RUNTIME_ACTION" == "needs_clarification" ]]; then
   log_dispatch_metric "blocked" "runtime_needs_clarification" "false"
+  append_pending_task "runtime_needs_clarification" "false" "$COUNCIL_JSON"
   echo "━━━ PLAN COUNCIL: NEEDS CLARIFICATION (runtime gate) ━━━" >&2
   echo "$RUNTIME_REASON" >&2
   exit 2
@@ -402,6 +569,7 @@ fi
 
 if [[ "$RUNTIME_ACTION" == "caution" && "$STRICT_RUNTIME" == "1" && "$ALLOW_DEGRADED" != "1" ]]; then
   log_dispatch_metric "blocked" "runtime_caution_not_allowed" "false"
+  append_pending_task "runtime_caution_not_allowed" "true" "$COUNCIL_JSON"
   echo "━━━ PLAN COUNCIL: CAUTION (runtime gate) ━━━" >&2
   echo "$RUNTIME_REASON" >&2
   echo "신뢰도 부족 상태입니다. 승인/완화 설정 없이 진행 금지." >&2

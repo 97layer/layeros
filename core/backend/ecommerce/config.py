@@ -62,6 +62,9 @@ class Settings:
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
     SQL_ECHO: bool = os.getenv("SQL_ECHO", "False").lower() == "true"
+    DEFAULT_TENANT_ID: str = os.getenv("DEFAULT_TENANT_ID", "woohwahae").strip().lower()
+    TENANT_HEADER: str = os.getenv("TENANT_HEADER", "X-Tenant-ID").strip()
+    REQUIRE_TENANT_HEADER: bool = os.getenv("REQUIRE_TENANT_HEADER", "False").lower() == "true"
 
     # CORS
     CORS_ORIGINS: list = [

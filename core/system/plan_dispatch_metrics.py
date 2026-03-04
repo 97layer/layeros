@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,7 +18,12 @@ from typing import Any, Dict, List
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_LOG_PATH = PROJECT_ROOT / "knowledge" / "system" / "plan_dispatch_metrics.jsonl"
+DEFAULT_LOG_PATH = Path(
+    os.getenv(
+        "PLAN_DISPATCH_METRICS_LOG",
+        str(PROJECT_ROOT / "knowledge" / "system" / "plan_dispatch_metrics.jsonl"),
+    )
+)
 
 
 def _now_iso() -> str:

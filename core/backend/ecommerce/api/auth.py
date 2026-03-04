@@ -5,12 +5,14 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from ..models import get_db, User
-from ..schemas import UserCreate, UserLogin, UserResponse, Token
+from ..schemas import UserCreate, UserResponse, Token
 from ..utils import (
     verify_password,
     get_password_hash,
     create_access_token,
     get_current_user,
+    get_authenticated_tenant_id,
+    get_public_tenant_id,
     ACCESS_TOKEN_EXPIRE_MINUTES,
 )
 
@@ -18,10 +20,17 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def register(user_data: UserCreate, db: Session = Depends(get_db)):
+def register(
+    user_data: UserCreate,
+    tenant_id: str = Depends(get_public_tenant_id),
+    db: Session = Depends(get_db),
+):
     """Register new user account."""
     # Check if email already exists
-    existing_user = db.query(User).filter(User.email == user_data.email).first()
+    existing_user = db.query(User).filter(
+        User.email == user_data.email,
+        User.tenant_id == tenant_id,
+    ).first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -30,6 +39,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
     # Create new user
     user = User(
+        tenant_id=tenant_id,
         email=user_data.email,
         full_name=user_data.full_name,
         phone=user_data.phone,
@@ -45,11 +55,15 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
+    tenant_id: str = Depends(get_public_tenant_id),
     db: Session = Depends(get_db)
 ):
     """Login and get access token."""
     # Find user by email (username field)
-    user = db.query(User).filter(User.email == form_data.username).first()
+    user = db.query(User).filter(
+        User.email == form_data.username,
+        User.tenant_id == tenant_id,
+    ).first()
 
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
@@ -66,7 +80,7 @@ def login(
 
     # Create access token
     access_token = create_access_token(
-        data={"sub": user.id, "email": user.email},
+        data={"sub": user.id, "email": user.email, "tenant_id": tenant_id},
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
 
@@ -84,10 +98,13 @@ def get_current_user_info(current_user: User = Depends(get_current_user)):
 
 
 @router.post("/refresh", response_model=Token)
-def refresh_token(current_user: User = Depends(get_current_user)):
+def refresh_token(
+    current_user: User = Depends(get_current_user),
+    tenant_id: str = Depends(get_authenticated_tenant_id),
+):
     """Refresh access token."""
     access_token = create_access_token(
-        data={"sub": current_user.id, "email": current_user.email},
+        data={"sub": current_user.id, "email": current_user.email, "tenant_id": tenant_id},
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
 

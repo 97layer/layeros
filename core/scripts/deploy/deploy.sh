@@ -53,7 +53,7 @@ sys.exit(0 if '$1' in d['active'] else 1)
 
 should_run_precheck() {
   case "$DEPLOY_ACTION" in
-    pull|all|council-worker-install)
+    pull|all)
       return 0
       ;;
   esac
@@ -284,10 +284,122 @@ for name, info in d['inactive'].items():
     "
     ;;
 
+  telegram-trace)
+    APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+    ssh ${VM_HOST} "cd '${APP_PATH}' && timeout 20 python3 -c \"
+import sys, os
+sys.path.insert(0, '.')
+try:
+    from dotenv import load_dotenv; load_dotenv('.env')
+except: pass
+print('1 dotenv ok', flush=True)
+try:
+    from core.system.notebooklm_bridge import get_bridge
+    b = get_bridge(); print('2 notebooklm ok', flush=True)
+except Exception as e: print('2 notebooklm FAIL', e, flush=True)
+try:
+    from core.system.conversation_engine import get_conversation_engine
+    c = get_conversation_engine(); print('3 conv_engine ok', flush=True)
+except Exception as e: print('3 conv_engine FAIL', e, flush=True)
+try:
+    from core.system.intent_classifier import get_intent_classifier
+    i = get_intent_classifier(); print('4 classifier ok', flush=True)
+except Exception as e: print('4 classifier FAIL', e, flush=True)
+try:
+    from core.system.youtube_analyzer import YouTubeAnalyzer
+    y = YouTubeAnalyzer(); print('5 youtube ok', flush=True)
+except Exception as e: print('5 youtube FAIL', e, flush=True)
+try:
+    from core.agents.gardener import Gardener
+    g = Gardener(); print('6 gardener ok', flush=True)
+except Exception as e: print('6 gardener FAIL', e, flush=True)
+try:
+    from core.agents.code_agent import CodeAgent
+    ca = CodeAgent(); print('7 code_agent ok', flush=True)
+except Exception as e: print('7 code_agent FAIL', e, flush=True)
+print('done', flush=True)
+\" 2>&1" || true
+    ;;
+
+  telegram-tail)
+    APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+    LOG="${2:-error}"
+    if [ "$LOG" = "error" ]; then
+      ssh ${VM_HOST} "tail -60 '${APP_PATH}/.infra/logs/telegram.error.log' 2>&1"
+    else
+      ssh ${VM_HOST} "tail -60 '${APP_PATH}/.infra/logs/telegram.log' 2>&1"
+    fi
+    ;;
+
+  telegram-logfile)
+    APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+    ssh ${VM_HOST} "cat /etc/systemd/system/97layer-telegram.service 2>/dev/null; echo '---'; ls -la '${APP_PATH}/.infra/logs/' 2>/dev/null || echo 'no logs dir'; ls -la /var/log/97layer* 2>/dev/null || echo 'no /var/log/97layer*'" 2>&1
+    ;;
+
+  telegram-error)
+    APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+    ssh ${VM_HOST} "cd '${APP_PATH}' && export \$(grep -v '^#' .env | xargs) 2>/dev/null; timeout 15 python3 -c \"
+import sys
+sys.path.insert(0, '.')
+try:
+    from dotenv import load_dotenv; load_dotenv('.env')
+except: pass
+try:
+    from core.system.env_validator import validate_env
+    validate_env('telegram_secretary')
+    print('ENV OK')
+except SystemExit as e:
+    print('ENV FAIL exit:', e)
+    sys.exit(1)
+try:
+    from core.daemons.telegram_secretary import TelegramSecretaryV6
+    import os
+    tok = os.getenv('TELEGRAM_BOT_TOKEN')
+    bot = TelegramSecretaryV6(tok)
+    print('INIT OK')
+except Exception as e:
+    print('INIT FAIL:', type(e).__name__, str(e)[:300])
+    sys.exit(1)
+\" 2>&1" || true
+    ;;
+
+  debug-run)
+    APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+    ssh ${VM_HOST} "find '${APP_PATH}' -name '*.log' -newer '${APP_PATH}/.env' 2>/dev/null | head -10; ls '${APP_PATH}/.infra/logs/' 2>/dev/null || echo 'no .infra/logs'; sudo journalctl -u 97layer-telegram --output=verbose -n 5 --no-pager 2>&1 | grep -i 'message\|error\|traceback\|python' | head -20" 2>&1
+    ;;
+
+  env-check)
+    APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+    ssh ${VM_HOST} "grep -E '^(TELEGRAM_BOT_TOKEN|ADMIN_TELEGRAM_ID|GOOGLE_API_KEY)=' '${APP_PATH}/.env' 2>/dev/null | sed 's/=.*/=***MASKED***/' || echo '.env not found'"
+    ;;
+
+  env-set)
+    ENV_KEY="${2:-}"
+    ENV_VAL="${3:-}"
+    if [ -z "$ENV_KEY" ] || [ -z "$ENV_VAL" ]; then
+      echo "Usage: deploy.sh env-set <KEY> <VALUE>" >&2
+      exit 1
+    fi
+    APP_PATH="/home/skyto5339_gmail_com/97layerOS"
+    ssh ${VM_HOST} "
+      set -e
+      ENV_FILE='${APP_PATH}/.env'
+      KEY='${ENV_KEY}'
+      VAL='${ENV_VAL}'
+      if grep -q \"^\${KEY}=\" \"\$ENV_FILE\" 2>/dev/null; then
+        sed -i \"s|^\${KEY}=.*|\${KEY}=\${VAL}|\" \"\$ENV_FILE\"
+        echo \"updated: \${KEY}\"
+      else
+        echo \"\${KEY}=\${VAL}\" >> \"\$ENV_FILE\"
+        echo \"appended: \${KEY}\"
+      fi
+    "
+    ;;
+
   logs)
     TARGET="${2:-}"
     if [ -n "$TARGET" ]; then
-      ssh ${VM_HOST} "sudo journalctl -u ${TARGET} -n 40 --no-pager 2>&1"
+      ssh ${VM_HOST} "sudo journalctl -u ${TARGET} -n 60 --no-pager -o cat 2>&1"
     else
       for svc in 97layer-telegram 97layer-ecosystem woohwahae-backend 97layer-gardener; do
         echo "━━━ $svc ━━━"
@@ -384,7 +496,7 @@ if not conf.exists():
     sys.exit(1)
 
 text = conf.read_text(encoding='utf-8', errors='ignore')
-match = re.search(r'location /admin/ \{.*?proxy_pass\\s+http://127\\.0\\.0\\.1:(\\d+)/;.*?\}', text, re.S)
+match = re.search(r'location /admin/ \{.*?proxy_pass\\s+http://127\\.0\\.0\\.1:(\\d+)(?:/)?;.*?\}', text, re.S)
 if not match:
     print('/admin location block not found')
     sys.exit(1)
@@ -412,9 +524,11 @@ PY"
     if [ "$TARGET_MODE" = "legacy" ]; then
       TARGET_PORT="5001"
       TARGET_LABEL="legacy-cortex-admin"
+      TARGET_PROXY="http://127.0.0.1:5001/"
     else
       TARGET_PORT="8082"
       TARGET_LABEL="unified-gateway"
+      TARGET_PROXY="http://127.0.0.1:8082"
     fi
 
     echo "api.woohwahae.kr /admin 라우팅 전환 → ${TARGET_LABEL} (${TARGET_PORT})"
@@ -423,7 +537,38 @@ PY"
       CONF=/etc/nginx/nginx.conf
       TS=\$(date +%Y%m%d_%H%M%S)
       sudo cp \$CONF \${CONF}.bak.admin-route.\${TS}
-      sudo sed -i -E '/location \\/admin\\//,/\\}/ s|proxy_pass http://127.0.0.1:[0-9]+/;|proxy_pass http://127.0.0.1:${TARGET_PORT}/;|' \$CONF
+      sudo TARGET_PROXY='${TARGET_PROXY}' python3 - <<'PY'
+import os
+import pathlib
+import re
+import sys
+
+conf_path = pathlib.Path('/etc/nginx/nginx.conf')
+target_proxy = os.environ.get('TARGET_PROXY', '').strip()
+if not target_proxy:
+    print('TARGET_PROXY missing', file=sys.stderr)
+    sys.exit(1)
+
+text = conf_path.read_text(encoding='utf-8', errors='ignore')
+block_match = re.search(r'location /admin/ \{.*?\}', text, re.S)
+if not block_match:
+    print('/admin location block not found', file=sys.stderr)
+    sys.exit(1)
+
+block = block_match.group(0)
+updated_block = re.sub(
+    r'proxy_pass\s+http://127\.0\.0\.1:\d+/?;',
+    f'proxy_pass {target_proxy};',
+    block,
+    count=1,
+)
+if block == updated_block:
+    print('proxy_pass update failed', file=sys.stderr)
+    sys.exit(1)
+
+updated_text = text[:block_match.start()] + updated_block + text[block_match.end():]
+conf_path.write_text(updated_text, encoding='utf-8')
+PY
       sudo nginx -t
       sudo systemctl reload nginx
       echo 'switched to ${TARGET_LABEL}'
@@ -431,7 +576,7 @@ PY"
 import pathlib
 import re
 text = pathlib.Path('/etc/nginx/nginx.conf').read_text(encoding='utf-8', errors='ignore')
-m = re.search(r'location /admin/ \\{.*?proxy_pass\\s+http://127\\.0\\.0\\.1:(\\d+)/;.*?\\}', text, re.S)
+m = re.search(r'location /admin/ \\{.*?proxy_pass\\s+http://127\\.0\\.0\\.1:(\\d+)(?:/)?;.*?\\}', text, re.S)
 print('active_admin_port=' + (m.group(1) if m else 'unknown'))
 PY
     "
@@ -444,8 +589,8 @@ set -euo pipefail
 APP_PATH="/home/skyto5339_gmail_com/97layerOS"
 cd "$APP_PATH"
 git fetch origin main && git reset --hard origin/main
-sudo cp ".infra/systemd/council-worker.service" /etc/systemd/system/council-worker.service
-sudo cp ".infra/systemd/council-worker.timer"   /etc/systemd/system/council-worker.timer
+sudo cp -f ".infra/systemd/council-worker.service" /etc/systemd/system/council-worker.service 2>/dev/null || true
+sudo cp -f ".infra/systemd/council-worker.timer"   /etc/systemd/system/council-worker.timer 2>/dev/null || true
 sudo systemctl daemon-reload
 sudo systemctl enable --now council-worker.timer
 echo "council-worker 타이머 상태:"

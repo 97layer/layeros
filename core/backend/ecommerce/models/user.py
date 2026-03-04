@@ -1,6 +1,6 @@
 """User model for authentication and user management."""
 from datetime import datetime
-from sqlalchemy import Column, String, Boolean, DateTime, Integer
+from sqlalchemy import Column, String, Boolean, DateTime, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -11,6 +11,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
+    tenant_id = Column(String(64), index=True, nullable=False, default="woohwahae")
     email = Column(String(255), unique=True, index=True, nullable=False)
     phone = Column(String(20), unique=True, nullable=True)
     full_name = Column(String(100), nullable=False)
@@ -32,7 +33,7 @@ class Address(Base):
     __tablename__ = "addresses"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     recipient_name = Column(String(100), nullable=False)
     phone = Column(String(20), nullable=False)
     postal_code = Column(String(10), nullable=False)

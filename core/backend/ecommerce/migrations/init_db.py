@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from models import init_db, engine, User, Product
 from utils import get_password_hash
+from config import settings
 
 
 def create_admin_user(db):
@@ -25,9 +26,13 @@ def create_admin_user(db):
     if len(admin_password) < 12:
         raise RuntimeError("ECOMMERCE_ADMIN_PASSWORD는 최소 12자 이상이어야 합니다.")
 
-    admin = db.query(User).filter(User.email == admin_email).first()
+    admin = db.query(User).filter(
+        User.email == admin_email,
+        User.tenant_id == settings.DEFAULT_TENANT_ID,
+    ).first()
     if not admin:
         admin = User(
+            tenant_id=settings.DEFAULT_TENANT_ID,
             email=admin_email,
             full_name="WOOHWAHAE Admin",
             hashed_password=get_password_hash(admin_password),

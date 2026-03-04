@@ -29,6 +29,7 @@ from typing import Tuple, Optional, Union
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 MANIFEST = PROJECT_ROOT / "directives" / "system.md"  # §10 Filesystem Placement
 CACHE = PROJECT_ROOT / "knowledge" / "system" / "filesystem_cache.json"
+GUARD_RULES = PROJECT_ROOT / "knowledge" / "system" / "guard_rules.json"
 
 # system.md §10 기반 명명 규칙
 ALLOWED_PATTERNS = {
@@ -72,8 +73,25 @@ FORBIDDEN_NAMES = [
     "temp_", "untitled_", "무제", "Untitled"
 ]
 
-# 루트 허용 파일
-ROOT_ALLOWED = ["CLAUDE.md", "README.md", "AGENTS.md", ".gitignore", ".env", ".ai_rules"]
+DEFAULT_ROOT_ALLOWED = ["CLAUDE.md", "README.md", "AGENTS.md", ".gitignore", ".env", ".ai_rules"]
+
+
+def _load_root_allowed() -> list[str]:
+    """Load root allowlist from guard_rules.json (single source), fallback to defaults."""
+    try:
+        data = json.loads(GUARD_RULES.read_text(encoding="utf-8"))
+        allowed = data.get("allowed_root_files")
+        if isinstance(allowed, list):
+            normalized = []
+            for item in allowed:
+                name = str(item).strip()
+                if name:
+                    normalized.append(name)
+            if normalized:
+                return normalized
+    except Exception:
+        pass
+    return list(DEFAULT_ROOT_ALLOWED)
 
 
 def validate_write(path: Path) -> Tuple[bool, str]:
@@ -97,10 +115,11 @@ def validate_write(path: Path) -> Tuple[bool, str]:
 
     # 2. 루트 .md 생성 제한
     if path.parent == PROJECT_ROOT:
-        if path.suffix == ".md" and path.name not in ROOT_ALLOWED:
+        root_allowed = _load_root_allowed()
+        if path.suffix == ".md" and path.name not in root_allowed:
             return False, "루트에 .md 생성 금지 (CLAUDE.md, README.md 외)"
         # 루트 허용 파일은 통과
-        if path.name in ROOT_ALLOWED:
+        if path.name in root_allowed:
             return True, ""
 
     # 3. website/ 예외 파일

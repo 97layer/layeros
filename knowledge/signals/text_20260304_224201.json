@@ -1,0 +1,16 @@
+{
+  "signal_id": "text_20260304_224201",
+  "type": "text_insight",
+  "content": "작업 전환 구간에서 집중이 흔들릴 때 확인하는 체크리스트를 정리합니다. 시작 신호를 통일하고, 중단 기준을 명확히 설정하고, 마무리 기록을 같은 형식으로 남기는 운영 루틴을 다룹니다.",
+  "captured_at": "2026-03-04T22:42:01+09:00",
+  "from_user": "97layer",
+  "source_channel": "manual",
+  "status": "analyzed",
+  "metadata": {
+    "title": "저널 씨앗 - 전환 루틴",
+    "preferred_content_type": "journal",
+    "seed_pack": "content_automation_v1",
+    "analysis_mode": "fallback_local"
+  },
+  "analyzed_at": "2026-03-04T23:05:08.202866"
+}

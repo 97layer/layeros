@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from ..models import Order, PaymentStatus, User, get_db
 from ..services.payment import construct_webhook_event, create_payment_intent
-from ..utils import get_current_active_admin, get_current_user
+from ..utils import get_authenticated_tenant_id, get_current_active_admin, get_current_user
 
 router = APIRouter(prefix="/payments", tags=["Payments"])
 _logger = logging.getLogger(__name__)
@@ -112,6 +112,7 @@ class PaymentIntentCreate(BaseModel):
 @router.post("/intent")
 def create_intent(
     payload: PaymentIntentCreate,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -119,6 +120,7 @@ def create_intent(
     order = db.query(Order).filter(
         Order.id == payload.order_id,
         Order.user_id == current_user.id,
+        Order.tenant_id == tenant_id,
     ).first()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
@@ -132,6 +134,7 @@ def create_intent(
 
     try:
         idempotency_key = f"order-{order.id}-user-{current_user.id}-total-{amount}"
+        idempotency_key = f"tenant-{tenant_id}-{idempotency_key}"
         intent = create_payment_intent(
             amount=amount,
             currency="krw",
@@ -160,12 +163,14 @@ def create_intent(
 @router.get("/orders/{order_id}")
 def get_payment_status(
     order_id: int,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     order = db.query(Order).filter(
         Order.id == order_id,
         Order.user_id == current_user.id,
+        Order.tenant_id == tenant_id,
     ).first()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
@@ -226,11 +231,15 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 @router.post("/orders/{order_id}/mark-paid")
 def mark_paid_manually(
     order_id: int,
+    tenant_id: str = Depends(get_authenticated_tenant_id),
     _: User = Depends(get_current_active_admin),
     db: Session = Depends(get_db),
 ):
     """Admin fallback: mark payment as paid manually."""
-    order = db.query(Order).filter(Order.id == order_id).first()
+    order = db.query(Order).filter(
+        Order.id == order_id,
+        Order.tenant_id == tenant_id,
+    ).first()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
 

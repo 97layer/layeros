@@ -1,0 +1,16 @@
+{
+  "signal_id": "text_20260304_224301",
+  "type": "text_insight",
+  "content": "아침 집중 구간은 저주파, 오후 전환 구간은 미드템포, 야간 정리 구간은 반복 리듬이 잘 맞는다. 시간대별 플레이리스트를 기능 중심으로 재정렬한다.",
+  "captured_at": "2026-03-04T22:43:01+09:00",
+  "from_user": "97layer",
+  "source_channel": "manual",
+  "status": "analyzed",
+  "metadata": {
+    "title": "플레이리스트 씨앗 - 시간대 리듬",
+    "preferred_content_type": "playlist",
+    "seed_pack": "content_automation_v1",
+    "analysis_mode": "fallback_local"
+  },
+  "analyzed_at": "2026-03-04T23:02:46.611996"
+}
