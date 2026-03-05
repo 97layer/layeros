@@ -19808,25 +19808,36 @@ body.time-night .home-preloader {
   object-fit: contain;
   opacity: 0;
   will-change: opacity, transform;
-  animation: logo-assemble 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: logo-assemble 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
+  transform: translateZ(0);
 }
 
 @keyframes logo-assemble {
   0% {
     opacity: 0;
-    transform: scale(1.12);
+    transform: scale(1.12) translateZ(0);
+  }
+
+  25% {
+    opacity: 0.15;
+    transform: scale(1.08) translateZ(0);
   }
 
   50% {
-    opacity: 0.3;
-    transform: scale(1.04);
+    opacity: 0.35;
+    transform: scale(1.04) translateZ(0);
+  }
+
+  75% {
+    opacity: 0.52;
+    transform: scale(1.02) translateZ(0);
   }
 
   100% {
     opacity: 0.65;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
   }
 }
 
