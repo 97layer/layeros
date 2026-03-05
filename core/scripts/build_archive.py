@@ -23,11 +23,16 @@ import markdown as md_lib
 
 logger = logging.getLogger(__name__)
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).resolve().parents[2]
+WEBSITE_DIR = ROOT / 'website'
 CONTENT_DIR = ROOT / 'website' / '_content'
 TEMPLATE_FILE = ROOT / 'website' / '_templates' / 'article.html'
 ARCHIVE_DIR = ROOT / 'website' / 'archive'
 INDEX_JSON = ARCHIVE_DIR / 'index.json'
+SITEMAP_FILE = WEBSITE_DIR / 'sitemap.xml'
+SITEMAP_BASE_URL = 'https://woohwahae.kr'
+SITEMAP_EXCLUDED_TOP_DIRS = {'assets', 'lab', '_components', '_pages', '_templates'}
+SITEMAP_EXCLUDED_FILES = {'404.html'}
 
 
 # ── frontmatter 파서 ──────────────────────────────────────────────────────────
@@ -167,6 +172,99 @@ def update_index(built_entries):
     print('[index] %s 갱신 (%d entries)' % (INDEX_JSON.relative_to(ROOT), len(merged)))
 
 
+def _canonical_url_path(rel_path):
+    """website 기준 상대 경로를 canonical URL path로 변환."""
+    parts = rel_path.parts
+    if not parts:
+        return None
+
+    if any(part.startswith('_') for part in parts):
+        return None
+
+    top = parts[0]
+    if top.startswith('_') or top in SITEMAP_EXCLUDED_TOP_DIRS:
+        return None
+    if rel_path.name in SITEMAP_EXCLUDED_FILES:
+        return None
+    if rel_path.name.startswith('_gen'):
+        return None
+
+    if rel_path.name == 'index.html':
+        if len(parts) == 1:
+            return '/'
+        return '/' + '/'.join(parts[:-1]) + '/'
+
+    # 동일 stem의 디렉토리 index가 있으면 clean URL(/foo/)을 canonical로 사용.
+    if len(parts) == 1:
+        dir_index = WEBSITE_DIR / rel_path.stem / 'index.html'
+        if dir_index.exists():
+            return '/' + rel_path.stem + '/'
+
+    return '/' + rel_path.as_posix()
+
+
+def _sitemap_meta(url_path):
+    """URL path별 changefreq/priority 정책."""
+    if url_path == '/':
+        return 'weekly', '1.0'
+    if url_path in {'/about/', '/archive/', '/practice/'}:
+        return 'weekly', '0.9'
+    if url_path.startswith('/archive/essay-'):
+        return 'monthly', '0.8'
+    if url_path.startswith('/archive/'):
+        return 'monthly', '0.7'
+    if url_path.startswith('/product/'):
+        return 'monthly', '0.7'
+    if url_path.endswith('.html'):
+        return 'monthly', '0.5'
+    return 'monthly', '0.6'
+
+
+def build_sitemap():
+    """website/ 실재 HTML 파일을 기준으로 sitemap.xml 자동 생성."""
+    url_map = {}
+
+    for html_path in sorted(WEBSITE_DIR.rglob('*.html')):
+        rel = html_path.relative_to(WEBSITE_DIR)
+        url_path = _canonical_url_path(rel)
+        if not url_path:
+            continue
+
+        prev = url_map.get(url_path)
+        if prev is None:
+            url_map[url_path] = html_path
+            continue
+
+        # 중복 canonical URL이면 index.html 소스를 우선 채택.
+        prev_is_index = prev.name == 'index.html'
+        curr_is_index = html_path.name == 'index.html'
+        if curr_is_index and not prev_is_index:
+            url_map[url_path] = html_path
+
+    urls = sorted(url_map.keys(), key=lambda p: (0 if p == '/' else 1, p))
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+
+    for url_path in urls:
+        source = url_map[url_path]
+        lastmod = datetime.fromtimestamp(source.stat().st_mtime).strftime('%Y-%m-%d')
+        changefreq, priority = _sitemap_meta(url_path)
+        lines.extend([
+            '  <url>',
+            f'    <loc>{SITEMAP_BASE_URL}{url_path}</loc>',
+            f'    <lastmod>{lastmod}</lastmod>',
+            f'    <changefreq>{changefreq}</changefreq>',
+            f'    <priority>{priority}</priority>',
+            '  </url>',
+        ])
+
+    lines.append('</urlset>')
+    SITEMAP_FILE.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    print('[sitemap] %s 갱신 (%d URLs)' % (SITEMAP_FILE.relative_to(ROOT), len(urls)))
+
+
 # ── 메인 ─────────────────────────────────────────────────────────────────────
 
 def main():
@@ -175,7 +273,9 @@ def main():
     args = parser.parse_args()
 
     if not CONTENT_DIR.exists():
-        logger.error("_content/ 디렉토리 없음: %s", CONTENT_DIR)
+        logger.warning("_content/ 디렉토리 없음: %s (아티클 빌드 스킵)", CONTENT_DIR)
+        build_sitemap()
+        print('[done] 빌드 완료 (0개)')
         return
 
     template = TEMPLATE_FILE.read_text(encoding='utf-8')
@@ -183,7 +283,9 @@ def main():
     # 전체 .md 목록 (빌드 순서용 메타 미리 수집)
     md_files = sorted(CONTENT_DIR.glob('*.md'))
     if not md_files:
-        logger.warning("_content/에 .md 파일 없음")
+        logger.warning("_content/에 .md 파일 없음 (아티클 빌드 스킵)")
+        build_sitemap()
+        print('[done] 빌드 완료 (0개)')
         return
 
     # 메타 미리 파싱 (prev_link 계산용)
@@ -218,6 +320,7 @@ def main():
         built.append(entry)
 
     update_index(built)
+    build_sitemap()
     print('[done] 빌드 완료 (%d개)' % len(built))
 
 

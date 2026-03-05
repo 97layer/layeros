@@ -14,7 +14,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet"/>
-<link href="/assets/css/style.css?v=f5b889f9" rel="stylesheet"/>
+<link href="/assets/css/style.css?v=d2729e10" rel="stylesheet"/>
 <style>
 /* ─────────────────────────────────────────────
    WOOSUNHO PAGE — sticky sidebar layout
@@ -416,12 +416,12 @@
     <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
     <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
   </ul>
-  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
     <span></span><span></span>
   </button>
   <div class="read-progress" id="read-progress" aria-hidden="true"></div>
 </nav>
-<div class="nav-overlay" id="nav-overlay">
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true">
   <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
   <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
   <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
@@ -777,6 +777,8 @@
         <a href="/archive/">Archive</a>
         <a href="/practice/">Practice</a>
         <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+        <a href="mailto:hello@woohwahae.kr">Contact</a>
       </nav>
       <div class="footer-contact-row">
         <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
@@ -789,6 +791,7 @@
         <a href="/privacy.html">Privacy</a>
         <a href="/terms.html">Terms</a>
         <span>&copy; 2026 WOOHWAHAE</span>
+        <span class="footer-time" id="footer-time"></span>
       </div>
     </div>
   </div>

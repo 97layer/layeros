@@ -163,42 +163,6 @@ ssh 97layer-vm "for s in 97layer-telegram 97layer-ecosystem 97layer-gardener woo
 
 ---
 
-## 📍 현재 상태 (CURRENT STATE)
-
-### [2026-03-03] claude-sonnet-4-6
-
-**완료**:
-- ✅ Gemini Proposer 스키마 불일치 수정 — system_instruction 추가, GEMINI_API_KEY fallback, JSON brace 추출 (code_agent.py)
-- ✅ Duel → ProposeGate 연결 — Gardener 결과 propose_queue 등록, 텔레그램 5분 polling job
-- ✅ Brand Scout Gardener 통합 — ScoutAgent.run_once() step 13으로 추가 (신규 daemon 없음)
-- ✅ _pick_auto_task 자기참조 버그 수정 — duel.py grep 제외
-- ✅ SA agent signal_path 로드 — 큐 payload에서 파일 로드 후 analyze_signal 호출 (content 빈값 버그 수정)
-- ✅ SA content/body/source 필드 정규화 — 멀티 스키마 신호 처리
-- ✅ 텔레그램 URL 처리 — URL 감지 시 페이지 본문 fetch + url_content 신호 저장
-- ✅ YouTube 분석 프롬프트 — 코드 주석 제거, 브랜드 철학 슬로우라이프/소거/본질로 업데이트
-- ✅ VM 전체 배포 — ecosystem/telegram/gardener 최신 코드 반영
-
-**파이프라인 현황**:
-- 신호 입력 → SA 분석 → Gardener 군집화 → CE 에세이 → 발행 전체 체인 정상화
-- Duel 자율 실행 → ProposeGate → 텔레그램 승인 루프 작동
-- Brand Scout (Kinfolk/Dezeen): RSS 수집 정상, 3개 소스 파싱 오류 (URL 교체 필요)
-
-**다음**:
-- ⏳ RSS 파싱 오류 소스 URL 교체 (Monocle, It's Nice That, 아무튼 계속)
-- ⏳ archive/about 디자인 (다른 에이전트 작업 중)
-- ⏳ SA 분석 결과 → Gardener 군집화 연동 검증 (end-to-end 테스트)
-
-**업데이트 시간**: 2026-03-03T12:30:00
-
-work_lock: unlocked
-
-### [2026-03-04] Communication prefs (Codex)
-
-- 톤: 동료 모드, 반말 유지 (사용자 요청 시까지 일관 적용)
-- 응답 규칙: 목표 우선 한 줄, 근거 병기, 선택지는 2~3개 번호, 로그는 최소 요약, 매 응답 끝에 실행 가능한 다음 스텝 제안
-- 적용 범위: Codex CLI 세션 전체
-
-
 ## 🌱 Gardener 자동 업데이트
 최종 실행: 2026-03-01 09:50
 
@@ -208,21 +172,6 @@ work_lock: unlocked
 
 **개념 사고 수준** (세션 간 연속성 앵커)
 - (아직 충분한 신호 미축적)
-
-
----
-
-## 📍 현재 상태 (CURRENT STATE)
-
-### [2026-03-04 17:27] Session Update - codex-archive-v5
-
-**완료한 작업**:
-- ✅ Archive redesigned to editorial lane structure; v5 minimal spacing applied; mock data added (3 per type) for scale verification; noise effects removed from essay pages; build and validators passed with only existing about warnings.
-
-**다음 단계**:
-- ⏳ Run visual QA screenshots on 390/768/1440 and tune spacing if needed
-
-**업데이트 시간**: 2026-03-04T17:27:09.594340
 
 
 ---

@@ -115,6 +115,7 @@ def _update_index(
             'issue': issue,
             'category': category,
             'type': post_type,
+            'status': existing.get('status', 'published') or 'published',
         })
     else:
         posts.append({
@@ -125,6 +126,7 @@ def _update_index(
             'issue': issue,
             'category': category,
             'type': post_type,
+            'status': 'published',
         })
 
     posts.sort(key=lambda p: p['date'], reverse=True)

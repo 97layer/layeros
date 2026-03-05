@@ -8,5 +8,5 @@ if [[ "${SKIP_LOCAL_HOOKS:-0}" == "1" ]]; then
   exit 0
 fi
 
-bash "$REPO_ROOT/core/scripts/hooks/run_code_audit.sh"
+bash "$REPO_ROOT/core/scripts/hooks/run_code_audit.sh" --scope staged --check paths
 

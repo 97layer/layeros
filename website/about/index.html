@@ -18,10 +18,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-  <link rel="stylesheet" href="/assets/css/style.css?v=91646ca8">
-  <script>(function () { var h = new Date().getHours(); var cls = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; var root = document.documentElement; root.classList.remove('time-dawn', 'time-day', 'time-evening', 'time-night'); root.classList.add(cls); })();</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=1a2f99b7">
+  <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
   <!-- /COMPONENT:head -->
 
 </head>
@@ -39,12 +38,12 @@
       <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
       <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
     </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+    <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
       <span></span><span></span>
     </button>
     <div class="read-progress" id="read-progress" aria-hidden="true"></div>
   </nav>
-  <div class="nav-overlay" id="nav-overlay">
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
     <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
     <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
     <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
@@ -285,23 +284,23 @@
             <span class="about-appendix__term">색채</span>
             <div class="appendix-palette">
               <div class="appendix-swatch">
-                <div class="appendix-swatch__color" style="background:#E3E2E0; border: 1px solid var(--line);"></div>
+                <div class="appendix-swatch__color appendix-swatch__color--bg"></div>
                 <span class="appendix-swatch__label">배경 · #E3E2E0</span>
               </div>
               <div class="appendix-swatch">
-                <div class="appendix-swatch__color" style="background:var(--text);"></div>
+                <div class="appendix-swatch__color appendix-swatch__color--text"></div>
                 <span class="appendix-swatch__label">본문 · #1A1A1A</span>
               </div>
               <div class="appendix-swatch">
-                <div class="appendix-swatch__color" style="background:var(--text-sub);"></div>
+                <div class="appendix-swatch__color appendix-swatch__color--text-sub"></div>
                 <span class="appendix-swatch__label">보조 · #4A4A4A</span>
               </div>
               <div class="appendix-swatch">
-                <div class="appendix-swatch__color" style="background:var(--text-faint);"></div>
+                <div class="appendix-swatch__color appendix-swatch__color--text-faint"></div>
                 <span class="appendix-swatch__label">희미 · #9A9A94</span>
               </div>
               <div class="appendix-swatch">
-                <div class="appendix-swatch__color" style="background:#EFEEED; border: 1px solid var(--line);"></div>
+                <div class="appendix-swatch__color appendix-swatch__color--line"></div>
                 <span class="appendix-swatch__label">선 · #EFEEED</span>
               </div>
             </div>
@@ -334,6 +333,8 @@
           <a href="/archive/">Archive</a>
           <a href="/practice/">Practice</a>
           <a href="/about/">About</a>
+          <a href="/lab/">Lab</a>
+          <a href="mailto:hello@woohwahae.kr">Contact</a>
         </nav>
         <div class="footer-contact-row">
           <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
@@ -346,13 +347,14 @@
           <a href="/privacy.html">Privacy</a>
           <a href="/terms.html">Terms</a>
           <span>&copy; 2026 WOOHWAHAE</span>
+          <span class="footer-time" id="footer-time"></span>
         </div>
       </div>
     </div>
   </footer>
   <!-- /COMPONENT:footer -->
 
-  <script defer src="/assets/js/site.js?v=1ce69050"></script>
+  <script defer src="/assets/js/site.js?v=29347181"></script>
 </body>
 
 </html>

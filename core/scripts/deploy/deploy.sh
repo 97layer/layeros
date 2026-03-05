@@ -191,7 +191,23 @@ case "$DEPLOY_ACTION" in
 
   --status)
     echo "=== VM 서비스 상태 (active 목록) ==="
-    ssh ${VM_HOST} "for s in ${SERVICES_ACTIVE}; do printf '%-25s %s\n' \$s \$(systemctl is-active \$s 2>/dev/null || echo 'not-found'); done"
+    ssh ${VM_HOST} "
+      for s in ${SERVICES_ACTIVE}; do
+        if [ \"\$s\" = \"council-worker\" ]; then
+          svc=\$(systemctl is-active council-worker.service 2>/dev/null || true)
+          tmr=\$(systemctl is-active council-worker.timer 2>/dev/null || true)
+          [ -n \"\$svc\" ] || svc='not-found'
+          [ -n \"\$tmr\" ] || tmr='not-found'
+          state=\$svc
+          if [ \"\$tmr\" = \"active\" ]; then
+            state='active(timer)'
+          fi
+          printf '%-25s %s (service=%s timer=%s)\n' \"\$s\" \"\$state\" \"\$svc\" \"\$tmr\"
+        else
+          printf '%-25s %s\n' \"\$s\" \"\$(systemctl is-active \$s 2>/dev/null || echo 'not-found')\"
+        fi
+      done
+    "
     ;;
 
   --list)
@@ -735,9 +751,20 @@ else:
 
     echo "[1/2] git pull..."
     ssh ${VM_HOST} "cd ${VM_PATH} && git fetch origin main && git reset --hard origin/main"
-    echo "[2/2] ${DEPLOY_ACTION} 재시작..."
-    ssh ${VM_HOST} "sudo systemctl restart ${DEPLOY_ACTION}"
-    sleep 2
-    ssh ${VM_HOST} "systemctl is-active ${DEPLOY_ACTION}"
+    if [ "${DEPLOY_ACTION}" = "council-worker" ]; then
+      echo "[2/2] ${DEPLOY_ACTION} 타이머 활성/즉시 실행..."
+      ssh ${VM_HOST} "
+        sudo systemctl daemon-reload
+        sudo systemctl enable --now council-worker.timer
+        sudo systemctl start council-worker.service || true
+      "
+      sleep 2
+      ssh ${VM_HOST} "systemctl is-active council-worker.timer"
+    else
+      echo "[2/2] ${DEPLOY_ACTION} 재시작..."
+      ssh ${VM_HOST} "sudo systemctl restart ${DEPLOY_ACTION}"
+      sleep 2
+      ssh ${VM_HOST} "systemctl is-active ${DEPLOY_ACTION}"
+    fi
     ;;
 esac

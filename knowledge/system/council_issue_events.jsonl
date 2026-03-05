@@ -1,0 +1,60 @@
+{"timestamp": "2026-03-04T15:41:35.169845+00:00", "event": "synced", "issue_id": "agents_guardrules_sync", "title": "AGENTS.md 격리 정책 정합성 (Guard Rules 동기화)"}
+{"timestamp": "2026-03-04T15:41:35.170286+00:00", "event": "synced", "issue_id": "archive_ui_cinematic_monochrome", "title": "Archive 웹디자인 전면 재설계 (Cinematic Monochrome)"}
+{"timestamp": "2026-03-04T15:41:35.170524+00:00", "event": "synced", "issue_id": "council_worker_vm_deploy", "title": "council-worker VM 배포"}
+{"timestamp": "2026-03-04T15:41:35.170710+00:00", "event": "synced", "issue_id": "depth_metrics_transition", "title": "지표 집계의 소거 (Growth → Depth Metrics 전환)"}
+{"timestamp": "2026-03-04T15:41:35.170878+00:00", "event": "synced", "issue_id": "frontend_execution_queue", "title": "프론트엔드 집중 실행 큐 (3건)"}
+{"timestamp": "2026-03-04T15:41:35.171080+00:00", "event": "synced", "issue_id": "local_rag_transition", "title": "CE 엔진 탈-클라우드화 (Local RAG)"}
+{"timestamp": "2026-03-04T15:41:35.171409+00:00", "event": "synced", "issue_id": "phase_shift_frontend_content", "title": "페이즈 강제 전환: 백엔드 동결 → 프론트엔드/콘텐츠 집중 선언"}
+{"timestamp": "2026-03-04T15:41:35.171646+00:00", "event": "synced", "issue_id": "ritual_sync_pipeline", "title": "L3(현장) → L1(인식) 역류 파이프라인 (Ritual-Sync) 구축"}
+{"timestamp": "2026-03-04T15:54:38.117351+00:00", "event": "synced", "issue_id": "system_reaudit_20260305", "title": "시스템 재분석 종합 (4개 안건)"}
+{"timestamp": "2026-03-04T16:08:36.053443+00:00", "event": "synced", "issue_id": "sitemap_corruption_fix", "title": "sitemap.xml 전면 오염 (SEO 긴급) + corpus 추적성 결여"}
+{"timestamp": "2026-03-04T16:20:17.001438+00:00", "event": "claimed", "issue_id": "agents_guardrules_sync", "agent": "CODEX"}
+{"timestamp": "2026-03-04T16:20:17.005657+00:00", "event": "claimed", "issue_id": "phase_shift_frontend_content", "agent": "CODEX"}
+{"timestamp": "2026-03-04T16:20:17.007561+00:00", "event": "resolved", "issue_id": "agents_guardrules_sync", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-04T16:20:17.032839+00:00", "event": "resolved", "issue_id": "phase_shift_frontend_content", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-04T16:20:37.407155+00:00", "event": "claimed", "issue_id": "frontend_execution_queue", "agent": "CODEX"}
+{"timestamp": "2026-03-04T16:28:32.505403+00:00", "event": "claimed", "issue_id": "sitemap_corruption_fix", "agent": "AGENT"}
+{"timestamp": "2026-03-04T16:28:32.564235+00:00", "event": "resolved", "issue_id": "sitemap_corruption_fix", "agent": "AGENT", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-04T23:51:57.775107+00:00", "event": "synced", "issue_id": "ai_constitution_creation", "title": "AI_CONSTITUTION 파일 생성 및 검증 프로세스 도입"}
+{"timestamp": "2026-03-04T23:51:57.775451+00:00", "event": "synced", "issue_id": "build_components_indent_fix", "title": "build_components.py 들여쓰기 개선 및 컴포넌트 주입 인덴트 동기화"}
+{"timestamp": "2026-03-04T23:51:57.775638+00:00", "event": "synced", "issue_id": "corpus_source_path_backfill", "title": "corpus 엔트리 `source_path` 필수화 및 기존 빈 엔트리 백필"}
+{"timestamp": "2026-03-04T23:51:57.775812+00:00", "event": "synced", "issue_id": "filesystem_guard_bugfix", "title": "filesystem_guard.py 격리 로직 버그 수정 및 quarantine 정리"}
+{"timestamp": "2026-03-04T23:51:57.775954+00:00", "event": "synced", "issue_id": "frontend_integrity_audit_20260305", "title": "프론트엔드 정합성 정밀 점검 (4건)"}
+{"timestamp": "2026-03-04T23:51:57.776100+00:00", "event": "synced", "issue_id": "heartbeat_monitoring_restore", "title": "sitemap.xml 자동 재생성 스케줄링 및 CI 연동"}
+{"timestamp": "2026-03-04T23:51:57.776257+00:00", "event": "synced", "issue_id": "session_management_protocol", "title": "세션 관리 프로토콜 도입 및 현재 태스크 기록"}
+{"timestamp": "2026-03-04T23:51:57.776451+00:00", "event": "synced", "issue_id": "sitemap_auto_regen", "title": "sitemap.xml 자동 재생성 스케줄링 및 CI 연동"}
+{"timestamp": "2026-03-04T23:51:57.778958+00:00", "event": "resolved", "issue_id": "frontend_execution_queue", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-04T23:56:26.255242+00:00", "event": "synced", "issue_id": "agents_guardrules_sync", "title": "AGENTS.md 격리 정책 정합성 (Guard Rules 동기화)"}
+{"timestamp": "2026-03-04T23:56:26.255592+00:00", "event": "synced", "issue_id": "directive_cross_audit_20260305", "title": "system.md / AGENTS.md 교차 감사 (4건)"}
+{"timestamp": "2026-03-04T23:56:26.255782+00:00", "event": "synced", "issue_id": "phase_shift_frontend_content", "title": "페이즈 강제 전환: 백엔드 동결 → 프론트엔드/콘텐츠 집중 선언"}
+{"timestamp": "2026-03-04T23:56:26.255954+00:00", "event": "synced", "issue_id": "sitemap_corruption_fix", "title": "sitemap.xml 전면 오염 (SEO 긴급) + corpus 추적성 결여"}
+{"timestamp": "2026-03-05T00:02:57.273537+00:00", "event": "synced", "issue_id": "directive_gap_audit_20260305", "title": "practice.md ↔ web-redesign-plan.md 이탈 교차 감사 (3건)"}
+{"timestamp": "2026-03-05T00:23:17.797883+00:00", "event": "synced", "issue_id": "core_system_fault_audit_20260305", "title": "코어 시스템 런타임 및 테스트 환경 침해 상태 (2건)"}
+{"timestamp": "2026-03-05T00:23:17.849829+00:00", "event": "claimed", "issue_id": "directive_gap_audit_20260305", "agent": "CODEX"}
+{"timestamp": "2026-03-05T00:23:21.107278+00:00", "event": "resolved", "issue_id": "directive_gap_audit_20260305", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:11:34.959807+00:00", "event": "synced", "issue_id": "core_system_fault_recheck_20260305", "title": "시스템 실시간 재진단 (2건)"}
+{"timestamp": "2026-03-05T01:11:34.960201+00:00", "event": "synced", "issue_id": "council_queue_path_drift_20260305", "title": "Council 큐 경로 이중성 (orphan 17건)"}
+{"timestamp": "2026-03-05T01:11:34.960411+00:00", "event": "synced", "issue_id": "home_ui_cinematic_silence", "title": "홈화면(Home) 디자인 제안 (Cinematic Silence)"}
+{"timestamp": "2026-03-05T01:31:56.763354+00:00", "event": "claimed", "issue_id": "council_queue_path_drift_20260305", "agent": "CODEX"}
+{"timestamp": "2026-03-05T01:31:56.831460+00:00", "event": "resolved", "issue_id": "council_queue_path_drift_20260305", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:31:59.565328+00:00", "event": "claimed", "issue_id": "core_system_fault_recheck_20260305", "agent": "CODEX"}
+{"timestamp": "2026-03-05T01:31:59.630082+00:00", "event": "resolved", "issue_id": "core_system_fault_recheck_20260305", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:32:02.726185+00:00", "event": "claimed", "issue_id": "core_system_fault_audit_20260305", "agent": "CODEX"}
+{"timestamp": "2026-03-05T01:32:02.794531+00:00", "event": "resolved", "issue_id": "core_system_fault_audit_20260305", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:38:50.404637+00:00", "event": "claimed", "issue_id": "council_worker_vm_deploy", "agent": "CODEX"}
+{"timestamp": "2026-03-05T01:38:50.453432+00:00", "event": "resolved", "issue_id": "council_worker_vm_deploy", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:40:17.328275+00:00", "event": "claimed", "issue_id": "filesystem_guard_bugfix", "agent": "CODEX"}
+{"timestamp": "2026-03-05T01:40:17.397783+00:00", "event": "resolved", "issue_id": "filesystem_guard_bugfix", "agent": "CODEX", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:52:49.967386+00:00", "event": "claimed", "issue_id": "corpus_source_path_backfill", "agent": "Codex"}
+{"timestamp": "2026-03-05T01:52:50.003905+00:00", "event": "resolved", "issue_id": "corpus_source_path_backfill", "agent": "Codex", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:57:33.108382+00:00", "event": "claimed", "issue_id": "directive_cross_audit_20260305", "agent": "Codex"}
+{"timestamp": "2026-03-05T01:57:33.166252+00:00", "event": "resolved", "issue_id": "directive_cross_audit_20260305", "agent": "Codex", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T01:59:46.728525+00:00", "event": "claimed", "issue_id": "session_management_protocol", "agent": "Codex"}
+{"timestamp": "2026-03-05T01:59:46.779598+00:00", "event": "resolved", "issue_id": "session_management_protocol", "agent": "Codex", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T02:00:00.631342+00:00", "event": "claimed", "issue_id": "system_reaudit_20260305", "agent": "Codex"}
+{"timestamp": "2026-03-05T02:00:00.679712+00:00", "event": "resolved", "issue_id": "system_reaudit_20260305", "agent": "Codex", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T02:03:36.963911+00:00", "event": "claimed", "issue_id": "heartbeat_monitoring_restore", "agent": "Codex"}
+{"timestamp": "2026-03-05T02:03:36.971980+00:00", "event": "resolved", "issue_id": "heartbeat_monitoring_restore", "agent": "Codex", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T02:05:02.041488+00:00", "event": "claimed", "issue_id": "sitemap_auto_regen", "agent": "Codex"}
+{"timestamp": "2026-03-05T02:05:02.084018+00:00", "event": "resolved", "issue_id": "sitemap_auto_regen", "agent": "Codex", "result": "done", "from_state": "processing"}
+{"timestamp": "2026-03-05T03:17:22.714877+00:00", "event": "synced", "issue_id": "footer_design_subtraction", "title": "푸터 디자인 정밀 리뷰 (Footer Subtraction & Resonance)"}

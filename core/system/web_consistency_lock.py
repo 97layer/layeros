@@ -31,6 +31,7 @@ PRACTICE_MD = PROJECT_ROOT / "directives" / "practice.md"
 # 웹 작업 권한 매트릭스
 WEB_PERMISSIONS = {
     "AD": ["style", "layout", "components", "visual"],  # Archive Designer 전담
+    "CODEX": ["style", "layout", "components", "visual"],  # Codex 웹 구현/수정 허용
     "CE": ["content", "text"],  # Corpus Editor는 텍스트만
     "SA": [],  # SAGE는 웹 직접 수정 금지
     "HUMAN": ["*"]  # 사람은 모든 권한
@@ -165,7 +166,7 @@ def validate_changes(agent_id: str) -> bool:
     current_hash = get_file_hash(STYLE_CSS)
 
     if initial_hash != current_hash:
-        if agent_id not in ["AD", "HUMAN"]:
+        if agent_id not in ["AD", "CODEX", "HUMAN"]:
             logger.error("❌ 권한 위반: %s는 style.css 수정 불가", agent_id)
             return False
         logger.info("✓ style.css 변경됨 (권한 있음)")

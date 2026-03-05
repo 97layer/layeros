@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-05T01:49:29.824681Z",
+  "homepage": {
+    "live": true
+  },
+  "practice": {
+    "atelier": {
+      "live": false,
+      "label": "HOLD",
+      "note": "오프라인 예약 공개 전까지 상세 소개만 노출"
+    },
+    "direction": {
+      "live": true,
+      "label": "LIVE",
+      "note": "문의형 서비스로 상시 오픈"
+    },
+    "project": {
+      "live": true,
+      "label": "LIVE",
+      "note": "신청 폼 운영"
+    },
+    "product": {
+      "live": false,
+      "label": "HOLD",
+      "note": "상품 구조 확정 전까지 대기"
+    }
+  }
+}

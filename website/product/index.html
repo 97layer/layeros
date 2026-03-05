@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="WOOHWAHAE 철학이 물성으로 구현된 공간. 슬로우라이프의 태도가 담긴 것들." name="description"/>
+<meta content="Zero Point Workbook with KRW checkout and global buyer support. Digital PDF + Riso print with international onboarding." name="description"/>
 <meta content="Product — WOOHWAHAE" property="og:title"/>
-<meta content="WOOHWAHAE 철학이 물성으로 구현된 공간." property="og:description"/>
+<meta content="Zero Point Workbook (KRW 15,000 / KRW 35,000) and product collection. International buyers supported by email onboarding." property="og:description"/>
 <meta content="website" property="og:type"/>
 <meta content="https://woohwahae.kr/product/" property="og:url"/>
+<meta content="https://woohwahae.kr/assets/media/brand/symbol.png" property="og:image"/>
 <title>Product — WOOHWAHAE</title>
 <!-- COMPONENT:head -->
 <meta name="theme-color" content="#E3E2E0">
@@ -17,7 +18,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=f5b889f9">
+<link rel="stylesheet" href="/assets/css/style.css?v=1a2f99b7">
 <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
 <!-- /COMPONENT:head -->
 </head>
@@ -33,12 +34,12 @@
     <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
     <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
   </ul>
-  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
     <span></span><span></span>
   </button>
   <div class="read-progress" id="read-progress" aria-hidden="true"></div>
 </nav>
-<div class="nav-overlay" id="nav-overlay">
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true">
   <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
   <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
   <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
@@ -51,8 +52,47 @@
       <h1 class="section-title">Product</h1>
     </header>
 
+    <section class="workbook-highlight" aria-labelledby="workbook-highlight-title">
+      <p class="workbook-highlight__label">Featured Workbook</p>
+      <h2 class="workbook-highlight__title" id="workbook-highlight-title">영점의 발견 / Zero Point Workbook</h2>
+      <p class="workbook-highlight__desc">브랜드 영점을 찾기 위한 30개 질문과 리플렉션 여백 페이지를 담았습니다. Built for founders running slow brands across KR and global markets.</p>
+      <div class="workbook-highlight__price">
+        <span>Digital PDF KRW 15,000 (approx. USD 11)</span>
+        <span>Riso Print KRW 35,000 (approx. USD 25)</span>
+      </div>
+      <div class="workbook-highlight__actions">
+        <a class="btn primary" href="/product/workbook.html">상세 보기</a>
+        <a class="btn" href="/product/workbook.html#purchase">구매하기</a>
+        <a class="btn" href="/product/workbook.html#global-notes">Global Notes</a>
+      </div>
+    </section>
+
+    <section class="product-global-note" aria-labelledby="product-global-note-title">
+      <p class="product-global-note__label">Cross-border Readiness</p>
+      <h2 class="product-global-note__title" id="product-global-note-title">해외 결제/배송 운영 기준</h2>
+      <ul class="product-global-note__list">
+        <li>결제 통화는 KRW(원화) 기준이며 USD는 참고값으로만 표시합니다.</li>
+        <li>Digital은 결제 완료 즉시 접근, Print는 이메일로 국가별 배송비와 주소를 확정합니다.</li>
+        <li>문의는 48시간 이내 1차 회신: hello@woohwahae.kr</li>
+      </ul>
+    </section>
+
     <!-- 상품 그리드 -->
     <div class="product-grid" id="productGrid">
+      <!-- 워크북 -->
+      <div class="product-card" data-product-link="/product/workbook.html">
+        <div class="product-image product-image--placeholder">
+          <span class="product-badge">Workbook</span>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">영점의 발견</h3>
+          <p class="product-description">브랜드 정렬을 위한 30개 질문집 (Digital/Riso, global onboarding available)</p>
+          <div class="product-price">
+            <span class="price-current">₩15,000 ~ ₩35,000</span>
+          </div>
+        </div>
+      </div>
+
       <!-- 상품 1 -->
       <div class="product-card" data-product-id="1">
         <div class="product-image">
@@ -215,6 +255,11 @@
     // 상품 카드 클릭 이벤트
     document.querySelectorAll('.product-card').forEach(card => {
       card.addEventListener('click', function() {
+        const productLink = this.dataset.productLink;
+        if (productLink) {
+          window.location.href = productLink;
+          return;
+        }
         const productId = this.dataset.productId;
         if (productId && products[productId]) {
           openModal(productId);
@@ -397,6 +442,8 @@
         <a href="/archive/">Archive</a>
         <a href="/practice/">Practice</a>
         <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+        <a href="mailto:hello@woohwahae.kr">Contact</a>
       </nav>
       <div class="footer-contact-row">
         <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
@@ -409,12 +456,13 @@
         <a href="/privacy.html">Privacy</a>
         <a href="/terms.html">Terms</a>
         <span>&copy; 2026 WOOHWAHAE</span>
+        <span class="footer-time" id="footer-time"></span>
       </div>
     </div>
   </div>
 </footer>
 <!-- /COMPONENT:footer -->
 
-<script defer src="/assets/js/site.js?v=1ce69050"></script>
+<script defer src="/assets/js/site.js?v=29347181"></script>
 </body>
 </html>

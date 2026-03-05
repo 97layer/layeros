@@ -30,11 +30,17 @@ COMPONENTS_DIR = WEBSITE_DIR / "_components"
 EXCLUDE_DIRS = {"_components", "_templates"}
 EXCLUDE_FILES = set()
 
-# 마커 패턴
+# 마커 패턴 (라인 시작 들여쓰기 캡처)
 MARKER_RE = re.compile(
-    r"<!-- COMPONENT:(\w[\w-]*) -->.*?<!-- /COMPONENT:\1 -->",
-    re.DOTALL,
+    r"(?P<indent>^[ \t]*)<!-- COMPONENT:(?P<name>\w[\w-]*) -->.*?^[ \t]*<!-- /COMPONENT:(?P=name) -->",
+    re.DOTALL | re.MULTILINE,
 )
+
+
+def indent_block(text: str, indent: str) -> str:
+    """모든 줄 앞에 동일 indent를 부여한다."""
+    lines = text.splitlines()
+    return "\n".join((f"{indent}{line}" if line else "") for line in lines)
 
 
 def load_component(name: str) -> str:
@@ -191,7 +197,8 @@ def inject_components(filepath: Path, dry_run: bool = False) -> bool:
     original = content
 
     def replace_marker(match):
-        name = match.group(1)
+        name = match.group("name")
+        indent = match.group("indent") or ""
         if name == "nav":
             fragment = load_component("nav")
         elif name == "footer":
@@ -202,14 +209,21 @@ def inject_components(filepath: Path, dry_run: bool = False) -> bool:
                 fragment = load_component("wave-bg")
             else:
                 # wave-bg가 필요 없는 페이지면 마커만 유지, 내부 비움
-                return "<!-- COMPONENT:wave-bg -->\n<!-- /COMPONENT:wave-bg -->"
+                return (
+                    f"{indent}<!-- COMPONENT:wave-bg -->\n"
+                    f"{indent}<!-- /COMPONENT:wave-bg -->"
+                )
         else:
             fragment = load_component(name)
 
         if not fragment:
             return match.group(0)
 
-        return f"<!-- COMPONENT:{name} -->\n{fragment}\n<!-- /COMPONENT:{name} -->"
+        return (
+            f"{indent}<!-- COMPONENT:{name} -->\n"
+            f"{indent_block(fragment, indent)}\n"
+            f"{indent}<!-- /COMPONENT:{name} -->"
+        )
 
     content = MARKER_RE.sub(replace_marker, content)
 

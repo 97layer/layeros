@@ -13,6 +13,7 @@ fi
 
 python3 - <<'PY'
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -43,6 +44,20 @@ def ensure_file(relpath: str) -> Optional[Path]:
         add_issue(f"missing: {relpath}")
         return None
     return path
+
+
+def parse_json_tail(text: str) -> Optional[dict]:
+    for raw in reversed((text or "").splitlines()):
+        line = raw.strip()
+        if not line:
+            continue
+        try:
+            payload = json.loads(line)
+        except Exception:
+            continue
+        if isinstance(payload, dict):
+            return payload
+    return None
 
 
 if not CONTRACT_PATH.is_file():
@@ -259,6 +274,55 @@ if plan_council_path is not None:
     if proc.returncode != 0 or "READY" not in proc.stdout:
         output = (proc.stdout + proc.stderr).strip() or "no output"
         add_issue(f"plan_council check failed: {output}")
+    elif (
+        isinstance(plan_council_contract, dict)
+        and plan_council_contract.get("require_preflight_for_nontrivial")
+    ):
+        allow_degraded = str(os.getenv("SESSION_BOOTSTRAP_ALLOW_DEGRADED", "")).strip().lower() in {
+            "1",
+            "true",
+            "yes",
+            "y",
+            "on",
+        }
+        probe_proc = subprocess.run(
+            [
+                sys.executable,
+                str(plan_council_path),
+                "--task",
+                "session bootstrap council reachability probe",
+                "--mode",
+                "preflight",
+                "--json",
+                "--no-save",
+            ],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+        probe_payload = parse_json_tail(probe_proc.stdout)
+        consensus = probe_payload.get("consensus", {}) if isinstance(probe_payload, dict) else {}
+        status = str(consensus.get("status", "")).strip().lower() if isinstance(consensus, dict) else ""
+        models_used = {
+            str(item).strip().lower()
+            for item in (consensus.get("models_used", []) if isinstance(consensus, dict) else [])
+            if str(item).strip()
+        }
+
+        if not status:
+            probe_out = (probe_proc.stdout + probe_proc.stderr).strip() or "no output"
+            add_issue(f"plan_council preflight probe parse failed: {probe_out}")
+        else:
+            if status != "ready" and not allow_degraded:
+                add_issue(f"plan_council preflight degraded: status={status} models_used={sorted(models_used)}")
+            if plan_council_contract.get("require_both_models") and not {"claude", "gemini"}.issubset(models_used):
+                if not allow_degraded:
+                    add_issue(
+                        "plan_council preflight missing required models: "
+                        f"models_used={sorted(models_used)}"
+                    )
 
 if plan_dispatch_path is not None:
     smoke_nontrivial_task = "스킬 및 기본 툴 체계를 분석하고 업그레이드 항목을 구현한다"
@@ -330,4 +394,15 @@ if issues:
 print("READY")
 PY
 
-exit $?
+bootstrap_rc=$?
+if [ $bootstrap_rc -ne 0 ]; then
+  exit $bootstrap_rc
+fi
+
+python3 core/system/session_state.py \
+  --event start \
+  --agent-id "${SESSION_AGENT_ID:-Codex}" \
+  --task-label "${SESSION_TASK_LABEL:-session-bootstrap}" \
+  --session-id "${SESSION_ID:-}" >/dev/null 2>&1 || true
+
+exit 0

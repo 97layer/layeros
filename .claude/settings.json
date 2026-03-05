@@ -10,6 +10,10 @@
           },
           {
             "type": "command",
+            "command": ".claude/hooks/council-room-watch.sh"
+          },
+          {
+            "type": "command",
             "command": ".claude/hooks/proactive-advisor.sh"
           },
           {

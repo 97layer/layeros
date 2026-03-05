@@ -1,11 +1,636 @@
 {
-  "generated": "2026-03-03T13:46:17.933501+00:00",
+  "generated": "2026-03-05T01:13:14.963175+00:00",
   "start_date": "2026-02-18",
-  "days": 14,
-  "total_commits": 279,
-  "uncommitted": 49,
-  "invested_hours": 77.2,
+  "days": 16,
+  "total_commits": 308,
+  "uncommitted": 70,
+  "invested_hours": 87.4,
+  "lines_added": 112330,
+  "lines_deleted": 66826,
   "entries": [
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] _pages/archive/meta.json"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] _pages/archive/script.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] about/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] about/woosunho/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-000-manifesto/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-001-beginning/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-002-slow-life/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-003-hair-and-daily/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-004-art-of-waiting/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-005-72h-rule/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-006-8pyeong/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-007-noise-removal/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-008-raw-materiality/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-009-inner-world/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/essay-010-work-and-essence/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/index.json"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/journal-001-subtraction/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] archive/lookbook/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] assets/css/style.css"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] assets/js/bg-field.js"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] assets/js/payment.js"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] assets/js/site.js"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/changelog/data.json"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/changelog/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/concept-sprint-v2.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-3d-art-core.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-ai-opener.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-bgm-player.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-bob-silhouette.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-cinematic-video.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-cut-diagram.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-film-grain.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-home-blueprint.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-keyframe-3d.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-lottie-style.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-pro-tool.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-renewal-decision-board.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-renewal-visual.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-ritual-flow.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-salon-blueprint.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-scissor-ritual.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-svg-anim.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/demo-symbol-3d.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/full-renewal-showcase.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/private-auth.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/proto-essay010-equilibrium.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/proto-essay010-v3.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/proto-essay010.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/prototype-master-cut.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/prototype-offering.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] lab/prototype-ultimate.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] payment-fail.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] payment-success.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] playlist.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] playlist/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] practice/atelier.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] practice/contact.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] practice/direction.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] practice/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] practice/product.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] practice/project.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] privacy.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] product/index.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] product/workbook.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] sitemap.xml"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[수정] terms.html"
+    },
+    {
+      "type": "local",
+      "sha": "local",
+      "date": "2026-03-05T01:13:13.562906+00:00",
+      "msg": "[미추적] practice/release-state.json"
+    },
+    {
+      "type": "commit",
+      "sha": "0c4da60",
+      "date": "2026-03-05T00:46:43+09:00",
+      "msg": "AgentLogger 파라미터 추가 + code_audit 베이스라인 + pre-commit 훅 수정",
+      "rawMsg": "fix: AgentLogger 파라미터 추가 + code_audit 베이스라인 + pre-commit 훅 수정"
+    },
+    {
+      "type": "commit",
+      "sha": "58497ad",
+      "date": "2026-03-04T23:12:58+09:00",
+      "msg": "Archive 에디토리얼 리스트 전환 + council-worker 배포 옵션 추가",
+      "rawMsg": "feat: Archive 에디토리얼 리스트 전환 + council-worker 배포 옵션 추가"
+    },
+    {
+      "type": "commit",
+      "sha": "2d01213",
+      "date": "2026-03-04T22:39:31+09:00",
+      "msg": "fix(website): resolve remaining ide warnings and aria attributes",
+      "rawMsg": "fix(website): resolve remaining ide warnings and aria attributes"
+    },
+    {
+      "type": "commit",
+      "sha": "d27a8e4",
+      "date": "2026-03-04T22:36:24+09:00",
+      "msg": "Tokenize about palette swatch inline colors",
+      "rawMsg": "Tokenize about palette swatch inline colors"
+    },
+    {
+      "type": "commit",
+      "sha": "55013b9",
+      "date": "2026-03-04T19:15:54+09:00",
+      "msg": "루트 위반 파일 정리 + structure_audit 루트 검사 로직 추가",
+      "rawMsg": "fix: 루트 위반 파일 정리 + structure_audit 루트 검사 로직 추가"
+    },
+    {
+      "type": "commit",
+      "sha": "41f3914",
+      "date": "2026-03-04T18:12:44+09:00",
+      "msg": "3월 4일 전체 패치 — 백엔드 강화 + 하네스 개선 + 웹 업데이트",
+      "rawMsg": "feat: 3월 4일 전체 패치 — 백엔드 강화 + 하네스 개선 + 웹 업데이트"
+    },
+    {
+      "type": "commit",
+      "sha": "7b3d890",
+      "date": "2026-03-04T12:39:52+09:00",
+      "msg": "오늘 전체 작업 통합 커밋",
+      "rawMsg": "feat: 오늘 전체 작업 통합 커밋"
+    },
+    {
+      "type": "commit",
+      "sha": "a6d5d1f",
+      "date": "2026-03-04T09:12:28+09:00",
+      "msg": "룩북 CGI 렌더 시리즈 3컷 추가 — 도자 모란/수면/헤어 조형",
+      "rawMsg": "feat: 룩북 CGI 렌더 시리즈 3컷 추가 — 도자 모란/수면/헤어 조형"
+    },
+    {
+      "type": "commit",
+      "sha": "ef8edbf",
+      "date": "2026-03-04T09:08:28+09:00",
+      "msg": "룩북 01+05만 유지, 나머지 삭제",
+      "rawMsg": "feat: 룩북 01+05만 유지, 나머지 삭제"
+    },
+    {
+      "type": "commit",
+      "sha": "4751070",
+      "date": "2026-03-04T08:59:41+09:00",
+      "msg": "룩북 그레인 감소(28→10) + 화질 리마스터(q97, 4:4:4)",
+      "rawMsg": "style: 룩북 그레인 감소(28→10) + 화질 리마스터(q97, 4:4:4)"
+    },
+    {
+      "type": "commit",
+      "sha": "cd66ab0",
+      "date": "2026-03-04T08:55:08+09:00",
+      "msg": "룩북 No.01 이미지 전체 재생성 — 다양 배경/구도, 서양앤틱 제거, 라이트 시리즈 추가",
+      "rawMsg": "feat: 룩북 No.01 이미지 전체 재생성 — 다양 배경/구도, 서양앤틱 제거, 라이트 시리즈 추가"
+    },
+    {
+      "type": "commit",
+      "sha": "2b30151",
+      "date": "2026-03-04T08:39:18+09:00",
+      "msg": "룩북 No.01 컨텐츠화 — 이미지 01만 + 컨셉 브리프 + 에디터 노트",
+      "rawMsg": "feat: 룩북 No.01 컨텐츠화 — 이미지 01만 + 컨셉 브리프 + 에디터 노트"
+    },
+    {
+      "type": "commit",
+      "sha": "d25b743",
+      "date": "2026-03-04T02:03:07+09:00",
+      "msg": "mcp config + lab index 마이너 수정",
+      "rawMsg": "chore: mcp config + lab index 마이너 수정"
+    },
+    {
+      "type": "commit",
+      "sha": "0db9c71",
+      "date": "2026-03-04T00:36:24+09:00",
+      "msg": "에세이 읽기 진행 바 + about 부록 아코디언 수정",
+      "rawMsg": "feat: 에세이 읽기 진행 바 + about 부록 아코디언 수정"
+    },
+    {
+      "type": "commit",
+      "sha": "7efba50",
+      "date": "2026-03-04T00:31:09+09:00",
+      "msg": "about 클릭 이중 튕김 — data-reveal translateY 억제 (VT 충돌 방지)",
+      "rawMsg": "fix: about 클릭 이중 튕김 — data-reveal translateY 억제 (VT 충돌 방지)"
+    },
+    {
+      "type": "commit",
+      "sha": "602fab1",
+      "date": "2026-03-04T00:27:53+09:00",
+      "msg": "홈 필드 모바일 복원 — DPR 2, 선 32, seed 6, opacity 0.18",
+      "rawMsg": "fix: 홈 필드 모바일 복원 — DPR 2, 선 32, seed 6, opacity 0.18"
+    },
+    {
+      "type": "commit",
+      "sha": "1eb0947",
+      "date": "2026-03-04T00:21:47+09:00",
+      "msg": "모바일 필드 흐림 — fog 카메라 거리 스케일 + opacity 데스크탑 동급",
+      "rawMsg": "fix: 모바일 필드 흐림 — fog 카메라 거리 스케일 + opacity 데스크탑 동급"
+    },
+    {
+      "type": "commit",
+      "sha": "0e81e5d",
+      "date": "2026-03-04T00:18:03+09:00",
+      "msg": "archive/lab filter — about TOC 동일 스펙 단일화",
+      "rawMsg": "style: archive/lab filter — about TOC 동일 스펙 단일화"
+    },
+    {
+      "type": "commit",
+      "sha": "1b10aae",
+      "date": "2026-03-04T00:17:57+09:00",
+      "msg": "모바일 필드 해상도 — DPR 캡 3, 선밀도 2배",
+      "rawMsg": "fix: 모바일 필드 해상도 — DPR 캡 3, 선밀도 2배"
+    },
+    {
+      "type": "commit",
+      "sha": "50892df",
+      "date": "2026-03-04T00:13:18+09:00",
+      "msg": "모바일 스크롤 끊김 전면 수정",
+      "rawMsg": "fix: 모바일 스크롤 끊김 전면 수정"
+    },
+    {
+      "type": "commit",
+      "sha": "f86115e",
+      "date": "2026-03-04T00:11:54+09:00",
+      "msg": "archive filter — practice 카드 동일 목차 구조 (num+label+검색)",
+      "rawMsg": "feat: archive filter — practice 카드 동일 목차 구조 (num+label+검색)"
+    },
+    {
+      "type": "commit",
+      "sha": "a52ba85",
+      "date": "2026-03-04T00:07:43+09:00",
+      "msg": "홈 서브라벨 + 필드 스크롤 줌 + overscroll 안정화",
+      "rawMsg": "feat: 홈 서브라벨 + 필드 스크롤 줌 + overscroll 안정화"
+    },
+    {
+      "type": "commit",
+      "sha": "e06cf70",
+      "date": "2026-03-04T00:04:33+09:00",
+      "msg": "archive filter vertical TOC 패밀리룩 — about 기준 정렬",
+      "rawMsg": "feat: archive filter vertical TOC 패밀리룩 — about 기준 정렬"
+    },
+    {
+      "type": "commit",
+      "sha": "bb70f4a",
+      "date": "2026-03-03T23:51:44+09:00",
+      "msg": "About 패밀리룩 정렬 — archive 필터 레이아웃, page-intro 패딩, practice 서브탭 전체 추가",
+      "rawMsg": "style: About 패밀리룩 정렬 — archive 필터 레이아웃, page-intro 패딩, practice 서브탭 전체 추가"
+    },
+    {
+      "type": "commit",
+      "sha": "d7b7cca",
+      "date": "2026-03-03T23:34:55+09:00",
+      "msg": "practice 카드 gap 교정 + archive 검색 모바일 full-width",
+      "rawMsg": "fix: practice 카드 gap 교정 + archive 검색 모바일 full-width"
+    },
+    {
+      "type": "commit",
+      "sha": "40fa9ef",
+      "date": "2026-03-03T23:23:18+09:00",
+      "msg": "About 기준 전체 UI/UX 정렬 — 일관성 교정",
+      "rawMsg": "style: About 기준 전체 UI/UX 정렬 — 일관성 교정"
+    },
+    {
+      "type": "commit",
+      "sha": "45c5acf",
+      "date": "2026-03-03T23:01:33+09:00",
+      "msg": "CSS 해시 bust 반영 (feaa73ff)",
+      "rawMsg": "chore: CSS 해시 bust 반영 (feaa73ff)"
+    },
+    {
+      "type": "commit",
+      "sha": "c3fb146",
+      "date": "2026-03-03T22:59:36+09:00",
+      "msg": "atelier 일관성 — notice 폰트 Pretendard 전환 + detail 갭 축소",
+      "rawMsg": "fix: atelier 일관성 — notice 폰트 Pretendard 전환 + detail 갭 축소"
+    },
+    {
+      "type": "commit",
+      "sha": "e459b5a",
+      "date": "2026-03-03T22:56:26+09:00",
+      "msg": "atelier.html — About 철학 연속성 + 패밀리룩 리빌딩",
+      "rawMsg": "style: atelier.html — About 철학 연속성 + 패밀리룩 리빌딩"
+    },
     {
       "type": "commit",
       "sha": "8f7c9dd",
@@ -747,300 +1372,6 @@
       "date": "2026-03-03T13:46:58+09:00",
       "msg": "본문 em dash 전수 제거, writing_guide 금지어 추가",
       "rawMsg": "fix: 본문 em dash 전수 제거, writing_guide 금지어 추가"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] about/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] about/woosunho/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-000-manifesto/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-001-beginning/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-002-slow-life/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-003-hair-and-daily/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-004-art-of-waiting/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-005-72h-rule/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-006-8pyeong/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-007-noise-removal/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-008-raw-materiality/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-009-inner-world/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-010-work-and-essence/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/essay-010-work-and-essence/proto_v4.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/journal-001-subtraction/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] archive/lookbook/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-3d-art-core.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-bgm-player.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-bob-silhouette.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-cinematic-video.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-cut-diagram.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-film-grain.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-home-blueprint.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-keyframe-3d.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-lottie-style.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-pro-tool.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-salon-blueprint.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-scissor-ritual.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-svg-anim.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/demo-symbol-3d.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/private-auth.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/proto-essay010-equilibrium.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/proto-essay010-v3.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/proto-essay010.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/prototype-master-cut.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] lab/prototype-ultimate.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] payment-fail.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] payment-success.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] playlist.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] practice/contact.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] practice/product.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] privacy.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] product/index.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[수정] terms.html"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[미추적] assets/js/bg-field.bak.js"
-    },
-    {
-      "type": "local",
-      "sha": "local",
-      "date": "2026-03-03T13:46:17.932944+00:00",
-      "msg": "[미추적] lab/changelog/"
     },
     {
       "type": "commit",

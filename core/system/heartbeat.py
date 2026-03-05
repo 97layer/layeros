@@ -22,6 +22,7 @@ from datetime import datetime
 # 경로 설정
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 CONTEXT_FILE = PROJECT_ROOT / "knowledge" / "system" / "execution_context.json"
+SYSTEM_STATE_FILE = PROJECT_ROOT / "knowledge" / "system" / "system_state.json"
 
 # 설정
 HEARTBEAT_INTERVAL = 30          # 초
@@ -69,6 +70,40 @@ def write_context(ctx: dict) -> None:
     tmp.replace(CONTEXT_FILE)  # atomic rename
 
 
+def _update_system_state(heartbeat_iso: str) -> None:
+    """
+    Keep system_state.json heartbeat metadata fresh alongside execution_context.
+    Best-effort only; failures are logged and ignored.
+    """
+    if not SYSTEM_STATE_FILE.exists():
+        return
+    try:
+        state = json.loads(SYSTEM_STATE_FILE.read_text(encoding="utf-8"))
+        agents = state.setdefault("agents", {})
+
+        td = agents.setdefault("Technical_Director", {})
+        td["status"] = "ACTIVE"
+        td["last_heartbeat"] = heartbeat_iso
+        td.setdefault("location", "Local(Mac)")
+        td.setdefault("current_task", "시스템 상태 점검 및 태스크 스캔")
+
+        async_bot = agents.get("Async_Telegram_Bot")
+        if isinstance(async_bot, dict):
+            async_bot["last_heartbeat"] = heartbeat_iso
+
+        state["last_update"] = heartbeat_iso.replace("T", " ")[:19]
+        previous_note = str(state.get("status_note", "")).lower()
+        if str(state.get("system_status", "")).upper() == "DEGRADED" and "heartbeat" in previous_note:
+            state["system_status"] = "HEALTHY"
+        state["status_note"] = f"Heartbeats refreshed at {state['last_update']}"
+
+        tmp = SYSTEM_STATE_FILE.with_suffix(".tmp")
+        tmp.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
+        tmp.replace(SYSTEM_STATE_FILE)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("system_state heartbeat sync skipped: %s", exc)
+
+
 def update_heartbeat() -> bool:
     """
     MacBook heartbeat 갱신.
@@ -89,6 +124,7 @@ def update_heartbeat() -> bool:
         return False  # 변경 없음
 
     write_context(ctx)
+    _update_system_state(now)
     return True
 
 

@@ -9,16 +9,16 @@
 <meta content="https://woohwahae.kr/practice/atelier.html" property="og:url"/>
 <title>Atelier — WOOHWAHAE</title>
   <!-- COMPONENT:head -->
-<meta name="theme-color" content="#E3E2E0">
-<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=f5b889f9">
-<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
-<!-- /COMPONENT:head -->
+  <meta name="theme-color" content="#E3E2E0">
+  <link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=1a2f99b7">
+  <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+  <!-- /COMPONENT:head -->
 
 </head>
 <body class="page-service page-practice-sub"><!-- COMPONENT:nav -->
@@ -49,6 +49,12 @@
     <a href="/practice/project.html" class="practice-tab">Project</a>
     <a href="/practice/product.html" class="practice-tab">Product</a>
   </nav>
+  <div class="release-banner release-banner--hold"
+       data-release-banner="atelier"
+       data-release-live-copy="Atelier가 공개 상태입니다. 예약을 진행할 수 있습니다."
+       data-release-hold-copy="Atelier는 현재 상품화 작업 중입니다. 지금은 소개만 노출됩니다.">
+    Atelier는 현재 상품화 작업 중입니다. 지금은 소개만 노출됩니다.
+  </div>
 </div>
 
 <!-- ① Hero: 두 컬럼 -->
@@ -99,7 +105,14 @@
         네이버 예약으로만 진행합니다.<br>
         전화 문의: 0507-1393-2075
       </p>
-      <a class="atelier-info-block__link" href="https://booking.naver.com/booking/13/bizes/1037484" target="_blank" rel="noopener">예약하기 →</a>
+      <a class="atelier-info-block__link release-action release-action--hold"
+         href="/practice/"
+         data-release-action="atelier"
+         data-release-live-href="https://booking.naver.com/booking/13/bizes/1037484"
+         data-release-live-label="예약하기 →"
+         data-release-hold-label="예약 준비 중"
+         data-release-hold-href="/practice/"
+         aria-disabled="true">예약 준비 중</a>
     </div>
   </div>
 </section>
@@ -242,13 +255,20 @@
   </div>
 
   <div class="atelier-cta">
-    <a href="https://booking.naver.com/booking/13/bizes/1037484" target="_blank" rel="noopener" class="form-submit">예약 →</a>
+    <a href="/practice/"
+       class="form-submit release-action release-action--hold"
+       data-release-action="atelier"
+       data-release-live-href="https://booking.naver.com/booking/13/bizes/1037484"
+       data-release-live-label="예약 →"
+       data-release-hold-label="예약 준비 중"
+       data-release-hold-href="/practice/"
+       aria-disabled="true">예약 준비 중</a>
   </div>
 
 </section>
 
 </main>
-<script defer src="../assets/js/site.js?v=1ce69050"></script>
+<script defer src="../assets/js/site.js?v=29347181"></script>
 
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
@@ -259,6 +279,8 @@
         <a href="/archive/">Archive</a>
         <a href="/practice/">Practice</a>
         <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+        <a href="mailto:hello@woohwahae.kr">Contact</a>
       </nav>
       <div class="footer-contact-row">
         <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
@@ -271,6 +293,7 @@
         <a href="/privacy.html">Privacy</a>
         <a href="/terms.html">Terms</a>
         <span>&copy; 2026 WOOHWAHAE</span>
+        <span class="footer-time" id="footer-time"></span>
       </div>
     </div>
   </div>

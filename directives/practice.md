@@ -33,31 +33,14 @@
 | Token | 값 | 용도 | 우선순위 |
 |-------|-----|------|---------|
 | `--bg` | #E3E2E0 | 메인 배경 (낡은 종이) | ★★★ PRIMARY |
-| `--bg-dark` | #DDDCDA | 보조 배경 | ★★★ PRIMARY |
 | `--text` | #1a1a1a | 본문 텍스트 (잉크) | ★★★ PRIMARY |
 | `--text-sub` | #4a4a4a | 보조 텍스트 | ★★★ PRIMARY |
 | `--text-faint` | #7A7A74 | 희미한 텍스트 (WCAG AA 4.5:1 확보) | ★★★ PRIMARY |
-| `--white` | #FFFFFF | 흰색 (반전용) | ★★★ PRIMARY |
 | `--line` | #EFEEED | 구분선 (극세선, 배경 근접) | ★★★ PRIMARY |
 | `--border` | var(--line) | --line 별칭 | ★★★ PRIMARY |
-| `--footer-bg` | #DFDEDC | 푸터 배경 | SECONDARY |
 
-### Stone Palette (SECONDARY)
-
-| Token | 값 | 용도 |
-|-------|-----|------|
-| `--stone-dark` | #7A6E5A | 어두운 갈색 (그림자, 강조) |
-| `--stone-mid` | #8B7355 | 중간 갈색 (텍스트 포인트) |
-| `--stone-light` | #A89880 | 밝은 갈색 (배경 톤) |
-
-### Deep Navy (OPTIONAL)
-
-| Token | 값 | 용도 |
-|-------|-----|------|
-| `--navy` | #1B2D4F | ::selection, blockquote border |
-
-**원칙**: Monochrome 기본 (90%+). Warm Gray 포인트 (10%). Deep Navy 극소수 영역만.
-**금지**: 비비드 계열의 과도한 색채.
+**원칙**: 모노크롬만 허용 (`--bg`, `--text`, `--text-sub`, `--text-faint`, `--line`).
+**금지**: Stone/Deep Navy 포함 비-모노크롬 토큰 추가.
 
 ---
 
@@ -99,8 +82,8 @@
 
 | Token | 값 |
 |-------|-----|
-| `--max-content` | 680px |
-| `--max-wide` | 960px |
+| `--max-content` | 720px |
+| `--max-wide` | 720px |
 
 ---
 
@@ -156,8 +139,8 @@
 | SVG 레이블 | IBM Plex Mono 9px, 300, ls 0.1em |
 | 드로잉 모션 | `stroke-dashoffset` 2s ease-out |
 | 순차 페이드 | 0.4s 간격 stagger |
-| blockquote | navy 1px 좌측 border + Crimson Text italic |
-| 제목 이탈릭 | font-weight 200, italic, clamp(1.5-2.2rem) |
+| blockquote | `border-left: 1px solid var(--line)` + `font-family: var(--font-mono)` + normal style |
+| 제목 강조 | font-weight 300, normal style, clamp(1.5-2.2rem) |
 
 ### 배경 레이어
 
@@ -184,12 +167,12 @@ Three.js: 색상 #E3E2E0, 선 96/32개, 곡선 500/120pt, Fog 0.035, prefers-red
 │ nav-brand    Archive Practice About │ ← 고정 상단
 ├─────────────────────────────────┤
 │      [wave-bg: 동심원 파동]         │ ← z-0, fixed
-│   ┌──── max 680px ────┐          │
+│   ┌──── max 720px ────┐          │
 │   │  section-label     │          │ ← z-1
 │   │  headline          │          │
 │   │  body text         │          │
 │   └────────────────────┘          │
-│   ┌──── max 960px ────┐          │
+│   ┌──── max 720px ────┐          │
 │   │  card grid (2col)  │          │
 │   └────────────────────┘          │
 ├─────────────────────────────────┤
@@ -216,9 +199,9 @@ Three.js: 색상 #E3E2E0, 선 96/32개, 곡선 500/120pt, Fog 0.035, prefers-red
 ```text
 woohwahae.kr/
 ├── about/     브랜드 서사
+│   └── woosunho/  에디터 포트폴리오
 ├── archive/   매거진 (essay-NNN, magazine/, lookbook/)
 ├── practice/  수행의 실천 (아틀리에, 디렉션, 프로젝트, 프로덕트, 연락)
-├── woosunho/  에디터 포트폴리오
 └── lab/       실험 (네비 미노출)
 ```
 
@@ -239,7 +222,7 @@ woohwahae.kr/
 - 전용 영역: `website/assets/css/style.css`, `website/_components/*.html`, 레이아웃·그리드·타이포그래피·색상·애니메이션·SVG·배경 이펙트.
 - 락 절차: `python core/system/web_consistency_lock.py --acquire AD --task "<작업>"` → validate → release.
 - 타 에이전트 권한: CE는 텍스트만, SA는 웹 직접 수정 금지.
-- 시각 원칙: 모노크롬 기본, 색채는 필연적 이유 있을 때만. 자연광·그림자·필름 그레인 존중. 서체: Pretendard Variable + IBM Plex Mono만 허용 (Crimson Text 금지).
+- 시각 원칙: 모노크롬만 허용. 자연광·그림자·필름 그레인 존중. 서체: Pretendard Variable + IBM Plex Mono만 허용 (Crimson Text 금지).
 - 필독: `practice.md` Part I, 특히 §I-9(웹 경험 설계).
 - 출력: `.infra/queue/tasks/completed/`의 visual_concept JSON (직접 파일 생성 없음).
 

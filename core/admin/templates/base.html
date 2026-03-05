@@ -91,6 +91,10 @@
             class="sidebar-link {% if request.path.startswith('/growth') %}active{% endif %}">
             성장
           </a>
+          <a href="{{ url_for('dashboard') }}#release-cockpit"
+            class="sidebar-link {% if request.path == '/' %}active{% endif %}">
+            릴리즈 보드
+          </a>
           <a href="{{ url_for('service_admin') }}"
             class="sidebar-link {% if request.path.startswith('/service') %}active{% endif %}">
             서비스 항목

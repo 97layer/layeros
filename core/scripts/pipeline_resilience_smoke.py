@@ -143,10 +143,18 @@ def main() -> int:
         raise RuntimeError(f"CD decision invalid: {cd_result.get('decision')}")
 
     after = queue_counts(queue_root)
-    if after["pending"] > 0 or after["processing"] > 0:
-        raise RuntimeError(
-            f"queue not clean after smoke: pending={after['pending']} processing={after['processing']}"
-        )
+    if args.allow_dirty_queue:
+        if after["pending"] > before["pending"] or after["processing"] > before["processing"]:
+            raise RuntimeError(
+                "queue regressed after smoke: "
+                f"before(pending={before['pending']},processing={before['processing']}) "
+                f"after(pending={after['pending']},processing={after['processing']})"
+            )
+    else:
+        if after["pending"] > 0 or after["processing"] > 0:
+            raise RuntimeError(
+                f"queue not clean after smoke: pending={after['pending']} processing={after['processing']}"
+            )
 
     if not args.keep_signal and signal_path.exists():
         signal_path.unlink()

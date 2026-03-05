@@ -267,8 +267,14 @@ def check_council_worker() -> CheckResult:
     timer_unit = os.getenv("COUNCIL_WORKER_TIMER_UNIT", "council-worker.timer")
     service_unit = os.getenv("COUNCIL_WORKER_SERVICE_UNIT", "council-worker.service")
     process_pattern = os.getenv("COUNCIL_WORKER_PROCESS_PATTERN", "core/daemons/council_worker.py")
-    pending_dir = PROJECT_ROOT / ".infra" / "queue" / "council" / "pending"
-    pending_count = len(list(pending_dir.glob("*.json"))) if pending_dir.exists() else 0
+    pending_dirs = {
+        "council": PROJECT_ROOT / ".infra" / "queue" / "council" / "pending",
+        "council_room": PROJECT_ROOT / ".infra" / "queue" / "council_room" / "pending",
+    }
+    pending_counts = {
+        name: (len(list(path.glob("*.json"))) if path.exists() else 0) for name, path in pending_dirs.items()
+    }
+    pending_count = sum(pending_counts.values())
 
     active_signals: List[str] = []
     if shutil.which("systemctl"):
@@ -276,6 +282,18 @@ def check_council_worker() -> CheckResult:
             code, out, _ = run_command(["systemctl", "is-active", unit])
             if code == 0 and out.strip() == "active":
                 active_signals.append(f"systemd:{unit}")
+
+    # macOS 등 로컬에 systemctl 없는 경우 deploy.sh --status로 VM 원격 확인
+    if not active_signals and not shutil.which("systemctl"):
+        deploy_sh = PROJECT_ROOT / "core/scripts/deploy/deploy.sh"
+        if deploy_sh.exists():
+            code, out, _ = run_command(["bash", str(deploy_sh), "--status"])
+            if code == 0:
+                for line in out.splitlines():
+                    parts = line.strip().split()
+                    if len(parts) >= 2 and parts[0] == "council-worker" and parts[1].startswith("active"):
+                        active_signals.append("vm:deploy-status")
+                        break
 
     if shutil.which("pgrep"):
         code, out, _ = run_command(["pgrep", "-f", process_pattern])
@@ -286,11 +304,15 @@ def check_council_worker() -> CheckResult:
         return CheckResult(
             "council-worker",
             "pass",
-            f"active via {', '.join(active_signals)} pending={pending_count}",
+            (
+                f"active via {', '.join(active_signals)} pending={pending_count} "
+                f"council={pending_counts['council']} council_room={pending_counts['council_room']}"
+            ),
         )
 
     detail = (
-        f"inactive pending={pending_count} timer={timer_unit} service={service_unit} "
+        f"inactive pending={pending_count} council={pending_counts['council']} "
+        f"council_room={pending_counts['council_room']} timer={timer_unit} service={service_unit} "
         f"pattern={process_pattern}"
     )
     if required:
@@ -794,13 +816,11 @@ def subprocess_run_with_env(cmd: List[str], extra_env: dict) -> Tuple[int, str, 
 
 
 def score(results: List[CheckResult]) -> int:
-    points = 0
-    for r in results:
-        if r.status == "pass":
-            points += 20
-        elif r.status == "warn":
-            points += 10
-    return min(points, 100)
+    if not results:
+        return 0
+    earned = sum(2 if r.status == "pass" else 1 if r.status == "warn" else 0 for r in results)
+    total = len(results) * 2
+    return round(earned / total * 100)
 
 
 def overall_status(results: List[CheckResult], readiness_score: int) -> str:

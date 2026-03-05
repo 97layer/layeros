@@ -101,6 +101,60 @@
   </div>
 </div>
 
+<!-- ─── Practice Release Cockpit ─── -->
+<div class="admin-section" id="release-cockpit">
+  <div class="archive-prod-head">
+    <p class="admin-label">PRACTICE RELEASE COCKPIT</p>
+    <form method="post" action="{{ url_for('publish') }}">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="release-publish-btn">상태 반영 발행</button>
+    </form>
+  </div>
+  <p class="release-cockpit-desc">
+    홈페이지 공개 상태: <strong>{{ 'LIVE' if release_board.homepage_live else 'HOLD' }}</strong>
+    · 마지막 갱신 {{ release_board.updated_at or 'N/A' }}
+  </p>
+  <div class="archive-prod-stats release-cockpit-stats">
+    <div class="archive-prod-stat">
+      <p class="archive-prod-stat__label">TOTAL</p>
+      <p class="archive-prod-stat__value">{{ release_board.total }}</p>
+    </div>
+    <div class="archive-prod-stat">
+      <p class="archive-prod-stat__label">LIVE</p>
+      <p class="archive-prod-stat__value">{{ release_board.live }}</p>
+    </div>
+    <div class="archive-prod-stat">
+      <p class="archive-prod-stat__label">HOLD</p>
+      <p class="archive-prod-stat__value">{{ release_board.hold }}</p>
+    </div>
+  </div>
+  <div class="release-cockpit-list">
+    {% for item in release_board.rows %}
+    <article class="release-cockpit-item release-cockpit-item--{{ item.status }}">
+      <div class="release-cockpit-item__main">
+        <p class="release-cockpit-item__meta">{{ item.path }}</p>
+        <h3 class="release-cockpit-item__title">{{ item.name }}</h3>
+        <p class="release-cockpit-item__note">{{ item.note }}</p>
+      </div>
+      <div class="release-cockpit-item__actions">
+        <span class="release-cockpit-item__badge release-cockpit-item__badge--{{ item.status }}">{{ item.status_label }}</span>
+        <form method="post" action="{{ url_for('release_toggle', section=item.key) }}">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="target" value="{{ item.next_status }}">
+          <button type="submit" class="release-cockpit-btn">{{ item.next_label }}</button>
+        </form>
+        <form method="post" action="{{ url_for('release_toggle', section=item.key) }}">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="target" value="{{ item.next_status }}">
+          <input type="hidden" name="publish" value="1">
+          <button type="submit" class="release-cockpit-btn">전환 + 발행</button>
+        </form>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</div>
+
 <!-- ─── System Status ─── -->
 <div class="admin-section" style="margin-top:2.5rem;">
   <p class="admin-label">SYSTEM STATUS</p>
@@ -393,6 +447,105 @@
   color: var(--text-sub);
 }
 
+.release-publish-btn {
+  border: 1px solid var(--line);
+  background: var(--text);
+  color: #f5f3ed;
+  padding: 0.34rem 0.72rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.release-cockpit-desc {
+  margin: 0.45rem 0 0;
+  font-size: 0.76rem;
+  color: var(--text-sub);
+}
+
+.release-cockpit-stats {
+  margin-top: 0.8rem;
+}
+
+.release-cockpit-list {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.release-cockpit-item {
+  border: 1px solid var(--line);
+  padding: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.release-cockpit-item__main {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.release-cockpit-item__meta {
+  margin: 0;
+  font-size: 0.6rem;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+  font-family: var(--font-en);
+}
+
+.release-cockpit-item__title {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.release-cockpit-item__note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-sub);
+}
+
+.release-cockpit-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.release-cockpit-item__badge {
+  border: 1px solid currentColor;
+  padding: 0.1rem 0.34rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.release-cockpit-item__badge--live {
+  color: var(--success);
+}
+
+.release-cockpit-item__badge--hold {
+  color: var(--danger);
+}
+
+.release-cockpit-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-sub);
+  padding: 0.22rem 0.55rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.07em;
+  cursor: pointer;
+}
+
+.release-cockpit-btn:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
 @media (max-width: 980px) {
   .archive-prod-list {
     grid-template-columns: 1fr;
@@ -402,6 +555,15 @@
 @media (max-width: 768px) {
   .archive-prod-stats {
     grid-template-columns: 1fr;
+  }
+
+  .release-cockpit-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .release-cockpit-item__actions {
+    justify-content: flex-start;
   }
 }
 </style>

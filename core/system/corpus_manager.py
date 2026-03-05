@@ -94,6 +94,9 @@ class CorpusManager:
         strategic_score = sa_analysis.get("strategic_score", 0)
         summary = sa_analysis.get("summary", "")
         key_insights = sa_analysis.get("key_insights", [])
+        source_path = str(signal_data.get("signal_path") or signal_data.get("source_path") or "").strip()
+        if not source_path:
+            source_path = f"knowledge/signals/{signal_id}.json"
 
         # Entry 구조
         entry = {
@@ -108,7 +111,7 @@ class CorpusManager:
             "summary": summary,
             "key_insights": key_insights,
             "raw_content_preview": str(signal_data.get("content", ""))[:300],
-            "source_path": str(signal_data.get("signal_path", "")),
+            "source_path": source_path,
             "used_in_essay": None,  # 에세이 발행 시 issue ID 기록
         }
 

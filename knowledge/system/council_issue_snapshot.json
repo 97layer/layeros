@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-03-05T03:17:24.208074+00:00",
+  "queue_root": "/Users/97layer/97layerOS/.infra/queue/council_room",
+  "counts": {
+    "pending": 9,
+    "processing": 0,
+    "completed": 0
+  },
+  "pending_items": [
+    "ai_constitution_creation",
+    "archive_ui_cinematic_monochrome",
+    "build_components_indent_fix"
+  ],
+  "processing_items": [],
+  "completed_items": []
+}

@@ -3,9 +3,11 @@
   "type": "text",
   "source": "smoke_test",
   "content": "fallback 경로에서도 파이프라인은 멈추지 않아야 한다.",
-  "status": "raw",
+  "status": "analyzed",
   "captured_at": "2026-03-04T23:58:51",
   "metadata": {
-    "smoke": true
-  }
+    "smoke": true,
+    "analysis_mode": "fallback_local"
+  },
+  "analyzed_at": "2026-03-05T10:53:42.348289"
 }

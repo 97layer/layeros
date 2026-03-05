@@ -1,7 +1,7 @@
 {
-  "system_status": "DEGRADED",
-  "status_note": "Heartbeats last collected 2026-02-15; values stale pending refresh",
-  "last_update": "2026-03-04 10:51:27",
+  "system_status": "HEALTHY",
+  "status_note": "Heartbeats refreshed at 2026-03-05 11:03:22",
+  "last_update": "2026-03-05 11:04:56",
   "agents": {
     "SA": {
       "status": "ACTIVE",
@@ -25,7 +25,7 @@
     },
     "Technical_Director": {
       "status": "ACTIVE",
-      "last_heartbeat": "2026-02-15 02:52:28.694364",
+      "last_heartbeat": "2026-03-05T11:03:22.948659",
       "current_task": "시스템 상태 점검 및 태스크 스캔",
       "location": "Local(Mac)"
     },
@@ -40,7 +40,7 @@
     },
     "Async_Telegram_Bot": {
       "status": "ONLINE",
-      "last_heartbeat": "2026-02-15 16:38:00.319460",
+      "last_heartbeat": "2026-03-05T11:03:22.948659",
       "current_task": "Messages: 0",
       "location": "Local(Mac)"
     }
@@ -51,5 +51,17 @@
     "content_generated": 0,
     "approved": 0,
     "rejected": 0
-  }
+  },
+  "sessions": {
+    "codex-82328-1772675983": {
+      "agent_id": "Codex",
+      "task_label": "backend debt cleanup",
+      "status": "active",
+      "started_at": "2026-03-05T10:59:43",
+      "updated_at": "2026-03-05T10:59:43",
+      "summary": ""
+    }
+  },
+  "sitemap_status": "UPDATED",
+  "sitemap_last_updated": "2026-03-05 11:04:56"
 }

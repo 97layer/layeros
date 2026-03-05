@@ -9,16 +9,16 @@
   <meta property="og:url" content="https://woohwahae.kr/lab/demo-renewal-visual.html"/>
   <title>Exp.027 Renewal Visual Board — WOOHWAHAE Lab</title>
   <!-- COMPONENT:head -->
-<meta name="theme-color" content="#E3E2E0">
-<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=f5b889f9">
-<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
-<!-- /COMPONENT:head -->
+  <meta name="theme-color" content="#E3E2E0">
+  <link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=1a2f99b7">
+  <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+  <!-- /COMPONENT:head -->
 </head>
 <body class="page-lab page-lab-visual">
 <!-- COMPONENT:nav -->
@@ -31,12 +31,12 @@
     <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
     <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
   </ul>
-  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
+  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
     <span></span><span></span>
   </button>
   <div class="read-progress" id="read-progress" aria-hidden="true"></div>
 </nav>
-<div class="nav-overlay" id="nav-overlay">
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true">
   <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
   <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
   <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
@@ -118,7 +118,7 @@
   </section>
 </main>
 
-<script defer src="/assets/js/site.js?v=1ce69050"></script>
+<script defer src="/assets/js/site.js?v=29347181"></script>
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
   <div class="footer-inner">
@@ -128,6 +128,8 @@
         <a href="/archive/">Archive</a>
         <a href="/practice/">Practice</a>
         <a href="/about/">About</a>
+        <a href="/lab/">Lab</a>
+        <a href="mailto:hello@woohwahae.kr">Contact</a>
       </nav>
       <div class="footer-contact-row">
         <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
@@ -140,6 +142,7 @@
         <a href="/privacy.html">Privacy</a>
         <a href="/terms.html">Terms</a>
         <span>&copy; 2026 WOOHWAHAE</span>
+        <span class="footer-time" id="footer-time"></span>
       </div>
     </div>
   </div>

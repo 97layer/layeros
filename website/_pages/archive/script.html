@@ -35,6 +35,14 @@
       return 'essay';
     }
 
+    function issueDisplay(value, index) {
+      var raw = String(value || '').trim();
+      if (!raw) return String(index + 1).padStart(3, '0');
+      var hit = raw.match(/(\d{1,4})/);
+      if (!hit) return String(index + 1).padStart(3, '0');
+      return hit[1].padStart(3, '0');
+    }
+
     function normalize(post, index) {
       var slug = String(post.slug || '').replace(/^\//, '').replace(/\/$/, '');
       var explicitUrl = String(post.url || '').trim();
@@ -48,6 +56,7 @@
         dateValue: dateValue(post.date),
         type: normalizeType(post.type),
         issue: post.issue || ('Issue ' + String(index + 1).padStart(3, '0')),
+        issueDisplay: issueDisplay(post.issue, index),
         readMin: typeof post.readMin === 'number' ? post.readMin : null
       };
     }
@@ -81,7 +90,7 @@
         '<div class="archive-cover__shell">',
         '<div class="archive-cover__rail">',
         '<p class="archive-cover__kicker">Archive Curated</p>',
-        '<p class="archive-cover__issue">', escapeHtml(post.issue), '</p>',
+        '<p class="archive-cover__issue">', escapeHtml(post.issueDisplay), '</p>',
         '<p class="archive-cover__label">', escapeHtml(typeMeta.label), '</p>',
         '</div>',
         '<div class="archive-cover__main">',
@@ -95,11 +104,16 @@
     }
 
     function laneMiniTemplate(post) {
+      var hasSummary = Boolean(post.summary);
       return [
-        '<article class="archive-mini">',
-        '<p class="archive-mini__meta"><span>', escapeHtml(post.issue), '</span><span>', escapeHtml(post.date), '</span></p>',
+        '<article class="archive-mini' + (hasSummary ? ' has-summary' : '') + '">',
+        '<p class="archive-mini__meta"><span class="archive-mini__issue">', escapeHtml(post.issueDisplay), '</span><span class="archive-mini__date">', escapeHtml(post.date), '</span></p>',
         '<h4 class="archive-mini__title">', escapeHtml(post.title), '</h4>',
+        hasSummary ? '<p class="archive-mini__summary">' + escapeHtml(post.summary) + '</p>' : '',
+        '<div class="archive-mini__foot">',
+        hasSummary ? '<button class="archive-mini__toggle" type="button" aria-expanded="false">Preview</button>' : '<span aria-hidden="true"></span>',
         '<a class="archive-mini__link" href="', escapeHtml(post.url), '">Open</a>',
+        '</div>',
         '</article>'
       ].join('');
     }
@@ -121,7 +135,7 @@
         '</header>',
         '<div class="archive-lane__body">',
         '<article class="archive-lane__feature">',
-        '<p class="archive-lane__feature-meta"><span>', escapeHtml(feature.issue), '</span><span>', escapeHtml(feature.date), '</span></p>',
+        '<p class="archive-lane__feature-meta"><span class="archive-lane__feature-issue">', escapeHtml(feature.issueDisplay), '</span><span class="archive-lane__feature-date">', escapeHtml(feature.date), '</span></p>',
         '<h4 class="archive-lane__feature-title">', escapeHtml(feature.title), '</h4>',
         '<p class="archive-lane__feature-summary">', escapeHtml(feature.summary), '</p>',
         '<div class="archive-lane__feature-foot"><span>', escapeHtml(readLabel(feature)), '</span><a href="', escapeHtml(feature.url), '">Open Record</a></div>',
@@ -141,6 +155,18 @@
       }).join('');
       lanesEl.innerHTML = laneHtml || '<p class="archive-cover__empty">표시할 기록이 없습니다.</p>';
     }
+
+    lanesEl.addEventListener('click', function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      var toggle = target.closest('.archive-mini__toggle');
+      if (!toggle) return;
+      var card = toggle.closest('.archive-mini');
+      if (!card) return;
+      var expanded = card.classList.toggle('is-expanded');
+      toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      toggle.textContent = expanded ? 'Hide' : 'Preview';
+    });
 
     fetch('index.json')
       .then(function (response) { return response.json(); })

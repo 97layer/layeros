@@ -54,7 +54,35 @@ SERVICE_FILE = BASE_DIR / 'knowledge' / 'service' / 'items.json'
 BOOKING_FILE = BASE_DIR / 'knowledge' / 'service' / 'booking.json'
 TELEGRAM_LOG_FILE = BASE_DIR / 'logs' / 'telegram.log'
 ADMIN_PASSWORD_OVERRIDE_FILE = BASE_DIR / 'knowledge' / 'system' / 'admin_password_hash.json'
+PRACTICE_RELEASE_FILE = WEBSITE_DIR / 'practice' / 'release-state.json'
 SYSTEMD_SERVICES = ['97layer-telegram', '97layer-ecosystem', '97layer-gardener', 'woohwahae-backend', 'cortex-admin']
+PRACTICE_RELEASE_ORDER = ['atelier', 'direction', 'project', 'product']
+PRACTICE_RELEASE_META = {
+    'atelier': {
+        'name': 'Atelier',
+        'path': '/practice/atelier.html',
+        'default_live': False,
+        'note': '오프라인 예약 공개 전까지 상세 소개만 노출',
+    },
+    'direction': {
+        'name': 'Directing',
+        'path': '/practice/direction.html',
+        'default_live': True,
+        'note': '문의형 서비스로 상시 오픈',
+    },
+    'project': {
+        'name': 'Project',
+        'path': '/practice/project.html',
+        'default_live': True,
+        'note': '신청 폼 운영',
+    },
+    'product': {
+        'name': 'Product',
+        'path': '/practice/product.html',
+        'default_live': False,
+        'note': '상품 구조 확정 전까지 대기',
+    },
+}
 
 # ─── App ───
 app = Flask(
@@ -170,6 +198,108 @@ def _atomic_write(path: Path, payload: dict) -> None:
         json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8'
     )
     tmp_path.replace(path)
+
+
+def _release_state_defaults() -> dict:
+    defaults = {
+        'version': 1,
+        'updated_at': datetime.utcnow().isoformat() + 'Z',
+        'homepage': {'live': True},
+        'practice': {},
+    }
+    for key in PRACTICE_RELEASE_ORDER:
+        meta = PRACTICE_RELEASE_META[key]
+        defaults['practice'][key] = {
+            'live': bool(meta.get('default_live', True)),
+            'label': 'LIVE' if meta.get('default_live', True) else 'HOLD',
+            'note': meta.get('note', ''),
+        }
+    return defaults
+
+
+def _normalize_release_state(raw: dict | None) -> dict:
+    defaults = _release_state_defaults()
+    if not isinstance(raw, dict):
+        return defaults
+
+    state = {
+        'version': 1,
+        'updated_at': str(raw.get('updated_at') or defaults['updated_at']),
+        'homepage': {
+            'live': bool((raw.get('homepage') or {}).get('live', True))
+            if isinstance(raw.get('homepage'), dict)
+            else True,
+        },
+        'practice': {},
+    }
+
+    raw_practice = raw.get('practice') if isinstance(raw.get('practice'), dict) else {}
+    for key in PRACTICE_RELEASE_ORDER:
+        fallback = defaults['practice'][key]
+        source = raw_practice.get(key) if isinstance(raw_practice.get(key), dict) else {}
+        live = bool(source.get('live', fallback['live']))
+        note = str(source.get('note', fallback['note'])).strip() or fallback['note']
+        label = str(source.get('label', '')).strip() or ('LIVE' if live else 'HOLD')
+        state['practice'][key] = {
+            'live': live,
+            'label': label,
+            'note': note,
+        }
+    return state
+
+
+def _load_release_state() -> dict:
+    if not PRACTICE_RELEASE_FILE.exists():
+        defaults = _release_state_defaults()
+        _save_release_state(defaults)
+        return defaults
+    try:
+        raw = json.loads(PRACTICE_RELEASE_FILE.read_text(encoding='utf-8'))
+    except (json.JSONDecodeError, OSError):
+        raw = None
+    state = _normalize_release_state(raw)
+    if raw != state:
+        _save_release_state(state)
+    return state
+
+
+def _save_release_state(state: dict) -> None:
+    normalized = _normalize_release_state(state)
+    normalized['updated_at'] = datetime.utcnow().isoformat() + 'Z'
+    PRACTICE_RELEASE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    _atomic_write(PRACTICE_RELEASE_FILE, normalized)
+
+
+def _build_release_board() -> dict:
+    state = _load_release_state()
+    rows = []
+    live_count = 0
+    for key in PRACTICE_RELEASE_ORDER:
+        meta = PRACTICE_RELEASE_META[key]
+        entry = state['practice'][key]
+        live = bool(entry.get('live'))
+        if live:
+            live_count += 1
+        rows.append({
+            'key': key,
+            'name': meta['name'],
+            'path': meta['path'],
+            'note': entry.get('note') or meta.get('note', ''),
+            'status': 'live' if live else 'hold',
+            'status_label': 'LIVE' if live else 'HOLD',
+            'next_status': 'hold' if live else 'live',
+            'next_label': 'Hold로 전환' if live else 'Live로 전환',
+            'live': live,
+        })
+    total = len(rows)
+    return {
+        'rows': rows,
+        'total': total,
+        'live': live_count,
+        'hold': max(total - live_count, 0),
+        'homepage_live': bool((state.get('homepage') or {}).get('live', True)),
+        'updated_at': state.get('updated_at', ''),
+    }
 
 
 def _load_bookings() -> dict:
@@ -364,6 +494,12 @@ def logout():
 
 
 def _archive_entry_is_pending(entry: dict) -> bool:
+    explicit_status = str(entry.get('status', '')).strip().lower()
+    if explicit_status in {'pending', 'draft', 'queued'}:
+        return True
+    if explicit_status in {'published', 'live'}:
+        return False
+
     raw_url = str(entry.get('url', '')).strip()
     slug = str(entry.get('slug', '')).strip().lower()
     if raw_url in {'#', '/#'}:
@@ -458,6 +594,7 @@ def dashboard():
 
     signal_count = len(list(SIGNALS_DIR.glob('*.json'))) if SIGNALS_DIR.exists() else 0
     archive_board = _build_archive_board(posts)
+    release_board = _build_release_board()
 
     return render_template('dashboard.html',
                            post_count=len(posts),
@@ -466,6 +603,7 @@ def dashboard():
                            due_clients=due_clients,
                            growth_snapshot=growth_snapshot,
                            archive_board=archive_board,
+                           release_board=release_board,
                            today=today,
                            period=period)
 
@@ -1328,6 +1466,38 @@ def service_toggle(item_id):
     return redirect(url_for('service_admin'))
 
 
+@app.route('/release/<section>/toggle', methods=['POST'])
+@login_required
+def release_toggle(section):
+    if section not in PRACTICE_RELEASE_META:
+        abort(404)
+
+    state = _load_release_state()
+    current = state['practice'].get(section, {})
+    target = (request.form.get('target') or '').strip().lower()
+    if target in {'live', 'hold'}:
+        next_live = target == 'live'
+    else:
+        next_live = not bool(current.get('live', False))
+
+    current['live'] = next_live
+    current['label'] = 'LIVE' if next_live else 'HOLD'
+    current['note'] = current.get('note') or PRACTICE_RELEASE_META[section].get('note', '')
+    state['practice'][section] = current
+    _save_release_state(state)
+
+    _audit('release_toggle', 'section=%s live=%s' % (section, next_live))
+    flash('%s 상태를 %s로 변경했습니다.' % (PRACTICE_RELEASE_META[section]['name'], 'LIVE' if next_live else 'HOLD'))
+
+    if request.form.get('publish') == '1':
+        from core.admin.utils.git_publisher import publish_to_website
+        success, message = publish_to_website()
+        _audit('publish', 'success=%s source=release_toggle section=%s' % (success, section))
+        flash(message if success else '릴리즈 상태 저장 완료 / 발행 실패: %s' % message)
+
+    return redirect(url_for('dashboard') + '#release-cockpit')
+
+
 # ─── 도구 ───
 
 @app.route('/tools')
@@ -1627,6 +1797,14 @@ def not_found(e):
         due_clients=[],
         growth_snapshot={},
         archive_board={'total': 0, 'published': 0, 'pending': 0, 'rows': []},
+        release_board={
+            'rows': [],
+            'total': 0,
+            'live': 0,
+            'hold': 0,
+            'homepage_live': True,
+            'updated_at': '',
+        },
         today=datetime.now().strftime('%Y-%m-%d'),
         period=datetime.now().strftime('%Y-%m'),
     ), 404

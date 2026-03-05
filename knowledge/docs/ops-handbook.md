@@ -42,6 +42,9 @@
 - Plan Dispatch pending 재시도: `python3 core/scripts/plan_dispatch_pending_replay.py --json`
 - Plan Dispatch stale 정리/순환: `python3 core/scripts/plan_dispatch_pending_replay.py --drop-stale --max-age-hours 24 --json` (처리 완료/무시 건 pending 자동 compact)
 - Council worker 강제가드: `python3 core/scripts/harness_doctor.py`의 `council-worker` 체크는 기본 fail-closed (`COUNCIL_WORKER_REQUIRED=1` 기본)
+- Council Room 안건 루프(세션 공유): `python3 core/scripts/council_issue_loop.py watch --json`
+- Council Room 안건 담당 할당: `python3 core/scripts/council_issue_loop.py claim --issue-id <id> --agent <AGENT>`
+- Council Room 안건 처리/삭제 순환: `python3 core/scripts/council_issue_loop.py resolve --issue-id <id> --agent <AGENT> --result done`
 
 ## 8. 신규 에이전트 추가 규칙
 - 새 지침 파일 생성 금지: 역할 규칙은 `directives/practice.md` 내 섹션만 추가/수정.

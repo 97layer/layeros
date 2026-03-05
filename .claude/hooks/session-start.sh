@@ -78,4 +78,11 @@ if [ -f "$AUDIT_SCRIPT" ]; then
   python3 "$AUDIT_SCRIPT" 2>/dev/null
 fi
 
+# ─── Council Room pending 요약 ──────────────────────────────
+
+COUNCIL_ISSUE_SCRIPT="$PROJECT_ROOT/core/scripts/council_issue_loop.py"
+if [ -f "$COUNCIL_ISSUE_SCRIPT" ]; then
+  python3 "$COUNCIL_ISSUE_SCRIPT" watch --max-items 5 --quiet-empty 2>/dev/null || true
+fi
+
 exit 0

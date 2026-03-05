@@ -11,16 +11,16 @@
   <meta content="https://woohwahae.kr/" property="og:url" />
   <title>WOOHWAHAE</title>
   <!-- COMPONENT:head -->
-<meta name="theme-color" content="#E3E2E0">
-<link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=f5b889f9">
-<script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
-<!-- /COMPONENT:head -->
+  <meta name="theme-color" content="#E3E2E0">
+  <link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=1a2f99b7">
+  <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+  <!-- /COMPONENT:head -->
   <link href="assets/media/brand/icon-192.png" rel="apple-touch-icon" />
   <script defer="" src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 </head>
@@ -28,105 +28,259 @@
 <body class="page-home">
   <!-- COMPONENT:preloader -->
   <div class="home-preloader" id="preloader">
-    <img src="/assets/media/brand/symbol.png" alt="" class="home-preloader__logo">
+    <div class="home-preloader__container">
+      <img src="/assets/media/brand/symbol.png" alt="" class="home-preloader__logo">
+    </div>
   </div>
   <script>
-    /* fallback: Three.js 로드 실패 시 3s 후 강제 해제 */
-    setTimeout(function () {
-      if (!window.__fieldReady) {
-        window.__fieldReady = true;
-        var preloader = document.getElementById('preloader');
-        if (preloader) preloader.classList.add('is-revealing');
-        setTimeout(function () {
+    /* ── 프리로더: Apple-style 시퀀스 (Stutter-Free) ── */
+    (function () {
+      var preloader = document.getElementById('preloader');
+
+      // 1. 로고 Manifest (Double rAF로 렌더링 시작 보장)
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          document.body.classList.add('is-revealing-logo');
+        });
+      });
+
+      // 2. 배경 스며듦 (Signal 기반 통합 퇴장)
+      window.revealField = function () {
+        if (preloader.getAttribute('data-revealed')) return;
+        preloader.setAttribute('data-revealed', 'true');
+
+        // 신호 수신 즉시 퇴장 클래스 주입하여 딜레이 체감 소거
+        requestAnimationFrame(function () {
           document.body.classList.add('is-loaded');
-        }, 1200);
-      }
-    }, 1500);
+        });
+      };
+
+      // 3. 강제 실행 (로딩 지연 대비: 2500ms)
+      setTimeout(function () {
+        if (!preloader.getAttribute('data-revealed') && window.revealField) {
+          window.revealField();
+        }
+      }, 2500);
+    })();
   </script>
   <!-- /COMPONENT:preloader -->
   <!-- COMPONENT:nav -->
-<nav class="site-nav" id="site-nav">
-  <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
-    <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
-  </a>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
-    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
-    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
-  </ul>
-  <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-expanded="false">
-    <span></span><span></span>
-  </button>
-  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
-</nav>
-<div class="nav-overlay" id="nav-overlay">
-  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
-  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
-  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
-</div>
-<!-- /COMPONENT:nav -->
+  <nav class="site-nav" id="site-nav">
+    <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+      <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
+      <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
+      <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+    <div class="read-progress" id="read-progress" aria-hidden="true"></div>
+  </nav>
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+    <div class="nav-overlay__grid">
+      <div class="nav-overlay__sector">
+        <h3 class="nav-overlay__label"><a href="/archive/">01. Archive / 기록</a></h3>
+        <nav class="nav-overlay__subs">
+          <a href="/archive/#essay">Essay <span>에세이</span></a>
+          <a href="/archive/#journal">Journal <span>일지</span></a>
+          <a href="/archive/lookbook/">Lookbook <span>룩북</span></a>
+          <a href="/playlist.html">Playlist <span>재생목록</span></a>
+        </nav>
+      </div>
+      <div class="nav-overlay__sector">
+        <h3 class="nav-overlay__label"><a href="/practice/">02. Practice / 실천</a></h3>
+        <nav class="nav-overlay__subs">
+          <a href="/practice/#atelier">Atelier <span>아틀리에</span></a>
+          <a href="/practice/#directing">Directing <span>디렉팅</span></a>
+          <a href="/practice/#projects">Project <span>프로젝트</span></a>
+          <a href="/practice/#product">Product <span>결과물</span></a>
+        </nav>
+      </div>
+      <div class="nav-overlay__sector">
+        <h3 class="nav-overlay__label"><a href="/about/">03. About / 본질</a></h3>
+        <nav class="nav-overlay__subs">
+          <a href="/about/#ch-2">The Origin <span>근원</span></a>
+          <a href="/about/woosunho/">Profile <span>프로필</span></a>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <!-- /COMPONENT:nav -->
   <canvas class="field-bg" id="field-bg"></canvas>
   <section class="home-hero" aria-label="WOOHWAHAE 메인 필드">
     <div class="home-hero__fog" aria-hidden="true"></div>
     <div class="home-hero__wiregrid" aria-hidden="true"></div>
-    <div class="home-hero__signal">
-      <p class="home-hero__kicker">WOOHWAHAE FIELD</p>
-      <p class="home-hero__statement">소거의 리듬을 기록하고, 실천의 구조로 연결합니다.</p>
+    <div class="home-hero__elog-wrap">
+      <p class="home-hero__elog-trigger" id="home-elog-trigger"><span id="home-clock"></span><span
+          class="home-elog-cta">↓</span></p>
+      <div class="home-hero__elog-panel" id="home-elog-panel" aria-hidden="true">
+        <span class="elog elog--loading"><time>—</time>불러오는 중</span>
+      </div>
     </div>
-    <nav class="home-hero__nav" aria-label="메인 섹션">
-      <a class="home-nav-item" href="/archive/">
-        <span class="home-nav-item__num">01.</span>
-        <span class="home-nav-item__name">Archive</span>
-        <span class="home-nav-item__sub">에세이 · 저널 · 룩북 · 플레이리스트</span>
-        <span class="mono home-nav-item__arrow">→</span>
-      </a>
-      <a class="home-nav-item" href="/practice/">
-        <span class="home-nav-item__num">02.</span>
-        <span class="home-nav-item__name">Practice</span>
-        <span class="home-nav-item__sub">아틀리에 · 디렉팅 · 프로젝트 · 프로덕트</span>
-        <span class="mono home-nav-item__arrow">→</span>
-      </a>
-      <a class="home-nav-item" href="/about/">
-        <span class="home-nav-item__num">03.</span>
-        <span class="home-nav-item__name">About</span>
-        <span class="home-nav-item__sub">THE ORIGIN · 우순호</span>
-        <span class="mono home-nav-item__arrow">→</span>
-      </a>
-    </nav>
   </section>
 
+  <script>
+    (function () {
+      var trigger = document.getElementById('home-elog-trigger');
+      var panel = document.getElementById('home-elog-panel');
+      var clock = document.getElementById('home-clock');
 
-  <div class="home-field-buffer"></div>
-  <script defer="" src="assets/js/bg-field.js?v=46d0a755"></script>
-  <script defer="" src="assets/js/site.js?v=1ce69050"></script>
+      /* 데이터 그레인: 문구 수렴 */
+      (function resolveTrigger() {
+        if (!trigger) return;
+        var NOISE = ['·', '—', '|', '/', '\\', ':', '_', '▸'];
+        var phrase = "시행착오가 많은 첫 웹개발 일지.";
+        var cta = "↓";
+
+        // 트리거 비우고 다시 채움 (시계 유지용)
+        var textNode = document.createElement('span');
+        textNode.className = 'elog-grain-text';
+        trigger.appendChild(textNode);
+
+        var ctaNode = trigger.querySelector('.home-elog-cta');
+
+        phrase.split('').forEach(function (ch, i) {
+          var s = document.createElement('span');
+          s.className = 'g-char';
+          s.textContent = NOISE[Math.floor(Math.random() * NOISE.length)];
+          textNode.appendChild(s);
+
+          var delay = 1000 + (i * 45) + Math.random() * 40;
+          setTimeout(function () {
+            var cycles = 0;
+            var max = 3;
+            var t = setInterval(function () {
+              if (cycles < max) {
+                s.textContent = NOISE[Math.floor(Math.random() * NOISE.length)];
+                cycles++;
+              } else {
+                clearInterval(t);
+                s.textContent = ch;
+                s.classList.add('is-settled');
+              }
+            }, 60);
+          }, delay);
+        });
+      })();
+
+      /* 실시간 시계 */
+      function updateClock() {
+        if (!clock) return;
+        var now = new Date();
+        clock.textContent =
+          now.getFullYear() + '.' +
+          String(now.getMonth() + 1).padStart(2, '0') + '.' +
+          String(now.getDate()).padStart(2, '0') + ' ' +
+          String(now.getHours()).padStart(2, '0') + ':' +
+          String(now.getMinutes()).padStart(2, '0') + ' — ';
+      }
+      updateClock();
+      setInterval(updateClock, 60000);
+
+      /* count-up */
+      function countUp(el, target, suffix, duration) {
+        var start = performance.now();
+        function step(now) {
+          var p = Math.min((now - start) / duration, 1);
+          var ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.floor(ease * target) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = target + suffix;
+        }
+        requestAnimationFrame(step);
+      }
+
+      /* 패널 렌더 */
+      function renderStats(data) {
+        var days = data.days || Math.floor((Date.now() - new Date('2026-02-18')) / 86400000) + 1;
+        var hours = data.invested_hours || 0;
+        var commits = data.total_commits || 0;
+        var pending = data.uncommitted || 0;
+        var added = data.lines_added || 0;
+        var deleted = data.lines_deleted || 0;
+
+        var rows = [
+          { label: '개발 기간', val: days, suf: ' 일째' },
+          { label: '투입 시간', val: Math.round(hours), suf: ' h' },
+          { label: '수정 횟수', val: commits, suf: ' 건' },
+          { label: '코드 추가', val: added, suf: ' 줄' },
+          { label: '코드 삭제', val: deleted, suf: ' 줄' },
+          { label: '보류 조각', val: pending, suf: ' 개' },
+        ];
+
+        panel.innerHTML = rows.map(function (r) {
+          return '<span class="elog-stat-row">' +
+            '<em class="elog-stat-label">' + r.label + '</em>' +
+            '<b class="elog-stat-val" data-target="' + r.val + '" data-suf="' + r.suf + '">0' + r.suf + '</b>' +
+            '</span>';
+        }).join('');
+
+        /* count-up 실행 */
+        panel.querySelectorAll('.elog-stat-val').forEach(function (el) {
+          var t = parseInt(el.dataset.target, 10);
+          var s = el.dataset.suf;
+          countUp(el, t, s, 1200);
+        });
+      }
+
+      /* 토글 + fetch */
+      var fetched = false;
+      if (trigger && panel) {
+        trigger.style.cursor = 'pointer';
+        trigger.addEventListener('click', function () {
+          var isOpen = panel.classList.contains('is-open');
+          if (!isOpen && !fetched) {
+            fetched = true;
+            panel.innerHTML = '<span class="elog elog--loading"><time>—</time>집계 중</span>';
+            fetch('/lab/changelog/data.json?t=' + Date.now())
+              .then(function (r) { return r.json(); })
+              .then(renderStats)
+              .catch(function () {
+                panel.innerHTML = '<span class="elog"><time>—</time>데이터를 불러올 수 없다.</span>';
+              });
+          }
+          panel.classList.toggle('is-open', !isOpen);
+          panel.setAttribute('aria-hidden', String(isOpen));
+        });
+      }
+    })();
+  </script>
+  <script defer="" src="assets/js/bg-field.js?v=20260305p"></script>
+  <script defer="" src="assets/js/site.js?v=29347181"></script>
 
 
   <!-- COMPONENT:footer -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-wordmark">WOOHWAHAE</div>
-    <div class="footer-mid">
-      <nav class="footer-nav">
-        <a href="/archive/">Archive</a>
-        <a href="/practice/">Practice</a>
-        <a href="/about/">About</a>
-      </nav>
-      <div class="footer-contact-row">
-        <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
-        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-wordmark">WOOHWAHAE</div>
+      <div class="footer-mid">
+        <nav class="footer-nav">
+          <a href="/archive/">Archive</a>
+          <a href="/practice/">Practice</a>
+          <a href="/about/">About</a>
+          <a href="/lab/">Lab</a>
+          <a href="mailto:hello@woohwahae.kr">Contact</a>
+        </nav>
+        <div class="footer-contact-row">
+          <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
+          <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+        </div>
+      </div>
+      <div class="footer-base">
+        <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
+        <div class="footer-legal">
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+          <span>&copy; 2026 WOOHWAHAE</span>
+          <span class="footer-time" id="footer-time"></span>
+        </div>
       </div>
     </div>
-    <div class="footer-base">
-      <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
-      <div class="footer-legal">
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-        <span>&copy; 2026 WOOHWAHAE</span>
-      </div>
-    </div>
-  </div>
-</footer>
-<!-- /COMPONENT:footer -->
+  </footer>
+  <!-- /COMPONENT:footer -->
 </body>
 
 </html>

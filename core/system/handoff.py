@@ -36,6 +36,46 @@ KNOWLEDGE_PATHS = {
     'archive': PROJECT_ROOT / 'knowledge' / 'archive',
 }
 
+CURRENT_STATE_HEADER = "## 📍 현재 상태 (CURRENT STATE)"
+
+
+def _is_current_state_header(line: str) -> bool:
+    return line.strip() == CURRENT_STATE_HEADER
+
+
+def replace_current_state_section(content: str, section: str) -> str:
+    """
+    Keep exactly one CURRENT STATE section in state.md.
+    Existing CURRENT STATE blocks are removed and the new section is appended.
+    """
+    lines = content.splitlines()
+    kept: List[str] = []
+    idx = 0
+
+    while idx < len(lines):
+        line = lines[idx]
+        if _is_current_state_header(line):
+            idx += 1
+            while idx < len(lines):
+                next_line = lines[idx]
+                if next_line.startswith("## ") and not _is_current_state_header(next_line):
+                    break
+                idx += 1
+            continue
+        kept.append(line)
+        idx += 1
+
+    base = "\n".join(kept).rstrip()
+    section_text = section.strip()
+
+    if not section_text:
+        return f"{base}\n" if base else ""
+    if not base:
+        return f"{section_text}\n"
+    if base.endswith("---"):
+        return f"{base}\n\n{section_text}\n"
+    return f"{base}\n\n---\n\n{section_text}\n"
+
 
 class HandoffEngine:
     """
@@ -130,26 +170,20 @@ class HandoffEngine:
         completed_items = '\n'.join(['- ✅ ' + item for item in summary.split('\n') if item.strip()])
         next_items = '\n'.join(['- ⏳ ' + step for step in next_steps])
 
-        update_section = f"""
-
----
-
-## 📍 현재 상태 (CURRENT STATE)
-
-### [{timestamp}] Session Update - {agent_id}
-
-**완료한 작업**:
-{completed_items}
-
-**다음 단계**:
-{next_items}
-
-**업데이트 시간**: {datetime.now().isoformat()}
-"""
+        update_section = (
+            f"{CURRENT_STATE_HEADER}\n\n"
+            f"### [{timestamp}] Session Update - {agent_id}\n\n"
+            f"**완료한 작업**:\n{completed_items}\n\n"
+            f"**다음 단계**:\n{next_items}\n\n"
+            f"**업데이트 시간**: {datetime.now().isoformat()}"
+        )
 
         if self.quanta_path.exists():
-            with open(self.quanta_path, 'a', encoding='utf-8') as f:
-                f.write(update_section)
+            current = self.quanta_path.read_text(encoding="utf-8")
+            updated = replace_current_state_section(current, update_section)
+            self.quanta_path.write_text(updated, encoding="utf-8")
+        else:
+            self.quanta_path.write_text(f"{update_section.strip()}\n", encoding="utf-8")
 
         # Release work lock (if held)
         self.release_work_lock(agent_id)
@@ -221,7 +255,7 @@ class HandoffEngine:
 
 ---
 
-## 📍 현재 상태 (CURRENT STATE)
+{CURRENT_STATE_HEADER}
 
 ### [{datetime.now().strftime("%Y-%m-%d %H:%M")}] System Initialization
 

@@ -85,8 +85,9 @@ def test_compact_pending_rows_removes_resolved_and_ignored():
 def test_pending_replay_cli_resolves_with_fake_dispatch(tmp_path: Path):
     pending_log = tmp_path / "pending.jsonl"
     result_log = tmp_path / "results.jsonl"
+    now_ts = datetime.now(timezone.utc).isoformat()
     pending_entry = {
-        "timestamp": _iso(100),
+        "timestamp": now_ts,
         "task_hash": "ddd444",
         "task_preview": "retry target",
         "task": "retry target full task",
@@ -142,8 +143,9 @@ def test_pending_replay_cli_resolves_with_fake_dispatch(tmp_path: Path):
 def test_pending_replay_drop_stale_marks_ignored_and_compacts(tmp_path: Path):
     pending_log = tmp_path / "pending_stale.jsonl"
     result_log = tmp_path / "results_stale.jsonl"
+    stale_ts = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
     pending_entry = {
-        "timestamp": _iso(-86400),  # old enough to exceed max-age-hours=1
+        "timestamp": stale_ts,  # old enough to exceed max-age-hours=1
         "task_hash": "stale001",
         "task_preview": "stale target",
         "task": "stale target full task",

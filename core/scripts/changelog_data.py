@@ -115,6 +115,22 @@ def calculate_invested_hours(commits):
             
     return round(total_minutes / 60, 1)
 
+def git_diff_stats():
+    """website/ 경로의 삽입/삭제 라인 수 집계"""
+    import re
+    log = run(["git", "log", "--shortstat", "--", "website/"])
+    added = 0
+    deleted = 0
+    for line in log.splitlines():
+        if "changed" in line:
+            ins_match = re.search(r'(\d+)\s+insertion', line)
+            del_match = re.search(r'(\d+)\s+deletion', line)
+            if ins_match:
+                added += int(ins_match.group(1))
+            if del_match:
+                deleted += int(del_match.group(1))
+    return added, deleted
+
 def main():
     commits     = git_commits()
     uncommitted = git_uncommitted()
@@ -131,6 +147,8 @@ def main():
     # date 기준 정렬 (최신순)
     all_entries.sort(key=lambda x: x["date"], reverse=True)
 
+    lines_added, lines_deleted = git_diff_stats()
+
     days = (datetime.now(timezone.utc) - datetime.fromisoformat(START_DATE + "T00:00:00+00:00")).days + 1
 
     output = {
@@ -140,6 +158,8 @@ def main():
         "total_commits": len(commits),
         "uncommitted": len(uncommitted),
         "invested_hours": invested_hours,
+        "lines_added": lines_added,
+        "lines_deleted": lines_deleted,
         "entries": all_entries
     }
 

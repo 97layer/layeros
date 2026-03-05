@@ -218,13 +218,13 @@
       ],
       "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
       "hash_seal": {
-        "/Users/97layer/97layerOS/website/archive/index.html": "970ba42bde5c377bea73de51edd70f1afeca9895",
-        "/Users/97layer/97layerOS/website/assets/css/style.css": "29d3a916d4b2510917359ae37fd2c7b3ec7c1f45"
+        "/Users/97layer/97layerOS/website/archive/index.html": "29a89520bd0559a325e0ef0e10d94b3068c990f9",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "5a6fcf6abab0c707a8af969708b41a6fcae2b1e1"
       },
       "permission_requests": 0,
       "max_permission_prompts": 1,
       "created_at": "2026-03-05T00:32:42",
-      "updated_at": "2026-03-05T00:32:44"
+      "updated_at": "2026-03-05T01:14:31"
     },
     "council_issue_loop_20260305": {
       "goal": "컨실룸 안건 자동감지/세션공유/처리순환 구현",
@@ -241,17 +241,180 @@
       ],
       "stop_conditions": "plan council exit3 또는 계약 충돌",
       "hash_seal": {
-        "/Users/97layer/97layerOS/core/scripts/council_issue_loop.py": null,
-        "/Users/97layer/97layerOS/.claude/hooks/council-room-watch.sh": null,
-        "/Users/97layer/97layerOS/.claude/hooks/session-start.sh": "cce463fa795441195dbdb9790819b4bbe3295fb9",
-        "/Users/97layer/97layerOS/.claude/settings.json": "d67911d326d67413722b6fc8141526fc041fb84a",
-        "/Users/97layer/97layerOS/core/tests/test_council_issue_loop.py": null,
-        "/Users/97layer/97layerOS/knowledge/docs/ops-handbook.md": "b920008ddb08049ed24d4c73952b346dc29f8057"
+        "/Users/97layer/97layerOS/core/scripts/council_issue_loop.py": "61d46d1b843e125ee2304ba39ae78920eb1c25c8",
+        "/Users/97layer/97layerOS/.claude/hooks/council-room-watch.sh": "bc0e1ce91dacd4b41d062f1143f4852c4e29bb80",
+        "/Users/97layer/97layerOS/.claude/hooks/session-start.sh": "548b79d4d6697590e3d4574d898a49e01b7de510",
+        "/Users/97layer/97layerOS/.claude/settings.json": "a86acafde5e34e25cc11c3ff16d1eb84ae77e95a",
+        "/Users/97layer/97layerOS/core/tests/test_council_issue_loop.py": "578131ef716ca605929435ba6c4e173baaed0045",
+        "/Users/97layer/97layerOS/knowledge/docs/ops-handbook.md": "820a0e20dfb88b5618d91e4cdc07bb5a31171e9c"
       },
       "permission_requests": 0,
       "max_permission_prompts": 1,
       "created_at": "2026-03-05T00:37:19",
-      "updated_at": "2026-03-05T00:37:21"
+      "updated_at": "2026-03-05T00:42:17"
+    },
+    "sitemap_fix_20260305": {
+      "goal": "sitemap.xml 오염 복구 및 누락 URL/playlist 경로 정합성 교정",
+      "files": [
+        "core/scripts/build_archive.py",
+        "website/sitemap.xml",
+        "website/archive/index.json"
+      ],
+      "checks": [
+        "python3 core/system/evidence_guard.py --check;python3 core/scripts/build.py --components --bust;python3 core/scripts/practical_hooks.py mobile-check --task-id sitemap_fix_20260305 --urls http://localhost:9700/ --widths 390",
+        "768",
+        "1440 --height 900 --session sitemapfix"
+      ],
+      "stop_conditions": "plan_dispatch exit3(degraded-lite) 상태 고위험 확장/비가역 변경 금지",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/scripts/build_archive.py": "e8e6e0fdd4bebd81b0a40c806d4b4df8488779c9",
+        "/Users/97layer/97layerOS/website/sitemap.xml": "ee3e6261968ce7903faefb314bf337a84811b753",
+        "/Users/97layer/97layerOS/website/archive/index.json": "8b39756c1d48879db9bdda51b4f801f222351b74"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T01:17:32",
+      "updated_at": "2026-03-05T01:27:23"
+    },
+    "build_components_indent_fix_20260305": {
+      "goal": "build_components 주입 들여쓰기 정합성 복원",
+      "files": [
+        "core/scripts/build_components.py",
+        "core/tests/test_build_components_indent.py"
+      ],
+      "checks": [
+        "pytest -q core/tests/test_build_components_indent.py;python3 core/scripts/build.py --components"
+      ],
+      "stop_conditions": "빌드 결과에서 컴포넌트 flush-left 재발",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/scripts/build_components.py": "9a797672925e37bfe259914e10484c96acb358e4",
+        "/Users/97layer/97layerOS/core/tests/test_build_components_indent.py": "4ffaeb28ff3230ca24ebf8cbeb75e26b283b2dba"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T01:22:28",
+      "updated_at": "2026-03-05T01:24:21"
+    },
+    "council_issue_hardening_20260305": {
+      "goal": "컨실룸 안건 루프의 동시성/소유권/훅 가시화 강화",
+      "files": [
+        "core/scripts/council_issue_loop.py",
+        "core/tests/test_council_issue_loop.py",
+        ".claude/hooks/council-room-watch.sh"
+      ],
+      "checks": [
+        "pytest -q core/tests/test_council_issue_loop.py;python3 core/scripts/council_issue_loop.py status --json;python3 core/system/evidence_guard.py --check"
+      ],
+      "stop_conditions": "큐 데이터 손상 징후 또는 claim/resolve 호환성 회귀",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/scripts/council_issue_loop.py": "7c21e9e294f403a153970b13513069e202e95d98",
+        "/Users/97layer/97layerOS/core/tests/test_council_issue_loop.py": "5161b107b399d6127e0063ee09ece1649250b9a6",
+        "/Users/97layer/97layerOS/.claude/hooks/council-room-watch.sh": "c10053b351a1bdfddf777aa294a58e62dafa6910"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T01:28:59",
+      "updated_at": "2026-03-05T01:30:19"
+    },
+    "frontend_execution_queue_finish_20260305": {
+      "goal": "frontend_execution_queue 남은 2개(archive premium CSS, workbook 판매전환) 구현 후 안건 resolve",
+      "files": [
+        "website/archive/index.html",
+        "website/assets/css/style.css",
+        "website/product/workbook.html",
+        "website/product/index.html",
+        "website/assets/js/payment.js"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust;python3 core/system/visual_validator.py;python3 core/scripts/practical_hooks.py mobile-check --task-id frontend_execution_queue_finish_20260305 --url http://localhost:9700/archive/ --url http://localhost:9700/product/workbook.html --url http://localhost:9700/product/ --viewport 390 --viewport 768 --viewport 1440"
+      ],
+      "stop_conditions": "웹 락 충돌, 빌드/비주얼 검증 실패, 결제 링크 회귀",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/index.html": "6c59c94a088dd7dc71e28a62f78cf8540d99ee0f",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "5a6fcf6abab0c707a8af969708b41a6fcae2b1e1",
+        "/Users/97layer/97layerOS/website/product/workbook.html": "d3f99a9bd4ba48bada488101124b6d0ada30f8c1",
+        "/Users/97layer/97layerOS/website/product/index.html": "5c878770580f2e11ee1d696c26bde7fe1e0d0353",
+        "/Users/97layer/97layerOS/website/assets/js/payment.js": "104ac45ecc52ab9f2101ccc903868d2676afb548"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T01:38:33",
+      "updated_at": "2026-03-05T01:38:38"
+    },
+    "overseas_workbook_20260305": {
+      "goal": "workbook/product 해외시장 전환",
+      "files": [
+        "website/product/workbook.html",
+        "website/product/index.html",
+        "website/payment-success.html",
+        "website/payment-fail.html",
+        "website/assets/js/payment.js",
+        "website/assets/css/style.css"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust;python3 core/system/visual_validator.py;mobile 390/768/1440"
+      ],
+      "stop_conditions": "KR 결제 플로우 깨짐 또는 검증 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/product/workbook.html": "edd2ede9ca818776c385930911524c3b096f3040",
+        "/Users/97layer/97layerOS/website/product/index.html": "38b661ad4c40a1610acbf385ceaa5a6d2bf343f9",
+        "/Users/97layer/97layerOS/website/payment-success.html": "c6c8ec687b2e7e2dc4880ace07d48c2547eaa1ae",
+        "/Users/97layer/97layerOS/website/payment-fail.html": "43391b2bbf748e68fca0acf1dd4335839da8d2f8",
+        "/Users/97layer/97layerOS/website/assets/js/payment.js": "440b502fe12261e639df2c3e5965d0372b60f10c",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "55f2e2e170ad82f8d110fc1f95cca7dbc530104d"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T08:38:12",
+      "updated_at": "2026-03-05T08:51:14"
+    },
+    "consistency_a_to_z": {
+      "goal": "웹 전역 일관성 A-Z 정비",
+      "files": [
+        "website/assets/css/style.css",
+        "website/about/index.html",
+        "website/_components/nav.html",
+        "website/assets/js/site.js"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust",
+        "python3 core/system/visual_validator.py",
+        "python3 core/scripts/practical_hooks.py mobile-check --urls http://localhost:9700/ --widths 390",
+        "768",
+        "1440 --session az"
+      ],
+      "stop_conditions": "규칙 위반/검증 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "f0ea718ae3111bc4dbbe72fe05be7eb2fb6b269d",
+        "/Users/97layer/97layerOS/website/about/index.html": "9b8a326e64ca2b18da97b42efa4a9abbf5b2dc0a",
+        "/Users/97layer/97layerOS/website/_components/nav.html": "b524f65f95d9b7b44618d97110f929472a760d15",
+        "/Users/97layer/97layerOS/website/assets/js/site.js": "ff42d838253b3be9445d017a40398719cf62f60f"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T08:59:41",
+      "updated_at": "2026-03-05T10:31:48"
+    },
+    "google-oauth-hamburger-20260305": {
+      "goal": "홈 햄버거 Google 로그인 기능 추가",
+      "files": [
+        "core/backend/main.py",
+        "website/assets/js/site.js",
+        "website/assets/css/style.css"
+      ],
+      "checks": [
+        "python3 -m py_compile core/backend/main.py; python3 core/system/web_consistency_lock.py --validate CODEX"
+      ],
+      "stop_conditions": "lock/검증 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/core/backend/main.py": "6c890f4bf4ec52aa566e00398c8be1d20038ff44",
+        "/Users/97layer/97layerOS/website/assets/js/site.js": "5ccf5ddd7063bce742e0d79402c267c407069bd8",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "f9b785e0a00949595be9fcf6185182ba27b64b41"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T10:43:07",
+      "updated_at": "2026-03-05T10:54:31"
     }
   }
 }

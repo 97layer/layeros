@@ -853,3 +853,27 @@
         applyState(fallback);
       });
   })();
+
+  /* ─── Footer Live Time (KST) ─── */
+  (function () {
+    var timeEl = document.getElementById('footer-time');
+    if (!timeEl) return;
+    
+    function updateTime() {
+      var d = new Date();
+      var h = d.getHours();
+      var m = d.getMinutes();
+      var s = d.getSeconds();
+      
+      var hh = h < 10 ? '0' + h : h;
+      var mm = m < 10 ? '0' + m : m;
+      var ss = s < 10 ? '0' + s : s;
+      
+      /* 울산 방구정 20길 인근 근사 좌표 + 24시 형식 초단위 표시 (밀도 높은 좌표계 연출) */
+      timeEl.textContent = ' ⸰ 35.556° N, 129.332° E · ' + hh + ':' + mm + ':' + ss;
+    }
+    
+    updateTime();
+    setInterval(updateTime, 1000);
+  })();
+})();

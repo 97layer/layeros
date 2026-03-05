@@ -4,6 +4,6 @@
   "section_label": "ARCHIVE",
   "description": "에세이, 저널, 룩북, 플레이리스트. 소거라는 렌즈로 세상을 읽는 기록들.",
   "og_url": "https://woohwahae.kr/archive/",
-  "body_class": "page-archive",
+  "body_class": "page-archive page-archive-index",
   "preamble": "에세이, 저널, 룩북, 플레이리스트. 느린 호흡으로 축적된 기록을 큐레이션합니다."
 }

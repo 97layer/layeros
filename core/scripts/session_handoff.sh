@@ -80,6 +80,14 @@ else
     echo "⚠️  WARNING: QUANTA was not updated recently"
 fi
 
+# Update session task telemetry (non-blocking)
+python3 core/system/session_state.py \
+    --event finish \
+    --agent-id "$AGENT_ID" \
+    --task-label "${SUMMARY:0:120}" \
+    --session-id "${SESSION_ID:-}" \
+    --summary "$SUMMARY" >/dev/null 2>&1 || true
+
 echo ""
 echo "╔════════════════════════════════════════════════════════════════╗"
 echo "║  ✅ Session Handoff Complete                                  ║"

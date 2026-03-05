@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Condense — Demo</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #F0F0F0;
+            --text: #111111;
+            --text-faint: #666666;
+            --noise: #AAAAAA;
+            /* 노이즈 기호 색 */
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'IBM Plex Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 52px;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .assemble-wrap {
+            display: flex;
+            white-space: nowrap;
+        }
+
+        .assemble-wrap .char {
+            display: inline-block;
+            color: var(--noise);
+            opacity: 0;
+            transition: opacity 0.18s linear, color 0.24s linear;
+        }
+
+        /* 노이즈 단계: 흐릿하게 존재 */
+        .assemble-wrap .char.noise {
+            opacity: 0.38;
+            color: var(--noise);
+        }
+
+        /* 확정 단계: 실제 글자로 */
+        .assemble-wrap .char.settled {
+            opacity: 1;
+            color: var(--text);
+            transition: color 0.12s linear;
+        }
+
+        .demo-wordmark {
+            font-size: clamp(1.8rem, 7vw, 4.2rem);
+            font-weight: 300;
+            letter-spacing: 0.22em;
+        }
+
+        .demo-sub {
+            font-size: clamp(0.55rem, 1.4vw, 0.72rem);
+            font-weight: 300;
+            letter-spacing: 0.28em;
+            color: var(--text-faint);
+        }
+
+        .replay-btn {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.12em;
+            color: var(--text-faint);
+            background: transparent;
+            border: 1px solid rgba(102, 102, 102, 0.28);
+            padding: 7px 13px;
+            cursor: pointer;
+            transition: border-color 0.14s, color 0.14s;
+        }
+
+        .replay-btn:hover {
+            color: var(--text);
+            border-color: rgba(17, 17, 17, 0.35);
+        }
+
+        .back-link {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.1em;
+            color: var(--text-faint);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a class="back-link" href="/lab/">← LAB</a>
+
+    <div class="assemble-wrap demo-wordmark" data-assemble="WOOHWAHAE"></div>
+    <div class="assemble-wrap demo-sub" data-assemble="FIELD · PRACTICE · SLOW LIFE"></div>
+
+    <button class="replay-btn" id="replay">[ REPLAY ]</button>
+
+    <script>
+        (function () {
+            /* 데이터 그레인 풀 — IBM 터미널 노이즈 기호 */
+            var NOISE = ['·', '—', '|', '/', '\\', ':', '_', '▸', '·', '·', '—'];
+            var STAGGER = 80;   /* ms per char */
+            var NOISE_CYCLES = 4;    /* 노이즈 교체 횟수 */
+            var NOISE_SPEED = 55;   /* ms per cycle */
+            var RAND_EXTRA = 35;
+
+            function randomNoise() {
+                return NOISE[Math.floor(Math.random() * NOISE.length)];
+            }
+
+            function resolveChar(span, finalChar, delay) {
+                setTimeout(function () {
+                    /* 1. 노이즈로 먼저 등장 */
+                    span.textContent = randomNoise();
+                    span.classList.add('noise');
+
+                    /* 2. NOISE_CYCLES 회 짧게 교체 */
+                    var count = 0;
+                    var ticker = setInterval(function () {
+                        count++;
+                        if (count < NOISE_CYCLES) {
+                            span.textContent = randomNoise();
+                        } else {
+                            /* 3. 최종 글자로 확정 */
+                            clearInterval(ticker);
+                            span.textContent = finalChar;
+                            span.classList.remove('noise');
+                            span.classList.add('settled');
+                        }
+                    }, NOISE_SPEED);
+
+                }, delay);
+            }
+
+            function condense(el, text, baseDelay) {
+                el.innerHTML = '';
+
+                text.split('').forEach(function (ch, i) {
+                    var span = document.createElement('span');
+                    span.className = 'char';
+                    /* 공백은 그냥 공백 */
+                    span.textContent = '\u00a0';
+                    el.appendChild(span);
+
+                    if (ch.trim() === '') {
+                        span.classList.add('settled');
+                        span.textContent = '\u00a0';
+                        return;
+                    }
+
+                    var delay = baseDelay + i * STAGGER + Math.random() * RAND_EXTRA;
+                    resolveChar(span, ch, delay);
+                });
+            }
+
+            function condenseAll() {
+                document.querySelectorAll('[data-assemble]').forEach(function (el, idx) {
+                    condense(el, el.getAttribute('data-assemble'), idx * 500);
+                });
+            }
+
+            condenseAll();
+
+            document.getElementById('replay').addEventListener('click', function () {
+                document.querySelectorAll('[data-assemble] .char').forEach(function (s) {
+                    s.className = 'char';
+                    s.textContent = '\u00a0';
+                });
+                setTimeout(condenseAll, 60);
+            });
+        })();
+    </script>
+</body>
+
+</html>

@@ -23,6 +23,13 @@ from sqlalchemy import create_engine, Column, String, Text, DateTime, Integer
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 from pydantic import BaseModel, Field
 
+try:
+    from google.auth.transport import requests as google_requests
+    from google.oauth2 import id_token as google_id_token
+except ImportError:
+    google_requests = None
+    google_id_token = None
+
 # LAYER OS core modules
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT))
@@ -152,6 +159,25 @@ class WSGIAdapter:
 
 ADMIN_PASSWORD_HASH = require_env('FASTAPI_ADMIN_PASSWORD_HASH')
 
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.getenv(name, "").strip()
+    if not raw:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        return default
+
+
+GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID", "").strip()
+GOOGLE_OAUTH_ALLOWED_HD = os.getenv("GOOGLE_OAUTH_ALLOWED_HD", "").strip()
+USER_SESSION_TTL = max(300, _env_int("FASTAPI_USER_SESSION_TTL", 86400))
+GOOGLE_CLOCK_SKEW_SECONDS = max(0, _env_int("GOOGLE_OAUTH_CLOCK_SKEW", 30))
+GOOGLE_OAUTH_READY = bool(
+    GOOGLE_OAUTH_CLIENT_ID and google_requests is not None and google_id_token is not None
+)
+
 # ─── FastAPI 앱 ───────────────────────────────────────────────
 
 app = FastAPI(
@@ -181,6 +207,7 @@ _audit_logger = setup_audit_logger('fastapi_audit', _audit_log_path)
 
 # 로그인 레이트 리미터 (5회/분)
 _login_limiter = RateLimiter(max_requests=5, window_seconds=60)
+_oauth_login_limiter = RateLimiter(max_requests=20, window_seconds=60)
 
 
 def _audit(request: Request, action: str, detail: str = '') -> None:
@@ -355,11 +382,16 @@ class QueueTaskCreate(BaseModel):
     payload: dict[str, Any] = Field(default_factory=dict)
 
 
+class GoogleOAuthLoginPayload(BaseModel):
+    credential: str = Field(..., min_length=32, max_length=8192)
+
+
 # ─── 세션/토큰 ────────────────────────────────────────────────
 
 # {token: {'created': timestamp}} — secrets 기반, 1시간 만료
 _admin_sessions: dict[str, dict] = {}
 SESSION_TTL = 3600  # 1시간
+_user_sessions: dict[str, dict[str, Any]] = {}
 
 
 def _cleanup_expired_sessions() -> None:
@@ -367,6 +399,10 @@ def _cleanup_expired_sessions() -> None:
     expired = [t for t, v in _admin_sessions.items() if now - v['created'] > SESSION_TTL]
     for t in expired:
         del _admin_sessions[t]
+
+    expired_user_tokens = [t for t, v in _user_sessions.items() if now - v['created'] > USER_SESSION_TTL]
+    for t in expired_user_tokens:
+        del _user_sessions[t]
 
 
 def get_db():
@@ -377,11 +413,25 @@ def get_db():
         db.close()
 
 
-def _extract_admin_token(request: Request) -> str:
+def _extract_bearer_token(request: Request) -> str:
     auth = request.headers.get("authorization", "").strip()
     if auth.lower().startswith("bearer "):
         return auth.split(" ", 1)[1].strip()
+    return ""
+
+
+def _extract_admin_token(request: Request) -> str:
+    token = _extract_bearer_token(request)
+    if token:
+        return token
     return request.headers.get("x-admin-token", "").strip()
+
+
+def _extract_user_token(request: Request) -> str:
+    token = _extract_bearer_token(request)
+    if token:
+        return token
+    return request.headers.get("x-user-token", "").strip()
 
 
 def check_admin(request: Request):
@@ -391,6 +441,35 @@ def check_admin(request: Request):
     if not token or token not in _admin_sessions:
         raise HTTPException(status_code=401, detail="Unauthorized")
     return True
+
+
+def _user_payload_from_google_claims(claims: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "sub": str(claims.get("sub", "")),
+        "email": str(claims.get("email", "")).strip().lower(),
+        "name": str(claims.get("name", "")).strip(),
+        "picture": str(claims.get("picture", "")).strip(),
+    }
+
+
+def _build_google_oauth_config() -> dict[str, Any]:
+    return {
+        "enabled": GOOGLE_OAUTH_READY,
+        "provider": "google",
+        "client_id": GOOGLE_OAUTH_CLIENT_ID if GOOGLE_OAUTH_READY else "",
+        "reason": "" if GOOGLE_OAUTH_READY else "GOOGLE_OAUTH_CLIENT_ID or google-auth dependency missing",
+    }
+
+
+def _current_user_from_request(request: Request) -> tuple[Optional[str], Optional[dict[str, Any]]]:
+    _cleanup_expired_sessions()
+    token = _extract_user_token(request)
+    if not token:
+        return None, None
+    session = _user_sessions.get(token)
+    if not session:
+        return token, None
+    return token, session
 
 
 # ─── 인증 엔드포인트 ──────────────────────────────────────────
@@ -412,6 +491,87 @@ async def admin_login(auth: AdminAuth, request: Request):
     _admin_sessions[token] = {'created': time.time()}
     _audit(request, 'login_success', ip)
     return {"token": token, "message": "Login successful"}
+
+
+@app.get("/api/auth/google/config")
+async def google_auth_config():
+    return _build_google_oauth_config()
+
+
+@app.post("/api/auth/google/login")
+async def google_auth_login(payload: GoogleOAuthLoginPayload, request: Request):
+    if not GOOGLE_OAUTH_READY:
+        raise HTTPException(status_code=503, detail="Google OAuth is not configured")
+
+    ip = request.client.host if request.client else 'unknown'
+    if _oauth_login_limiter.is_limited(ip):
+        _audit(request, 'oauth_login_rate_limited', ip)
+        raise HTTPException(status_code=429, detail="Too many attempts. Try later.")
+
+    try:
+        token_info = google_id_token.verify_oauth2_token(
+            payload.credential,
+            google_requests.Request(),
+            GOOGLE_OAUTH_CLIENT_ID,
+            clock_skew_in_seconds=GOOGLE_CLOCK_SKEW_SECONDS,
+        )
+    except ValueError:
+        _audit(request, 'oauth_login_failed', 'google_token_invalid')
+        raise HTTPException(status_code=401, detail="Invalid Google credential")
+
+    issuer = str(token_info.get("iss", ""))
+    if issuer not in ("accounts.google.com", "https://accounts.google.com"):
+        _audit(request, 'oauth_login_failed', 'issuer_invalid')
+        raise HTTPException(status_code=401, detail="Invalid token issuer")
+
+    if not token_info.get("email_verified"):
+        _audit(request, 'oauth_login_failed', 'email_not_verified')
+        raise HTTPException(status_code=401, detail="Email is not verified")
+
+    if GOOGLE_OAUTH_ALLOWED_HD:
+        hosted_domain = str(token_info.get("hd", "")).strip().lower()
+        if hosted_domain != GOOGLE_OAUTH_ALLOWED_HD.lower():
+            _audit(request, 'oauth_login_failed', 'hosted_domain_mismatch')
+            raise HTTPException(status_code=403, detail="Google hosted domain is not allowed")
+
+    user = _user_payload_from_google_claims(token_info)
+    if not user["sub"] or not user["email"]:
+        _audit(request, 'oauth_login_failed', 'missing_claims')
+        raise HTTPException(status_code=401, detail="Required Google claims are missing")
+
+    session_token = generate_token(32)
+    _user_sessions[session_token] = {
+        "created": time.time(),
+        "user": user,
+    }
+    _oauth_login_limiter.reset(ip)
+    _audit(request, 'oauth_login_success', user["email"])
+    return {
+        "token": session_token,
+        "user": user,
+        "expires_in": USER_SESSION_TTL,
+        "provider": "google",
+    }
+
+
+@app.get("/api/auth/me")
+async def auth_me(request: Request):
+    _, session = _current_user_from_request(request)
+    if not session:
+        return {"authenticated": False}
+    return {
+        "authenticated": True,
+        "user": session["user"],
+        "expires_in": USER_SESSION_TTL,
+    }
+
+
+@app.post("/api/auth/logout")
+async def auth_logout(request: Request):
+    token, session = _current_user_from_request(request)
+    if token and session:
+        _user_sessions.pop(token, None)
+    return {"success": True}
 
 
 # ─── API 엔드포인트 ───────────────────────────────────────────
