@@ -9,15 +9,16 @@
   <meta property="og:url" content="https://woohwahae.kr/lab/full-renewal-showcase.html"/>
   <title>Exp.024 Full Renewal Showcase — WOOHWAHAE Lab</title>
   <!-- COMPONENT:head -->
-  <meta name="theme-color" content="#E3E2E0">
+  <meta name="theme-color" content="#EAEAEA">
   <link rel="icon" href="/assets/media/brand/symbol.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+  <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
   <link rel="stylesheet" href="/assets/css/style.css?v=1a2f99b7">
-  <script>(function(){var h=new Date().getHours();var cls=h<6?'time-dawn':h<18?'time-day':h<22?'time-evening':'time-night';var root=document.documentElement;root.classList.remove('time-dawn','time-day','time-evening','time-night');root.classList.add(cls);})();</script>
+  <script>(function () { var h = new Date().getHours(); var cls = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; var root = document.documentElement; root.classList.remove('time-dawn', 'time-day', 'time-evening', 'time-night'); root.classList.add(cls); })();</script>
   <!-- /COMPONENT:head -->
 </head>
 <body class="page-lab page-lab-renewal">
@@ -27,9 +28,10 @@
     <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
   </a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
-    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
-    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/archive/">Archive</a></li>
+    <li><a href="/practice/">Practice</a></li>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/lab/">Lab</a></li>
   </ul>
   <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
     <span></span><span></span>
@@ -37,9 +39,40 @@
   <div class="read-progress" id="read-progress" aria-hidden="true"></div>
 </nav>
 <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
-  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
-  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
-  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <div class="nav-overlay__grid">
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/archive/">Archive</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/archive/#essay">Essay <span>에세이</span></a>
+        <a href="/archive/#journal">Journal <span>일지</span></a>
+        <a href="/archive/lookbook/">Lookbook <span>룩북</span></a>
+        <a href="/playlist.html">Playlist <span>재생목록</span></a>
+      </nav>
+    </div>
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/practice/">Practice</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/practice/#atelier">Atelier <span>아틀리에</span></a>
+        <a href="/practice/#directing">Directing <span>디렉팅</span></a>
+        <a href="/practice/#projects">Project <span>프로젝트</span></a>
+        <a href="/practice/#product">Product <span>결과물</span></a>
+      </nav>
+    </div>
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/about/">About</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/about/#ch-2">The Origin <span>근원</span></a>
+        <a href="/about/woosunho/">Profile <span>프로필</span></a>
+      </nav>
+    </div>
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/lab/">Lab</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/lab/">Experiments <span>실험실</span></a>
+        <a href="/lab/changelog/">Changelog <span>변경이력</span></a>
+      </nav>
+    </div>
+  </div>
 </div>
 <!-- /COMPONENT:nav -->
 
@@ -297,31 +330,39 @@
 <!-- COMPONENT:footer -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-wordmark">WOOHWAHAE</div>
     <div class="footer-mid">
-      <nav class="footer-nav">
-        <a href="/archive/">Archive</a>
-        <a href="/practice/">Practice</a>
-        <a href="/about/">About</a>
-        <a href="/lab/">Lab</a>
-        <a href="mailto:hello@woohwahae.kr">Contact</a>
-      </nav>
-      <div class="footer-contact-row">
+      <button class="footer-contact-toggle" id="footer-contact-toggle" aria-expanded="false">
+        Contact <span class="footer-toggle-icon">+</span>
+      </button>
+      <div class="footer-contact-panel" id="footer-contact-panel" aria-hidden="true">
+        <a href="tel:050713932075">0507-1393-2075</a>
         <a href="mailto:hello@woohwahae.kr">hello@woohwahae.kr</a>
-        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">@woohwahae</a>
+        <a href="https://instagram.com/woohwahae" target="_blank" rel="noopener">Instagram</a>
       </div>
     </div>
     <div class="footer-base">
       <p class="footer-biz">CEO SUNHO JO &middot; BRN 532-05-02854 &middot; 32, Bangujeong 20-gil, Jung-gu, Ulsan</p>
       <div class="footer-legal">
+        <span>&copy; 2024 WOOHWAHAE</span>
         <a href="/privacy.html">Privacy</a>
         <a href="/terms.html">Terms</a>
-        <span>&copy; 2026 WOOHWAHAE</span>
         <span class="footer-time" id="footer-time"></span>
       </div>
     </div>
   </div>
 </footer>
+<script>
+(function(){
+  var btn=document.getElementById('footer-contact-toggle');
+  var panel=document.getElementById('footer-contact-panel');
+  if(!btn||!panel)return;
+  btn.addEventListener('click',function(){
+    var open=panel.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded',String(open));
+    panel.setAttribute('aria-hidden',String(!open));
+  });
+})();
+</script>
 <!-- /COMPONENT:footer -->
 </body>
 </html>

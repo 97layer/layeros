@@ -873,3 +873,22 @@
     setInterval(updateTime, 1000);
   })();
 })();
+
+/* ─── Footer Contact Toggle ─── */
+(function () {
+  function initFooterToggle() {
+    var btn = document.getElementById('footer-contact-toggle');
+    var panel = document.getElementById('footer-contact-panel');
+    if (!btn || !panel) return;
+    btn.addEventListener('click', function () {
+      var open = panel.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+      panel.setAttribute('aria-hidden', String(!open));
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFooterToggle);
+  } else {
+    initFooterToggle();
+  }
+})();
