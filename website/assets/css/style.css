@@ -3874,28 +3874,28 @@ footer {
   border-bottom-color: var(--text);
 }
 
-/* ── Time-Aware Atmosphere ── */
+/* ── Time-Aware Atmosphere (Monochrome override) ── */
 :root.time-dawn {
-  --bg: #EAEAE8;
-  --bg-dark: #E2E2E0;
-  --text-faint: #777;
+  --bg: #EAEAEA;
+  --bg-dark: #E2E2E2;
+  --text-faint: #888;
   --duration-slow: 1.8s;
   --breath: 4.8s;
   /* 새벽 — 가장 긴 호흡 */
 }
 
 :root.time-evening {
-  --bg: #E6E5E3;
-  --bg-dark: #DEDDD9;
-  --text-faint: #9A8F85;
+  --bg: #ECECEC;
+  --bg-dark: #E4E4E4;
+  --text-faint: #888;
   --duration-slow: 1.5s;
   --breath: 4.2s;
   /* 저녁 — 약간 느려짐 */
 }
 
 :root.time-night {
-  --bg: #DCDCDA;
-  --bg-dark: #D5D5D3;
+  --bg: #DCDCDC;
+  --bg-dark: #D5D5D5;
   --text-faint: #777;
   --duration-slow: 2s;
   --breath: 5.2s;
@@ -4653,7 +4653,8 @@ body.home-radical .mag-row {
 
 /* Contact: 콘텐츠 영역 가독성 */
 body.home-radical .contact-section {
-  background: rgba(240, 239, 235, 0.78);
+  background: rgba(234, 234, 234, 0.78);
+  /* 모노톤으로 전환 */
   padding: var(--space-md);
   border-radius: 2px;
 }
@@ -4661,9 +4662,9 @@ body.home-radical .contact-section {
 /* ─── About 페이지 전용 시각 조정 ─── */
 /* 서늘한 무채색 온도 (크림 #F0EFEB → 중립 회백색) */
 body.home-radical {
-  --bg: #E3E2E0;
-  --bg-dark: #DDDCDA;
-  --line: #CCCCC9;
+  --bg: var(--bg);
+  --bg-dark: var(--bg-dark);
+  --line: var(--line);
 }
 
 body.home-radical .mag-row--intro {
@@ -4877,9 +4878,10 @@ body.home-radical::after {
 @media (max-width: 768px) {
   .manifesto {
     padding: var(--space-lg) var(--space-sm);
-    background: rgba(228, 226, 220, 0.82);
-    backdrop-filter: blur(2px);
+    background: rgba(234, 234, 234, 0.82);
+    /* 베이지 잔재 제거 */
     -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
     position: relative;
     z-index: 1;
   }
@@ -6768,10 +6770,10 @@ body.page-archive-ledger .footer-legal span {
 }
 
 .nav-open .site-nav {
-  background: rgba(255, 255, 255, 0.45) !important;
-  backdrop-filter: blur(50px) saturate(140%);
-  -webkit-backdrop-filter: blur(50px) saturate(140%);
-  border-bottom-color: rgba(26, 26, 26, 0.05);
+  background: var(--bg) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: var(--text);
 }
 
 /* 읽기 진행 바 — 에세이 전용 */
@@ -6926,16 +6928,23 @@ body.page-archive-ledger .footer-legal span {
 .nav-overlay.open .nav-overlay__sector:nth-child(1) .nav-overlay__label a {
   animation: nav-type-in 0.5s steps(20) 0.1s forwards;
 }
+
 .nav-overlay.open .nav-overlay__sector:nth-child(2) .nav-overlay__label a {
   animation: nav-type-in 0.5s steps(20) 0.32s forwards;
 }
+
 .nav-overlay.open .nav-overlay__sector:nth-child(3) .nav-overlay__label a {
   animation: nav-type-in 0.5s steps(14) 0.54s forwards;
 }
 
 @keyframes nav-type-in {
-  from { clip-path: inset(0 100% 0 0); }
-  to   { clip-path: inset(0 0% 0 0); }
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0% 0 0);
+  }
 }
 
 .nav-overlay__subs {
@@ -6946,9 +6955,20 @@ body.page-archive-ledger .footer-legal span {
   transition: opacity 0.4s ease;
 }
 
-.nav-overlay.open .nav-overlay__sector:nth-child(1) .nav-overlay__subs { opacity: 1; transition-delay: 0.65s; }
-.nav-overlay.open .nav-overlay__sector:nth-child(2) .nav-overlay__subs { opacity: 1; transition-delay: 0.88s; }
-.nav-overlay.open .nav-overlay__sector:nth-child(3) .nav-overlay__subs { opacity: 1; transition-delay: 1.08s; }
+.nav-overlay.open .nav-overlay__sector:nth-child(1) .nav-overlay__subs {
+  opacity: 1;
+  transition-delay: 0.65s;
+}
+
+.nav-overlay.open .nav-overlay__sector:nth-child(2) .nav-overlay__subs {
+  opacity: 1;
+  transition-delay: 0.88s;
+}
+
+.nav-overlay.open .nav-overlay__sector:nth-child(3) .nav-overlay__subs {
+  opacity: 1;
+  transition-delay: 1.08s;
+}
 
 .nav-overlay__subs a {
   font-family: var(--font-mono);
@@ -14033,12 +14053,12 @@ html[data-nav-dir="back"] ::view-transition-new(root) {
 :root.time-day,
 :root.time-evening,
 :root.time-night {
-  --bg: #E3E2E0;
-  --bg-dark: #DDDCDA;
-  --text: #1A1A1A;
-  --text-sub: #4A4A4A;
-  --text-faint: #7A7A74;
-  --line: #EFEEED;
+  --bg: #EAEAEA;
+  --bg-dark: #E2E2E2;
+  --text: #000000;
+  --text-sub: #444444;
+  --text-faint: #888888;
+  --line: #DDDDDD;
 }
 
 /* Shared shell typography and spacing. */
@@ -14615,13 +14635,13 @@ body.page-lab-demo textarea {
    Preserve WOOHWAHAE mood while tightening visual discipline.
    ============================================================ */
 :root {
-  --bg: #eceae6;
-  --bg-dark: #e2dfd9;
-  --footer-bg: #e4e1db;
-  --text: #22201b;
-  --text-sub: #565047;
-  --text-faint: #797065;
-  --line: #d6d1c8;
+  --bg: #EAEAEA;
+  --bg-dark: #E2E2E2;
+  --footer-bg: #E6E6E6;
+  --text: #000000;
+  --text-sub: #444444;
+  --text-faint: #888888;
+  --line: #DDDDDD;
   --border: var(--line);
 
   --space-xs: 0.5rem;
@@ -14644,12 +14664,12 @@ body.page-lab-demo textarea {
 :root.time-day,
 :root.time-evening,
 :root.time-night {
-  --bg: #eceae6;
-  --bg-dark: #e2dfd9;
-  --text: #22201b;
-  --text-sub: #565047;
-  --text-faint: #797065;
-  --line: #d6d1c8;
+  --bg: #EAEAEA;
+  --bg-dark: #E2E2E2;
+  --text: #000000;
+  --text-sub: #444444;
+  --text-faint: #888888;
+  --line: #DDDDDD;
 }
 
 body {
@@ -15487,13 +15507,13 @@ body::after {
    Archive + Practice hard reset for consistent family look.
    ============================================================ */
 :root {
-  --bg: #D9D5CE;
-  --bg-dark: #CFCCC4;
-  --footer-bg: #D2CEC7;
-  --text: #141311;
-  --text-sub: #35312C;
-  --text-faint: #5E574E;
-  --line: #C5BFB5;
+  --bg: #DDDDDD;
+  --bg-dark: #D3D3D3;
+  --footer-bg: #D7D7D7;
+  --text: #111111;
+  --text-sub: #333333;
+  --text-faint: #555555;
+  --line: #C5C5C5;
   --border: var(--line);
 
   --space-xs: 8px;
@@ -16177,13 +16197,13 @@ body.is-loaded .home-hero__nav {
    Kill muddy mood. Clean, readable, restrained tension.
    ============================================================ */
 :root {
-  --bg: #DDD9D2;
-  --bg-dark: #D3CFC7;
-  --footer-bg: #D7D2CB;
-  --text: #0F0F0D;
-  --text-sub: #2C2A26;
-  --text-faint: #514B43;
-  --line: #BEB7AC;
+  --bg: #DDDDDD;
+  --bg-dark: #D3D3D3;
+  --footer-bg: #D7D7D7;
+  --text: #111111;
+  --text-sub: #333333;
+  --text-faint: #555555;
+  --line: #BEBEBE;
   --border: var(--line);
 }
 
@@ -16403,19 +16423,19 @@ button:focus-visible {
    No beige tint. High readability + hard contrast.
    ============================================================ */
 :root {
-  --bg: #efefeb;
-  --bg-dark: #e6e6e1;
-  --footer-bg: #e9e9e4;
-  --text: #171715;
-  --text-sub: #34332f;
-  --text-faint: #63635c;
-  --line: #c6c6be;
+  --bg: #EAEAEA;
+  --bg-dark: #E2E2E2;
+  --footer-bg: #E6E6E6;
+  --text: #000000;
+  --text-sub: #444444;
+  --text-faint: #888888;
+  --line: #DDDDDD;
   --border: var(--line);
 }
 
 body {
   background:
-    linear-gradient(180deg, rgba(239, 239, 235, 0.94) 0%, rgba(230, 230, 225, 0.94) 100%),
+    linear-gradient(180deg, rgba(234, 234, 234, 0.94) 0%, rgba(226, 226, 226, 0.94) 100%),
     url('/assets/media/ui/dot-grid.svg');
   background-repeat: no-repeat, repeat;
   background-size: cover, 24px 24px;
@@ -18718,7 +18738,7 @@ body.page-archive .arc-item__summary {
 
 body {
   background:
-    linear-gradient(180deg, rgba(242, 242, 240, 0.92) 0%, rgba(234, 234, 231, 0.92) 100%),
+    linear-gradient(180deg, rgba(242, 242, 242, 0.92) 0%, rgba(234, 234, 234, 0.92) 100%),
     url('/assets/media/ui/dot-grid.svg');
   background-repeat: no-repeat, repeat;
   background-size: cover, 28px 28px;
@@ -19572,7 +19592,8 @@ body.is-loaded .home-preloader {
 
 /* 시간대별 배경색 변조 */
 body.time-dawn .home-preloader {
-  background-color: #F5F4F2;
+  background-color: #F5F5F5;
+  /* 웜톤(#F5F4F2)에서 모노 스케일로 정정 */
 }
 
 body.time-day .home-preloader {
@@ -19580,11 +19601,11 @@ body.time-day .home-preloader {
 }
 
 body.time-evening .home-preloader {
-  background-color: #E8E7E5;
+  background-color: #E8E8E8;
 }
 
 body.time-night .home-preloader {
-  background-color: #E0DFDD;
+  background-color: #E0E0E0;
 }
 
 /* ── Nav Overlay OAuth Panel (2026-03-05) ── */

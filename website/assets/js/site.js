@@ -21,25 +21,21 @@
 
   if (toggle && overlay) {
     function setNavOpen(nextOpen) {
-      /* [ ] ↔ [×] 전환 시 opacity fade: content는 transition 불가라 JS로 처리 */
-      toggle.classList.add('nav-toggle--switching');
-      toggle.classList.remove('nav-toggle--appeared');
-      setTimeout(function () {
-        overlay.classList.toggle('open', nextOpen);
-        overlay.setAttribute('aria-hidden', String(!nextOpen));
-        toggle.setAttribute('aria-expanded', String(nextOpen));
-        document.body.classList.toggle('nav-open', nextOpen);
-        toggle.classList.remove('nav-toggle--switching');
-        toggle.classList.add('nav-toggle--appeared');
-        setTimeout(function () {
-          toggle.classList.remove('nav-toggle--appeared');
-        }, 260);
-      }, 150);
+      overlay.classList.toggle('open', nextOpen);
+      overlay.setAttribute('aria-hidden', String(!nextOpen));
+      toggle.setAttribute('aria-expanded', String(nextOpen));
+      document.body.classList.toggle('nav-open', nextOpen);
     }
 
     function closeNav() {
       setNavOpen(false);
     }
+
+    /* dim backdrop — 드롭다운 바깥 클릭 시 닫기 */
+    var dim = document.createElement('div');
+    dim.className = 'nav-dim';
+    document.body.appendChild(dim);
+    dim.addEventListener('click', closeNav);
 
     setNavOpen(false);
 
@@ -858,21 +854,21 @@
   (function () {
     var timeEl = document.getElementById('footer-time');
     if (!timeEl) return;
-    
+
     function updateTime() {
       var d = new Date();
       var h = d.getHours();
       var m = d.getMinutes();
       var s = d.getSeconds();
-      
+
       var hh = h < 10 ? '0' + h : h;
       var mm = m < 10 ? '0' + m : m;
       var ss = s < 10 ? '0' + s : s;
-      
+
       /* 울산 방구정 20길 인근 근사 좌표 + 24시 형식 초단위 표시 (밀도 높은 좌표계 연출) */
       timeEl.textContent = ' ⸰ 35.556° N, 129.332° E · ' + hh + ':' + mm + ':' + ss;
     }
-    
+
     updateTime();
     setInterval(updateTime, 1000);
   })();
