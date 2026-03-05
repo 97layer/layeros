@@ -319,7 +319,8 @@ def _build_runtime_meta(
     if decision == "needs_clarification":
         gate_recommendation = "needs_clarification"
     elif availability_score <= 0.0:
-        gate_recommendation = "hard_stop"
+        # 네트워크 오류 — 작업 자체 위험이 아니므로 caution으로 다운그레이드
+        gate_recommendation = "caution"
     elif status == "degraded" or reliability_score < _MIN_RELIABILITY or unstable:
         gate_recommendation = "caution"
     else:
@@ -700,9 +701,9 @@ def self_check(require_both: bool = False) -> int:
 def _exit_code(payload: Dict[str, Any]) -> int:
     """Exit code contract:
     0 = ready + go          → 구현 진행 가능
-    1 = degraded (둘 다)    → HARD STOP. 네트워크/키 오류. 구현 금지.
     2 = needs_clarification → 범위 불명확. 사용자 확인 후 진행.
-    3 = degraded/caution    → 단일 모델 또는 신뢰도/변동성 주의. 승인 후 진행.
+    3 = degraded/caution    → 네트워크 오류, 단일 모델, 신뢰도 이슈. 사용자 승인 후 진행.
+    (1 = 미사용. 네트워크 오류도 hard stop하지 않음)
     """
     consensus = payload.get("consensus", {})
     status = consensus.get("status", "degraded")
@@ -712,11 +713,11 @@ def _exit_code(payload: Dict[str, Any]) -> int:
     gate = str(runtime.get("gate_recommendation", "")).strip().lower()
 
     if gate == "hard_stop":
-        return 1
+        return 3  # hard_stop → caution으로 다운그레이드 (네트워크 오류 포함)
     if gate == "needs_clarification":
         return 2
     if status == "degraded" and not models_used:
-        return 1  # 둘 다 실패
+        return 3  # 둘 다 실패 → caution (HARD STOP 제거)
     if status == "degraded":
         return 3  # 한 모델만 성공
     if decision == "needs_clarification":
