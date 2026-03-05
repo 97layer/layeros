@@ -1,13 +1,20 @@
 {
-  "generated": "2026-03-05T16:17:56.399819+00:00",
+  "generated": "2026-03-05T16:20:26.700033+00:00",
   "start_date": "2026-02-18",
   "days": 16,
-  "total_commits": 331,
+  "total_commits": 333,
   "uncommitted": 0,
-  "invested_hours": 90.9,
-  "lines_added": 128853,
-  "lines_deleted": 75875,
+  "invested_hours": 91.0,
+  "lines_added": 128876,
+  "lines_deleted": 75884,
   "entries": [
+    {
+      "type": "commit",
+      "sha": "af09bec",
+      "date": "2026-03-06T01:20:04+09:00",
+      "msg": "feat(about): 지은이의 말 — 솔직 리라이트",
+      "rawMsg": "feat(about): 지은이의 말 — 솔직 리라이트"
+    },
     {
       "type": "commit",
       "sha": "7ccaf91",
@@ -77,6 +84,13 @@
       "date": "2026-03-05T19:47:10+09:00",
       "msg": "style(footer): Contact 토글 리디자인 + 채널톡 삽입",
       "rawMsg": "style(footer): Contact 토글 리디자인 + 채널톡 삽입"
+    },
+    {
+      "type": "commit",
+      "sha": "ef075e3",
+      "date": "2026-03-05T16:17:56Z",
+      "msg": "update changelog data",
+      "rawMsg": "chore: update changelog data"
     },
     {
       "type": "commit",
