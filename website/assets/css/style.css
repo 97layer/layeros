@@ -15,26 +15,38 @@
 :root {
   /* ━━━ 색상 — Cinematic Monochrome ━━━ */
   --bg: #EAEAEA;
-  /* 메인 배경 (모노톤) */
   --bg-dark: #E2E2E2;
-  /* 보조 배경 */
   --footer-bg: #E6E6E6;
-  /* 푸터 배경 */
-  --text: #111111;
-  /* 잉크 블랙 */
-  --text-sub: #555555;
-  /* 보조 텍스트 */
+  --text: #000000;
+  /* 순수 블랙 */
+  --text-sub: #444444;
+  /* 순수 딥 그레이 */
   --text-faint: #888888;
-  /* 희미한 텍스트 (WCAG AA 4.5:1 확보) */
+  /* 순수 라이트 그레이 */
   --white: #FFFFFF;
-  --line: #EEEEEE;
+  --line: #DDDDDD;
+  /* 순수 라인 그레이 */
   /* 미세 구분선 */
   --border: var(--line);
 
   /* ━━━ 타이포그래피 ━━━ */
-  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'DM Mono', 'SF Mono', 'Fira Mono', 'Consolas', monospace;
-  --font-mono-body: 'IBM Plex Mono', 'DM Mono', 'Menlo', monospace;
+  --font-body: 'Pretendard Variable',
+    'Pretendard',
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    sans-serif;
+  --font-mono: 'IBM Plex Mono',
+    'DM Mono',
+    'SF Mono',
+    'Fira Mono',
+    'Consolas',
+    monospace;
+  --font-mono-body: 'IBM Plex Mono',
+    'DM Mono',
+    'Menlo',
+    monospace;
   --font-serif: var(--font-body);
   --font-serif-slab: var(--font-body);
   --font-sans: var(--font-body);
@@ -8933,8 +8945,9 @@ main {
   .footer-contact-row a:hover,
   .footer-nav a:hover {
     color: var(--text);
-    opacity: 0.6;
-    text-shadow: 0 0 8px rgba(26, 26, 26, 0.15);
+    opacity: 0.8;
+    text-shadow: none;
+    /* 브라운 톤을 유발할 수 있는 그림자 제거 */
   }
 }
 
@@ -19555,7 +19568,7 @@ body.is-loaded .page-home .home-hero__elog-wrap {
 }
 
 body.is-loaded .home-preloader {
-  animation: preloader-fade-out 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: preloader-fade-out 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 @keyframes preloader-fade-out {
@@ -19678,86 +19691,30 @@ body.time-night .home-preloader {
   z-index: 10000;
 }
 
-/* ── 프리로더 로고 — 최적화된 입자 응집 애니메이션 ── */
+/* ── 프리로더 로고 — opacity-only (Paint 트리거 zero) ── */
 .home-preloader__logo {
   width: 96px;
   height: 96px;
   object-fit: contain;
   opacity: 0;
-  will-change: opacity, transform;
-  animation: logo-assemble 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
-  backface-visibility: hidden;
-  -webkit-font-smoothing: antialiased;
+  will-change: opacity;
+  animation: logo-assemble 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.05s forwards;
   transform: translateZ(0);
 }
 
 @keyframes logo-assemble {
-  0% {
-    opacity: 0;
-    transform: scale(1.15) translateZ(0);
-  }
-
-  10% {
-    opacity: 0.06;
-    transform: scale(1.125) translateZ(0);
-  }
-
-  20% {
-    opacity: 0.12;
-    transform: scale(1.1) translateZ(0);
-  }
-
-  30% {
-    opacity: 0.19;
-    transform: scale(1.08) translateZ(0);
-  }
-
-  40% {
-    opacity: 0.28;
-    transform: scale(1.06) translateZ(0);
-  }
-
-  50% {
-    opacity: 0.35;
-    transform: scale(1.04) translateZ(0);
-  }
-
-  60% {
-    opacity: 0.42;
-    transform: scale(1.03) translateZ(0);
-  }
-
-  75% {
-    opacity: 0.54;
-    transform: scale(1.01) translateZ(0);
-  }
-
-  90% {
-    opacity: 0.62;
-    transform: scale(1.002) translateZ(0);
-  }
-
-  100% {
-    opacity: 0.65;
-    transform: scale(1) translateZ(0);
-  }
+  0%   { opacity: 0; }
+  100% { opacity: 0.65; }
 }
 
-/* 퇴장 — 역방향으로 축소 (배경과 동기화: 1.0s) */
+/* 퇴장 — opacity-only 페이드 (1.4s 호흡) */
 body.is-loaded .home-preloader__logo {
-  animation: logo-disperse 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: logo-disperse 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 @keyframes logo-disperse {
-  0% {
-    opacity: 0.65;
-    transform: scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(0.92);
-  }
+  0%   { opacity: 0.65; }
+  100% { opacity: 0; }
 }
 
 /* ============================================================
