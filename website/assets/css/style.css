@@ -6859,33 +6859,26 @@ body.page-archive-ledger .footer-legal span {
   display: flex;
   position: fixed;
   inset: 0;
-  width: 100%;
+  left: auto;
+  width: min(540px, 100%);
+  /* 원래의 사이드 패널 너비 */
   z-index: 9999;
-  /* 동아시아 백자/한지 질감: 미세한 웜톤과 노이즈 */
-  background:
-    radial-gradient(at top left, rgba(255, 253, 250, 0.48), transparent),
-    rgba(255, 255, 255, 0.42);
-  backdrop-filter: blur(60px) saturate(110%);
-  -webkit-backdrop-filter: blur(60px) saturate(110%);
-  padding: 160px var(--space-md) var(--space-md);
+  background: var(--bg-glass);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  padding: clamp(100px, 12vh, 160px) var(--space-md) var(--space-md);
   flex-direction: column;
-  transform: translateY(-8px);
+  transform: translateX(100%);
+  /* 오른쪽에서 슬라이드 */
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.8s var(--ease), opacity 0.8s var(--ease);
   overflow-y: auto;
+  box-shadow: -20px 0 60px rgba(26, 26, 26, 0.05);
+  /* 경계감 강조 */
 }
 
-/* 아주 미세한 종이 질감 추가 */
-.nav-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.015;
-  pointer-events: none;
-  z-index: -1;
-}
+/* 질감 레이어 제거 */
 
 .nav-overlay.open {
   transform: translateY(0);
@@ -6893,16 +6886,11 @@ body.page-archive-ledger .footer-legal span {
   pointer-events: auto;
 }
 
-/* 에디토리얼 스플릿 그리드 (사이드바 최적화) */
 .nav-overlay__grid {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 3.2rem;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding-left: 20%;
-  /* 더 과감한 좌측 여백(余白) */
 }
 
 .nav-overlay__sector {
@@ -16788,125 +16776,12 @@ body.page-home {
 }
 
 /* 홈페이지 전용 푸터 — Architectural Horizon (2026-03-05) */
+/* 홈페이지 전용 푸터 스타일 오버라이드 제거 (표준 Sticky Reveal 복구) */
 .page-home .site-footer {
   position: relative;
   z-index: 55;
   bottom: auto;
-  background: transparent;
-  /* 배경 소거: 상단 필드와 연결 */
-  padding: 120px 0 60px;
-  border-top: none;
-}
-
-/* 필드와 푸터 사이의 부드러운 안개(Mist) 전이 */
-.page-home .site-footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, var(--bg));
-  pointer-events: none;
-}
-
-.page-home .footer-inner {
-  max-width: var(--max-wide);
-  margin: 0 auto;
-  padding: 0 var(--space-xl);
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  /* 비대칭 레이아웃: 동양적 여백 */
-  gap: 4rem;
-  align-items: end;
-}
-
-.page-home .footer-wordmark {
-  position: static;
-  transform: none;
-  font-size: 1.25rem;
-  /* 거대 배경에서 정교한 시그니처로 변경 */
-  font-weight: 300;
-  letter-spacing: 0.35em;
-  opacity: 0.85;
-  color: var(--text);
-  margin-bottom: -4px;
-}
-
-.page-home .footer-mid {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2rem;
-}
-
-.page-home .footer-nav {
-  display: flex;
-  gap: 2.22rem;
-  width: 100%;
-  border-bottom: 1px solid rgba(26, 26, 26, 0.05);
-  padding-bottom: 1rem;
-}
-
-.page-home .footer-contact-row {
-  display: flex;
-  gap: 2rem;
-}
-
-.page-home .footer-base {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 2.2rem;
-  border-top: 1px solid rgba(26, 26, 26, 0.03);
-}
-
-.page-home .footer-biz {
-  max-width: 42ch;
-  margin: 0;
-  text-align: left;
-  line-height: 2.1;
-  font-size: 0.62rem;
-  opacity: 0.35;
-}
-
-.page-home .footer-legal {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.45rem;
-}
-
-.page-home .footer-time {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  opacity: 0.52;
-  color: var(--text);
-}
-
-@media (max-width: 1024px) {
-  .page-home .footer-inner {
-    grid-template-columns: 1fr;
-    padding: 0 var(--space-md);
-    gap: 3rem;
-  }
-
-  .page-home .footer-base {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 2.5rem;
-  }
-
-  .page-home .footer-biz {
-    text-align: center;
-  }
-
-  .page-home .footer-legal {
-    align-items: center;
-  }
+  background: var(--bg);
 }
 
 /* ── 모바일 홈 우선 레이아웃 (2026-03-05) ── */
@@ -19688,9 +19563,11 @@ body.is-loaded .home-preloader {
     opacity: 1;
     visibility: visible;
   }
+
   99% {
     visibility: visible;
   }
+
   100% {
     opacity: 0;
     visibility: hidden;
@@ -19817,12 +19694,27 @@ body.time-night .home-preloader {
 @keyframes logo-assemble {
   0% {
     opacity: 0;
-    transform: scale(1.12) translateZ(0);
+    transform: scale(1.15) translateZ(0);
   }
 
-  25% {
-    opacity: 0.15;
+  10% {
+    opacity: 0.06;
+    transform: scale(1.125) translateZ(0);
+  }
+
+  20% {
+    opacity: 0.12;
+    transform: scale(1.1) translateZ(0);
+  }
+
+  30% {
+    opacity: 0.19;
     transform: scale(1.08) translateZ(0);
+  }
+
+  40% {
+    opacity: 0.28;
+    transform: scale(1.06) translateZ(0);
   }
 
   50% {
@@ -19830,9 +19722,19 @@ body.time-night .home-preloader {
     transform: scale(1.04) translateZ(0);
   }
 
+  60% {
+    opacity: 0.42;
+    transform: scale(1.03) translateZ(0);
+  }
+
   75% {
-    opacity: 0.52;
-    transform: scale(1.02) translateZ(0);
+    opacity: 0.54;
+    transform: scale(1.01) translateZ(0);
+  }
+
+  90% {
+    opacity: 0.62;
+    transform: scale(1.002) translateZ(0);
   }
 
   100% {
