@@ -216,11 +216,11 @@ body {
   position: fixed;
   inset: 0;
   background: linear-gradient(to bottom,
-      rgba(227, 226, 224, 0.1) 0%,
+      rgba(225, 225, 225, 0.1) 0%,
       /* 상단 가시성 확보 */
-      rgba(227, 226, 224, 0) 30%,
-      rgba(227, 226, 224, 0) 70%,
-      rgba(227, 226, 224, 0.15) 100%);
+      rgba(225, 225, 225, 0) 30%,
+      rgba(225, 225, 225, 0) 70%,
+      rgba(225, 225, 225, 0.15) 100%);
   z-index: 2;
   /* 하향 */
   pointer-events: none;
@@ -387,7 +387,7 @@ a:hover {
 }
 
 .nav-main.scrolled {
-  background-color: rgba(227, 226, 224, 0.7);
+  background-color: rgba(225, 225, 225, 0.7);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
   padding: var(--space-sm) var(--space-md);
@@ -1083,7 +1083,7 @@ section+section {
     width: 72%;
     max-width: 320px;
     height: 100dvh;
-    background: rgba(228, 226, 220, 0.97);
+    background: rgba(224, 224, 224, 0.97);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
     flex-direction: column;
@@ -4644,7 +4644,7 @@ body.home-radical main.container--wide {
 
 /* About: mag-row 반투명 글래스 + 여백 + 서늘한 색온도 */
 body.home-radical .mag-row {
-  background: rgba(236, 236, 234, 0.84);
+  background: rgba(235, 235, 235, 0.84);
   padding-left: var(--space-md);
   padding-right: var(--space-md);
   padding-top: var(--space-lg);
@@ -4660,7 +4660,7 @@ body.home-radical .contact-section {
 }
 
 /* ─── About 페이지 전용 시각 조정 ─── */
-/* 서늘한 무채색 온도 (크림 #F0EFEB → 중립 회백색) */
+/* 서늘한 무채색 온도 (크림 #EEEEEE → 중립 회백색) */
 body.home-radical {
   --bg: var(--bg);
   --bg-dark: var(--bg-dark);
@@ -5742,7 +5742,7 @@ body.home-radical::after {
   display: flex;
   gap: var(--space-lg);
   align-items: center;
-  background: rgba(240, 239, 235, 0.92);
+  background: rgba(238, 238, 238, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--line);
@@ -6466,7 +6466,7 @@ body.page-archive-ledger .ledger__film {
   top: 50%;
   width: clamp(172px, 23vw, 250px);
   aspect-ratio: 16 / 10;
-  border: 1px solid rgba(247, 243, 236, 0.36);
+  border: 1px solid rgba(242, 242, 242, 0.36);
   overflow: hidden;
   opacity: 0;
   transform: translate3d(24px, -50%, 0) scale(0.9);
@@ -6488,14 +6488,14 @@ body.page-archive-ledger .ledger__film::before {
   inset: -24%;
   transform: rotate(-4deg);
   background:
-    radial-gradient(80% 64% at 20% 24%, rgba(240, 236, 228, 0.56) 0%, rgba(240, 236, 228, 0) 64%),
+    radial-gradient(80% 64% at 20% 24%, rgba(234, 234, 234, 0.56) 0%, rgba(234, 234, 234, 0) 64%),
     radial-gradient(70% 70% at 78% 80%, rgba(204, 200, 192, 0.28) 0%, rgba(204, 200, 192, 0) 78%),
     linear-gradient(140deg, #171715 0%, #2a2a27 52%, #121210 100%);
 }
 
 body.page-archive-ledger .ledger__film::after {
   background:
-    repeating-linear-gradient(0deg, rgba(250, 246, 236, 0.08) 0 1px, rgba(250, 246, 236, 0) 1px 4px),
+    repeating-linear-gradient(0deg, rgba(244, 244, 244, 0.08) 0 1px, rgba(244, 244, 244, 0) 1px 4px),
     repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0 1px, rgba(0, 0, 0, 0) 1px 6px);
   mix-blend-mode: screen;
   opacity: 0.34;
@@ -6524,27 +6524,27 @@ body.page-archive-ledger .ledger__film-issue {
 
 body.page-archive-ledger .ledger__film--essay::before {
   background:
-    radial-gradient(86% 66% at 20% 24%, rgba(236, 232, 225, 0.6) 0%, rgba(236, 232, 225, 0) 62%),
+    radial-gradient(86% 66% at 20% 24%, rgba(231, 231, 231, 0.6) 0%, rgba(231, 231, 231, 0) 62%),
     linear-gradient(158deg, #161614 0%, #2d2d29 54%, #11110f 100%);
 }
 
 body.page-archive-ledger .ledger__film--journal::before {
   background:
-    linear-gradient(145deg, rgba(246, 241, 232, 0.22) 0%, rgba(246, 241, 232, 0) 35%),
-    repeating-linear-gradient(25deg, rgba(240, 236, 228, 0.12) 0 2px, rgba(240, 236, 228, 0) 2px 8px),
+    linear-gradient(145deg, rgba(239, 239, 239, 0.22) 0%, rgba(239, 239, 239, 0) 35%),
+    repeating-linear-gradient(25deg, rgba(234, 234, 234, 0.12) 0 2px, rgba(234, 234, 234, 0) 2px 8px),
     linear-gradient(132deg, #121210 0%, #282824 56%, #0f0f0d 100%);
 }
 
 body.page-archive-ledger .ledger__film--lookbook::before {
   background:
-    linear-gradient(90deg, rgba(238, 233, 223, 0.58) 0 28%, rgba(238, 233, 223, 0) 28% 100%),
+    linear-gradient(90deg, rgba(231, 231, 231, 0.58) 0 28%, rgba(231, 231, 231, 0) 28% 100%),
     linear-gradient(152deg, #1a1a18 0%, #30302c 52%, #121210 100%);
 }
 
 body.page-archive-ledger .ledger__film--playlist::before {
   background:
-    radial-gradient(65% 90% at 14% 50%, rgba(241, 236, 228, 0.5) 0%, rgba(241, 236, 228, 0) 64%),
-    repeating-linear-gradient(0deg, rgba(247, 243, 236, 0.1) 0 2px, rgba(247, 243, 236, 0) 2px 7px),
+    radial-gradient(65% 90% at 14% 50%, rgba(235, 235, 235, 0.5) 0%, rgba(235, 235, 235, 0) 64%),
+    repeating-linear-gradient(0deg, rgba(242, 242, 242, 0.1) 0 2px, rgba(242, 242, 242, 0) 2px 7px),
     linear-gradient(150deg, #171715 0%, #2a2a27 52%, #11110f 100%);
 }
 
@@ -6582,7 +6582,7 @@ body.page-archive-ledger .ledger__placeholder {
   top: calc(56px + 12px);
   border: 1px solid rgba(234, 234, 234, 0.2);
   background:
-    linear-gradient(180deg, rgba(247, 243, 236, 0.08) 0%, rgba(247, 243, 236, 0) 52%),
+    linear-gradient(180deg, rgba(242, 242, 242, 0.08) 0%, rgba(242, 242, 242, 0) 52%),
     rgba(8, 8, 8, 0.8);
   padding: 18px 16px;
   min-height: 320px;
@@ -6759,7 +6759,7 @@ body.page-archive-ledger .footer-legal span {
   right: 0;
   z-index: 10001;
   /* 오버레이(9999)보다 높게 설정하여 닫기 버튼 가시성 보장 */
-  height: 80px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -7025,7 +7025,7 @@ body.nav-open .nav-dim {
 .page-main {
   position: relative;
   z-index: 1;
-  padding-top: 80px;
+  padding-top: 64px;
 }
 
 @media (max-width: 768px) {
@@ -7117,7 +7117,7 @@ body.nav-open .nav-dim {
 }
 
 .home-metadata--top {
-  top: 80px;
+  top: 64px;
 }
 
 .home-metadata--bottom {
@@ -7374,7 +7374,7 @@ body.is-loaded .home-hero__nav {
 .home-below {
   position: relative;
   z-index: 1;
-  background: linear-gradient(to bottom, rgba(227, 226, 224, 0.4) 0%, rgba(227, 226, 224, 0.88) 35%, var(--bg) 70%);
+  background: linear-gradient(to bottom, rgba(225, 225, 225, 0.4) 0%, rgba(225, 225, 225, 0.88) 35%, var(--bg) 70%);
   padding: var(--space-xl) 0 var(--space-2xl);
 }
 
@@ -10689,7 +10689,7 @@ body::after {
 .lab-concept-board {
   border: 1px solid var(--line);
   background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.38), rgba(221, 220, 218, 0.24));
+    linear-gradient(160deg, rgba(255, 255, 255, 0.38), rgba(219, 219, 219, 0.24));
   margin-bottom: 1rem;
 }
 
@@ -10748,7 +10748,7 @@ body::after {
   background:
     linear-gradient(180deg,
       rgba(255, 255, 255, 0.22),
-      rgba(227, 226, 224, 0));
+      rgba(225, 225, 225, 0));
   transition:
     opacity var(--duration) var(--ease-out),
     background var(--duration) var(--ease-out),
@@ -10761,7 +10761,7 @@ body::after {
   background:
     linear-gradient(180deg,
       rgba(255, 255, 255, 0.52),
-      rgba(227, 226, 224, 0.06));
+      rgba(225, 225, 225, 0.06));
 }
 
 @media (max-width: 980px) {
@@ -10779,8 +10779,8 @@ body::after {
 .page-lab-sprint {
   background:
     radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.34), transparent 42%),
-    radial-gradient(circle at 88% 16%, rgba(209, 208, 204, 0.28), transparent 46%),
-    linear-gradient(180deg, #e4e3e1 0%, #e1dfdc 54%, #deddd9 100%);
+    radial-gradient(circle at 88% 16%, rgba(207, 207, 207, 0.28), transparent 46%),
+    linear-gradient(180deg, #E2E2E2 0%, #DEDEDE 54%, #DCDCDC 100%);
 }
 
 .page-lab-sprint .page-intro {
@@ -11019,7 +11019,7 @@ body::after {
   --sprint-zone-index: 0;
   border: 1px solid var(--line);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.56), rgba(221, 220, 218, 0.3)),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.56), rgba(219, 219, 219, 0.3)),
     radial-gradient(circle at 80% 0%, rgba(26, 26, 26, 0.05), transparent 42%);
   padding: var(--space-md);
   position: relative;
@@ -11067,7 +11067,7 @@ body::after {
   z-index: 1;
   min-height: 100%;
   border: 1px solid rgba(26, 26, 26, 0.18);
-  background: rgba(227, 226, 224, 0.72);
+  background: rgba(225, 225, 225, 0.72);
   padding: 1rem;
   display: grid;
   gap: 0.85rem;
@@ -11405,8 +11405,8 @@ body::after {
 .page-lab-renewal {
   background:
     radial-gradient(circle at 10% 8%, rgba(255, 255, 255, 0.35), transparent 44%),
-    radial-gradient(circle at 88% 14%, rgba(213, 212, 207, 0.28), transparent 46%),
-    linear-gradient(180deg, #e4e3e1 0%, #e1dfdc 58%, #dfddd8 100%);
+    radial-gradient(circle at 88% 14%, rgba(210, 210, 210, 0.28), transparent 46%),
+    linear-gradient(180deg, #E2E2E2 0%, #DEDEDE 58%, #DCDCDC 100%);
 }
 
 .renewal-live {
@@ -11548,7 +11548,7 @@ body::after {
   padding: 0.75rem;
   transition: width 0.32s var(--ease-out);
   background:
-    linear-gradient(180deg, rgba(227, 226, 224, 0.68), rgba(223, 221, 217, 0.52));
+    linear-gradient(180deg, rgba(225, 225, 225, 0.68), rgba(220, 220, 220, 0.52));
 }
 
 .renewal-screen {
@@ -11912,12 +11912,12 @@ body::after {
 
 /* Ops panel */
 .renewal-screen--ops {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.7), rgba(223, 222, 218, 0.6));
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.7), rgba(221, 221, 221, 0.6));
 }
 
 .ops-hero {
   border: 1px solid var(--line);
-  background: linear-gradient(120deg, rgba(26, 26, 26, 0.06), rgba(227, 226, 224, 0.9));
+  background: linear-gradient(120deg, rgba(26, 26, 26, 0.06), rgba(225, 225, 225, 0.9));
   padding: 0.64rem;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -14075,7 +14075,7 @@ html[data-nav-dir="back"] ::view-transition-new(root) {
 .site-footer {
   background: var(--bg);
   border-top: none;
-  padding: 4rem 0 2rem;
+  padding: 2.5rem 0 1.5rem;
 }
 
 .site-footer a {
@@ -14089,6 +14089,7 @@ html[data-nav-dir="back"] ::view-transition-new(root) {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.04em;
+  line-height: 1.45;
   color: var(--text-sub);
 }
 
@@ -14243,7 +14244,7 @@ html[data-nav-dir="back"] ::view-transition-new(root) {
 .payment-download-card {
   margin-top: var(--space-md);
   padding: 1.5rem;
-  background: #f5f5f5;
+  background: #F5F5F5;
   border-left: 3px solid #2C2C2C;
 }
 
@@ -14685,7 +14686,7 @@ body::after {
 }
 
 .site-nav {
-  background: rgba(236, 234, 230, 0.9);
+  background: rgba(233, 233, 233, 0.9);
   border-bottom: 1px solid var(--line);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -14795,7 +14796,7 @@ body::after {
   border-color: var(--line);
   background: linear-gradient(165deg,
       rgba(255, 255, 255, 0.34),
-      rgba(226, 223, 217, 0.42));
+      rgba(222, 222, 222, 0.42));
   margin-bottom: 1.35rem;
 }
 
@@ -14948,7 +14949,7 @@ body::after {
 .page-archive .archive-search {
   border: 1px solid var(--line);
   border-radius: 0;
-  background: rgba(227, 226, 224, 0.28);
+  background: rgba(225, 225, 225, 0.28);
   min-height: 36px;
   padding: 0 0.92rem;
   font-size: 0.76rem;
@@ -15084,7 +15085,7 @@ body::after {
   border: 1px solid var(--line);
   border-radius: 0;
   overflow: hidden;
-  background: rgba(227, 226, 224, 0.2);
+  background: rgba(225, 225, 225, 0.2);
 }
 
 .archive-list::after {
@@ -15268,7 +15269,7 @@ body::after {
   top: calc(var(--space-lg) + 0.2rem);
   border: 1px solid var(--line);
   border-radius: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(227, 226, 224, 0.34) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.48) 0%, rgba(225, 225, 225, 0.34) 100%);
   padding: clamp(1.05rem, 2.2vw, 1.45rem);
   display: grid;
   gap: 0.72rem;
@@ -15532,7 +15533,7 @@ body {
 
 .site-nav {
   border-bottom: 1px solid var(--line);
-  background: rgba(227, 226, 224, 0.95);
+  background: rgba(225, 225, 225, 0.95);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -15640,7 +15641,7 @@ body {
 
 .archive-list {
   border-radius: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(227, 226, 224, 0.08));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(225, 225, 225, 0.08));
   position: relative;
 }
 
@@ -16065,7 +16066,7 @@ body {
   margin: 0 auto;
   width: min(100%, 960px);
   padding: 0;
-  background: rgba(217, 213, 206, 0.9);
+  background: rgba(212, 212, 212, 0.9);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   opacity: 0;
@@ -16136,7 +16137,7 @@ body.is-loaded .home-hero__nav {
 
 .home-field-buffer {
   height: 18vh;
-  background: linear-gradient(to bottom, rgba(227, 226, 224, 0) 0%, var(--bg) 100%);
+  background: linear-gradient(to bottom, rgba(225, 225, 225, 0) 0%, var(--bg) 100%);
 }
 
 @media (max-width: 900px) {
@@ -16215,7 +16216,7 @@ button:focus-visible {
 }
 
 .site-nav {
-  background: rgba(221, 217, 210, 0.96);
+  background: rgba(216, 216, 216, 0.96);
   border-bottom-color: var(--line);
 }
 
@@ -16272,7 +16273,7 @@ button:focus-visible {
 
 .home-hero__nav {
   width: min(100%, 840px);
-  background: rgba(221, 217, 210, 0.94);
+  background: rgba(216, 216, 216, 0.94);
   border: 1px solid var(--line);
 }
 
@@ -16440,7 +16441,7 @@ body {
 }
 
 .site-nav {
-  background: rgba(246, 246, 244, 0.97);
+  background: rgba(245, 245, 245, 0.97);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -16502,7 +16503,7 @@ body {
 
 .home-hero__nav {
   width: min(100%, 840px);
-  background: rgba(246, 246, 244, 0.9);
+  background: rgba(245, 245, 245, 0.9);
   border: 1px solid var(--line);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -16537,7 +16538,7 @@ body {
 }
 
 .home-field-buffer {
-  background: linear-gradient(to bottom, rgba(246, 246, 244, 0) 0%, var(--bg) 100%);
+  background: linear-gradient(to bottom, rgba(245, 245, 245, 0) 0%, var(--bg) 100%);
 }
 
 /* Archive */
@@ -16763,12 +16764,12 @@ body.page-home {
 
 /* signal 텍스트 — 배경 노이즈 대비를 위한 가독성 보정 */
 .page-home .home-hero__statement {
-  text-shadow: 0 0 28px rgba(239, 239, 235, 0.6);
+  text-shadow: 0 0 28px rgba(237, 237, 237, 0.6);
 }
 
 /* nav 패널 — 반투명 frosted */
 .page-home .home-hero__nav {
-  background: rgba(239, 239, 235, 0.88);
+  background: rgba(237, 237, 237, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(198, 198, 190, 0.6);
@@ -16790,7 +16791,7 @@ body.page-home {
   z-index: -1;
   bottom: 0;
   background: var(--bg);
-  padding: 4rem 0 2rem;
+  padding: 2.5rem 0 1.5rem;
   border-top: none;
 }
 
@@ -16831,14 +16832,14 @@ body.page-home {
     font-size: 13px;
     line-height: 1.75;
     max-width: none;
-    text-shadow: 0 0 20px rgba(239, 239, 235, 0.7);
+    text-shadow: 0 0 20px rgba(237, 237, 237, 0.7);
   }
 
   /* nav: 하단 고정형 카드 */
   .page-home .home-hero__nav {
     position: relative;
     width: 100%;
-    background: rgba(239, 239, 235, 0.9);
+    background: rgba(237, 237, 237, 0.9);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid var(--line);
@@ -16937,7 +16938,7 @@ body.page-home {
   grid-template-columns: 62px 1fr;
   gap: 14px;
   padding: 18px 16px;
-  border: 1px solid #e2ded6;
+  border: 1px solid #DCDCDC;
   background: rgba(255, 255, 255, 0.82);
   box-shadow:
     0 8px 22px rgba(0, 0, 0, 0.04),
@@ -17002,7 +17003,7 @@ body.page-home {
 
 /* Archive — high-sensitivity editorial */
 .page-archive {
-  background: #f6f7f8;
+  background: #F7F7F7;
 }
 
 .archive-hero {
@@ -17214,7 +17215,7 @@ body.page-home {
 }
 
 .page-essay .art {
-  background: #f6f7f8;
+  background: #F7F7F7;
   padding: 0;
 }
 
@@ -17304,7 +17305,7 @@ body.page-home {
 
 /* Archive Editorial Override v5 (minimal) */
 body.page-archive {
-  background: #f4f5f6 !important;
+  background: #F5F5F5 !important;
 }
 
 body.page-archive .page-main {
@@ -17901,7 +17902,7 @@ body.page-archive.page-archive-index .page-preamble {
   border-bottom: none;
   padding: 9px;
   border: 1px solid var(--line);
-  background: #f6f5f3;
+  background: #F4F4F4;
   position: relative;
 }
 
@@ -17949,7 +17950,7 @@ body.page-archive.page-archive-index .page-preamble {
 
 .archive-item:hover,
 .archive-lookbook:hover {
-  background: linear-gradient(90deg, rgba(239, 238, 237, 0.45) 0%, rgba(239, 238, 237, 0.0) 60%);
+  background: linear-gradient(90deg, rgba(238, 238, 238, 0.45) 0%, rgba(238, 238, 238, 0.0) 60%);
 }
 
 .archive-item__meta,
@@ -18116,7 +18117,7 @@ body.page-archive.page-archive-index .page-preamble {
     align-items: center;
     padding: 4px 8px;
     border: 1px solid var(--line);
-    background: #f4f5f6;
+    background: #F5F5F5;
   }
 
   body.page-archive .archive-editorial {
@@ -18424,7 +18425,7 @@ body.page-archive.page-archive-index .archive-mini.has-summary.is-expanded .arch
     top: 62px;
     z-index: 7;
     padding-bottom: 0.42rem;
-    background: linear-gradient(180deg, rgba(227, 226, 224, 0.96) 0%, rgba(227, 226, 224, 0.78) 72%, rgba(227, 226, 224, 0) 100%);
+    background: linear-gradient(180deg, rgba(225, 225, 225, 0.96) 0%, rgba(225, 225, 225, 0.78) 72%, rgba(225, 225, 225, 0) 100%);
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
   }
@@ -18451,7 +18452,7 @@ body.page-archive.page-archive-index .archive-mini.has-summary.is-expanded .arch
     top: 58px;
     border: 0;
     padding: 4px 9px;
-    background: rgba(227, 226, 224, 0.92);
+    background: rgba(225, 225, 225, 0.92);
     letter-spacing: 0.2em;
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
@@ -18749,7 +18750,7 @@ body.page-home {
 
 /* nav */
 .site-nav {
-  background: rgba(248, 248, 246, 0.94);
+  background: rgba(247, 247, 247, 0.94);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom-color: var(--line);
@@ -18757,7 +18758,7 @@ body.page-home {
 
 /* 오버레이 nav */
 .nav-overlay {
-  background: rgba(248, 248, 246, 0.97);
+  background: rgba(247, 247, 247, 0.97);
 }
 
 /* footer */
@@ -18768,10 +18769,10 @@ body.page-home {
 
 /* 홈 hero nav 패널 — 유리질 */
 .page-home .home-hero__nav {
-  background: rgba(248, 248, 246, 0.82);
+  background: rgba(247, 247, 247, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-color: rgba(208, 208, 203, 0.7);
+  border-color: rgba(206, 206, 206, 0.7);
   box-shadow: 0 2px 32px rgba(20, 20, 18, 0.07);
 }
 
@@ -18808,7 +18809,7 @@ body.page-home {
 
 /* archive-shell head */
 .archive-shell__head {
-  background: rgba(248, 248, 246, 0.88);
+  background: rgba(247, 247, 247, 0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -18999,12 +19000,12 @@ body.page-home {
   background: rgba(234, 234, 234, 0.72);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  border: 1px solid rgba(208, 208, 203, 0.55);
+  border: 1px solid rgba(206, 206, 206, 0.55);
   box-shadow: 0 2px 20px rgba(20, 20, 18, 0.06);
 }
 
 .page-home .home-nav-item {
-  border-bottom-color: rgba(208, 208, 203, 0.5);
+  border-bottom-color: rgba(206, 206, 206, 0.5);
   color: var(--text);
 }
 
@@ -19061,12 +19062,12 @@ body.page-home {
 @media (max-width: 767px) {
   .page-home .home-hero__nav {
     background: rgba(234, 234, 234, 0.78);
-    border-color: rgba(208, 208, 203, 0.5);
+    border-color: rgba(206, 206, 206, 0.5);
   }
 
   .page-home .home-nav-item {
     color: var(--text);
-    border-bottom-color: rgba(208, 208, 203, 0.45);
+    border-bottom-color: rgba(206, 206, 206, 0.45);
   }
 
   .page-home .home-nav-item__num,
@@ -19408,8 +19409,8 @@ body.is-loaded .page-home .home-hero__elog-wrap {
    width: auto로 비율 유지, height만 고정해서 세로 절단 방지 */
 .nav-symbol {
   width: auto;
-  height: 30px;
-  max-width: 48px;
+  height: 24px;
+  max-width: 40px;
   object-fit: contain;
   object-position: center;
 }
@@ -19588,7 +19589,7 @@ body.is-loaded .home-preloader {
 /* 시간대별 배경색 변조 */
 body.time-dawn .home-preloader {
   background-color: #F5F5F5;
-  /* 웜톤(#F5F4F2)에서 모노 스케일로 정정 */
+  /* 웜톤(#F3F3F3)에서 모노 스케일로 정정 */
 }
 
 body.time-day .home-preloader {
