@@ -1,7 +1,7 @@
 {
   "system_status": "HEALTHY",
   "status_note": "Heartbeats refreshed at 2026-03-05 11:03:22",
-  "last_update": "2026-03-05 11:04:56",
+  "last_update": "2026-03-05 19:18:07",
   "agents": {
     "SA": {
       "status": "ACTIVE",
@@ -59,6 +59,30 @@
       "status": "active",
       "started_at": "2026-03-05T10:59:43",
       "updated_at": "2026-03-05T10:59:43",
+      "summary": ""
+    },
+    "codex-98767-1772682791": {
+      "agent_id": "Codex",
+      "task_label": "session-bootstrap",
+      "status": "active",
+      "started_at": "2026-03-05T12:53:11",
+      "updated_at": "2026-03-05T12:53:11",
+      "summary": ""
+    },
+    "codex-32599-1772690449": {
+      "agent_id": "Codex",
+      "task_label": "session-bootstrap",
+      "status": "active",
+      "started_at": "2026-03-05T15:00:49",
+      "updated_at": "2026-03-05T15:00:49",
+      "summary": ""
+    },
+    "codex-67722-1772705887": {
+      "agent_id": "Codex",
+      "task_label": "session-bootstrap",
+      "status": "active",
+      "started_at": "2026-03-05T19:18:07",
+      "updated_at": "2026-03-05T19:18:07",
       "summary": ""
     }
   },

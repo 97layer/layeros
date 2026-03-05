@@ -3,9 +3,10 @@
     <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
   </a>
   <ul class="nav-links" id="nav-links">
-    <li><a href="/archive/"><span class="numeric-tag">01.</span>Archive</a></li>
-    <li><a href="/practice/"><span class="numeric-tag">02.</span>Practice</a></li>
-    <li><a href="/about/"><span class="numeric-tag">03.</span>About</a></li>
+    <li><a href="/archive/">Archive</a></li>
+    <li><a href="/practice/">Practice</a></li>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/lab/">Lab</a></li>
   </ul>
   <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
     <span></span><span></span>
@@ -13,7 +14,38 @@
   <div class="read-progress" id="read-progress" aria-hidden="true"></div>
 </nav>
 <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
-  <a href="/archive/"><span class="nav-overlay__num">01.</span>Archive</a>
-  <a href="/practice/"><span class="nav-overlay__num">02.</span>Practice</a>
-  <a href="/about/"><span class="nav-overlay__num">03.</span>About</a>
+  <div class="nav-overlay__grid">
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/archive/">Archive</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/archive/#essay">Essay <span>에세이</span></a>
+        <a href="/archive/#journal">Journal <span>일지</span></a>
+        <a href="/archive/lookbook/">Lookbook <span>룩북</span></a>
+        <a href="/playlist.html">Playlist <span>재생목록</span></a>
+      </nav>
+    </div>
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/practice/">Practice</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/practice/#atelier">Atelier <span>아틀리에</span></a>
+        <a href="/practice/#directing">Directing <span>디렉팅</span></a>
+        <a href="/practice/#projects">Project <span>프로젝트</span></a>
+        <a href="/practice/#product">Product <span>결과물</span></a>
+      </nav>
+    </div>
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/about/">About</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/about/#ch-2">The Origin <span>근원</span></a>
+        <a href="/about/woosunho/">Profile <span>프로필</span></a>
+      </nav>
+    </div>
+    <div class="nav-overlay__sector">
+      <h3 class="nav-overlay__label"><a href="/lab/">Lab</a></h3>
+      <nav class="nav-overlay__subs">
+        <a href="/lab/">Experiments <span>실험실</span></a>
+        <a href="/lab/changelog/">Changelog <span>변경이력</span></a>
+      </nav>
+    </div>
+  </div>
 </div>

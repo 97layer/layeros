@@ -58,3 +58,4 @@
 {"timestamp": "2026-03-05T02:05:02.041488+00:00", "event": "claimed", "issue_id": "sitemap_auto_regen", "agent": "Codex"}
 {"timestamp": "2026-03-05T02:05:02.084018+00:00", "event": "resolved", "issue_id": "sitemap_auto_regen", "agent": "Codex", "result": "done", "from_state": "processing"}
 {"timestamp": "2026-03-05T03:17:22.714877+00:00", "event": "synced", "issue_id": "footer_design_subtraction", "title": "푸터 디자인 정밀 리뷰 (Footer Subtraction & Resonance)"}
+{"timestamp": "2026-03-05T03:45:36.907342+00:00", "event": "synced", "issue_id": "footer_ui_parallax_anchor", "title": "푸터 2차 고도화 제안 (Parallax Reveal & Absolute Anchor)"}

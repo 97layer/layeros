@@ -415,6 +415,129 @@
       "max_permission_prompts": 1,
       "created_at": "2026-03-05T10:43:07",
       "updated_at": "2026-03-05T10:54:31"
+    },
+    "home_footer_confirm_20260305": {
+      "goal": "홈(index) 푸터 확정안 구현 및 로컬 렌더 검증",
+      "files": [
+        "website/index.html",
+        "website/assets/css/style.css",
+        "website/assets/js/site.js"
+      ],
+      "checks": [
+        "python3 core/system/web_consistency_lock.py --validate CODEX",
+        "python3 core/scripts/practical_hooks.py mobile-check --urls http://127.0.0.1:9712/ --widths 390",
+        "768",
+        "1440 --session home-footer-check"
+      ],
+      "stop_conditions": "web lock invalid | mobile-check fail | local render fail",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/index.html": "d56834ba5d876ac638ad30ead2f8477a0ce39810",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "eda0574b34be04b84d55866884bb333eebf17104",
+        "/Users/97layer/97layerOS/website/assets/js/site.js": "0d6bca596c3c6ac33e12fdc377976f73db8aed3c"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T12:52:56",
+      "updated_at": "2026-03-05T13:24:33"
+    },
+    "task_20260305_154020": {
+      "goal": "작업 대화 훅에 성능/확장 키워드 감지 시 Go vs Python 제안 지시 추가",
+      "files": [
+        ".claude/hooks/proactive-advisor.sh"
+      ],
+      "checks": [
+        "bash -n .claude/hooks/proactive-advisor.sh"
+      ],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/.claude/hooks/proactive-advisor.sh": "cd1049d5f2b2e6fbf2c81d03970d1dd33c5487d1"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T15:40:20",
+      "updated_at": "2026-03-05T15:40:24"
+    },
+    "task_20260305_170119": {
+      "goal": "Plan Council evidence log",
+      "files": [
+        "knowledge/system/evidence_log.jsonl"
+      ],
+      "checks": [],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/knowledge/system/evidence_log.jsonl": "4eaee18af916a98ffe6096e448929006b292f37f"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T17:01:19",
+      "updated_at": "2026-03-05T17:11:30"
+    },
+    "task_20260305_171441": {
+      "goal": "Plan Council 실패 원인 진단",
+      "files": [
+        "knowledge/system/evidence_log.jsonl"
+      ],
+      "checks": [
+        "python3 core/system/plan_council.py --self-check --require-both"
+      ],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/knowledge/system/evidence_log.jsonl": "baed2ce4cfbfcedbc1246f59764669bde1c76b12"
+      },
+      "permission_requests": 1,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T17:14:41",
+      "updated_at": "2026-03-05T18:16:16"
+    },
+    "task_20260305_182000": {
+      "goal": "Archive 레이아웃/UX 일관성 정리",
+      "files": [
+        "website/archive/index.html",
+        "website/_pages/archive/body.html",
+        "website/assets/css/style.css"
+      ],
+      "checks": [
+        "python3 core/system/plan_council.py --task \"Archive 레이아웃/UX 일관성 정리\" --mode preflight"
+      ],
+      "stop_conditions": "plan_council degraded/needs_clarification | web_lock unavailable | hash drift detected",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/index.html": "fb10e8fc5c6fa293eb1b0d823656b85ed57b0ff3",
+        "/Users/97layer/97layerOS/website/_pages/archive/body.html": "126aefc0ede073cf4a0dabddf1f2292689fc8f91",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "c3a46f560d67af8ed720c6e846210a88fd652e70"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T18:20:00",
+      "updated_at": "2026-03-05T18:37:08"
+    },
+    "task_20260305_192138": {
+      "goal": "Archive index ledger JS fix (home tone alignment) + visual check",
+      "files": [
+        "website/archive/index.html",
+        "website/about/woosunho/index.html",
+        "website/archive/essay-004-art-of-waiting/index.html",
+        "website/index.html",
+        "website/practice/atelier.html",
+        "website/product/index.html"
+      ],
+      "checks": [
+        "python3 core/scripts/practical_hooks.py mobile-check --urls http://127.0.0.1:9712/archive/ --widths 390",
+        "768",
+        "1440 --height 900"
+      ],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/index.html": "edbba7261aed0a84e27b2c230379b7377e0207a5",
+        "/Users/97layer/97layerOS/website/about/woosunho/index.html": "fa30fd685a9b70271ce90c8e2e830ee000b7e978",
+        "/Users/97layer/97layerOS/website/archive/essay-004-art-of-waiting/index.html": "905baf68dd19f859f39e898191818e15bc8186f2",
+        "/Users/97layer/97layerOS/website/index.html": "8b86212861534b03dbc5def5b609aee852a2562f",
+        "/Users/97layer/97layerOS/website/practice/atelier.html": "bb1009aa3999a0bad71f24dd045f1dc1ce157061",
+        "/Users/97layer/97layerOS/website/product/index.html": "45d0f374f053629b4016a4099ebb4a5354f030cd"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T19:21:38",
+      "updated_at": "2026-03-05T19:49:12"
     }
   }
 }

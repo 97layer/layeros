@@ -33,6 +33,20 @@ fi
 
 # 시각/디자인 작업 감지 → 강화 프롬프트
 VISUAL_PATTERNS="(css|html|레이아웃|디자인|스타일|폰트|여백|정렬|색상|푸터|헤더|버그|깨|이상|고쳐|수정|화면|모바일|뷰|레이어|렌더)"
+
+# 인프라/성능/확장 키워드 감지 → Go vs Python 제안 지시
+INFRA_PATTERNS="(확장|스케일|스케일링|인프라|성능|지연|latency|throughput|동시성|qps|rps|p95|p99|트래픽|부하|비용|메모리|cpu|병목|concurrency|performance|scaling|infrastructure)"
+INFRA_HINT=""
+if echo "$NORMALIZED" | grep -qiE "$INFRA_PATTERNS"; then
+  INFRA_HINT=$(cat << 'EOF'
+[인프라/성능 판단]
+- 확장/성능 맥락이면 Go vs Python을 먼저 짧게 판단하고 제안.
+- Go가 낫다면: 동시성/지연/배포 이유를 한 줄로.
+- Python 유지가 낫다면: 병목 부재/개발속도/부분 최적화 우선.
+EOF
+)
+fi
+
 if echo "$MESSAGE" | grep -qiE "$VISUAL_PATTERNS"; then
   cat << 'EOF'
 ━━━ PROACTIVE ADVISOR MODE ━━━
@@ -54,6 +68,9 @@ if echo "$MESSAGE" | grep -qiE "$VISUAL_PATTERNS"; then
 금지: 빈 공감 / 실행 후 침묵 / 수치 미검증 커밋
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
+  if [ -n "$INFRA_HINT" ]; then
+    echo "$INFRA_HINT"
+  fi
   exit 0
 fi
 
@@ -72,5 +89,8 @@ cat << 'EOF'
 금지: 빈 공감 / 실행 후 침묵 / 단점 생략
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
+if [ -n "$INFRA_HINT" ]; then
+  echo "$INFRA_HINT"
+fi
 
 exit 0

@@ -62,10 +62,7 @@ def get_section(filepath: Path) -> str:
 
 
 def get_footer_type(filepath: Path) -> str:
-    """페이지에 맞는 footer 타입 반환.
-
-    2026-03 이후 공개 페이지는 footer-contact 단일 컴포넌트를 사용한다.
-    """
+    """페이지에 맞는 footer 타입 반환. 전체 표준 통일."""
     return "footer-contact"
 
 

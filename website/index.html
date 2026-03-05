@@ -39,7 +39,7 @@
       var preloader = document.getElementById('preloader');
       var sessionKey = 'wwh_preloader_shown';
 
-      // 최상단에서 즉시 체크: 이미 본 경우 모든 실행 중단 및 요소 소거
+  // 상단에서 즉시 체크: 이미 본 경우 모든 실행 중단 및 요소 소거
       if (sessionStorage.getItem(sessionKey)) {
         if (preloader) preloader.style.display = 'none';
         document.body.classList.add('is-loaded');

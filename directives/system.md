@@ -2,7 +2,7 @@
 
 > **Version**: 10.0 (통합)
 > **역할**: 에이전트 실행 프로토콜 + 파일 배치 규칙 + AI 거버넌스.
->         sage_architect.md(인격)가 '무엇을 사고하는가'라면, 이 문서는 '어떻게 실행하는가'.
+> sage_architect.md(인격)가 '무엇을 사고하는가'라면, 이 문서는 '어떻게 실행하는가'.
 > **Authority**: sage_architect.md > the_origin.md > system.md > practice.md(역할 섹션)
 
 ---
@@ -122,17 +122,21 @@ CONTEXT_SLOTS = {
 ## 8. Constraint Enforcement (제약 강제)
 
 ### 8.1 언어 제약
+
 - SSOT: sage_architect.md §9 금칙 규정
 
 ### 8.2 시각 제약
+
 - SSOT: practice.md Part I (Colors, Typography, Spacing, Breath)
 
 ### 8.3 품질 게이트 (2-Stage)
 
 **Stage 1 — STAP (콘텐츠 품질)**: `practice.md §II-4`
+
 - 5-pillar. 70점+ → Stage 2. 미달 → CE 재작업 최대 2회.
 
 **Stage 2 — Ralph Loop (언어 품질)**: `sage_architect.md §6.5`
+
 - 4-loop. 90점+ → AD 진행. 미달 → CE 재작업 최대 2회.
 
 두 게이트 모두 통과해야 AD로 이동.
@@ -144,12 +148,13 @@ CONTEXT_SLOTS = {
 1. **중복 생성** — filesystem_cache.json 미확인 상태로 파일 생성
 2. **컨텍스트 무시** — state.md 미확인 상태로 작업 시작
 3. **work lock 무시** — 잠금 확인 없이 파일 수정
-4. **미등록 산출물** — 생성 후 register-asset 누락
+4. **글로벌 검증 누락** — CSS 선택자나 변수 수정 시 파일 전체에서 중복/덮어쓰기 여부 미확인
 5. **과거 환각** — 기록된 것만 신뢰. 추측 금지
 6. **루트 파일 생성** — CLAUDE.md, README.md 제외 루트(/)에 어떤 파일도 금지
 
 ### 금지 파일명 패턴
-SESSION_SUMMARY_* / WAKEUP_REPORT* / DEPLOY_* / NEXT_STEPS* / temp_* / untitled_*
+
+SESSION_SUMMARY_*/ WAKEUP_REPORT* / DEPLOY_*/ NEXT_STEPS* / temp_*/ untitled_*
 
 ---
 
@@ -206,6 +211,8 @@ LAYER OSOS/
 3. 과장 금지: "압도적", "완벽" → 객관적 톤
 4. 증명 우선: 주장 < 증명. 증명 없으면 침묵
 5. SAGE-ARCHITECT 절대 우선: 내 판단 < sage_architect.md
+6. 글로벌 충돌 검증 (Anti-Override): CSS 선택자나 로직 수정 시, 반드시 파일 전체에서 동일 키워드가 다른 위치(특히 파일 하단)에서 덮어쓰고 있는지 Grep으로 전수 확인 후 작업할 것.
+   - 예: `.site-nav`를 수정할 때 파일 하단에 `MONOCHROME PALETTE` 등에서 재정의되고 있는지 확인 누락 시 "CRITICAL BUG"로 간주.
 
 ### 11.2 Gemini System Prompt
 
@@ -221,16 +228,19 @@ LAYER OSOS/
 ## 12. Cache Strategy
 
 ### 상주 메모리
+
 ```python
 ALWAYS_CACHED = ["sage_architect.md"]
 ```
 
 ### 온디맨드
+
 ```python
 ON_DEMAND = ["practice.md", "the_origin.md"]
 ```
 
 ### 무효화 트리거
+
 - sage_architect.md 변경 → 전체 캐시 무효화
 - practice.md 변경 → 해당 섹션만 리로드
 
@@ -260,6 +270,7 @@ Generate ← Publish (Essay) ← Generate (Essay)
 ```
 
 자동화 트리거:
+
 - 신호 20개 누적 → SA 군집 분석
 - 군집 ripe → CE 에세이 초안
 - 에세이 STAP 70점+ → AD 시각화 + 발행
@@ -269,6 +280,7 @@ Generate ← Publish (Essay) ← Generate (Essay)
 ## 15. Web Consistency Lock
 
 ### 웹 작업 일관성 문제 방지
+
 ```bash
 # 작업 전 반드시 실행
 python core/system/web_consistency_lock.py --acquire [AGENT_ID] --task "작업내용"
@@ -277,6 +289,7 @@ python core/system/web_consistency_lock.py --release [AGENT_ID]
 ```
 
 ### 권한 매트릭스
+
 | Agent | 권한 범위 |
 |-------|----------|
 | AD | style.css, 레이아웃, 컴포넌트, 비주얼 전담 |
@@ -284,6 +297,7 @@ python core/system/web_consistency_lock.py --release [AGENT_ID]
 | SA | 웹 직접 수정 금지 |
 
 ### 어조 규칙 강제
+
 | 섹션 | 어조 |
 |------|------|
 | archive/* | 자연체 (에세이, 독백) |
@@ -298,6 +312,7 @@ python core/system/web_consistency_lock.py --release [AGENT_ID]
 ## 16. Session Hygiene
 
 ### 세션 시작 필수 체크
+
 ```bash
 # .claude/hooks/session-start 자동 실행
 # 1. Uncommitted 파일 경고
@@ -306,11 +321,13 @@ python core/system/web_consistency_lock.py --release [AGENT_ID]
 ```
 
 ### 커밋 정책
+
 - **즉시 커밋**: 의미 있는 변경은 즉시 커밋
 - **즉시 되돌림**: 실험/테스트는 즉시 `git checkout --`
 - **방치 금지**: Modified 상태로 세션 종료 금지
 
 ### TodoWrite 사용 기준
+
 - ✅ 사용: 5단계 이상 복잡한 작업
 - ❌ 금지: 단순 파일 읽기/수정
 - ❌ 금지: 1-2단계 작업
