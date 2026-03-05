@@ -2932,7 +2932,7 @@ footer {
 }
 
 .footer-inner {
-  max-width: var(--max-wide);
+  max-width: var(--max-content);
   margin: 0 auto;
   padding: 0 var(--space-md);
 }
@@ -5370,6 +5370,23 @@ body.home-radical::after {
   font-size: 0.58rem;
   font-weight: 300;
   color: var(--text-faint);
+}
+
+.arc-featured-cat,
+.arc-featured-date,
+.nav-overlay__subs a span {
+  font-family: var(--font-sans);
+  font-size: 0.5rem;
+  font-weight: 300;
+  letter-spacing: 0em;
+  /* 한글 자간 최적화 */
+  opacity: 0.35;
+  /* 한글 보조 라벨의 시각 위계 최소화 */
+  margin-left: 5px;
+  vertical-align: baseline;
+}
+
+.arc-featured-read {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -6765,13 +6782,14 @@ body.page-archive-ledger .footer-legal span {
   justify-content: space-between;
   padding: 0 max(var(--space-md), calc((100% - 900px) / 2));
   /* 900px 그리드 끝선에 정렬 */
-  background: rgba(255, 255, 255, 0.01);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  transition: background-color 0.6s ease, border-color 0.6s ease, backdrop-filter 0.6s ease;
+  background: rgba(255, 255, 255, 0.005);
+  /* 투명도 극대화 */
+  backdrop-filter: blur(25px) saturate(160%);
+  -webkit-backdrop-filter: blur(25px) saturate(160%);
+  border-bottom: none;
+  /* 하단 경계선 소거 */
+  transition: background-color 0.8s ease, backdrop-filter 0.8s ease;
   overflow: hidden;
-  /* 노이즈 레이어 가둠 */
 }
 
 /* ── Glass Noise Texture (2026-03-05) ── */
@@ -6973,16 +6991,20 @@ body.nav-open .nav-dim {
 
 .nav-overlay__sector {
   display: grid;
-  grid-template-columns: 85px 1fr;
-  /* 그리드 더 압축 */
+  grid-template-columns: 88px 1fr;
+  /* 섹션 대비 폭 조절 */
   align-items: baseline;
-  padding: 0.35rem 0;
+  padding: 0.38rem 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.02);
   transition: border-color 0.4s var(--ease);
 }
 
 .nav-overlay__sector:last-child {
-  border-bottom: none;
+  border-bottom: none !important;
+}
+
+.nav-overlay__sector:last-child .nav-overlay__label a {
+  border-bottom: none !important;
 }
 
 .nav-overlay__sector:hover {
@@ -7082,10 +7104,13 @@ body.nav-open .nav-dim {
 
 .nav-overlay__subs a {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
-  /* 푸터 링크 사이즈(0.65rem)보다 더 정밀하게 조정 */
+  font-size: 0.55rem;
+  /* 초소형 스케일 고정 */
   font-weight: 300;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.08em;
+  /* 영문 대문자 자간 확장 확보 */
+  text-transform: uppercase;
+  /* 영문 대문자 처리로 기하학적 대칭 확보 */
   color: var(--text-sub);
   text-decoration: none;
   display: flex;
@@ -9025,7 +9050,7 @@ main {
 
 
 .footer-inner {
-  max-width: var(--max-wide);
+  max-width: var(--max-content);
   margin: 0 auto;
   padding: 0 var(--space-md);
   display: flex;
@@ -14244,7 +14269,8 @@ html[data-nav-dir="back"] ::view-transition-new(root) {
 .about-intro {
   padding-top: var(--space-md);
   padding-bottom: var(--space-md);
-  border-bottom: 1px solid var(--line);
+  border-bottom: none;
+  /* 하단 경계 소거 */
 }
 
 .page-preamble,
