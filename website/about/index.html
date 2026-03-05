@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap">
   <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-  <link rel="stylesheet" href="/assets/css/style.css?v=61e56d36">
+  <link rel="stylesheet" href="/assets/css/style.css?v=a9759620">
   <script>(function () { var h = new Date().getHours(); var cls = h < 6 ? 'time-dawn' : h < 18 ? 'time-day' : h < 22 ? 'time-evening' : 'time-night'; var root = document.documentElement; root.classList.remove('time-dawn', 'time-day', 'time-evening', 'time-night'); root.classList.add(cls); })();</script>
   <!-- /COMPONENT:head -->
 
@@ -31,18 +31,20 @@
 
   <!-- COMPONENT:nav -->
   <nav class="site-nav" id="site-nav">
-    <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
-      <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
-    </a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="/archive/">Archive</a></li>
-      <li><a href="/practice/">Practice</a></li>
-      <li><a href="/about/">About</a></li>
-      <li><a href="/lab/">Lab</a></li>
-    </ul>
-    <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
-      <span></span><span></span>
-    </button>
+    <div class="site-nav__top">
+      <a class="nav-brand" href="/" aria-label="WOOHWAHAE">
+        <img class="nav-symbol" src="/assets/media/brand/symbol.png" alt="WOOHWAHAE">
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/archive/">Archive</a></li>
+        <li><a href="/works/">Works</a></li>
+        <li><a href="/about/">Root</a></li>
+        <li><a href="/lab/">Lab</a></li>
+      </ul>
+      <button class="nav-toggle" id="nav-toggle" aria-label="메뉴" aria-controls="nav-overlay" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
     <div class="read-progress" id="read-progress" aria-hidden="true"></div>
   </nav>
   <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
@@ -50,34 +52,28 @@
       <div class="nav-overlay__sector">
         <h3 class="nav-overlay__label"><a href="/archive/">Archive</a></h3>
         <nav class="nav-overlay__subs">
-          <a href="/archive/#essay">Essay <span>에세이</span></a>
-          <a href="/archive/#journal">Journal <span>일지</span></a>
-          <a href="/archive/lookbook/">Lookbook <span>룩북</span></a>
-          <a href="/playlist.html">Playlist <span>재생목록</span></a>
+          <a href="/archive/notes/">Log <span>사유 / 기록</span></a>
+          <a href="/archive/curation/">Curation <span>시선 / 청음</span></a>
         </nav>
       </div>
       <div class="nav-overlay__sector">
-        <h3 class="nav-overlay__label"><a href="/practice/">Practice</a></h3>
+        <h3 class="nav-overlay__label"><a href="/works/">Works</a></h3>
         <nav class="nav-overlay__subs">
-          <a href="/practice/#atelier">Atelier <span>아틀리에</span></a>
-          <a href="/practice/#directing">Directing <span>디렉팅</span></a>
-          <a href="/practice/#projects">Project <span>프로젝트</span></a>
-          <a href="/practice/#product">Product <span>결과물</span></a>
+          <a href="/works/atelier/">Atelier <span>작업</span></a>
+          <a href="/works/offering/">Offering <span>서비스 / 제품</span></a>
+          <a href="/works/project/">Project <span>협업</span></a>
         </nav>
       </div>
       <div class="nav-overlay__sector">
-        <h3 class="nav-overlay__label"><a href="/about/">About</a></h3>
+        <h3 class="nav-overlay__label"><a href="/about/">Root</a></h3>
         <nav class="nav-overlay__subs">
-          <a href="/about/#ch-2">The Origin <span>근원</span></a>
-          <a href="/about/woosunho/">Profile <span>프로필</span></a>
+          <a href="/about/">Root <span>근원</span></a>
+          <a href="/about/woosunho/">Woosunho <span>기획자</span></a>
         </nav>
       </div>
       <div class="nav-overlay__sector">
         <h3 class="nav-overlay__label"><a href="/lab/">Lab</a></h3>
-        <nav class="nav-overlay__subs">
-          <a href="/lab/">Experiments <span>실험실</span></a>
-          <a href="/lab/changelog/">Changelog <span>변경이력</span></a>
-        </nav>
+        <nav class="nav-overlay__subs"></nav>
       </div>
     </div>
   </div>
@@ -108,8 +104,8 @@
       <span class="about-section__label">001. 시선<span class="about-section__sub">서(序)</span></span>
 
       <div class="about-body-text" data-reveal>
-        <p>이 시대, 인간에게 어느 때보다 많은 것이 주어졌습니다. 선택지는 전례 없이 넓고, 원하는 것은 손에 닿습니다. 풍요입니다. 그러나 더 많이 가질수록 스스로가 어떤 존재인지 대답하기는 오히려
-          어려워집니다.</p>
+        <p>인간에게 어느 때보다 많은 것이 주어진 현재를 살아가며,</p>
+        <p>선택지는 전례 없이 넓고, 원하는 것은 손에 닿습니다. 풍요입니다. 그러나 더 많이 가질수록 스스로가 어떤 존재인지 대답하기는 오히려 어려워집니다.</p>
         <p>볼수록, 볼 수 없게 됩니다. 들을수록, 들을 수 없게 됩니다. 더 많이 주어질수록 스스로 판단하는 힘은 조용히 흐려집니다. 흐려진다는 것은, 처음부터 있었다는 것입니다.</p>
         <p>선택지가 넓어질수록 선택은 더 어려워집니다. 익숙한 것, 편한 것, 무난한 것. 그렇게 외부의 기준이 자신의 기준처럼 자리잡기 시작합니다. 단번에 쌓이지 않습니다. 매일 조금씩. 어디서 왔는지
           점점 보이지 않습니다. 채워지는 것들 사이에서, 처음부터 있던 것들이 조용히 가려집니다. 가려진 것들은 없다고 여기게 됩니다.</p>
@@ -395,7 +391,7 @@
   </script>
   <!-- /COMPONENT:footer -->
 
-  <script defer src="/assets/js/site.js?v=5b25e7d9"></script>
+  <script defer src="/assets/js/site.js?v=324f8aac"></script>
 </body>
 
 </html>
