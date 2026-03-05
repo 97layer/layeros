@@ -6781,8 +6781,8 @@ body.page-archive-ledger .footer-legal span {
   flex-direction: column;
   /* 세로 배치 시에도 중앙 확보 */
   justify-content: flex-start;
-  padding: 0 16px;
-  /* '가장자리 밀기' 철학 유지 및 단일화 */
+  padding: 0;
+  /* 내부 row에서 패딩 관리하여 오차 소거 */
   background: rgba(255, 255, 255, 0.003);
   -webkit-backdrop-filter: blur(25px) saturate(160%);
   backdrop-filter: blur(25px) saturate(160%);
@@ -6798,6 +6798,8 @@ body.page-archive-ledger .footer-legal span {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 16px;
+  /* 로고가 시작되는 정확한 기준점 */
 }
 
 /* ── Glass Noise Texture (2026-03-05) ── */
@@ -6841,7 +6843,7 @@ body.page-archive-ledger .footer-legal span {
   will-change: transform;
 }
 
-.page-essay .read-progress {
+.page-log .read-progress {
   display: block;
 }
 
@@ -6868,6 +6870,9 @@ body.page-archive-ledger .footer-legal span {
 }
 
 .nav-brand {
+  display: flex;
+  /* 인라인 여백 소거 */
+  align-items: center;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: var(--fw-light);
@@ -6875,6 +6880,8 @@ body.page-archive-ledger .footer-legal span {
   color: var(--text);
   text-decoration: none;
   border-bottom: none !important;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-brand:hover {
@@ -6969,8 +6976,8 @@ body.nav-open .nav-dim {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 max(var(--space-md), calc((100% - 900px) / 2));
-  /* 그리드 폭과 동기화 */
+  padding: 0 16px;
+  /* 헤더와 정렬 동기화 */
   opacity: 0;
   pointer-events: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
@@ -7896,11 +7903,10 @@ body.is-loaded .home-hero__nav {
   gap: var(--space-lg);
   /* 간격 확장 */
   height: 38px;
-  margin-top: -2px;
-  /* 상단 top 섹션과의 밀도 보정 */
+  margin-top: 0px;
   padding-bottom: 12px;
-  padding-left: 0;
-  /* 로고와 완벽하게 좌 정렬 */
+  padding-left: 16px;
+  /* 로고와 완벽하게 16px에서 수직 동기화 */
   border-bottom: none;
   background: transparent;
   transition: opacity 0.3s ease;
@@ -9042,7 +9048,7 @@ body.is-loaded .home-hero__nav {
 .site-footer {
   position: sticky;
   bottom: 0;
-  z-index: -1;
+  z-index: 1;
   background: var(--bg);
   /* 본문과 완벽히 동일한 배경으로 경계 소거 */
   padding: 2.4rem 0 3rem;
@@ -12579,6 +12585,71 @@ body.page-about {
   line-height: 1.75;
   max-width: var(--max-content);
   margin-bottom: var(--space-lg);
+}
+
+/* ── 지은이의 말 이스터에그 ── */
+.about-preface {
+  max-width: var(--max-content);
+  margin-top: calc(-1 * var(--space-sm));
+}
+
+.about-preface__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: var(--fw-light);
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.about-preface__trigger:hover {
+  color: var(--text-sub);
+}
+
+.about-preface__icon {
+  display: inline-block;
+  transition: transform 0.35s var(--ease-out);
+  line-height: 1;
+}
+
+.about-preface__trigger[aria-expanded="true"] .about-preface__icon {
+  transform: rotate(45deg);
+}
+
+.about-preface__body {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.4s ease;
+}
+
+.about-preface__body.is-open {
+  max-height: 4000px;
+  opacity: 1;
+}
+
+.about-preface__text {
+  padding: var(--space-lg) 0 var(--space-lg);
+  border-left: 1px solid var(--line);
+  padding-left: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.about-preface__sig {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: var(--fw-light);
+  letter-spacing: 0.06em;
+  color: var(--text-sub);
+  margin-top: var(--space-md);
 }
 
 @media (max-width: 640px) {
@@ -17386,9 +17457,9 @@ body.page-home {
 }
 
 /* Essay layout simplification */
-.page-essay .reading-progress-container,
-.page-essay .art-wave-canvas,
-.page-essay .viz-line-draw {
+.page-log .reading-progress-container,
+.page-log .art-wave-canvas,
+.page-log .viz-line-draw {
   display: none !important;
 }
 
@@ -17401,12 +17472,12 @@ body.page-home {
   animation: none !important;
 }
 
-.page-essay .art {
+.page-log .art {
   background: #F7F7F7;
   padding: 0;
 }
 
-.page-essay .art-container {
+.page-log .art-container {
   max-width: 720px;
   margin: 0 auto;
   padding: 5.5rem 1.5rem 7rem;
@@ -17415,15 +17486,15 @@ body.page-home {
   box-shadow: 0 16px 30px rgba(0, 0, 0, 0.05);
 }
 
-.page-essay .art-header-rule {
+.page-log .art-header-rule {
   display: none;
 }
 
-.page-essay .art-header-grid {
+.page-log .art-header-grid {
   display: block;
 }
 
-.page-essay .art-header-meta {
+.page-log .art-header-meta {
   display: flex;
   gap: 10px;
   font-family: var(--font-mono);
@@ -17433,7 +17504,7 @@ body.page-home {
   margin-bottom: 0.4rem;
 }
 
-.page-essay .art-category {
+.page-log .art-category {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -17441,46 +17512,46 @@ body.page-home {
   color: var(--text-sub);
 }
 
-.page-essay .art-title {
+.page-log .art-title {
   font-size: 20px;
   line-height: 1.65;
   letter-spacing: -0.01em;
 }
 
-.page-essay .art-subtitle {
+.page-log .art-subtitle {
   font-size: 14px;
   line-height: 1.8;
   color: var(--text-sub);
   margin-top: 0.25rem;
 }
 
-.page-essay .art-body {
+.page-log .art-body {
   margin-top: 2.6rem;
 }
 
-.page-essay .art-body p {
+.page-log .art-body p {
   font-size: 15px;
   line-height: 1.9;
   margin: 1.5rem 0 0;
 }
 
-.page-essay .article-divider {
+.page-log .article-divider {
   margin: 3rem 0;
   border-color: var(--line);
 }
 
-.page-essay .article-closing {
+.page-log .article-closing {
   font-weight: 500;
 }
 
-.page-essay .art-outro {
+.page-log .art-outro {
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--line);
 }
 
-.page-essay .art-outro-meta,
-.page-essay .art-outro-nav {
+.page-log .art-outro-meta,
+.page-log .art-outro-nav {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
@@ -17499,27 +17570,100 @@ body.page-archive .page-main {
   padding-bottom: 7rem;
 }
 
-body.page-archive .page-intro {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 4.8rem 2rem 3rem;
+/* ─── Archive Horizontal Intro (New 2026-03-05) ─── */
+.archive-intro {
+  display: flex;
+  align-items: flex-end;
+  /* 베이스라인 정렬로 시각적 안정감 */
+  justify-content: space-between;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 2.8rem;
+  margin-top: 1.2rem;
 }
 
-body.page-archive .page-intro .section-label {
-  margin: 0 0 1.1rem;
+.archive-intro__core {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+}
+
+.archive-title {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.17em;
-  text-transform: uppercase;
-  color: var(--text-sub);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  font-weight: 400;
+  color: var(--text);
+  margin: 0;
+  line-height: 1;
 }
 
-body.page-archive .page-intro .page-title {
+.archive-summary {
+  font-size: 0.65rem;
+  color: var(--text-faint);
   margin: 0;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.66;
-  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+
+.archive-filter {
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 2px;
+  /* 텍스트 베이스라인 미세 조정 */
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 0;
+  padding-bottom: 4px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.filter-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.is-active {
+  color: var(--text);
+}
+
+.filter-btn.is-active::after {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .archive-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .archive-intro__core {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .archive-filter {
+    width: 100%;
+    justify-content: flex-start;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+    padding-top: 1rem;
+  }
 }
 
 body.page-archive .page-intro .page-preamble {
@@ -18712,11 +18856,11 @@ body.page-archive.page-archive-index .archive-mini.has-summary.is-expanded .arch
 }
 
 /* Essay simplification hard override */
-body.page-essay .art-content-grid {
+body.page-log .art-content-grid {
   display: block;
 }
 
-body.page-essay .art-sidebar {
+body.page-log .art-sidebar {
   display: none;
 }
 
