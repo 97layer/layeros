@@ -617,10 +617,16 @@ JSON만 반환.
         except Exception:
             pass
 
+        type_desc = "Journal (자연체, 안내형)" if is_journal else "Essay (한다체, 독백형)"
+        conv_context_section = (
+            "## 현재 관심 맥락 (참고)\n" + conv_context_block + "\n\n---\n\n"
+            if conv_context_block else ""
+        )
+
         prompt = f"""너는 WOOHWAHAE의 편집장이다. SAGE-ARCHITECT 인격으로 쓴다.
 
 주제: {theme}{category_hint}
-타입: {"Journal (자연체, 안내형)" if is_journal else "Essay (한다체, 독백형)"}
+타입: {type_desc}
 신호 수: {entry_count}개
 
 ---
@@ -684,7 +690,7 @@ JSON만 반환.
 
 ---
 
-{f"## 현재 관심 맥락 (참고)\n{conv_context_block}\n\n---\n\n" if conv_context_block else ""}## 관찰 원문 흐름 (신호 {entry_count}개)
+{conv_context_section}## 관찰 원문 흐름 (신호 {entry_count}개)
 {context_text}
 
 ---
@@ -712,7 +718,7 @@ JSON만 반환.
   "telegram_summary_tone": "{tg_tone}",
   "theme": "{theme}",
   "content_category": "{content_category}",
-  "content_type": "{"journal" if is_journal else "essay"}",
+  "content_type": "{type_label}",
   "entry_count": {entry_count}
 }}
 
