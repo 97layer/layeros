@@ -771,6 +771,48 @@ def check_git_hook_automation() -> CheckResult:
     )
 
 
+def check_token_efficiency() -> CheckResult:
+    """토큰 효율 지표 — 복합 점수 + 주요 수치 요약."""
+    try:
+        import importlib.util as ilu
+        spec = ilu.spec_from_file_location(
+            "efficiency_report",
+            PROJECT_ROOT / "core/scripts/efficiency_report.py",
+        )
+        mod = ilu.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+
+        last = 100  # 최근 100건 기준
+        disp = mod.dispatch_efficiency(last)
+        cncl = mod.council_efficiency(last)
+        doc  = mod.doctor_trend(10)
+        comp = mod.composite_score(disp, cncl, doc)
+
+        score_val    = comp.get("composite", 0)
+        grade        = comp.get("grade", "unknown")
+        fallback_pct = disp.get("fallback_rate_pct", 0)
+        degraded_pct = cncl.get("wasted_council_calls_pct", 0)
+        dead_pct     = cncl.get("clarification_dead_pct", 0)
+
+        detail = (
+            f"composite={score_val:.0f}/100 [{grade}] "
+            f"fallback={fallback_pct:.1f}% "
+            f"council_waste={degraded_pct:.1f}% "
+            f"clarify_dead={dead_pct:.1f}%"
+        )
+
+        if grade in ("excellent", "good"):
+            status = "pass"
+        elif grade == "fair":
+            status = "warn"
+        else:
+            status = "fail"
+
+        return CheckResult("token-efficiency", status, detail)
+    except Exception as exc:
+        return CheckResult("token-efficiency", "warn", f"계산 실패: {exc}")
+
+
 def check_tests(run_tests: bool) -> CheckResult:
     if not run_tests:
         return CheckResult("tests", "warn", "skipped (--run-tests not set)")
@@ -900,6 +942,7 @@ def main() -> int:
         check_git_hook_automation(),
         check_work_lock(),
         check_asset_registry_integrity(),
+        check_token_efficiency(),
         check_tests(args.run_tests),
     ]
 
