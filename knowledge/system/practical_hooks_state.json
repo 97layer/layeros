@@ -550,6 +550,233 @@
       "max_permission_prompts": 1,
       "created_at": "2026-03-05T20:16:16",
       "updated_at": "2026-03-05T20:16:58"
+    },
+    "task_20260305_213116": {
+      "goal": "IA 변경: works 메인, practice 리다이렉트, works/offering 통합, about 네비 Root 라벨, archive notes/curation 분리",
+      "files": [
+        "website/_pages",
+        "website/_components/nav.html",
+        "website/_templates/section-page.html",
+        "website/assets/js/site.js",
+        "website/works",
+        "website/practice",
+        "website/archive",
+        "website/about",
+        "website/sitemap.xml",
+        "website/assets/css/style.css",
+        "website/archive/index.json",
+        "website/_pages/archive/script.html"
+      ],
+      "checks": [
+        "python3 core/scripts/build_sections.py",
+        "python3 core/scripts/build.py --components --bust",
+        "python3 core/system/visual_validator.py",
+        "python3 core/scripts/code_audit.py"
+      ],
+      "stop_conditions": "hash drift detected | validation failed | permission budget exceeded",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/_pages": null,
+        "/Users/97layer/97layerOS/website/_components/nav.html": "ab431602811c57d79933956009fbd791ac89b30a",
+        "/Users/97layer/97layerOS/website/_templates/section-page.html": "7ebe31229d3970b332bd05d35ca1fa4b327a5f34",
+        "/Users/97layer/97layerOS/website/assets/js/site.js": "4187236bcdb41302b05b2709ed9be22cbb51fe73",
+        "/Users/97layer/97layerOS/website/works": null,
+        "/Users/97layer/97layerOS/website/practice": null,
+        "/Users/97layer/97layerOS/website/archive": null,
+        "/Users/97layer/97layerOS/website/about": null,
+        "/Users/97layer/97layerOS/website/sitemap.xml": "ee3e6261968ce7903faefb314bf337a84811b753",
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "c19bcb1f88dc5a692c67af95f6fe9e492354da68",
+        "/Users/97layer/97layerOS/website/archive/index.json": "8b39756c1d48879db9bdda51b4f801f222351b74",
+        "/Users/97layer/97layerOS/website/_pages/archive/script.html": "a0d1cc0797f7cf7fd5815720674becc906ef3d55"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T21:31:16",
+      "updated_at": "2026-03-05T21:31:20"
+    },
+    "task_20260305_215224": {
+      "goal": "IA 구조 정리(works/offering/root, archive notes/curation, practice redirects)",
+      "files": [
+        "website/_components/nav.html",
+        "website/_templates/section-page.html",
+        "website/_templates/article.html",
+        "website/assets/js/site.js",
+        "website/sitemap.xml",
+        "website/works/projects.json",
+        "website/practice/projects.json",
+        "website/payment-fail.html",
+        "website/payment-success.html",
+        "website/product/workbook.html",
+        "website/works/index.html",
+        "website/archive/index.html",
+        "website/archive/notes/index.html",
+        "website/archive/curation/index.html",
+        "website/works/atelier/index.html",
+        "website/works/offering/index.html",
+        "website/works/project/index.html",
+        "website/_pages/works/meta.json",
+        "website/_pages/works/body.html",
+        "website/_pages/archive/script.html",
+        "core/scripts/build_sections.py"
+      ],
+      "checks": [
+        "python3 core/scripts/build_sections.py; python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py; python3 core/scripts/code_audit.py; mobile-check 390/768/1440"
+      ],
+      "stop_conditions": "visual_validator 실패 또는 mobile-check 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/_components/nav.html": "3166de7671211e900e9a3ce990aed34efd98c8ec",
+        "/Users/97layer/97layerOS/website/_templates/section-page.html": "bf6370a22fdd1727cbc7460a07a8880e046b71b7",
+        "/Users/97layer/97layerOS/website/_templates/article.html": "acf4579dcdc34b85e65f53cd278cd233027a415c",
+        "/Users/97layer/97layerOS/website/assets/js/site.js": "9548134c1b350c234bd1820afcc59a21fc9ed674",
+        "/Users/97layer/97layerOS/website/sitemap.xml": "f32233c41caf79e907e3fab56ce88acc76d26c8e",
+        "/Users/97layer/97layerOS/website/works/projects.json": "92504bbe844604c36b13a947b75d14a9085342b0",
+        "/Users/97layer/97layerOS/website/practice/projects.json": "92504bbe844604c36b13a947b75d14a9085342b0",
+        "/Users/97layer/97layerOS/website/payment-fail.html": "39227edddfc7cedf33acc3e7d1da3be246b6cbf0",
+        "/Users/97layer/97layerOS/website/payment-success.html": "84fc29f8ab46abd5006314db8f1b8119134bff68",
+        "/Users/97layer/97layerOS/website/product/workbook.html": "2390911d01e1429b0744456679d5de423ce0b4d0",
+        "/Users/97layer/97layerOS/website/works/index.html": "6070522eb552e51405767ae5c9bffdee5c8f173d",
+        "/Users/97layer/97layerOS/website/archive/index.html": "dd859bdcba54c84ead5258b4310737e4dea41daa",
+        "/Users/97layer/97layerOS/website/archive/notes/index.html": "7778322281f5f637c81eefae733c2636081fc4a8",
+        "/Users/97layer/97layerOS/website/archive/curation/index.html": "4b192e9eee972424f2a30ef163045a925353a156",
+        "/Users/97layer/97layerOS/website/works/atelier/index.html": "bf476822fc6fc1be793f5013ee4678daaa47c90f",
+        "/Users/97layer/97layerOS/website/works/offering/index.html": "8b79a3fd9c724d8aea215d05ef6638466785cc83",
+        "/Users/97layer/97layerOS/website/works/project/index.html": "f84ad74713729438b1221d6484b85b22e9df8bce",
+        "/Users/97layer/97layerOS/website/_pages/works/meta.json": "0a1780beb4ae2c644f6591584a35480b49cf4a60",
+        "/Users/97layer/97layerOS/website/_pages/works/body.html": "77f525e83b07f077f24a8d73bdd6cf3197ba0dc1",
+        "/Users/97layer/97layerOS/website/_pages/archive/script.html": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "/Users/97layer/97layerOS/core/scripts/build_sections.py": "e1ccc7474dbc32805cab0209166b6721e28a4459"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T21:52:24",
+      "updated_at": "2026-03-05T22:42:51"
+    },
+    "task_20260305_225543": {
+      "goal": "Archive 상단 표식 제거 및 상단 여백 축소",
+      "files": [
+        "website/_pages/archive/meta.json",
+        "website/_templates/section-page.html",
+        "website/archive/notes/index.html",
+        "website/archive/curation/index.html",
+        "website/archive/index.html"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py; mobile-check 390/768/1440"
+      ],
+      "stop_conditions": "visual_validator 실패 또는 mobile-check 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/_pages/archive/meta.json": "141f52eeb7ab0edaef98c16c4788bc23bcee805e",
+        "/Users/97layer/97layerOS/website/_templates/section-page.html": "114065bce94a12cecc53f0cb2755becaebe45af7",
+        "/Users/97layer/97layerOS/website/archive/notes/index.html": "a9582fca66d79bfd06aad53711d59b73866cdb98",
+        "/Users/97layer/97layerOS/website/archive/curation/index.html": "0c51eec771544671a837a03766322fc249e7d237",
+        "/Users/97layer/97layerOS/website/archive/index.html": "143a2115f730b7ad5c12bf93fc2c06017da2b892"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T22:55:43",
+      "updated_at": "2026-03-05T22:59:41"
+    },
+    "task_20260305_230809": {
+      "goal": "Footer contact toggle 클릭 불가 수정",
+      "files": [
+        "website/assets/css/style.css",
+        "website/archive/index.html",
+        "website/archive/notes/index.html",
+        "website/archive/curation/index.html"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py; mobile-check 390/768/1440"
+      ],
+      "stop_conditions": "visual_validator 실패 또는 mobile-check 실패 시 중단",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/assets/css/style.css": "bf37f2e5dfc187bbcdbb066c8c53092f98798c51",
+        "/Users/97layer/97layerOS/website/archive/index.html": "890733ba3dea80c1eb63df8586009168922c9cbf",
+        "/Users/97layer/97layerOS/website/archive/notes/index.html": "033c16ade1fe55fd256cfa0936efc04fe4547292",
+        "/Users/97layer/97layerOS/website/archive/curation/index.html": "bceae8128c9b00446296b014ea616bac187e0126"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T23:08:09",
+      "updated_at": "2026-03-05T23:09:08"
+    },
+    "task_20260305_233520": {
+      "goal": "Fix archive/log link label mismatch (shows notes)",
+      "files": [
+        "website/_pages/works/meta.json"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py; python3 core/scripts/practical_hooks.py mobile-check"
+      ],
+      "stop_conditions": "If Plan Council hard_stop without approval or lock missing",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/_pages/works/meta.json": "0a1780beb4ae2c644f6591584a35480b49cf4a60"
+      },
+      "permission_requests": 1,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-05T23:53:20",
+      "updated_at": "2026-03-06T00:09:01"
+    },
+    "task_20260306_001430": {
+      "goal": "Rebuild archive index.json from actual log/curation pages and re-order",
+      "files": [
+        "website/archive/index.json",
+        "website/assets/js/site.js"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py; python3 core/scripts/practical_hooks.py mobile-check"
+      ],
+      "stop_conditions": "If web lock missing or plan council hard_stop without approval",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/index.json": "b6957e8f488b2fb68fc02ee9976e082f9d1da235",
+        "/Users/97layer/97layerOS/website/assets/js/site.js": "e6901dd51c83fee56f71d179c6ab663325947186"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-06T00:23:54",
+      "updated_at": "2026-03-06T00:27:49"
+    },
+    "task_20260306_010834": {
+      "goal": "Archive rename to date-based slugs (full archive)",
+      "files": [
+        "website/archive/**",
+        "website/archive/index.json",
+        "website/assets/js/site.js"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py"
+      ],
+      "stop_conditions": "Plan Council gate!=ready without explicit approval",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/**": null,
+        "/Users/97layer/97layerOS/website/archive/index.json": "b6957e8f488b2fb68fc02ee9976e082f9d1da235",
+        "/Users/97layer/97layerOS/website/assets/js/site.js": "699a45207a6164d79a32da56808e404b5a1e4372"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-06T01:08:35",
+      "updated_at": "2026-03-06T01:08:37"
+    },
+    "task_20260306_013220": {
+      "goal": "Archive cleanup: remove legacy essay/journal/magazine/lookbook/notes paths, merge content into date-based logs",
+      "files": [
+        "website/archive/**",
+        "website/archive/index.json",
+        "website/sitemap.xml",
+        "website/playlist.html"
+      ],
+      "checks": [
+        "python3 core/scripts/build.py --components --bust; python3 core/system/visual_validator.py"
+      ],
+      "stop_conditions": "Plan Council gate!=ready without explicit approval",
+      "hash_seal": {
+        "/Users/97layer/97layerOS/website/archive/**": null,
+        "/Users/97layer/97layerOS/website/archive/index.json": "8d9c086138163b9ac080783d148dacf3da6fe939",
+        "/Users/97layer/97layerOS/website/sitemap.xml": "d2472a8c58d9dddbac524e8af943ff819bbeeff4",
+        "/Users/97layer/97layerOS/website/playlist.html": "6605f94159509005151cc4b0772410930812775f"
+      },
+      "permission_requests": 0,
+      "max_permission_prompts": 1,
+      "created_at": "2026-03-06T01:32:20",
+      "updated_at": "2026-03-06T01:32:22"
     }
   }
 }

@@ -44,7 +44,7 @@ logging.basicConfig(
 logger = logging.getLogger("scout_agent")
 
 # signal_inject 모듈이 실제로 사용하는 경로를 그대로 참조한다.
-# (signal_inject.PROJECT_ROOT = core/, 따라서 SIGNALS_DIR = core/knowledge/signals/)
+# (signal_inject.PROJECT_ROOT = 97layerOS 루트, 따라서 SIGNALS_DIR = knowledge/signals/)
 SIGNALS_DIR = _si.SIGNALS_DIR
 SOURCES_PATH = PROJECT_ROOT / "knowledge" / "service" / "scout_sources.json"
 

@@ -1,6 +1,6 @@
 [
   {
-    "slug": "curation-20260309-playlist",
+    "slug": "curation/playlist",
     "title": "Playlist — Midnight Floor",
     "date": "2026.03.09",
     "issue": "Sound 004",
@@ -11,7 +11,7 @@
     "status": "published"
   },
   {
-    "slug": "curation-20260307-lookbook",
+    "slug": "curation/lookbook",
     "title": "Lookbook No.03 — Surface Pressure",
     "date": "2026.03.07",
     "issue": "Visual 003",

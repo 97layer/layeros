@@ -36,6 +36,8 @@ _template_path = TMPL_DIR / "section-page.html"
 # 페이지 → 출력 경로 맵
 PAGE_MAP = {
     "archive": WEB / "archive" / "index.html",
+    "archive_log": WEB / "archive" / "log" / "index.html",
+    "archive_curation": WEB / "archive" / "curation" / "index.html",
     "works": WEB / "works" / "index.html",
     "lab": WEB / "lab" / "index.html",
 }
@@ -68,7 +70,9 @@ def _extract_marker(text: str):
 
 
 def build_page(page_id: str, out_path: Path) -> None:
-    page_dir = PAGES_DIR / page_id
+    # 서브 아카이브 페이지는 archive 소스를 공유함
+    source_id = "archive" if page_id.startswith("archive_") else page_id
+    page_dir = PAGES_DIR / source_id
     meta = json.loads(_read(page_dir / "meta.json"))
 
     controls_struct = meta.get("controls")

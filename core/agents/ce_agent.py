@@ -794,7 +794,7 @@ JSON만 출력."""
 
             # ── 언어품질 검증 (Ralph Loop) ──────────────────────
             try:
-                from core.utils.essay_quality_validator import EssayQualityValidator
+                from core.system.essay_quality_validator import EssayQualityValidator
                 validator = EssayQualityValidator()
                 essay_text = result.get('archive_essay', '')
                 if essay_text:

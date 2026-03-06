@@ -138,7 +138,7 @@ class PipelineOrchestrator:
         """
         CE 결과물 Ralph Loop 점수 계산.
         sage_architect.md §6.5 기준 4-Loop 순차 스캔.
-        SSOT: core/utils/essay_quality_validator.EssayQualityValidator
+        SSOT: core/system/essay_quality_validator.EssayQualityValidator
         """
         content = ce_result.get("result", {})
         essay = content.get("archive_essay", "")
@@ -149,7 +149,7 @@ class PipelineOrchestrator:
             return 0
 
         try:
-            from core.utils.essay_quality_validator import EssayQualityValidator
+            from core.system.essay_quality_validator import EssayQualityValidator
             validator = EssayQualityValidator()
             result = validator.validate(essay)
             score = result["score"]
