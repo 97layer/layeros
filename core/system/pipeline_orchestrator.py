@@ -43,11 +43,11 @@ class PipelineOrchestrator:
     # 확정 파이프라인:
     # Signal → SA → Corpus → Gardener(군집 성숙) → CE → Ralph(QA) → AD → CD → Publisher
     #
-    # SA→Corpus: _process_sa_completed_only() (활성)
+    # SA→Corpus: _handle_sa_corpus() in _process_all_completed()
     # Gardener→CE: gardener._trigger_essay_for_cluster() (별도 데몬)
-    # CE→Ralph→AD: _process_ce_completed() (Ralph은 인라인 QA 게이트)
-    # AD→CD: _process_ad_completed()
-    # CD→Publisher: _process_cd_completed()
+    # CE→Ralph→AD: _handle_ce_completed() (Ralph은 인라인 QA 게이트)
+    # AD→CD: _handle_ad_completed()
+    # CD→Publisher: _handle_cd_completed()
 
     MAX_CE_RETRIES = 2  # CD 거절 후 CE 재작업 최대 횟수
     RALPH_PASS_SCORE = 90  # Ralph 품질 게이트
@@ -270,196 +270,6 @@ class PipelineOrchestrator:
 
         return created_count
 
-    def _process_sa_completed_only(self) -> int:
-        """
-        SA 완료 태스크만 처리 → Corpus 누적.
-        즉시발행 체인(AD→CE→CD)은 실행하지 않음.
-        발행은 Gardener가 Corpus 군집 성숙도 기반으로 트리거.
-        """
-        from core.system.corpus_manager import CorpusManager
-
-        tasks = self._load_completed_tasks()
-        processed_count = 0
-        corpus = CorpusManager()
-
-        for task in tasks:
-            task_id = task.get("task_id", "")
-            agent_type = task.get("agent_type", "")
-            task_type = task.get("task_type", "")
-            status = task.get("status", "")
-            result = task.get("result", {}) or {}
-
-            if self._is_orchestrated(task_id):
-                continue
-            if status != "completed":
-                continue
-
-            # SA 완료 → Corpus에 누적 (체인 진행 없음)
-            if agent_type == "SA" and task_type in ["analyze_signal", "analyze"]:
-                sa_result = result.get("result", {})
-                signal_id = task.get("payload", {}).get("signal_id", "")
-                signal_path = task.get("payload", {}).get("signal_path", "")
-
-                # 원본 신호 데이터 로드
-                signal_data = {}
-                if signal_path:
-                    try:
-                        signal_data = json.loads(Path(signal_path).read_text())
-                    except Exception:
-                        signal_data = task.get("payload", {})
-
-                try:
-                    corpus.add_entry(signal_id, sa_result, signal_data)
-                    logger.info("[Orchestrator] SA→Corpus: %s", signal_id)
-                except Exception as e:
-                    logger.warning("[Orchestrator] Corpus 누적 실패: %s", e)
-
-                self._mark_orchestrated(task_id, "corpus_accumulated")
-                processed_count += 1
-
-        return processed_count
-
-    def _process_ce_completed(self) -> int:
-        """CE 완료 태스크 → Ralph QA → AD 태스크 생성"""
-        tasks = self._load_completed_tasks()
-        count = 0
-        for task in tasks:
-            task_id = task.get("task_id", "")
-            if self._is_orchestrated(task_id):
-                continue
-            if task.get("status") != "completed":
-                continue
-            if task.get("agent_type") != "CE":
-                continue
-            if task.get("task_type") not in ("write_content", "write_corpus_essay"):
-                continue
-
-            result = task.get("result", {}) or {}
-            next_id = self._handle_ce_completed(task, result)
-            self._mark_orchestrated(task_id, next_id)
-            count += 1
-        return count
-
-    def _process_ad_completed(self) -> int:
-        """AD 완료 태스크 → CD 리뷰 태스크 생성"""
-        tasks = self._load_completed_tasks()
-        count = 0
-        for task in tasks:
-            task_id = task.get("task_id", "")
-            if self._is_orchestrated(task_id):
-                continue
-            if task.get("status") != "completed":
-                continue
-            if task.get("agent_type") != "AD":
-                continue
-            if task.get("task_type") != "create_visual_concept":
-                continue
-
-            result = task.get("result", {}) or {}
-            next_id = self._handle_ad_completed(task, result)
-            self._mark_orchestrated(task_id, next_id)
-            count += 1
-        return count
-
-    def _process_cd_completed(self) -> int:
-        """CD 완료 태스크 → Publisher 트리거 or CE 재작업"""
-        tasks = self._load_completed_tasks()
-        count = 0
-        for task in tasks:
-            task_id = task.get("task_id", "")
-            if self._is_orchestrated(task_id):
-                continue
-            if task.get("status") != "completed":
-                continue
-            if task.get("agent_type") != "CD":
-                continue
-            if task.get("task_type") != "review_content":
-                continue
-
-            result = task.get("result", {}) or {}
-            next_id = self._handle_cd_completed(task, result)
-            self._mark_orchestrated(task_id, next_id)
-            count += 1
-        return count
-
-    def process_completed_tasks(self):
-        """완료된 태스크 스캔 → 다음 파이프라인 단계 생성 (레거시 — 현재 미사용)"""
-        tasks = self._load_completed_tasks()
-        processed_count = 0
-
-        for task in tasks:
-            task_id = task.get("task_id", "")
-            agent_type = task.get("agent_type", "")
-            task_type = task.get("task_type", "")
-            status = task.get("status", "")
-            result = task.get("result", {}) or {}
-
-            # 이미 처리된 태스크 스킵
-            if self._is_orchestrated(task_id):
-                continue
-
-            # 실패한 태스크 스킵
-            if status != "completed":
-                continue
-
-            # SA 완료 → AD 태스크 생성
-            if agent_type == "SA" and task_type in ["analyze_signal", "analyze"]:
-                next_task_id = self._handle_sa_completed(task, result)
-                if next_task_id:
-                    self._mark_orchestrated(task_id, next_task_id)
-                    processed_count += 1
-                else:
-                    # 건너뜀 (낮은 점수 등) - 중복 방지용으로 마킹
-                    self._mark_orchestrated(task_id, "skipped")
-                    processed_count += 1
-
-            # AD 완료 → CE 태스크 생성
-            elif agent_type == "AD" and task_type == "create_visual_concept":
-                next_task_id = self._handle_ad_completed(task, result)
-                self._mark_orchestrated(task_id, next_task_id)
-                processed_count += 1
-
-            # CE 완료 → Ralph 검증 → CD 태스크 생성
-            elif agent_type == "CE" and task_type == "write_content":
-                next_task_id = self._handle_ce_completed(task, result)
-                self._mark_orchestrated(task_id, next_task_id)
-                processed_count += 1
-
-            # CD 완료 → ContentPublisher 호출 or CE 재작업
-            elif agent_type == "CD" and task_type == "review_content":
-                next_task_id = self._handle_cd_completed(task, result)
-                self._mark_orchestrated(task_id, next_task_id)
-                processed_count += 1
-
-        if processed_count > 0:
-            logger.info("[Orchestrator] %d개 태스크 처리 완료", processed_count)
-
-        return processed_count
-
-    def _handle_sa_completed(self, task: Dict, result: Dict) -> Optional[str]:
-        """SA 완료 → AD 태스크 생성"""
-        sa_result = result.get("result", {})
-        strategic_score = sa_result.get("strategic_score", 0)
-
-        # 전략 점수 50 미만이면 파이프라인 스킵
-        if strategic_score < 50:
-            logger.info("[Orchestrator] SA 점수 %s < 50, 파이프라인 스킵: %s", strategic_score, task['task_id'])
-            return None
-
-        signal_id = task.get("payload", {}).get("signal_id", "unknown")
-
-        ad_payload = {
-            "signal_id": signal_id,
-            "sa_result": sa_result,
-            "themes": sa_result.get("themes", []),
-            "key_insights": sa_result.get("key_insights", []),
-            "strategic_score": strategic_score,
-            "source_task_id": task["task_id"]
-        }
-
-        logger.info("[Orchestrator] SA→AD: signal=%s, score=%s", signal_id, strategic_score)
-        return self._create_task("AD", "create_visual_concept", ad_payload)
-
     def _handle_ad_completed(self, task: Dict, result: Dict) -> str:
         """AD 완료 → CD 최종 리뷰 태스크 생성"""
         ad_result = result.get("result", {})
@@ -631,7 +441,7 @@ class PipelineOrchestrator:
         return counts
 
     def _handle_sa_corpus(self, task: Dict, result: Dict):
-        """SA 완료 → Corpus 누적 (인라인, _process_sa_completed_only 대체)"""
+        """SA 완료 → Corpus 누적"""
         from core.system.corpus_manager import CorpusManager
 
         task_id = task.get("task_id", "")

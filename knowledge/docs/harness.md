@@ -165,7 +165,7 @@ practice.md (시각/언어/공간 규격)
 | 역할 | 모든 레이어 통과 품질 게이트. CE→AD 이동 전 강제 검증 |
 | 기준 | sage_architect.md §6.5 Ralph Loop. 4단계 스캔. 기준선 90점 |
 | 소거 렌즈 | 클리셰, 시대 한정 어휘, 빈 공감 동사 제거. "소거의 언어 품질 게이트" |
-| 구현 상태 | ✅ `core/utils/essay_quality_validator.py` 자동화. PipelineOrchestrator 인라인 통합 |
+| 구현 상태 | ✅ `core/system/essay_quality_validator.py` 자동화. PipelineOrchestrator 인라인 통합 |
 | 갭 | 70점 이상 통과 기준 (RALPH_PASS_SCORE=70). sage_architect.md 기준선 90점과 불일치 |
 
 ### Publisher (`core/system/content_publisher.py`)
@@ -276,7 +276,7 @@ knowledge/clients/ + knowledge/corpus/ + website/archive/
 | SA | `core/agents/sa_agent.py` | `knowledge/signals/` | `knowledge/corpus/entries/` | `directives/practice.md §II-10` |
 | CE | `core/agents/ce_agent.py` | corpus + Gardener 트리거 | 에세이 태스크 | `directives/practice.md §II-11` |
 | AD | `core/agents/ad_agent.py` | CE 완료 태스크 | 시각 컨셉 태스크 | `directives/practice.md §I-10` |
-| Ralph | `core/utils/essay_quality_validator.py` | CE 산출물 | QA 점수/통과 신호 | `sage_architect.md §6.5` |
+| Ralph | `core/system/essay_quality_validator.py` | CE 산출물 | QA 점수/통과 신호 | `sage_architect.md §6.5` |
 | Publisher | `core/system/content_publisher.py` | AD 완료 + CD 승인 | `knowledge/assets/published/` | `sage_architect.md §4` |
 | Gardener | `core/agents/gardener.py` | `knowledge/corpus/entries/` | CE 트리거 + Telegram | `directives/system.md §2` |
 | Growth | `core/system/growth.py` | clients + corpus + archive | `knowledge/reports/growth/` | `directives/system.md §1` |

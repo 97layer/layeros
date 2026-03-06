@@ -127,7 +127,6 @@
   - 흐름 수정: CE→AD(기존 CE→CD), AD→CD(기존 AD→CE)
   - CE write_corpus_essay: 직접 Publisher 호출 제거 → 오케스트레이터 체인 경유
   - AD process_task: 오케스트레이터 payload 호환 추가
-  - signal_processor.py 폐기 처리
 
 ---
 

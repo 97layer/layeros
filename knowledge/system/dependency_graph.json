@@ -3,108 +3,54 @@
   "version": "1.0.0",
   "last_updated": "2026-02-26T18:30:00",
   "description": "Dependency Graph — 파일 수정 시 영향 범위 추적 및 자동 전파",
-
-  "nodes": {
-    "directives/the_origin.md": {
-      "type": "doctrine",
-      "tier": "FROZEN",
-      "description": "시스템 최상위 SSOT. 철학적 근간 (Part 0, I).",
-      "dependencies": [],
-      "dependents": [
-        "directives/system.md",
-        "directives/practice.md",
-        "website/**/*.html",
-        "CLAUDE.md"
-      ],
-      "cascade_rules": {
-        "on_change": "alert_cd",
-        "propagate": "rebuild_all"
-      }
-    },
-
-    "directives/practice.md": {
-      "type": "practice",
-      "tier": "PROPOSE",
-      "description": "통합 실천 규격 (Part I 시각 / Part II 언어 / Part III 공간)",
-      "dependencies": ["directives/the_origin.md"],
-      "dependents": [
-        "website/assets/css/style.css",
-        "core/system/directive_loader.py",
-        "core/agents/agent_router.py",
-        "website/_templates/*.html",
-        "knowledge/service/items.json",
-        "knowledge/corpus/essay-001.md"
-      ],
-      "cascade_rules": {
-        "on_change": "notify_agents",
-        "propagate": "css_update + template_review + content_review"
-      }
-    },
-
-    "website/assets/css/style.css": {
-      "type": "asset",
-      "tier": "AUTO",
-      "description": "전역 디자인 토큰 (:root)",
-      "dependencies": ["directives/practice.md"],
-      "dependents": [
-        "website/**/*.html"
-      ],
-      "cascade_rules": {
-        "on_change": "invalidate_cache",
-        "propagate": "cf_pages_deploy"
-      }
-    },
-
-    "knowledge/service/items.json": {
-      "type": "data",
-      "tier": "AUTO",
-      "description": "서비스 목록 데이터 (에세이 + 서비스)",
-      "dependencies": ["directives/practice.md"],
-      "dependents": [
-        "website/archive/index.html",
-        "website/practice/*.html",
-        "core/admin/app.py"
-      ],
-      "cascade_rules": {
-        "on_change": "validate_schema",
-        "propagate": "regenerate_html"
-      }
-    },
-
-    "knowledge/corpus/essay-001.md": {
-      "type": "content",
-      "tier": "AUTO",
-      "description": "에세이 콘텐츠",
-      "dependencies": ["directives/practice.md"],
-      "dependents": [
-        "knowledge/service/items.json#essay-001",
-        "website/archive/essay-001.html"
-      ],
-      "cascade_rules": {
-        "on_change": "update_metadata",
-        "propagate": "republish_archive"
-      }
-    }
-  },
-
+  "nodes": [
+    "directives/the_origin.md",
+    "directives/practice.md",
+    "website/assets/css/style.css",
+    "knowledge/service/items.json"
+  ],
   "cascade_rules": {
     "FROZEN": {
       "description": "철학 변경 → 전체 재검증",
-      "actions": ["alert_cd", "rebuild_all_dependents", "require_approval"]
+      "actions": [
+        "alert_cd",
+        "rebuild_all_dependents",
+        "require_approval"
+      ]
     },
     "PROPOSE": {
       "description": "규칙 변경 → 에이전트 재프롬프트",
-      "actions": ["notify_affected_agents", "queue_review"]
+      "actions": [
+        "notify_affected_agents",
+        "queue_review"
+      ]
     },
     "AUTO": {
       "description": "데이터 변경 → 자동 전파",
-      "actions": ["silent_propagate", "auto_commit"]
+      "actions": [
+        "silent_propagate",
+        "auto_commit"
+      ]
     }
   },
-
   "validation": {
-    "required_fields": ["type", "tier", "dependencies", "dependents"],
-    "allowed_tiers": ["FROZEN", "PROPOSE", "AUTO"],
-    "allowed_types": ["doctrine", "practice", "asset", "data", "content"]
+    "required_fields": [
+      "type",
+      "tier",
+      "dependencies",
+      "dependents"
+    ],
+    "allowed_tiers": [
+      "FROZEN",
+      "PROPOSE",
+      "AUTO"
+    ],
+    "allowed_types": [
+      "doctrine",
+      "practice",
+      "asset",
+      "data",
+      "content"
+    ]
   }
 }
