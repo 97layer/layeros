@@ -1,0 +1,93 @@
+{
+  "generated_at": "2026-03-06T08:22:45.383381+00:00",
+  "date_utc": "20260306",
+  "type": "plan_dispatch_daily",
+  "sources": {
+    "plan_council_reports": "/Users/97layer/97layerOS/knowledge/system/plan_council_reports.jsonl",
+    "metrics_log": "/Users/97layer/97layerOS/knowledge/system/plan_dispatch_metrics.jsonl",
+    "replay_log": "/Users/97layer/97layerOS/knowledge/system/plan_dispatch_replay_reports.jsonl"
+  },
+  "thresholds": {
+    "fallback_threshold": 0.3,
+    "fallback_min_samples": 20,
+    "drift_window": 14,
+    "drift_min_samples": 5,
+    "allowed_rate_drift_threshold": 0.2,
+    "complexity_rate_drift_threshold": 0.25
+  },
+  "metrics": {
+    "log_path": "/Users/97layer/97layerOS/knowledge/system/plan_dispatch_metrics.jsonl",
+    "window": 200,
+    "total": 200,
+    "executed_count": 107,
+    "executed_rate": 0.535,
+    "fallback_count": 10,
+    "fallback_rate": 0.05,
+    "avg_score": 2.915,
+    "phase_counts": {
+      "skip": 74,
+      "smoke": 107,
+      "blocked": 19
+    },
+    "reason_counts": {
+      "simple_task": 74,
+      "smoke_mode": 107,
+      "hard_stop_model_unavailable": 14,
+      "degraded_not_allowed": 2,
+      "needs_clarification_model": 3
+    },
+    "complexity_counts": {
+      "simple": 84,
+      "medium": 74,
+      "high": 42
+    },
+    "mode_counts": {
+      "auto": 151,
+      "manual": 49
+    }
+  },
+  "replay": {
+    "source": "/Users/97layer/97layerOS/knowledge/system/plan_council_reports.jsonl",
+    "min_complexity": "medium",
+    "total": 30,
+    "allowed_count": 22,
+    "allowed_rate": 0.733,
+    "complexity_counts": {
+      "medium": 12,
+      "simple": 8,
+      "high": 10
+    },
+    "top_signals": [
+      "slash_separator",
+      "len>=60",
+      "multi_clause",
+      "high_keyword",
+      "medium_keyword",
+      "len>=120",
+      "len>=220",
+      "multi_action_tokens"
+    ],
+    "drift": {
+      "detected": false,
+      "reason": "within_threshold",
+      "baseline_samples": 14,
+      "baseline_allowed_rate": 0.76,
+      "current_allowed_rate": 0.733,
+      "allowed_delta": 0.027,
+      "allowed_rate_threshold": 0.2,
+      "max_complexity_delta": 0.083,
+      "complexity_rate_threshold": 0.25,
+      "complexity_delta": {
+        "simple": 0.026,
+        "medium": 0.083,
+        "high": 0.057
+      }
+    }
+  },
+  "health": {
+    "status": "pass",
+    "issues": [],
+    "warnings": []
+  },
+  "report_path": "/Users/97layer/97layerOS/knowledge/system/plan_dispatch_daily/plan_dispatch_20260306.json"
+}
