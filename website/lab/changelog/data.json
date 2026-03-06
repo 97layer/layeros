@@ -1,13 +1,76 @@
 {
-  "generated": "2026-03-05T16:21:40.320194+00:00",
+  "generated": "2026-03-06T08:28:52.923331+00:00",
   "start_date": "2026-02-18",
-  "days": 16,
-  "total_commits": 335,
+  "days": 17,
+  "total_commits": 345,
   "uncommitted": 0,
-  "invested_hours": 91.0,
-  "lines_added": 128896,
-  "lines_deleted": 75890,
+  "invested_hours": 93.6,
+  "lines_added": 191324,
+  "lines_deleted": 146976,
   "entries": [
+    {
+      "type": "commit",
+      "sha": "9814dc7",
+      "date": "2026-03-06T17:28:19+09:00",
+      "msg": "lab 구조 정비 + 3페이지 헤더 통일 (archive/works/lab)",
+      "rawMsg": "style: lab 구조 정비 + 3페이지 헤더 통일 (archive/works/lab)"
+    },
+    {
+      "type": "commit",
+      "sha": "87d0441",
+      "date": "2026-03-06T16:35:45+09:00",
+      "msg": "core/ dead 폴더 정리 + essay_quality_validator 경로 이동",
+      "rawMsg": "chore: core/ dead 폴더 정리 + essay_quality_validator 경로 이동"
+    },
+    {
+      "type": "commit",
+      "sha": "5f1ed3b",
+      "date": "2026-03-06T12:55:32+09:00",
+      "msg": "chore(lab): assets 정리 — dead 파일 격리, lab-*.js → proto-*.js 통일",
+      "rawMsg": "chore(lab): assets 정리 — dead 파일 격리, lab-*.js → proto-*.js 통일"
+    },
+    {
+      "type": "commit",
+      "sha": "4ccbaba",
+      "date": "2026-03-06T12:52:18+09:00",
+      "msg": "chore(lab): demo-* → proto-* 전체 통합, 단일 접두사 체계",
+      "rawMsg": "chore(lab): demo-* → proto-* 전체 통합, 단일 접두사 체계"
+    },
+    {
+      "type": "commit",
+      "sha": "711d0a4",
+      "date": "2026-03-06T12:51:58+09:00",
+      "msg": "chore(lab): proto-* → demo-* 통합, 단일 접두사 체계",
+      "rawMsg": "chore(lab): proto-* → demo-* 통합, 단일 접두사 체계"
+    },
+    {
+      "type": "commit",
+      "sha": "5b2b81d",
+      "date": "2026-03-06T12:49:32+09:00",
+      "msg": "chore(lab): 파일 네이밍 통일 및 구버전 격리",
+      "rawMsg": "chore(lab): 파일 네이밍 통일 및 구버전 격리"
+    },
+    {
+      "type": "commit",
+      "sha": "1cabd6e",
+      "date": "2026-03-06T12:46:00+09:00",
+      "msg": "웹사이트 폴더 구조 정리",
+      "rawMsg": "chore: 웹사이트 폴더 구조 정리"
+    },
+    {
+      "type": "commit",
+      "sha": "87a6c55",
+      "date": "2026-03-06T01:27:37+09:00",
+      "msg": "style(about): 여담 stat 라벨 — 아마 우화해 시작즈음부터",
+      "rawMsg": "style(about): 여담 stat 라벨 — 아마 우화해 시작즈음부터"
+    },
+    {
+      "type": "commit",
+      "sha": "710fc1e",
+      "date": "2026-03-06T01:24:33+09:00",
+      "msg": "style(about): 여담 패널 — 전체 소형·희미 톤 통일",
+      "rawMsg": "style(about): 여담 패널 — 전체 소형·희미 톤 통일"
+    },
     {
       "type": "commit",
       "sha": "e18a3a7",
@@ -91,6 +154,13 @@
       "date": "2026-03-05T19:47:10+09:00",
       "msg": "style(footer): Contact 토글 리디자인 + 채널톡 삽입",
       "rawMsg": "style(footer): Contact 토글 리디자인 + 채널톡 삽입"
+    },
+    {
+      "type": "commit",
+      "sha": "22848cd",
+      "date": "2026-03-05T16:21:40Z",
+      "msg": "update changelog data",
+      "rawMsg": "chore: update changelog data"
     },
     {
       "type": "commit",
