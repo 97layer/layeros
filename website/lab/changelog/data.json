@@ -1,12 +1,12 @@
 {
-  "generated": "2026-03-06T16:05:58.231625+00:00",
+  "generated": "2026-03-07T15:45:05.466918+00:00",
   "start_date": "2026-02-18",
-  "days": 17,
-  "total_commits": 346,
+  "days": 18,
+  "total_commits": 347,
   "uncommitted": 0,
-  "invested_hours": 88.9,
-  "lines_added": 191400,
-  "lines_deleted": 146982,
+  "invested_hours": 80.4,
+  "lines_added": 191412,
+  "lines_deleted": 146987,
   "entries": [
     {
       "type": "commit",
@@ -21,6 +21,13 @@
       "date": "2026-03-06T16:35:45+09:00",
       "msg": "core/ dead 폴더 정리 + essay_quality_validator 경로 이동",
       "rawMsg": "chore: core/ dead 폴더 정리 + essay_quality_validator 경로 이동"
+    },
+    {
+      "type": "commit",
+      "sha": "ae60dbd",
+      "date": "2026-03-06T16:05:58Z",
+      "msg": "update changelog data",
+      "rawMsg": "chore: update changelog data"
     },
     {
       "type": "commit",
